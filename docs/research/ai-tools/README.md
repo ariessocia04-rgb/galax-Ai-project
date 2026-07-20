@@ -11,16 +11,20 @@
    - Current final paper-qualification decision, 80-point threshold, MCP compatibility matrix, conflict-free workflow, duration estimate, and quality conditions.
 3. `AI_CONTRIBUTOR_COMMAND_DESIGN_SURVEY_2026-07-21.md`
    - Official-platform survey used to define professional, repository-first commands.
-4. `../../team/external-ai-contributors/COMMON_OPERATING_CONTRACT.md`
-   - Shared repository, safety, execution, stop, test, and handoff contract.
-5. `../../team/external-ai-contributors/ROLE_CARDS.md`
-   - Exact role, professional background, goal, scope, restrictions, and success criteria for the five contributors.
-6. `../../plan/EXTERNAL_AI_CONTRIBUTOR_WORK_ASSIGNMENT_PLAN.md`
+4. `../../prompts/external-ai-contributors/README.md`
+   - Canonical external contributor role package index.
+5. `../../prompts/external-ai-contributors/SHARED_EXECUTION_PROTOCOL.md`
+   - Shared repository, safety, execution, stop, testing, and handoff protocol.
+6. The exact selected role charter:
+   - `../../prompts/external-ai-contributors/CLINE_ROLE_CHARTER.md`
+   - `../../prompts/external-ai-contributors/OPENHANDS_CORE_ROLE_CHARTER.md`
+   - `../../prompts/external-ai-contributors/AIDER_ROLE_CHARTER.md`
+   - `../../prompts/external-ai-contributors/MINI_SWE_AGENT_ROLE_CHARTER.md`
+   - `../../prompts/external-ai-contributors/PR_AGENT_ROLE_CHARTER.md`
+7. `../../plan/EXTERNAL_AI_CONTRIBUTOR_WORK_ASSIGNMENT_PLAN.md`
    - Agent 01 work packages, ownership locks, transitions, schedule, and quality target.
-7. `../../prompts/external-ai-contributors/CONTROLLED_TASK_PACKET_TEMPLATE.md`
+8. `../../prompts/external-ai-contributors/CONTROLLED_TASK_PACKET_TEMPLATE.md`
    - Required task input before any contributor may start.
-8. `../../prompts/external-ai-contributors/DESIGNATED_CONTRIBUTOR_COMMANDS.md`
-   - Paste-ready commands for Cline, OpenHands Core, Aider, mini-SWE-agent, and PR-Agent.
 9. `AI_DEVELOPMENT_TOOL_STRICT_RESCREEN_V2_2026-07-21.md`
    - Historical strict re-screen. Superseded where it conflicts with V3.
 10. `AI_DEVELOPMENT_TOOL_CANDIDATE_AUDIT_2026-07-21.md`
@@ -124,7 +128,7 @@ after_all_role_trials_and_gates_pass:
 ```yaml
 roles_defined: true
 work_packages_defined: true
-commands_defined: true
+canonical_commands_defined_in_individual_charters: true
 one_active_writer_per_task: required
 parallel_writers_on_overlapping_paths: prohibited
 direct_main_write: prohibited
