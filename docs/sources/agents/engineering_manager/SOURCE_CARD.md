@@ -37,14 +37,25 @@ The reserve provider is not an automatic fallback.
 
 Current tool status: `CONDITIONALLY_APPROVED`
 
+### Knowledge and memory infrastructure
+
+- [Drive Knowledge Gateway source card](../../tools/drive_knowledge_gateway/SOURCE_CARD.md)
+- [Notion Memory Gateway source card](../../tools/notion_memory_gateway/SOURCE_CARD.md)
+- [Google Drive knowledge + Notion memory architecture](../../../architecture/GOOGLE_DRIVE_KNOWLEDGE_NOTION_MEMORY_DRAFT.md)
+
+Drive and Notion are Flow/application infrastructure. They are not additional Agent 01 tools.
+
 ## Agent research records
 
 - [Agent 01 Tool Inspection](../../../research/agents/AGENT-01-engineering-manager/03_TOOL_INSPECTION.md)
 - [CrewAI Capability and Limitation Matrix](../../../research/crewai/CREWAI_1_15_4_CAPABILITY_LIMIT_MATRIX.md)
 - [15-Agent Capability Mapping](../../../plan/AGENT_CAPABILITY_MAPPING_DRAFT.md)
+- [15-Agent LLM, Tool, Knowledge, and Memory Matrix](../../../plan/AGENT_LLM_TOOL_KNOWLEDGE_MEMORY_MATRIX_DRAFT.md)
 - [GitHub Repository Read/Write Architecture](../../../architecture/GITHUB_REPOSITORY_READ_WRITE_DRAFT.md)
 - [No Unsupported Agent Work Rule](../../../rules/NO_UNSUPPORTED_AGENT_WORK_RULE_DRAFT.md)
 - [Per-Agent LLM Compatibility Rule](../../../rules/PER_AGENT_LLM_COMPATIBILITY_RULE_DRAFT.md)
+- [Knowledge Before Implementation Rule](../../../rules/KNOWLEDGE_BEFORE_IMPLEMENTATION_RULE_DRAFT.md)
+- [Notion Memory Rule](../../../rules/NOTION_MEMORY_RULE_DRAFT.md)
 - [Source Traceability Rule](../../../rules/SOURCE_TRACEABILITY_RULE_DRAFT.md)
 - [No Exact Duplicates Rule](../../../rules/NO_EXACT_DUPLICATES_RULE_DRAFT.md)
 
@@ -62,6 +73,8 @@ Agent 01 may:
 
 ```text
 - receive the actual structured result of RepositoryPreflightTool
+- receive a bounded verified memory context prepared by the Flow
+- receive a verified LearningPacket when the run manifest requires owner knowledge
 - identify failed, blocked, and passed checks
 - summarize why the run may or may not continue
 - return a structured preflight decision and self-diagnostic
@@ -73,6 +86,8 @@ Agent 01 may not:
 - select or add agents dynamically
 - reorder tasks
 - delegate work
+- directly search Google Drive
+- directly browse or write Notion
 - modify the repository
 - create a branch
 - approve an agent, LLM, tool, architecture, or release
@@ -80,7 +95,7 @@ Agent 01 may not:
 - continue after a blocking preflight result
 ```
 
-The deterministic Flow/application creates the run manifest, selects approved agents, creates the run branch, and controls execution order.
+The deterministic Flow/application creates the run manifest, selects approved agents, retrieves knowledge and memory, creates the run branch, and controls execution order.
 
 ## LLM compatibility contract
 
@@ -115,6 +130,7 @@ Required LLM capabilities:
 - structured AgentTaskResult output
 - token usage reporting
 - safe timeout and HTTP 429 behavior
+- correct handling of bounded LearningPacket and Notion memory context
 ```
 
 ## One-tool contract
@@ -127,6 +143,21 @@ network_permission: false
 repository_scope: configured_galax_repository_only
 ```
 
+## Knowledge and memory contract
+
+```yaml
+Drive_access:
+  direct_agent_access: false
+  LearningPacket_from_Flow: allowed_when_manifest_requires
+Notion_access:
+  direct_agent_access: false
+  verified_memory_context_from_Flow: allowed
+memory_priority:
+  repository_over_memory: true
+StudyReceipt:
+  required_when_LearningPacket_present: true
+```
+
 ## Self-diagnostic boundary
 
 Agent 01's self-diagnostic is advisory until it passes:
@@ -135,6 +166,7 @@ Agent 01's self-diagnostic is advisory until it passes:
 structured output
 → deterministic guardrail
 → actual preflight tool evidence comparison
+→ LearningPacket and memory-context evidence comparison when present
 → downstream release audit
 ```
 
@@ -149,6 +181,9 @@ dynamic_delegation: rejected
 assigned_tool_count: 1
 repository_preflight_read: conditionally_supported
 repository_write_for_agent_01: rejected_not_required
+Drive_direct_access: rejected_not_required
+Notion_direct_access: rejected_not_required
+Flow_supplied_knowledge_and_memory: specified_not_tested
 system_repository_write: planned_for_role_scoped_writer_agents
 llm_profile: selected_not_tested
 agent_implementation: not_started
@@ -163,14 +198,16 @@ A future deterministic query:
 source engineering_manager
 ```
 
-must return this card and the exact framework, LLM, and tool links above. It must not reconstruct sources from model memory.
+must return this card and the exact framework, LLM, tool, knowledge, and memory links above. It must not reconstruct sources from model memory.
 
 ## Revalidation required when
 
 - Agent role, goal, task, or boundaries change.
 - The selected LLM or its profile changes.
 - The tool schema or implementation changes.
+- Knowledge or memory schemas change.
 - CrewAI or LiteLLM version changes.
+- Google Drive or Notion API behavior changes.
 - GitHub repository integration changes.
 - Rate, pricing, provider API, security, or privacy behavior changes.
 - Any source link becomes outdated or unavailable.
