@@ -77,19 +77,21 @@ parallel_tool_calls: false
 vision: false
 ```
 
-## Documented free-plan limits
+## Documented free-trial limits
+
+The current official Cerebras limits page documents these general free-trial limits for `gpt-oss-120b`:
 
 ```yaml
-requests_per_minute: 30
-requests_per_hour: 900
-requests_per_day: 14400
-tokens_per_minute: 64000
+requests_per_minute: 5
+requests_per_hour: NOT_DOCUMENTED
+requests_per_day: NOT_DOCUMENTED
+tokens_per_minute: 30000
 tokens_per_hour: 1000000
 tokens_per_day: 1000000
 monthly_token_limit: NOT_DOCUMENTED_AS_A_FIXED_FREE_QUOTA
 ```
 
-The runtime must read the actual connected account limits before every run group. The repository values are planning ceilings, not permanent provider guarantees.
+The runtime must read the actual connected account limits before every run group because Cerebras states that specific cases may vary. Repository values are planning ceilings, not permanent provider guarantees.
 
 ## Data handling decision
 
