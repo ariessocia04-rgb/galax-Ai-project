@@ -2,49 +2,69 @@
 
 **Status:** `DRAFT_MUTABLE`  
 **Framework candidate:** CrewAI 1.15.4  
-**LLM candidate:** `cerebras/gpt-oss-120b`  
-**LLM status:** selected for validation, not enabled  
+**Private primary candidate:** `groq/openai/gpt-oss-120b`  
+**Private hosted fallback candidate:** Cloudflare `@cf/openai/gpt-oss-120b`  
+**Public/redacted long-context candidate:** `gemini/gemini-2.5-flash`  
+**Optional local fallback candidate:** `ollama/gpt-oss:20b`  
 **Process:** `Process.sequential`
 
-## 1. Provider facts vs Galax internal limits
+## 1. Provider capacity vs Galax internal limits
 
-### Current documented Cerebras model capacity
+### Groq GPT-OSS 120B
 
 ```yaml
-model: gpt-oss-120b
 context_window_tokens: 131072
-maximum_completion_tokens: 40960
-reasoning_effort:
-  - low
-  - medium
-  - high
-tool_calling: true
-structured_outputs: true
-vision: false
-parallel_tool_calls: false
+maximum_output_tokens: 65536
+base_free_limits:
+  requests_per_minute: 30
+  requests_per_day: 1000
+  tokens_per_minute: 8000
+  tokens_per_day: 200000
 ```
+
+The 8,000 TPM limit is the practical hosted-primary bottleneck. Large model context does not permit sending a 131K prompt on the free plan.
 
 Official sources:
 
-- [Cerebras supported models](https://inference-docs.cerebras.ai/models/overview)
-- [Cerebras public model metadata](https://inference-docs.cerebras.ai/api-reference/models/public-models)
+- [Groq model](https://console.groq.com/docs/model/openai/gpt-oss-120b)
+- [Groq limits](https://console.groq.com/docs/rate-limits)
 
-### Published general free-tier limits
+### Cloudflare GPT-OSS 120B
 
 ```yaml
-tokens_per_minute: 64000
-tokens_per_hour: 1000000
-tokens_per_day: 1000000
-requests_per_minute: 30
-requests_per_hour: 900
-requests_per_day: 14400
+context_window_tokens: 128000
+free_allocation_neurons_per_day: 10000
+quota_type: compute_based
 ```
 
-Cerebras states that specific account limits can vary, and its model page notes temporary free-tier reductions for high-demand models. Therefore, these values are not hardcoded as guaranteed runtime capacity.
+The Flow must estimate input and output neuron use and capture the current allocation state. It must not translate the daily allocation into a guaranteed request count.
 
-Source:
+Official sources:
 
-- [Cerebras rate limits](https://inference-docs.cerebras.ai/support/rate-limits)
+- [Cloudflare model](https://developers.cloudflare.com/workers-ai/models/gpt-oss-120b/)
+- [Cloudflare pricing](https://developers.cloudflare.com/workers-ai/platform/pricing/)
+
+### Gemini 2.5 Flash
+
+```yaml
+context_window_tokens: 1048576
+maximum_output_tokens: 65536
+data_classification: public_or_fully_redacted_only_on_free_tier
+account_limits: capture_from_AI_Studio
+```
+
+It is not the private-repository fallback because Google states that free-tier content may be used to improve its products.
+
+### Ollama GPT-OSS 20B
+
+```yaml
+context_window_tokens_documented: 128000
+model_download_size: approximately_14GB
+minimum_model_runtime_memory_claim: approximately_16GB
+actual_capacity: hardware_test_required
+```
+
+Full context and usable latency are not assumed.
 
 ### Global Galax ceilings
 
@@ -57,23 +77,22 @@ execution:
   parallel_tool_calls: false
 
 provider_control:
-  internal_max_rpm: 4
   effective_rpm: minimum_of_internal_ceiling_and_current_account_limit_with_headroom
   maximum_retries: 1
   timeout_seconds: 120
 
 context:
-  low_or_medium_reasoning_input_soft_limit: 12000
-  high_reasoning_input_soft_limit: 16000
-  per_call_input_hard_limit: 20000
+  default_private_input_soft_limit: 4000
+  default_public_redacted_input_soft_limit: 12000
+  provider_and_account_snapshot_required: true
   respect_context_window: false
 
 run_budget:
-  soft_limit_total_tokens: 90000
-  hard_limit_total_tokens: 120000
+  soft_limit_total_tokens: computed_from_active_provider
+  hard_limit_total_tokens: computed_from_active_provider
 ```
 
-The internal `max_rpm: 4` is a conservative Galax policy, not a claim about the provider's permanent limit.
+Do not use one universal daily/run token budget across providers. Groq, Cloudflare, Gemini, and Ollama have materially different quota models.
 
 ## 2. Agent table
 
@@ -95,7 +114,7 @@ The internal `max_rpm: 4` is a conservative Galax policy, not a claim about the 
 | 14 | SRE and Observability Engineer | `ObservabilityReadTool` | High | 2,200 | 8 | 2 | Disabled; approved telemetry source required |
 | 15 | Independent Code Review, Documentation, and Release Auditor | `ReleaseAuditTool` | High | 2,200 | 8 | 2 | Disabled; evidence gateway required |
 
-Tool-call ceilings are internal design values and must be verified against the exact task implementation. One tool interface may perform several closely related operations; it is still one assigned tool.
+These are internal design ceilings and require per-agent/provider testing. One tool interface may expose several closely related, permission-scoped operations.
 
 ## 3. Agent-specific restrictions
 
@@ -117,7 +136,7 @@ Must not: invent requirements, approve scope, edit application code.
 
 ```text
 May: research official sources and update research/source records.
-Must not: treat LLM memory or an aggregator as authority, install software,
+Must not: treat model memory or an aggregator as authority, install software,
 approve implementation, or change production configuration.
 ```
 
@@ -140,7 +159,7 @@ Must not: edit production code, access production user data, or certify complian
 ### Agent 06 — Frontend Application Engineer
 
 ```text
-May: edit frontend allowlisted paths and run approved commands in external sandbox.
+May: edit frontend allowlisted paths and run approved commands in an external sandbox.
 Must not: use deprecated CrewAI code execution, edit backend/database/rules,
 or write before a required StudyReceipt passes.
 ```
@@ -156,7 +175,7 @@ or claim authorization correctness without tests.
 ### Agent 08 — Data and Database Engineer
 
 ```text
-May: edit schema/migration paths and use disposable local/test database.
+May: edit schema/migration paths and use a disposable local/test database.
 Must not: access production data, run destructive production migrations,
 or treat generated SQL as validated.
 ```
@@ -166,13 +185,13 @@ or treat generated SQL as validated.
 ```text
 May: edit CrewAI Flow, task, schema, guardrail, and tested LLM configuration paths.
 Must not: enable unsupported fields, change from sequential process,
-enable native memory/deprecated code execution, or enable every agent automatically.
+enable unvalidated native memory/code execution, or enable every agent automatically.
 ```
 
 ### Agent 10 — Integration and MCP Engineer
 
 ```text
-May: implement scoped adapters and MCP servers using mocks/test credentials.
+May: implement scoped adapters and MCP servers with mocks/test credentials.
 Must not: connect random public MCP servers, expose unrestricted URL fetch,
 use production credentials, or claim reliability without failure tests.
 ```
@@ -217,7 +236,7 @@ Must not: edit implementation, approve its own prior work, merge, or deploy.
 
 ## 4. Tool-call pattern
 
-For ordinary writer agents, the intended maximum three calls are:
+For ordinary writer agents:
 
 ```text
 1. inspect authorized workspace
@@ -225,13 +244,11 @@ For ordinary writer agents, the intended maximum three calls are:
 3. verify committed change set and sandbox evidence
 ```
 
-Agent 03 may need up to five calls because it must search, fetch, compare, record, and verify. Read-only auditors use fewer calls.
-
-A tool call count increase changes the agent profile and triggers revalidation.
+Agent 03 may need up to five calls for search, fetch, compare, record, and verify. A tool-call ceiling change triggers revalidation.
 
 ## 5. Token accounting
 
-Count whenever available:
+Count whenever exposed:
 
 ```text
 input tokens
@@ -239,13 +256,14 @@ input tokens
 + tool-result context tokens
 + output tokens
 + retry tokens
++ Cloudflare neuron allocation or local compute duration where applicable
 ```
 
-At the run soft limit:
+At the active provider's soft limit:
 
 ```text
 - do not start optional agents
-- reuse verified evidence by ID/hash
+- reuse unchanged verified evidence by ID/hash
 - stop nonessential narrative expansion
 - preserve required QA/security/audit work
 ```
@@ -263,11 +281,12 @@ ACTION: save canonical checkpoint and stop new LLM calls
 - Never send the entire repository.
 - Never send all 15 prompts or tool schemas in one call.
 - Never send `.env`, credentials, private keys, or production records.
+- Gemini free tier receives public or fully redacted content only.
 - Send only current rules, task contract, bounded memory, LearningPacket,
   relevant repository excerpts, one tool schema, and required prior output.
 ```
 
-When required exact context exceeds the hard limit:
+When exact required context exceeds the effective provider/account/hardware limit:
 
 ```text
 STATUS: BLOCKED_CONTEXT_LIMIT
@@ -279,7 +298,8 @@ ACTION: split into checkpointed sequential segments
 ```text
 ROLE FACT CHECKED
 → CREWAI FEATURE SUPPORTED
-→ LLM PROFILE LIVE TESTED
+→ ACTIVE LLM PROFILE LIVE TESTED FOR THIS AGENT
+→ FALLBACK PROFILE LIVE TESTED WHEN REQUIRED
 → ONE TOOL IMPLEMENTED AND LIVE TESTED
 → DOCKER/SANDBOX TESTS WHEN REQUIRED
 → DRIVE STUDY TEST WHEN REQUIRED
