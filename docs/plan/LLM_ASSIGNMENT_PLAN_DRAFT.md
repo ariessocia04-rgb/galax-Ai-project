@@ -44,6 +44,8 @@ tool_interfaces: exactly_one
 
 The common LLM may be reused by multiple agents. The one-to-one policy applies to each agent's role-specific tool interface, not to exclusive ownership of an LLM provider.
 
+Google Drive knowledge and Notion memory are controlled Flow/application infrastructure. They are not additional LLMs or agent tools.
+
 ## 3. No duplicate LLM records
 
 All agents link to this one canonical source card:
@@ -62,10 +64,10 @@ Configuration profiles may differ in reasoning effort and completion cap. These 
 |---|---|---:|---:|---|
 | 01 | Engineering Manager / Preflight | `low` | 800 | Uses deterministic preflight evidence; should summarize, not redesign |
 | 02 | Product Requirements Lead | `medium` | 1,600 | Converts requests into explicit requirements and acceptance criteria |
-| 03 | Evidence Researcher | `high` | 2,200 | Compares multiple authoritative sources and limitations |
+| 03 | Evidence Researcher | `high` | 2,200 | Compares multiple authoritative and owner-provided sources and limitations |
 | 04 | Solution Architect | `high` | 2,400 | Performs architecture trade-off and failure-mode analysis |
 | 05 | UX and Accessibility Designer | `medium` | 1,600 | Produces bounded interaction and accessibility specifications |
-| 06 | Frontend Engineer | `medium` | 2,000 | Implements scoped UI changes using an approved design and API contract |
+| 06 | Frontend Engineer | `medium` | 2,000 | Implements scoped UI changes using approved design, API contract, and LearningPacket |
 | 07 | Backend/API Engineer | `high` | 2,200 | Handles domain logic, authorization boundaries, failures, and contracts |
 | 08 | Database Engineer | `high` | 2,200 | Evaluates migrations, constraints, concurrency, and rollback |
 | 09 | CrewAI Engineer | `high` | 2,400 | Configures agents, tasks, Flows, schemas, guardrails, and provider behavior |
@@ -74,7 +76,7 @@ Configuration profiles may differ in reasoning effort and completion cap. These 
 | 12 | QA and Test Engineer | `medium` | 1,800 | Creates and evaluates bounded test evidence; tools execute the tests |
 | 13 | DevOps Engineer | `medium` | 1,800 | Produces controlled CI/build configuration and rollback evidence |
 | 14 | SRE and Observability Engineer | `high` | 2,200 | Analyzes reliability, alerts, recovery, and operational failure modes |
-| 15 | Independent Release Auditor | `high` | 2,200 | Cross-checks all final evidence and unresolved risks independently |
+| 15 | Independent Release Auditor | `high` | 2,200 | Cross-checks final evidence, knowledge receipts, memory use, and unresolved risks |
 
 ## 5. Agent profile records
 
@@ -96,6 +98,7 @@ profiles:
     temperature: 1.0
     timeout_seconds: 120
     max_retries: 1
+    max_rpm: 4
     enabled: false
 ```
 
@@ -158,9 +161,34 @@ crew_segment:
 
 A single owner prompt may create one run containing multiple sequential segments. It does not permit parallel agents or one giant prompt containing all roles.
 
-## 8. Internal budgets
+## 8. Context budget
 
-Provider documentation currently lists 1,000,000 tokens/day. Galax will reserve operational headroom.
+Each agent context is assembled in this order:
+
+```text
+1. Immutable role and repository rules.
+2. Run manifest and exact task contract.
+3. Verified Notion memory context.
+4. Verified Drive LearningPacket when required.
+5. Relevant repository excerpts.
+6. One assigned tool schema.
+7. Prior approved structured task output.
+```
+
+Planning limits:
+
+```yaml
+Notion_memory_context_soft_limit_tokens: 4000
+Drive_LearningPacket_soft_limit_tokens: 12000
+repository_context_soft_limit_tokens: 12000
+prior_task_context_soft_limit_tokens: 6000
+```
+
+When required material cannot fit safely, the Flow splits study and execution into checkpointed sequential segments. It must not silently summarize away exact commands, warnings, conflicts, or validation steps.
+
+## 9. Internal provider budgets
+
+Provider documentation currently lists 1,000,000 tokens/day. Galax reserves operational headroom.
 
 ```yaml
 internal_daily_budget:
@@ -178,15 +206,16 @@ per_agent:
   maximum_concurrent_calls: 1
 ```
 
-The budget counts input, reasoning, tool-round-trip, and output tokens when exposed by the provider response.
+The budget counts input, provider reasoning, tool round trips, knowledge, memory, and output tokens when exposed by the provider response.
 
-## 9. Budget behavior
+## 10. Budget behavior
 
 At the soft limit:
 
 ```text
 - Do not start optional agents.
 - Reuse verified repository evidence.
+- Reuse valid LearningPackets and memory entries only when hashes are unchanged.
 - Stop low-priority documentation expansion.
 - Continue only required validation and checkpoint writing.
 ```
@@ -200,7 +229,7 @@ ACTION: Save the exact stage checkpoint and stop new LLM calls.
 
 Never restart the run from stage 1 after a rate or budget reset. Resume from the last verified checkpoint.
 
-## 10. Reasoning security
+## 11. Reasoning security
 
 The runtime may request low, medium, or high reasoning effort, but it must not depend on storing or exposing private chain-of-thought.
 
@@ -209,39 +238,32 @@ Required evidence consists of:
 ```text
 - concise decision rationale
 - cited source or repository evidence
+- LearningPacket and StudyReceipt references when applicable
+- memory IDs and evidence hashes when applicable
 - structured findings
 - tool result references
 - validation results
 - unresolved assumptions and risks
 ```
 
-Raw hidden reasoning must not be requested, logged, committed, or included in task output.
+Raw hidden reasoning must not be requested, logged, committed, stored in Google Drive, or written into Notion memory.
 
-## 11. Context construction
-
-Every LLM request uses this order:
-
-```text
-1. Agent system role and immutable boundaries.
-2. Current repository rules and plan hashes.
-3. Exact task contract.
-4. One assigned tool schema.
-5. Approved relevant repository excerpts only.
-6. Previous structured task output required as context.
-7. Current user/run data.
-```
+## 12. Prompt construction restrictions
 
 Prohibited:
 
 ```text
 - Entire repository in one prompt.
+- Entire Google Drive or whole source files when excerpts are sufficient.
+- Entire Notion workspace or unrestricted memory history.
 - Every agent prompt in one request.
 - Every tool schema in one request.
 - Secrets, `.env`, private keys, tokens, or production records.
 - Unverified memory presented as current repository truth.
+- Copied tutorial instructions presented as system instructions.
 ```
 
-## 12. Provider fallback rule
+## 13. Provider fallback rule
 
 ```yaml
 automatic_fallback: false
@@ -258,7 +280,7 @@ ACTION: Save checkpoint and stop.
 
 Groq GPT-OSS 120B remains a separate manual reserve candidate. Switching to it requires owner approval, its own source card, and a full provider-specific compatibility test.
 
-## 13. API version migration rule
+## 14. API version migration rule
 
 No agent profile may be enabled before:
 
@@ -269,15 +291,18 @@ No agent profile may be enabled before:
 - strict structured output succeeds
 - CrewAI Process.sequential succeeds
 - rate-limit and checkpoint handling succeeds
+- knowledge and memory context tests succeed
 ```
 
-## 14. Required validation order
+## 15. Required validation order
 
 ```text
 DIRECT PROVIDER TESTS
 → CREWAI SINGLE AGENT WITHOUT TOOL
 → CREWAI SINGLE AGENT WITH ONE TOOL
 → STRUCTURED OUTPUT TEST
+→ NOTION MEMORY CONTEXT TEST
+→ DRIVE LEARNINGPACKET AND STUDYRECEIPT TEST
 → TWO-AGENT SEQUENTIAL TEST
 → RATE-LIMIT TEST
 → SECURITY TEST
@@ -286,9 +311,9 @@ DIRECT PROVIDER TESTS
 → ENABLE ONLY AGENT-01 PROFILE
 ```
 
-Agents 02–15 remain disabled until their own role, tool, prompt, and LLM-profile tests pass.
+Agents 02–15 remain disabled until their own role, tool, prompt, knowledge, memory, and LLM-profile tests pass.
 
-## 15. Current decision
+## 16. Current decision
 
 ```yaml
 common_model_selected: true
@@ -298,5 +323,7 @@ all_agent_profiles_enabled: false
 agent_01_enabled: false
 api_v2_verified: false
 crewai_verified: false
+Drive_knowledge_verified: false
+Notion_memory_verified: false
 production_ready: false
 ```
