@@ -3,7 +3,7 @@
 **Status:** `DRAFT_MUTABLE`  
 **Verified:** 2026-07-20
 
-This index is the canonical human-readable entry point for agent, LLM, framework, and tool sources. It must contain links only to existing source cards.
+This index is the canonical human-readable entry point for agent, LLM, framework, tool, knowledge, and memory sources. It must contain links only to existing source cards.
 
 ## Agents
 
@@ -11,7 +11,7 @@ This index is the canonical human-readable entry point for agent, LLM, framework
 |---|---|---|---|---|
 | [`engineering_manager`](agents/engineering_manager/SOURCE_CARD.md) | AI Engineering Manager and CrewAI Execution Planning Lead | [`cerebras/gpt-oss-120b`](llms/cerebras-gpt-oss-120b/SOURCE_CARD.md) | [`RepositoryPreflightTool`](tools/repository_preflight_tool/SOURCE_CARD.md) | `RESEARCHING` |
 
-Agents 02–15 will be added only after their individual role, LLM profile, and tool inspections begin.
+Agents 02–15 have candidate profiles in the 15-agent matrix. Individual source cards will be added only after each agent's role, LLM profile, and single tool inspection begins.
 
 ## Frameworks
 
@@ -26,25 +26,34 @@ Agents 02–15 will be added only after their individual role, LLM profile, and 
 | [`LLM-cerebras-gpt-oss-120b`](llms/cerebras-gpt-oss-120b/SOURCE_CARD.md) | Cerebras `gpt-oss-120b` | `SELECTED_FOR_VALIDATION` | [Cerebras public model metadata](https://inference-docs.cerebras.ai/api-reference/models/public-models) |
 | [`LLM-groq-openai-gpt-oss-120b`](llms/groq-openai-gpt-oss-120b/SOURCE_CARD.md) | Groq `openai/gpt-oss-120b` | `RESERVE_CANDIDATE_NOT_ACTIVE` | [Groq exact model page](https://console.groq.com/docs/model/openai/gpt-oss-120b) |
 
-## Tools
+## Agent tools and infrastructure gateways
 
-| Source ID | Tool | Status | Official compatibility source |
+| Source ID | Tool/gateway | Status | Official compatibility source |
 |---|---|---|---|
 | [`TOOL-repository-preflight`](tools/repository_preflight_tool/SOURCE_CARD.md) | `RepositoryPreflightTool` | `CONDITIONALLY_APPROVED` | [CrewAI custom tools](https://docs.crewai.com/learn/create-custom-tools) |
+| [`TOOL-drive-knowledge-gateway`](tools/drive_knowledge_gateway/SOURCE_CARD.md) | `DriveKnowledgeGateway` | `SELECTED_FOR_VALIDATION` | [Google Drive API search](https://developers.google.com/workspace/drive/api/guides/search-files) |
+| [`TOOL-notion-memory-gateway`](tools/notion_memory_gateway/SOURCE_CARD.md) | `GalaxNotionMemoryGateway` | `SELECTED_FOR_VALIDATION` | [Notion API](https://developers.notion.com/) |
+
+The Drive and Notion gateways are controlled Flow/application infrastructure. They do not count as additional agent tools and are not directly exposed to agents.
 
 ## Core rules
 
 - [No unsupported agent work rule](../rules/NO_UNSUPPORTED_AGENT_WORK_RULE_DRAFT.md)
 - [Per-agent LLM compatibility rule](../rules/PER_AGENT_LLM_COMPATIBILITY_RULE_DRAFT.md)
+- [Knowledge before implementation rule](../rules/KNOWLEDGE_BEFORE_IMPLEMENTATION_RULE_DRAFT.md)
+- [Notion memory rule](../rules/NOTION_MEMORY_RULE_DRAFT.md)
 - [Source traceability rule](../rules/SOURCE_TRACEABILITY_RULE_DRAFT.md)
 - [No exact duplicates rule](../rules/NO_EXACT_DUPLICATES_RULE_DRAFT.md)
 
-## Research and plans
+## Research, architecture, and plans
 
 - [CrewAI 1.15.4 capability and limitation matrix](../research/crewai/CREWAI_1_15_4_CAPABILITY_LIMIT_MATRIX.md)
+- [Notion + CrewAI: 10 verified facts](../research/notion/NOTION_CREWAI_10_VERIFIED_FACTS_2026-07-20.md)
 - [15-agent capability mapping](../plan/AGENT_CAPABILITY_MAPPING_DRAFT.md)
+- [15-agent LLM, tool, knowledge, and memory matrix](../plan/AGENT_LLM_TOOL_KNOWLEDGE_MEMORY_MATRIX_DRAFT.md)
 - [Free provider screening — 2026-07-20](../research/llms/FREE_PROVIDER_SCREENING_2026-07-20.md)
 - [LLM assignment plan](../plan/LLM_ASSIGNMENT_PLAN_DRAFT.md)
+- [Google Drive knowledge + Notion memory architecture](../architecture/GOOGLE_DRIVE_KNOWLEDGE_NOTION_MEMORY_DRAFT.md)
 - [GitHub repository read/write architecture](../architecture/GITHUB_REPOSITORY_READ_WRITE_DRAFT.md)
 
 ## Deterministic query mapping
@@ -59,6 +68,8 @@ aliases:
   crewai: frameworks/crewai-1.15.4/SOURCE_CARD.md
   crewai-1.15.4: frameworks/crewai-1.15.4/SOURCE_CARD.md
   cerebras-gpt-oss-120b: llms/cerebras-gpt-oss-120b/SOURCE_CARD.md
+  drive-knowledge: tools/drive_knowledge_gateway/SOURCE_CARD.md
+  notion-memory: tools/notion_memory_gateway/SOURCE_CARD.md
 ```
 
 Expected queries:
@@ -67,6 +78,8 @@ Expected queries:
 source engineering_manager
 source crewai
 source cerebras-gpt-oss-120b
+source drive-knowledge
+source notion-memory
 ```
 
 The command must return the links stored in the mapped source card. It must not ask an LLM to remember or recreate source URLs.
