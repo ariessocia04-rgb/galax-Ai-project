@@ -3,7 +3,19 @@
 **Status:** `DRAFT_MUTABLE`  
 **Verified:** 2026-07-20
 
-This index is the canonical human-readable entry point for agent, LLM, framework, tool, knowledge, memory, and infrastructure sources. It contains links only to existing repository records or official sources.
+This index is the canonical human-readable entry point for agent, LLM, framework, tool, knowledge, memory, infrastructure, and readiness sources. It contains links only to existing repository records or official sources.
+
+## Current readiness
+
+```yaml
+full_build_prompt_status: BLOCKED_NOT_READY_TO_PROMPT_CREWAI
+agents_enabled: 0
+primary_llm: DISABLED_PENDING_TESTS
+fallback_llm: DISABLED_PENDING_TESTS
+production_ready: false
+```
+
+- [Final free-tier readiness audit](../research/readiness/FINAL_FREE_TIER_READINESS_AUDIT_2026-07-20.md)
 
 ## Agents
 
@@ -21,10 +33,12 @@ Agents 02–15 have candidate profiles in the 15-agent plans. Individual source 
 
 ## LLMs
 
-| Source ID | Provider/model | Status | Official model source |
-|---|---|---|---|
-| [`LLM-cerebras-gpt-oss-120b`](llms/cerebras-gpt-oss-120b/SOURCE_CARD.md) | Cerebras `gpt-oss-120b` | `SELECTED_FOR_VALIDATION` | [Cerebras public model metadata](https://inference-docs.cerebras.ai/api-reference/models/public-models) |
-| [`LLM-groq-openai-gpt-oss-120b`](llms/groq-openai-gpt-oss-120b/SOURCE_CARD.md) | Groq `openai/gpt-oss-120b` | `RESERVE_CANDIDATE_NOT_ACTIVE` | [Groq exact model page](https://console.groq.com/docs/model/openai/gpt-oss-120b) |
+| Source ID | Provider/model | Runtime role | Status | Official model source |
+|---|---|---|---|---|
+| [`LLM-cerebras-gpt-oss-120b`](llms/cerebras-gpt-oss-120b/SOURCE_CARD.md) | Cerebras `gpt-oss-120b` | Primary candidate | `DISABLED_PENDING_API_V2_AND_ACCOUNT_TESTS` | [Cerebras public model metadata](https://inference-docs.cerebras.ai/api-reference/models/public-models) |
+| [`LLM-groq-openai-gpt-oss-120b`](llms/groq-openai-gpt-oss-120b/SOURCE_CARD.md) | Groq `openai/gpt-oss-120b` | Controlled fallback candidate | `DISABLED_PENDING_SEPARATE_TESTS` | [Groq exact model page](https://console.groq.com/docs/model/openai/gpt-oss-120b) |
+
+The fallback is not a silent provider switch. It must pass its own per-agent compatibility tests and may be selected only by deterministic Flow from a safe checkpoint.
 
 ## Agent tools and Flow infrastructure gateways
 
@@ -47,6 +61,8 @@ Drive, primary memory, and Notion mirror gateways are controlled Flow/applicatio
 
 - [No unsupported agent work](../rules/NO_UNSUPPORTED_AGENT_WORK_RULE_DRAFT.md)
 - [Per-agent LLM compatibility](../rules/PER_AGENT_LLM_COMPATIBILITY_RULE_DRAFT.md)
+- [Validated LLM failover](../rules/VALIDATED_LLM_FAILOVER_RULE_DRAFT.md)
+- [Free-tier capacity snapshot](../rules/FREE_TIER_CAPACITY_SNAPSHOT_RULE_DRAFT.md)
 - [Knowledge before implementation](../rules/KNOWLEDGE_BEFORE_IMPLEMENTATION_RULE_DRAFT.md)
 - [Supabase primary memory + Notion mirror](../rules/SUPABASE_PRIMARY_MEMORY_NOTION_MIRROR_RULE_DRAFT.md)
 - [Automatic revalidation research](../rules/AUTOMATIC_REVALIDATION_RESEARCH_RULE_DRAFT.md)
@@ -59,6 +75,7 @@ Earlier rule retained for mirror details only where not superseded:
 
 ## Research, architecture, and plans
 
+- [Final free-tier readiness audit](../research/readiness/FINAL_FREE_TIER_READINESS_AUDIT_2026-07-20.md)
 - [CrewAI 1.15.4 capability and limitation matrix](../research/crewai/CREWAI_1_15_4_CAPABILITY_LIMIT_MATRIX.md)
 - [CrewAI + Docker fact check](../research/docker/CREWAI_DOCKER_FACT_CHECK_2026-07-20.md)
 - [Fully containerized Galax architecture](../architecture/FULLY_DOCKERIZED_CREWAI_FLOW_DRAFT.md)
@@ -82,10 +99,12 @@ aliases:
   crewai: frameworks/crewai-1.15.4/SOURCE_CARD.md
   crewai-1.15.4: frameworks/crewai-1.15.4/SOURCE_CARD.md
   cerebras-gpt-oss-120b: llms/cerebras-gpt-oss-120b/SOURCE_CARD.md
+  groq-gpt-oss-120b: llms/groq-openai-gpt-oss-120b/SOURCE_CARD.md
   drive-knowledge: tools/drive_knowledge_gateway/SOURCE_CARD.md
   supabase-memory: tools/supabase_memory_gateway/SOURCE_CARD.md
   notion-memory: tools/notion_memory_gateway/SOURCE_CARD.md
   docker: infrastructure/docker-compose/SOURCE_CARD.md
+  free-tier-readiness: ../research/readiness/FINAL_FREE_TIER_READINESS_AUDIT_2026-07-20.md
 ```
 
 Expected queries:
@@ -94,10 +113,12 @@ Expected queries:
 source engineering_manager
 source crewai
 source cerebras-gpt-oss-120b
+source groq-gpt-oss-120b
 source drive-knowledge
 source supabase-memory
 source notion-memory
 source docker
+source free-tier-readiness
 ```
 
-The command returns links stored in the mapped source card. It must not ask an LLM to remember or recreate source URLs.
+The command returns links stored in the mapped source card or research record. It must not ask an LLM to remember or recreate source URLs.
