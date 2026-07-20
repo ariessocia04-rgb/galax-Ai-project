@@ -3,25 +3,29 @@
 **Status:** `DRAFT_MUTABLE`  
 **Production status:** `NOT_APPROVED`  
 **Crew process:** `Process.sequential`  
-**Active agents:** `0`
+**Active agents:** `0`  
+**Canonical remediation:** `docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md`
 
 ## 1. Corrected architecture decision
 
-The earlier one-provider Cerebras plan is superseded because current official pricing classifies Cerebras access as trial credits. Trial-only providers are not active Galax candidates.
-
-Galax now uses separately validated routing classes:
+The active Galax plan does not use one model for every agent. Provider/model selection is based on the exact agent task, data class, tool schema, output contract, quality tests, and current free/account capacity.
 
 ```yaml
-private_repository_and_code:
+low_and_medium_bounded_private_work:
+  primary_candidate: groq/openai/gpt-oss-20b
+  hosted_fallback_candidate: cloudflare/@cf/openai/gpt-oss-20b
+  optional_local_fallback: ollama/gpt-oss:20b
+
+high_complexity_private_work:
   primary_candidate: groq/openai/gpt-oss-120b
   hosted_fallback_candidate: cloudflare/@cf/openai/gpt-oss-120b
-  optional_local_fallback: ollama/gpt-oss:20b
+  optional_local_fallback: none_until_quality_equivalent_profile_is_proven
 
 public_or_fully_redacted_long_context:
   candidate: gemini/gemini-2.5-flash
 
 conditional_research_only:
-  candidate: mistral/mistral-small-2603
+  candidate: mistral_free_mode_account_specific
 
 rejected_active:
   - cerebras/gpt-oss-120b
@@ -29,112 +33,123 @@ rejected_active:
   - trial_credit_only_providers
 ```
 
-No provider profile is enabled until it passes per-agent tests.
+No profile is enabled from documentation evidence alone.
 
-## 2. One agent, one tool remains unchanged
+## 2. CrewAI controls
+
+```yaml
+process: Process.sequential
+planning: false
+reasoning: false
+memory: false
+allow_delegation: false
+allow_code_execution: false
+async_execution: false
+parallel_agents: false
+parallel_tool_calls: false
+concurrent_llm_calls: 1
+respect_context_window: false
+```
+
+CrewAI `planning=True` is not used because it creates an extra AgentPlanner call and defaults to an OpenAI planning model unless explicitly changed. CrewAI `reasoning=True` is not used because it creates an additional refinement loop and CrewAI documents that a reasoning-stage failure can continue into task execution. Galax uses provider-native `reasoning_effort` plus explicit structured planning tasks and deterministic Flow validation.
+
+## 3. One agent, one LLM, one tool
 
 ```text
 LLM != TOOL
 ```
 
-Every active agent has:
+For one active task:
 
 ```yaml
+active_agent: exactly_one
 active_llm_profile: exactly_one
 assigned_tool_interface: exactly_one
 ```
 
-A validated fallback is not simultaneously attached to the agent. The deterministic Flow replaces the active LLM profile only from a safe checkpoint after an approved provider failure.
+Fallback profiles may be stored, but they are not simultaneously attached to the agent. Deterministic Flow may explicitly replace the active profile only from a safe checkpoint, only when no external mutation is active, and only when the alternate is approved for the same agent and data class.
 
-Google Drive knowledge, Supabase memory, and optional Notion mirror are controlled Flow infrastructure, not additional agent tools.
+Google Drive knowledge, Supabase memory, Notion mirroring, branch creation, checkpoints, agent selection, and draft PR creation remain trusted Flow/application infrastructure.
 
-## 3. Canonical source records
+## 4. Canonical source records
 
 ```text
+docs/sources/llms/groq-openai-gpt-oss-20b/SOURCE_CARD.md
 docs/sources/llms/groq-openai-gpt-oss-120b/SOURCE_CARD.md
+docs/sources/llms/cloudflare-gpt-oss-20b/SOURCE_CARD.md
 docs/sources/llms/cloudflare-gpt-oss-120b/SOURCE_CARD.md
 docs/sources/llms/google-gemini-2.5-flash/SOURCE_CARD.md
 docs/sources/llms/ollama-gpt-oss-20b/SOURCE_CARD.md
 docs/sources/llms/cerebras-gpt-oss-120b/SOURCE_CARD.md  # rejected history
 ```
 
-Do not copy provider facts into 15 agent cards. Agent cards link to canonical source cards and define only their task-specific profile.
+Provider facts are stored once in canonical source cards. Individual agent cards contain only the agent-specific profile, tests, limits, and decision.
 
-## 4. Per-agent reasoning and output ceilings
+## 5. Per-agent model allocation candidates
 
-These are Galax internal ceilings, not provider capacity claims.
+These are validation candidates, not approvals.
 
-| ID | Agent | Reasoning | Maximum output tokens | Default data class |
-|---:|---|---|---:|---|
-| 01 | Engineering Manager / Preflight | Low | 800 | Private scoped repository metadata |
-| 02 | Product Requirements Lead | Medium | 1,600 | Private owner requirements |
-| 03 | Evidence Researcher | High | 2,200 | Public sources and redacted owner material |
-| 04 | Solution Architect | High | 2,400 | Private scoped architecture context |
-| 05 | UX and Accessibility Designer | Medium | 1,600 | Private scoped design context |
-| 06 | Frontend Engineer | Medium | 2,000 | Private scoped code |
-| 07 | Backend/API Engineer | High | 2,200 | Private scoped code |
-| 08 | Database Engineer | High | 2,200 | Private schema and disposable test data |
-| 09 | CrewAI Engineer | High | 2,400 | Private CrewAI/config source |
-| 10 | Integration/MCP Engineer | High | 2,200 | Private adapters and public protocol docs |
-| 11 | Security and Privacy Engineer | High | 2,400 | Sensitive scoped security evidence |
-| 12 | QA and Test Engineer | Medium | 1,800 | Private scoped tests/results |
-| 13 | DevOps Engineer | Medium | 1,800 | Private CI/build configuration |
-| 14 | SRE and Observability Engineer | High | 2,200 | Redacted telemetry only |
-| 15 | Independent Release Auditor | High | 2,200 | Private bounded evidence package |
+| ID | Agent | Primary candidate | Reasoning effort | Output cap | Hosted fallback candidate | Current status |
+|---:|---|---|---|---:|---|---|
+| 01 | Engineering Manager / Preflight | Groq GPT-OSS 20B | Low | 800 | Cloudflare GPT-OSS 20B | Disabled; tests missing |
+| 02 | Product Requirements and Scope Lead | Groq GPT-OSS 20B | Medium | 1,600 | Cloudflare GPT-OSS 20B | Disabled; tests missing |
+| 03 | Evidence and Capability Researcher | Gemini 2.5 Flash for public/redacted; Groq 120B for private scoped | High | 2,200 | Cloudflare 120B for private scoped | Disabled; gateway/tests missing |
+| 04 | Solution and Systems Architect | Groq GPT-OSS 120B | High | 2,400 | Cloudflare GPT-OSS 120B | Disabled; tests missing |
+| 05 | UX, UI, and Accessibility Designer | Groq GPT-OSS 20B | Medium | 1,600 | Cloudflare GPT-OSS 20B | Disabled; tests missing |
+| 06 | Frontend Application Engineer | Groq GPT-OSS 20B initially | Medium | 2,000 | Cloudflare 20B; promote to tested 120B only if quality gate fails | Disabled; sandbox missing |
+| 07 | Backend and API Engineer | Groq GPT-OSS 120B | High | 2,200 | Cloudflare GPT-OSS 120B | Disabled; sandbox missing |
+| 08 | Data and Database Engineer | Groq GPT-OSS 120B | High | 2,200 | Cloudflare GPT-OSS 120B | Disabled; disposable DB missing |
+| 09 | CrewAI and AI Systems Engineer | Groq GPT-OSS 120B | High | 2,400 | Cloudflare GPT-OSS 120B | Disabled; pinned integration missing |
+| 10 | Integration and MCP Engineer | Groq GPT-OSS 120B | High | 2,200 | Cloudflare GPT-OSS 120B | Disabled; MCP security tests missing |
+| 11 | Security, Privacy, and AI Safety Engineer | Groq GPT-OSS 120B | High | 2,400 | None until a sensitive-data fallback suite passes | Disabled; scanner gateway missing |
+| 12 | QA and Test Automation Engineer | Groq GPT-OSS 20B | Medium | 1,800 | Cloudflare GPT-OSS 20B | Disabled; test sandbox missing |
+| 13 | DevOps and CI/CD Engineer | Groq GPT-OSS 20B | Medium | 1,800 | Cloudflare GPT-OSS 20B | Disabled; build sandbox missing |
+| 14 | SRE and Observability Engineer | Groq GPT-OSS 120B | High | 2,200 | Cloudflare 120B only with fully redacted telemetry | Disabled; telemetry gateway missing |
+| 15 | Independent Release Auditor | Groq GPT-OSS 120B | High | 2,200 | Cloudflare GPT-OSS 120B | Disabled; evidence gateway missing |
 
-## 5. Default provider class by agent
+A 20B failure against the defined quality suite may justify testing the 120B profile. It does not authorize silent promotion.
 
-### Private repository agents
+## 6. Provider capacity controls
 
-Agents 01, 02, 04–15 default to the Groq candidate profile because Groq provides a direct CrewAI/LiteLLM path, a durable free plan, tool calling, structured output modes, and stronger free-plan data handling than Gemini.
+### Groq GPT-OSS 20B and 120B
 
-```yaml
-primary_source_id: LLM-groq-openai-gpt-oss-120b
-primary_model: groq/openai/gpt-oss-120b
-status: DISABLED_PENDING_PER_AGENT_TESTS
-```
-
-### Research agent
-
-Agent 03 may use either:
+Current planning base limits recorded for both models:
 
 ```yaml
-private_or_owner_scoped_research:
-  model: groq/openai/gpt-oss-120b
-
-public_large_learning_packet:
-  model: gemini/gemini-2.5-flash
-  restriction: public_or_fully_redacted_only
+RPM: 30
+RPD: 1000
+TPM: 8000
+TPD: 200000
 ```
 
-Only one profile is active for a task.
+The connected organization is the runtime source of truth. The current 8K TPM limit is the practical free-tier bottleneck despite a much larger model context. The 20B model is selected for potential latency/compute efficiency, not for a larger published free token quota.
 
-### Hosted fallback
+### Cloudflare Workers AI
 
 ```yaml
-source_id: LLM-cloudflare-gpt-oss-120b
-model: '@cf/openai/gpt-oss-120b'
-connection: custom_OpenAI_compatible
-status: DISABLED_PENDING_PER_AGENT_TESTS
+free_allocation: 10000_neurons_per_day
+quota_type: compute_based
 ```
 
-### Local fallback
+The 20B model has lower published neuron rates than 120B, but the runtime must capture current official rates and remaining allocation. Do not convert the free allocation into a guaranteed number of requests.
 
-```yaml
-source_id: LLM-ollama-gpt-oss-20b
-model: ollama/gpt-oss:20b
-status: DISABLED_PENDING_HARDWARE_AND_PER_AGENT_TESTS
-```
+### Gemini 2.5 Flash
 
-## 6. Planned profile schema
+Actual project/model RPM, TPM, and RPD must be captured from the connected account. The free profile receives public or fully redacted content only because Google states free-tier content may be used to improve its products.
+
+### Ollama GPT-OSS 20B
+
+Capacity is determined by actual model digest, RAM/VRAM, CPU/GPU, configured context, latency, and concurrency tests. No provider quota does not mean unlimited practical capacity.
+
+## 7. Planned profile schema
 
 ```yaml
 profiles:
-  engineering_manager_groq_v1:
+  engineering_manager_groq_20b_v1:
     agent_id: engineering_manager
-    source_id: LLM-groq-openai-gpt-oss-120b
+    source_id: LLM-groq-openai-gpt-oss-20b
     provider: groq
-    model: groq/openai/gpt-oss-120b
+    model: groq/openai/gpt-oss-20b
     data_classification: private_scoped
     reasoning_effort: low
     max_completion_tokens: 800
@@ -143,11 +158,11 @@ profiles:
     max_retries: 1
     enabled: false
 
-  engineering_manager_cloudflare_v1:
+  engineering_manager_cloudflare_20b_v1:
     agent_id: engineering_manager
-    source_id: LLM-cloudflare-gpt-oss-120b
+    source_id: LLM-cloudflare-gpt-oss-20b
     provider: custom_openai
-    model: '@cf/openai/gpt-oss-120b'
+    model: '@cf/openai/gpt-oss-20b'
     data_classification: private_scoped
     reasoning_effort: low
     max_completion_tokens: 800
@@ -156,9 +171,9 @@ profiles:
     enabled: false
 ```
 
-Fallback profiles are stored but not attached simultaneously to an agent.
+Provider-specific parameters must be explicitly mapped. Unsupported parameters must not be silently forwarded.
 
-## 7. Runtime factory rule
+## 8. Runtime factory and hooks
 
 ```python
 from crewai import LLM
@@ -166,16 +181,13 @@ from crewai import LLM
 
 def build_agent_llm(profile: LLMProfile) -> LLM:
     if not profile.enabled:
-        raise RuntimeError(
-            f"LLM profile {profile.profile_id} is not approved."
-        )
-
+        raise RuntimeError(f"LLM profile {profile.profile_id} is not approved")
     return LLM(**profile.to_crewai_parameters())
 ```
 
-Provider-specific parameters are generated explicitly. Unsupported parameters must not be silently forwarded.
+A crew-scoped `PRE_MODEL_CALL` hook enforces profile identity, data classification, secret scanning, current capacity, input/output budget, and single-agent context. A `POST_MODEL_CALL` hook records usage and redacts prohibited output. Hook evidence is not sufficient by itself; the canonical invocation ledger and task guardrails remain authoritative.
 
-Secrets are read only from the runtime secret store:
+Secrets are runtime-only:
 
 ```env
 GROQ_API_KEY=
@@ -185,107 +197,84 @@ GEMINI_API_KEY=
 OLLAMA_BASE_URL=http://127.0.0.1:11434
 ```
 
-## 8. Sequential execution and token protection
-
-```yaml
-execution:
-  process: sequential
-  parallel_agents: false
-  asynchronous_tasks: false
-  concurrent_llm_calls: 1
-  selected_agents_only: true
-  load_all_agent_prompts: false
-  load_all_tool_schemas: false
-```
-
-Default segment maximum is five selected agents; hard maximum is eight. Larger runs are split into checkpointed sequential segments.
-
 ## 9. Context assembly
 
 ```text
-1. Immutable repository rules.
+1. Active immutable repository rules and hashes.
 2. Run manifest and exact task contract.
 3. Bounded verified Supabase MemoryContext.
 4. Verified Drive LearningPacket when required.
-5. Relevant repository excerpts.
-6. One assigned tool schema.
-7. Prior approved structured task output.
+5. Relevant repository excerpts only.
+6. Exactly one assigned tool schema.
+7. Prior approved structured sequential output.
 ```
 
-Never send the whole repository, all agent prompts, all tool schemas, secrets, or unrestricted memory.
+Prohibited:
 
-Provider context windows do not override TPM, daily allocation, account limits, privacy, or Galax internal budgets.
-
-## 10. Provider capacity controls
-
-### Groq
-
-```yaml
-base_free_limits:
-  RPM: 30
-  RPD: 1000
-  TPM: 8000
-  TPD: 200000
+```text
+- full repository
+- all 15 prompts
+- all tool schemas
+- secrets or credential files
+- unrestricted memory
+- raw hidden reasoning
+- private content sent to the free Gemini profile
 ```
 
-The 8K TPM limit means large context must be split even though the model advertises 131K context.
+When required exact context exceeds the effective account/provider/hardware capacity, return `BLOCKED_CONTEXT_LIMIT` and split the task into checkpointed sequential segments.
 
-### Cloudflare
-
-```yaml
-free_allocation: 10000_neurons_per_day
-```
-
-Allocation is compute-based. The Flow estimates input/output neuron consumption and captures the current dashboard state.
-
-### Gemini
-
-Actual RPM/TPM/RPD must be captured from AI Studio. Free-tier content is public/redacted only.
-
-### Ollama
-
-Capacity is determined by actual local hardware, model digest, configured context, and measured latency.
-
-## 11. Failover rule
+## 10. Failover rule
 
 ```text
 safe LLM-only stage fails
-→ verify no external write is active
-→ checkpoint
-→ classify failure
-→ verify alternate profile is approved for agent and data class
-→ capture alternate capacity
-→ instantiate alternate explicitly
-→ rerun safe stage
-→ record provider/model switch
+→ confirm no repository/database/upload/deployment mutation is active
+→ write a canonical manual checkpoint
+→ classify the provider failure
+→ verify alternate profile approval for the same agent and data class
+→ capture current alternate capacity
+→ explicitly construct the alternate LLM
+→ rerun only the safe stage
+→ record provider/model/profile transition
 ```
 
-No automatic switch occurs during commits, database writes, uploads, deployment, or merge.
+No failover for prompt/schema defects, factual disagreement, security/permission failure, failed tests, repository conflicts, or missing human approval.
 
-## 12. Required validation order
+## 11. Required validation per profile
 
 ```text
-PIN DEPENDENCIES
-→ DIRECT PROVIDER OR LOCAL MODEL TEST
-→ CREWAI SINGLE AGENT WITHOUT TOOL
-→ SINGLE AGENT WITH ONE TOOL
-→ TOOL RESULT ROUND TRIP
-→ STRUCTURED OUTPUT
-→ DATA CLASSIFICATION TEST
-→ RATE/ALLOCATION/CONTEXT TEST
-→ TWO-AGENT SEQUENTIAL TEST
-→ CHECKPOINTED FAILOVER TEST
-→ SECURITY TEST
-→ ENABLE ONE AGENT PROFILE ONLY
+LLM-001 authentication and exact model ID
+LLM-002 system-instruction adherence
+LLM-003 prohibited-action refusal
+LLM-004 provider reasoning parameter behavior
+LLM-005 correct single tool selection
+LLM-006 exact Pydantic arguments
+LLM-007 real invocation ID
+LLM-008 tool-result round trip
+LLM-009 structured task output
+LLM-010 malformed output rejection
+LLM-011 PRE/POST model-hook enforcement
+LLM-012 token cap and usage recording
+LLM-013 timeout behavior
+LLM-014 HTTP 429/allocation behavior
+LLM-015 context overflow stops safely
+LLM-016 prompt-injection resistance
+LLM-017 secret/data-classification protection
+LLM-018 sequential context acceptance
+LLM-019 self-diagnostic evidence consistency
+LLM-020 agent-specific quality acceptance
 ```
 
-## 13. Current decision
+Approval for one agent does not approve another agent, even with the same model.
+
+## 12. Current decision
 
 ```yaml
-Groq_primary_candidate: selected_not_tested
-Cloudflare_hosted_fallback: selected_not_tested
+Groq_20B_bounded_primary: selected_not_tested
+Groq_120B_high_complexity_primary: selected_not_tested
+Cloudflare_20B_bounded_fallback: selected_not_tested
+Cloudflare_120B_high_complexity_fallback: selected_not_tested
 Gemini_public_long_context: selected_not_tested
-Ollama_local_fallback: optional_not_tested
+Ollama_local_20B: optional_not_tested
 Mistral: conditional_research_only
 Cerebras: rejected_trial_only
 all_agent_profiles_enabled: false
