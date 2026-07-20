@@ -11,6 +11,7 @@ identity:
   task_id:
   contributor_id: CLINE-01 | OPENHANDS-01 | AIDER-01 | MSWE-01 | PRAGENT-01
   exact_role:
+  role_charter_path:
   human_coordinator:
 
 repository:
@@ -28,8 +29,8 @@ mission:
 
 required_reading:
   - README.md
-  - docs/team/external-ai-contributors/COMMON_OPERATING_CONTRACT.md
-  - docs/team/external-ai-contributors/ROLE_CARDS.md
+  - docs/prompts/external-ai-contributors/SHARED_EXECUTION_PROTOCOL.md
+  - exact role_charter_path named above
   - docs/research/readiness/FINAL_PRE_PROMPT_CONFLICT_AUDIT_2026-07-20.md
   - docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
   - docs/prompts/GALAX_FOUNDATION_AGENT01_IMPLEMENTATION_VALIDATION_PROMPT.md
@@ -82,12 +83,22 @@ stop_conditions:
   - architecture_change_required_but_not_approved
 
 required_handoff:
-  schema: docs/team/external-ai-contributors/COMMON_OPERATING_CONTRACT.md#10-required-handoff-schema
+  schema: docs/prompts/external-ai-contributors/SHARED_EXECUTION_PROTOCOL.md#10-handoff-contract
   include_patch_or_diff: true
   include_commands: true
   include_test_logs: true
   include_blockers: true
   human_decision_required: true
+```
+
+## Role charter values
+
+```yaml
+CLINE-01: docs/prompts/external-ai-contributors/CLINE_ROLE_CHARTER.md
+OPENHANDS-01: docs/prompts/external-ai-contributors/OPENHANDS_CORE_ROLE_CHARTER.md
+AIDER-01: docs/prompts/external-ai-contributors/AIDER_ROLE_CHARTER.md
+MSWE-01: docs/prompts/external-ai-contributors/MINI_SWE_AGENT_ROLE_CHARTER.md
+PRAGENT-01: docs/prompts/external-ai-contributors/PR_AGENT_ROLE_CHARTER.md
 ```
 
 ## Required opening response
@@ -115,4 +126,4 @@ awaiting_human_plan_approval: true
 
 ## Required final response
 
-Use the full handoff schema in the common contract. A prose-only claim such as “done” is invalid.
+Use the full handoff schema in `SHARED_EXECUTION_PROTOCOL.md`. A prose-only claim such as “done” is invalid.
