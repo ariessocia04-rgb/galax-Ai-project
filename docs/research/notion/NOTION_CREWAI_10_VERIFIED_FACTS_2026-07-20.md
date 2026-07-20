@@ -122,9 +122,16 @@ Source:
 
 # Verified connected-workspace observation
 
-The currently connected Notion workspace successfully returned search results through the installed Notion connector on 2026-07-20. Existing project-memory-style pages were discoverable, confirming that the current user connection supports workspace search.
+On 2026-07-20, the currently connected Notion account successfully authenticated through the installed Notion connector and returned ranked workspace search results. Existing pages with project-memory patterns were discoverable, including an `IRent Memory Hub` and a project index/recovery page.
 
-This observation proves current connector access only. It does not approve unattended CrewAI memory writes or broad workspace access.
+This proves current read/search connectivity for the user's active ChatGPT session only. It does not prove that:
+
+```text
+- the future CrewAI runtime has Notion credentials
+- a dedicated Galax Memory data source exists
+- unattended writes are authorized
+- the current connector scope is safe for production automation
+```
 
 # Final technical decision
 
