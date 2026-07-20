@@ -2,545 +2,189 @@
 
 **Status:** `DRAFT_MUTABLE`  
 **Framework candidate:** CrewAI 1.15.4  
-**LLM candidate:** `cerebras/gpt-oss-120b`  
 **Process:** `Process.sequential`  
-**Global rule:** One agent receives one role-specific tool interface. Google Drive knowledge and Notion memory are injected by trusted Flow/application infrastructure.
+**Agents enabled:** `0`
 
-## Global LLM restrictions
+## 1. Global architecture
 
 ```yaml
-provider: Cerebras
-model: cerebras/gpt-oss-120b
-status: SELECTED_FOR_VALIDATION_NOT_USED
-temperature: 1.0
-timeout_seconds: 120
-max_retries: 1
-max_rpm: 4
+private_repository_primary_candidate: groq/openai/gpt-oss-120b
+private_hosted_fallback_candidate: cloudflare/@cf/openai/gpt-oss-120b
+public_redacted_long_context_candidate: gemini/gemini-2.5-flash
+optional_local_fallback_candidate: ollama/gpt-oss:20b
+rejected_trial_only_candidate: cerebras/gpt-oss-120b
+
 allow_delegation: false
 allow_code_execution: false
 async_execution: false
-memory: false
-respect_context_window: false
-crewai_reasoning_loop: false
+native_CrewAI_memory: false
+parallel_tool_calls: false
+maximum_active_agents: 1
+maximum_active_LLM_calls: 1
 ```
 
-Every profile below remains disabled until its own prompt, tool schema, actual tool invocation, structured output, security, rate-limit, and sequential-context tests pass.
+Every provider profile remains disabled until it passes its own agent-specific prompt, tool, structured-output, privacy, rate/allocation, failure, and sequential-context tests.
 
-## Shared context order
+## 2. Shared context order
 
 ```text
-1. Immutable system and repository rules.
-2. Current run manifest and task contract.
-3. Verified Notion memory context.
+1. Immutable repository rules.
+2. Current run manifest and exact task contract.
+3. Verified bounded Supabase MemoryContext.
 4. Verified Google Drive LearningPacket when required.
 5. Relevant repository excerpts.
 6. One role-specific tool schema.
-7. Prior structured sequential task output.
+7. Prior approved structured sequential output.
 ```
 
-## Agent 01 — Engineering Manager / Preflight
+Notion is an optional curated human-readable mirror. It is not the primary machine-memory context.
+
+## 3. Provider selection boundary
+
+### Private or confidential task context
 
 ```yaml
-llm_profile:
-  reasoning_effort: low
-  max_completion_tokens: 800
-  max_iter: 4
-  status: DISABLED_PENDING_TESTS
-single_tool:
-  name: RepositoryPreflightTool
-  permission: repository_read_only
-  status: CONDITIONALLY_APPROVED_NOT_IMPLEMENTED
-Drive_knowledge:
-  required_for:
-    - explicit owner preflight policies
-    - task-specific governance tutorials
-Notion_memory_read:
-  - GLOBAL_BLOCKER
-  - AGENT_VALIDATION
-  - TOOL_VALIDATION
-  - LLM_VALIDATION
-must_not:
-  - choose or add agents dynamically
-  - reorder tasks
-  - write repository
-  - approve its own result
-required_tests:
-  - exact preflight tool invocation
-  - continue_or_stop schema
-  - blocking result stops sequential run
+primary: groq/openai/gpt-oss-120b
+hosted_fallback: cloudflare/@cf/openai/gpt-oss-120b
+local_fallback: ollama/gpt-oss:20b
 ```
 
-## Agent 02 — Product Requirements and Scope Lead
+### Public or fully redacted long-context material
 
 ```yaml
-llm_profile:
-  reasoning_effort: medium
-  max_completion_tokens: 1600
-  max_iter: 6
-  status: DISABLED_PENDING_RESEARCH
-single_tool:
-  name: RequirementsWorkspaceTool
-  permission: requirements_and_acceptance_docs_run_branch_write
-  status: CANDIDATE_NOT_IMPLEMENTED
-Drive_knowledge:
-  required_for:
-    - owner business-process tutorials
-    - copied product workflow references
-    - domain terminology files
-Notion_memory_read:
-  - DECISION
-  - LESSON
-  - SCOPE_CONFLICT
-  - RUN_SUMMARY
-must_not:
-  - invent requirements
-  - approve scope
-  - edit application code
-  - use outdated learning material without flagging it
-required_tests:
-  - requirement traceability to owner prompt and LearningPacket
-  - acceptance criteria schema
-  - no unsupported feature invention
+candidate: gemini/gemini-2.5-flash
 ```
 
-## Agent 03 — Evidence and Capability Researcher
+The free Gemini profile cannot receive confidential repository code, secrets, customer data, or private owner documents because free-tier data may be used to improve Google products.
 
-```yaml
-llm_profile:
-  reasoning_effort: high
-  max_completion_tokens: 2200
-  max_iter: 8
-  status: DISABLED_PENDING_RESEARCH
-single_tool:
-  name: VerifiedResearchWorkspaceTool
-  permission: public_web_research_plus_source_registry_run_branch_write
-  status: CANDIDATE_NOT_IMPLEMENTED
-Drive_knowledge:
-  primary_role:
-    - reconcile owner Drive learning files with current official sources
-    - investigate related files when titles are wrong
-Notion_memory_read:
-  - SOURCE_WARNING
-  - LESSON
-  - PRIOR_RESEARCH_GAP
-must_not:
-  - treat model memory as current evidence
-  - cite aggregator as final authority
-  - install or enable providers
-  - approve without live-test requirements
-required_tests:
-  - official-source priority
-  - source date and version capture
-  - contradiction detection
-  - real Drive file ID and hash evidence
+Only one LLM profile is attached to an agent for one task. Alternate profiles are selected by deterministic Flow only from a safe checkpoint.
+
+## 4. Agent matrix
+
+| ID | Agent | Default data class | LLM profile candidate | One tool interface | Drive learning | Supabase memory types | Current status |
+|---:|---|---|---|---|---|---|---|
+| 01 | Engineering Manager / Preflight | Private scoped metadata | Groq primary; Cloudflare fallback | `RepositoryPreflightTool` | Governance/tutorial references when required | `GLOBAL_BLOCKER`, `AGENT_VALIDATION`, `TOOL_VALIDATION`, `LLM_VALIDATION` | Disabled |
+| 02 | Product Requirements and Scope Lead | Private owner requirements | Groq primary; Cloudflare fallback | `RequirementsWorkspaceTool` | Business-process, workflow, terminology files | `DECISION`, `LESSON`, `SCOPE_CONFLICT`, `RUN_SUMMARY` | Disabled |
+| 03 | Evidence and Capability Researcher | Public/redacted or private scoped | Gemini for public/redacted large packets; Groq for private scoped work | `VerifiedResearchWorkspaceTool` | Primary Drive reconciliation and related-file discovery | `SOURCE_WARNING`, `LESSON`, `PRIOR_RESEARCH_GAP` | Disabled |
+| 04 | Solution and Systems Architect | Private scoped architecture | Groq primary; Cloudflare fallback | `ArchitectureWorkspaceTool` | Architecture patterns, protocols, failure modes | `DECISION`, `LESSON`, `MISTAKE`, `ARCHITECTURE_RISK` | Disabled |
+| 05 | UX, UI, and Accessibility Designer | Private scoped design | Groq primary; Cloudflare fallback | `UXWorkspaceTool` | UI, interaction, accessibility learning files | `DECISION`, `UX_LESSON`, `ACCESSIBILITY_DEFECT` | Disabled |
+| 06 | Frontend Application Engineer | Private scoped code | Groq primary; Cloudflare/Ollama validated fallback | `FrontendWorkspaceTool` | Framework tutorials, components, owner UI references | `FRONTEND_LESSON`, `REGRESSION`, `BUILD_FAILURE` | Disabled |
+| 07 | Backend and API Engineer | Private scoped code | Groq primary; Cloudflare/Ollama validated fallback | `BackendWorkspaceTool` | API, domain, authentication, failure references | `BACKEND_LESSON`, `API_CONTRACT_FAILURE`, `SECURITY_WARNING` | Disabled |
+| 08 | Data and Database Engineer | Private schema/disposable data | Groq primary; Cloudflare/Ollama validated fallback | `DatabaseWorkspaceTool` | Schema, migration, rollback, concurrency material | `DATABASE_LESSON`, `MIGRATION_FAILURE`, `DATA_RISK` | Disabled |
+| 09 | CrewAI and AI Systems Engineer | Private CrewAI/config source | Groq primary; Cloudflare/Ollama validated fallback | `CrewAIWorkspaceTool` | CrewAI, LLM, MCP, prompt-pattern references | `AGENT_VALIDATION`, `LLM_VALIDATION`, `TOOL_VALIDATION`, `CREWAI_FAILURE` | Disabled |
+| 10 | Integration and MCP Engineer | Private adapters + public protocol docs | Groq primary; Gemini public-doc research only | `IntegrationMCPWorkspaceTool` | API/MCP/authentication references | `INTEGRATION_LESSON`, `AUTH_FAILURE`, `MCP_VALIDATION` | Disabled |
+| 11 | Security, Privacy, and AI Safety Engineer | Sensitive scoped evidence | Groq primary; local Ollama only after quality tests | `SecurityAuditTool` | Owner security policies, threat-model references | `SECURITY_WARNING`, `THREAT`, `MITIGATION`, `PRIOR_FINDING` | Disabled |
+| 12 | QA and Test Automation Engineer | Private tests/results | Groq primary; Cloudflare/Ollama validated fallback | `TestRunnerTool` | Test patterns and acceptance examples | `REGRESSION`, `FLAKY_TEST`, `QA_LESSON` | Disabled |
+| 13 | DevOps and CI/CD Engineer | Private CI/build configuration | Groq primary; Cloudflare/Ollama validated fallback | `CIBuildWorkspaceTool` | CI, packaging, deployment procedures | `BUILD_FAILURE`, `RELEASE_LESSON`, `ROLLBACK_LESSON` | Disabled |
+| 14 | SRE and Observability Engineer | Redacted telemetry | Groq primary; Gemini only for fully redacted large telemetry summaries | `ObservabilityReadTool` | SLO, incident, monitoring, recovery references | `INCIDENT`, `RECOVERY_CHECKPOINT`, `SRE_LESSON` | Disabled |
+| 15 | Independent Release Auditor | Private bounded evidence | Groq primary; Cloudflare/Ollama validated fallback | `ReleaseAuditTool` | Release criteria, audit standards | `PRIOR_RELEASE_RISK`, `UNRESOLVED_BLOCKER`, `AGENT_VALIDATION`, `TOOL_VALIDATION`, `LLM_VALIDATION` | Disabled |
+
+## 5. Per-agent restrictions
+
+### Agent 01
+
+```text
+No dynamic agent selection, task reordering, delegation, repository writing, or self-approval.
 ```
 
-## Agent 04 — Solution and Systems Architect
+### Agent 02
 
-```yaml
-llm_profile:
-  reasoning_effort: high
-  max_completion_tokens: 2400
-  max_iter: 8
-  status: DISABLED_PENDING_RESEARCH
-single_tool:
-  name: ArchitectureWorkspaceTool
-  permission: architecture_docs_run_branch_write
-  status: CANDIDATE_NOT_IMPLEMENTED
-Drive_knowledge:
-  required_for:
-    - architecture tutorials
-    - owner-approved system patterns
-    - protocol and failure-mode references
-Notion_memory_read:
-  - DECISION
-  - LESSON
-  - MISTAKE
-  - ARCHITECTURE_RISK
-must_not:
-  - modify implementation code
-  - approve architecture unilaterally
-  - treat tutorial pattern as compatible without version check
-required_tests:
-  - architecture proposal schema
-  - dependency and failure-mode evidence
-  - conflict with current architecture detection
+```text
+No invented requirements, unilateral scope approval, or application-code edits.
 ```
 
-## Agent 05 — UX, UI, and Accessibility Designer
+### Agent 03
 
-```yaml
-llm_profile:
-  reasoning_effort: medium
-  max_completion_tokens: 1600
-  max_iter: 6
-  status: DISABLED_PENDING_RESEARCH
-single_tool:
-  name: UXWorkspaceTool
-  permission: design_specs_and_local_or_staging_inspection
-  status: CANDIDATE_NOT_IMPLEMENTED
-Drive_knowledge:
-  required_for:
-    - copied UI tutorials
-    - design patterns
-    - accessibility learning files
-Notion_memory_read:
-  - DECISION
-  - UX_LESSON
-  - ACCESSIBILITY_DEFECT
-must_not:
-  - edit production UI code
-  - claim accessibility compliance without test evidence
-  - access production user data
-required_tests:
-  - interaction-state specification
-  - keyboard and accessibility evidence
-  - design-to-requirement traceability
+```text
+No model-memory-as-fact, aggregator-only approval, provider installation, or implementation approval.
 ```
 
-## Agent 06 — Frontend Application Engineer
+### Agent 04
 
-```yaml
-llm_profile:
-  reasoning_effort: medium
-  max_completion_tokens: 2000
-  max_iter: 8
-  status: DISABLED_PENDING_RESEARCH
-single_tool:
-  name: FrontendWorkspaceTool
-  permission: frontend_paths_run_branch_write_plus_external_sandbox
-  status: CANDIDATE_NOT_IMPLEMENTED
-Drive_knowledge:
-  required_for:
-    - framework tutorials
-    - component patterns
-    - owner UI implementation references
-Notion_memory_read:
-  - FRONTEND_LESSON
-  - REGRESSION
-  - BUILD_FAILURE
-must_not:
-  - use deprecated CrewAI built-in code execution
-  - edit backend, database, rules, or workflow paths
-  - write before StudyReceipt passes
-required_tests:
-  - allowed-path enforcement
-  - patch and sandbox execution evidence
-  - lint/unit/UI test evidence
-  - stale framework tutorial rejection
+```text
+No implementation edits, unilateral architecture approval, or tutorial compatibility assumptions.
 ```
 
-## Agent 07 — Backend and API Engineer
+### Agent 05
 
-```yaml
-llm_profile:
-  reasoning_effort: high
-  max_completion_tokens: 2200
-  max_iter: 8
-  status: DISABLED_PENDING_RESEARCH
-single_tool:
-  name: BackendWorkspaceTool
-  permission: backend_API_paths_run_branch_write_plus_external_sandbox
-  status: CANDIDATE_NOT_IMPLEMENTED
-Drive_knowledge:
-  required_for:
-    - API tutorials
-    - domain logic references
-    - authentication and error-handling materials
-Notion_memory_read:
-  - BACKEND_LESSON
-  - API_CONTRACT_FAILURE
-  - SECURITY_WARNING
-must_not:
-  - modify frontend or production database
-  - expose credentials
-  - claim authorization correctness without tests
-required_tests:
-  - API contract validation
-  - auth boundary tests
-  - failure and retry behavior
-  - allowed-path and sandbox evidence
+```text
+No production UI edits, production user data, or unsupported accessibility certification.
 ```
 
-## Agent 08 — Data and Database Engineer
+### Agents 06–08, 09, 12, and 13
 
-```yaml
-llm_profile:
-  reasoning_effort: high
-  max_completion_tokens: 2200
-  max_iter: 8
-  status: DISABLED_PENDING_RESEARCH
-single_tool:
-  name: DatabaseWorkspaceTool
-  permission: schema_and_migration_paths_plus_disposable_local_database
-  status: CANDIDATE_NOT_IMPLEMENTED
-Drive_knowledge:
-  required_for:
-    - schema tutorials
-    - migration references
-    - concurrency and rollback learning files
-Notion_memory_read:
-  - DATABASE_LESSON
-  - MIGRATION_FAILURE
-  - DATA_RISK
-must_not:
-  - access or mutate production database
-  - run destructive migration without owner approval
-  - treat generated SQL as validated
-required_tests:
-  - local disposable migration
-  - rollback test
-  - constraint and concurrency validation
-  - no production credentials
+```text
+No deprecated CrewAI built-in code execution. All commands run through the separately tested external sandbox in the assigned workspace tool.
 ```
 
-## Agent 09 — CrewAI and AI Systems Engineer
+### Agent 10
 
-```yaml
-llm_profile:
-  reasoning_effort: high
-  max_completion_tokens: 2400
-  max_iter: 8
-  status: DISABLED_PENDING_RESEARCH
-single_tool:
-  name: CrewAIWorkspaceTool
-  permission: CrewAI_config_flow_schema_tests_run_branch_write_plus_sandbox
-  status: CANDIDATE_NOT_IMPLEMENTED
-Drive_knowledge:
-  required_for:
-    - owner CrewAI tutorials
-    - agent prompt patterns
-    - LLM and MCP setup references
-Notion_memory_read:
-  - AGENT_VALIDATION
-  - LLM_VALIDATION
-  - TOOL_VALIDATION
-  - CREWAI_FAILURE
-must_not:
-  - enable unsupported CrewAI fields
-  - change process from sequential
-  - enable native memory or deprecated code execution without approval
-  - enable all agents automatically
-required_tests:
-  - pinned CrewAI load test
-  - exact agent/tool/LLM profile test
-  - sequential-order test
-  - structured self-diagnostic test
+```text
+No random public MCP servers, unrestricted URL fetch, production credentials, or untested authentication/retry behavior.
 ```
 
-## Agent 10 — Integration and MCP Engineer
+### Agent 11
 
-```yaml
-llm_profile:
-  reasoning_effort: high
-  max_completion_tokens: 2200
-  max_iter: 8
-  status: DISABLED_PENDING_RESEARCH
-single_tool:
-  name: IntegrationMCPWorkspaceTool
-  permission: integration_and_MCP_paths_run_branch_write_plus_mock_sandbox
-  status: CANDIDATE_NOT_IMPLEMENTED
-Drive_knowledge:
-  required_for:
-    - API integration tutorials
-    - MCP protocol references
-    - authentication setup files
-Notion_memory_read:
-  - INTEGRATION_LESSON
-  - AUTH_FAILURE
-  - MCP_VALIDATION
-must_not:
-  - connect random public MCP server
-  - expose unrestricted URL fetch
-  - use production credentials
-  - claim reliability without malformed-response tests
-required_tests:
-  - schema and auth tests
-  - timeout/retry/429 tests
-  - SSRF and path validation
-  - MCP response validation
+```text
+No unauthorized exploitation, production mutation, automatic remediation, or claim that the system is secure.
 ```
 
-## Agent 11 — Security, Privacy, and AI Safety Engineer
+### Agent 14
 
-```yaml
-llm_profile:
-  reasoning_effort: high
-  max_completion_tokens: 2400
-  max_iter: 8
-  status: DISABLED_PENDING_RESEARCH
-single_tool:
-  name: SecurityAuditTool
-  permission: scan_only_repository_and_local_artifacts
-  status: CANDIDATE_NOT_IMPLEMENTED
-Drive_knowledge:
-  required_for:
-    - owner security policies
-    - threat-model tutorials
-    - approved standards references
-Notion_memory_read:
-  - SECURITY_WARNING
-  - THREAT
-  - MITIGATION
-  - PRIOR_FINDING
-must_not:
-  - exploit unauthorized targets
-  - mutate production
-  - auto-fix findings
-  - certify system as secure
-required_tests:
-  - tool-generated scan evidence
-  - false-positive disposition schema
-  - secret and PII redaction
-  - human gate for high-risk actions
+```text
+Read-only approved telemetry, with redaction. No production changes or unsupported root-cause claims.
 ```
 
-## Agent 12 — QA and Test Automation Engineer
+### Agent 15
 
-```yaml
-llm_profile:
-  reasoning_effort: medium
-  max_completion_tokens: 1800
-  max_iter: 8
-  status: DISABLED_PENDING_RESEARCH
-single_tool:
-  name: TestRunnerTool
-  permission: test_execution_and_test_paths_run_branch_write
-  status: CANDIDATE_NOT_IMPLEMENTED
-Drive_knowledge:
-  required_for:
-    - testing tutorials
-    - owner acceptance examples
-    - framework-specific test patterns
-Notion_memory_read:
-  - REGRESSION
-  - FLAKY_TEST
-  - QA_LESSON
-must_not:
-  - modify implementation solely to hide failure
-  - delete existing tests without approval
-  - report pass without actual test invocation
-required_tests:
-  - invocation ID and exit-code evidence
-  - unit/integration/browser result parsing
-  - failed test stops downstream release
+```text
+No code edits, self-review of its own prior work, merge, deployment, or ignoring missing evidence.
 ```
 
-## Agent 13 — DevOps and CI/CD Engineer
+## 6. Drive learning gate
 
-```yaml
-llm_profile:
-  reasoning_effort: medium
-  max_completion_tokens: 1800
-  max_iter: 8
-  status: DISABLED_PENDING_RESEARCH
-single_tool:
-  name: CIBuildWorkspaceTool
-  permission: CI_and_build_paths_run_branch_write_plus_local_build_sandbox
-  status: CANDIDATE_NOT_IMPLEMENTED
-Drive_knowledge:
-  required_for:
-    - CI tutorials
-    - build and packaging references
-    - owner deployment procedures
-Notion_memory_read:
-  - BUILD_FAILURE
-  - RELEASE_LESSON
-  - ROLLBACK_LESSON
-must_not:
-  - deploy production
-  - edit repository secrets
-  - enable paid infrastructure
-  - auto-merge
-required_tests:
-  - local build evidence
-  - workflow syntax validation
-  - artifact hash
-  - production deployment gate
+When the run manifest requires owner learning material:
+
+```text
+Drive search by metadata + body text + related terms
+→ fetch relevant candidates
+→ inspect actual sections
+→ version/conflict check
+→ LearningPacket
+→ selected agent StudyReceipt
+→ deterministic validation
+→ tool access enabled for the task
 ```
 
-## Agent 14 — SRE and Observability Engineer
+File title alone is not sufficient evidence of relevance.
 
-```yaml
-llm_profile:
-  reasoning_effort: high
-  max_completion_tokens: 2200
-  max_iter: 8
-  status: DISABLED_PENDING_RESEARCH
-single_tool:
-  name: ObservabilityReadTool
-  permission: approved_logs_metrics_traces_read_only
-  status: CANDIDATE_NOT_IMPLEMENTED
-Drive_knowledge:
-  required_for:
-    - monitoring tutorials
-    - SLO and incident references
-    - owner recovery procedures
-Notion_memory_read:
-  - INCIDENT
-  - RECOVERY_CHECKPOINT
-  - SRE_LESSON
-must_not:
-  - change production environment
-  - suppress alerts
-  - claim root cause without evidence
-  - expose sensitive logs
-required_tests:
-  - read-only enforcement
-  - trace/metric/log correlation evidence
-  - redaction
-  - recovery recommendation schema
+## 7. Memory gate
+
+```text
+Supabase exact filters/keyword retrieval
+→ bounded verified MemoryContext
+→ repository conflict check
+→ agent receives selected entries only
 ```
 
-## Agent 15 — Independent Code Review, Documentation, and Release Auditor
+No agent receives Supabase credentials or directly writes durable memory. Validated results pass QA/audit before trusted Flow writes memory.
 
-```yaml
-llm_profile:
-  reasoning_effort: high
-  max_completion_tokens: 2200
-  max_iter: 8
-  status: DISABLED_PENDING_RESEARCH
-single_tool:
-  name: ReleaseAuditTool
-  permission: run_branch_repo_test_security_source_memory_evidence_read_only
-  status: CANDIDATE_NOT_IMPLEMENTED
-Drive_knowledge:
-  required_for:
-    - owner release criteria
-    - audit tutorials
-    - final reference standards
-Notion_memory_read:
-  - PRIOR_RELEASE_RISK
-  - UNRESOLVED_BLOCKER
-  - AGENT_VALIDATION
-  - TOOL_VALIDATION
-  - LLM_VALIDATION
-must_not:
-  - edit code
-  - approve its own prior work
-  - merge or deploy
-  - ignore missing learning or memory evidence
-required_tests:
-  - independent evidence reconciliation
-  - source and StudyReceipt verification
-  - final blocked/pass-pending-owner schema
-```
-
-# Common enablement gate
+## 8. Common live-test gate
 
 Every agent requires:
 
 ```text
 ROLE FACT CHECKED
 → CREWAI FEATURE SUPPORTED
-→ LLM PROFILE TESTED
+→ ACTIVE LLM PROFILE TESTED FOR THE AGENT AND DATA CLASS
+→ REQUIRED FALLBACK PROFILE TESTED
 → SINGLE TOOL IMPLEMENTED AND TESTED
-→ DRIVE LEARNING BEHAVIOR TESTED WHEN APPLICABLE
-→ NOTION MEMORY CONTEXT TESTED
+→ DRIVE LEARNING TESTED WHEN APPLICABLE
+→ SUPABASE MEMORY CONTEXT TESTED
 → STRUCTURED OUTPUT AND SELF-DIAGNOSTIC TESTED
-→ SECURITY AND PERMISSION TESTS PASSED
-→ SEQUENTIAL CONTEXT TEST PASSED
+→ SECURITY/PERMISSION TESTS PASSED
+→ PROCESS.SEQUENTIAL HANDOFF TESTED
 → STATUS = APPROVED_FOR_IMPLEMENTATION
 ```
 
-No agent in this matrix is currently enabled.
+No agent in this matrix is enabled.
