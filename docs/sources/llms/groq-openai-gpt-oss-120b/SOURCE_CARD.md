@@ -1,7 +1,7 @@
 # LLM Source Card — Groq OpenAI GPT-OSS 120B
 
 **Source ID:** `LLM-groq-openai-gpt-oss-120b`  
-**Status:** `CANDIDATE_NOT_USED`  
+**Status:** `RESERVE_CANDIDATE_NOT_ACTIVE`  
 **Approved for agents:** No  
 **Verified:** 2026-07-20
 
@@ -11,15 +11,18 @@
 provider: Groq
 provider_type: hosted_inference_api
 exact_model_id: openai/gpt-oss-120b
+crewai_model_id: groq/openai/gpt-oss-120b
 model_developer: OpenAI
 model_family: gpt-oss
-planned_agent_ids:
-  - engineering_manager
+planned_agent_ids: []
+manual_reserve_for:
+  - cerebras/gpt-oss-120b
 cost_status: free_plan_available_but_limited
 runtime_status: blocked_pending_tests
+automatic_fallback: false
 ```
 
-FreeLLM is not the provider for this model. It may only be recorded as a discovery directory. The planned connection, if approved, is directly from Galax to Groq.
+Groq is a direct provider. FreeLLM and other provider directories may be discovery sources only.
 
 ## Exact official links
 
@@ -48,10 +51,9 @@ FreeLLM is not the provider for this model. It may only be recorded as a discove
 
 ### CrewAI compatibility
 
-- [CrewAI LLM concepts](https://docs.crewai.com/v1.15.4/en/concepts/llms.md)
-- [CrewAI LLM connections](https://docs.crewai.com/v1.15.4/en/learn/llm-connections.md)
-- [CrewAI annotations for LLM and tool separation](https://docs.crewai.com/v1.15.4/en/learn/using-annotations.md)
-- [CrewAI sequential process](https://docs.crewai.com/v1.15.4/en/learn/sequential-process.md)
+- [CrewAI LLM concepts](https://docs.crewai.com/concepts/llms)
+- [CrewAI annotations for LLM and tool separation](https://docs.crewai.com/learn/using-annotations)
+- [CrewAI sequential process](https://docs.crewai.com/learn/sequential-process)
 
 ## Provider-documented capacity
 
@@ -68,45 +70,41 @@ free_plan_documented_limits:
   requests_per_day: 1000
   tokens_per_minute: 8000
   tokens_per_day: 200000
+monthly_token_limit: NOT_DOCUMENTED_AS_A_FIXED_FREE_QUOTA
 ```
 
-The exact limits for the connected Groq organization must be read from the Groq account because provider documentation states that account-specific exceptions may exist.
+The exact limits for the connected Groq organization must be read from the account because provider documentation states that exceptions may exist.
 
 ## Security and privacy notes
 
-- Customer inference data is not retained by default except for limited reliability or abuse-monitoring circumstances described by Groq.
-- Groq documents a Zero Data Retention control.
-- Usage metadata is still retained.
+- Customer inference data is not retained by default except for the limited cases described by Groq.
+- Groq documents a Zero Data Retention setting.
+- Usage metadata is retained.
 - Repository secrets, credentials, personal data, and unrestricted private files must not be sent to the hosted model.
-- Provider-managed browser search and code execution are disabled in the initial Galax design; Galax uses its own controlled tools.
+- Provider-managed browser search and code execution are disabled in the Galax design.
+
+## Why it is not active
+
+Cerebras GPT-OSS 120B is being validated first because its documented free token and request quotas are larger. Using two active providers during the initial build would increase integration, testing, monitoring, and failure-handling complexity.
+
+Groq may be selected later only through this sequence:
+
+```text
+owner approves provider switch
+→ source card revalidated
+→ Groq-specific live tests pass
+→ affected agent profiles updated
+→ no automatic fallback enabled
+```
 
 ## Compatibility risks
 
 ```text
 - Groq is mostly, not fully, OpenAI compatible.
 - Unsupported OpenAI parameters can return HTTP 400.
-- CrewAI compatibility must be tested with the exact pinned CrewAI and provider-library versions.
+- CrewAI compatibility must be tested with exact pinned versions.
 - Tool calling and structured output must be tested separately and together.
 - Rate-limit handling and checkpoint recovery must be tested.
-```
-
-## Required tests before status can become APPROVED
-
-```text
-- Direct authentication test.
-- Exact model availability test.
-- Plain completion test.
-- System-message test.
-- One local function-call test.
-- JSON object test.
-- JSON schema or Pydantic test.
-- CrewAI single-agent test.
-- CrewAI one-agent-one-tool test.
-- Two-task sequential CrewAI test.
-- 429 and retry-after handling test.
-- Token accounting test.
-- Secret-redaction test.
-- Checkpoint resume test.
 ```
 
 ## Current decision
@@ -119,7 +117,7 @@ crewai_runtime_verified: false
 tool_calling_verified: false
 structured_output_verified: false
 security_tests_passed: false
+active_for_agents: false
+automatic_fallback: false
 approved: false
 ```
-
-This model must not be added to production `agents.yaml` while the status remains `CANDIDATE_NOT_USED`.
