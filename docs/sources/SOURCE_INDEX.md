@@ -1,0 +1,54 @@
+# Galax AI Source Index — Draft
+
+**Status:** `DRAFT_MUTABLE`  
+**Verified:** 2026-07-20
+
+This index is the canonical human-readable entry point for agent, LLM, and tool sources. It must contain links only to existing source cards.
+
+## Agents
+
+| Agent ID | Role | LLM | Tool | Status |
+|---|---|---|---|---|
+| [`engineering_manager`](agents/engineering_manager/SOURCE_CARD.md) | AI Engineering Manager and CrewAI Execution Planning Lead | [`cerebras/gpt-oss-120b`](llms/cerebras-gpt-oss-120b/SOURCE_CARD.md) | [`RepositoryPreflightTool`](tools/repository_preflight_tool/SOURCE_CARD.md) | `RESEARCHING` |
+
+Agents 02–15 will be added only after their individual role, LLM profile, and tool inspections begin.
+
+## LLMs
+
+| Source ID | Provider/model | Status | Official model source |
+|---|---|---|---|
+| [`LLM-cerebras-gpt-oss-120b`](llms/cerebras-gpt-oss-120b/SOURCE_CARD.md) | Cerebras `gpt-oss-120b` | `SELECTED_FOR_VALIDATION` | [Cerebras public model metadata](https://inference-docs.cerebras.ai/api-reference/models/public-models) |
+| [`LLM-groq-openai-gpt-oss-120b`](llms/groq-openai-gpt-oss-120b/SOURCE_CARD.md) | Groq `openai/gpt-oss-120b` | `RESERVE_CANDIDATE_NOT_ACTIVE` | [Groq exact model page](https://console.groq.com/docs/model/openai/gpt-oss-120b) |
+
+## Tools
+
+| Source ID | Tool | Status | Official compatibility source |
+|---|---|---|---|
+| [`TOOL-repository-preflight`](tools/repository_preflight_tool/SOURCE_CARD.md) | `RepositoryPreflightTool` | `CONDITIONALLY_APPROVED` | [CrewAI custom tools](https://docs.crewai.com/learn/create-custom-tools) |
+
+## Research and decisions
+
+- [Free provider screening — 2026-07-20](../research/llms/FREE_PROVIDER_SCREENING_2026-07-20.md)
+- [LLM assignment plan](../plan/LLM_ASSIGNMENT_PLAN_DRAFT.md)
+- [Source traceability rule](../rules/SOURCE_TRACEABILITY_RULE_DRAFT.md)
+- [No exact duplicates rule](../rules/NO_EXACT_DUPLICATES_RULE_DRAFT.md)
+- [GitHub repository read/write architecture](../architecture/GITHUB_REPOSITORY_READ_WRITE_DRAFT.md)
+
+## Deterministic query mapping
+
+The future source lookup command maps aliases as follows:
+
+```yaml
+aliases:
+  engineering_manager: agents/engineering_manager/SOURCE_CARD.md
+  AGENT-01: agents/engineering_manager/SOURCE_CARD.md
+  agent_01: agents/engineering_manager/SOURCE_CARD.md
+```
+
+Expected query:
+
+```text
+source engineering_manager
+```
+
+The command must return the links stored in the mapped source card. It must not ask an LLM to remember or recreate source URLs.
