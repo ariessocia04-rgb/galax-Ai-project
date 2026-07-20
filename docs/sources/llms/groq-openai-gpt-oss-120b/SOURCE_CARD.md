@@ -1,7 +1,7 @@
 # LLM Source Card — Groq OpenAI GPT-OSS 120B
 
 **Source ID:** `LLM-groq-openai-gpt-oss-120b`  
-**Status:** `RESERVE_CANDIDATE_NOT_ACTIVE`  
+**Status:** `SELECTED_FOR_VALIDATION_AS_PRIVATE_REPOSITORY_PRIMARY`  
 **Approved for agents:** No  
 **Verified:** 2026-07-20
 
@@ -14,110 +14,105 @@ exact_model_id: openai/gpt-oss-120b
 crewai_model_id: groq/openai/gpt-oss-120b
 model_developer: OpenAI
 model_family: gpt-oss
-planned_agent_ids: []
-manual_reserve_for:
-  - cerebras/gpt-oss-120b
-cost_status: free_plan_available_but_limited
-runtime_status: blocked_pending_tests
-automatic_fallback: false
+cost_status: durable_free_plan_available_but_limited
+runtime_status: DISABLED_PENDING_CREWAI_TESTS
 ```
-
-Groq is a direct provider. FreeLLM and other provider directories may be discovery sources only.
 
 ## Exact official links
 
-### Provider and model
-
-- [Exact Groq model page: openai/gpt-oss-120b](https://console.groq.com/docs/model/openai/gpt-oss-120b)
-- [Groq API reference](https://console.groq.com/docs/api-reference)
-- [Groq OpenAI compatibility](https://console.groq.com/docs/openai)
-- [Groq local tool calling](https://console.groq.com/docs/tool-use/local-tool-calling)
-- [Groq model permissions](https://console.groq.com/docs/model-permissions)
-
-### Limits and cost
-
-- [Groq rate limits](https://console.groq.com/docs/rate-limits)
-- [Groq spend limits](https://console.groq.com/docs/spend-limits)
-
-### Privacy and data
-
-- [Groq customer data and retention](https://console.groq.com/docs/your-data)
-
-### Model source and license
-
-- [Official OpenAI GPT-OSS repository](https://github.com/openai/gpt-oss)
-- [Official GPT-OSS license](https://github.com/openai/gpt-oss/blob/main/LICENSE)
-- [Official GPT-OSS usage policy](https://github.com/openai/gpt-oss/blob/main/USAGE_POLICY)
-
-### CrewAI compatibility
-
+- [Exact model page](https://console.groq.com/docs/model/openai/gpt-oss-120b)
+- [Rate limits](https://console.groq.com/docs/rate-limits)
+- [Local tool calling](https://console.groq.com/docs/tool-use/local-tool-calling)
+- [OpenAI compatibility](https://console.groq.com/docs/openai)
+- [Customer data and retention](https://console.groq.com/docs/your-data)
+- [Groq services agreement](https://console.groq.com/docs/legal/services-agreement)
 - [CrewAI LLM concepts](https://docs.crewai.com/concepts/llms)
-- [CrewAI annotations for LLM and tool separation](https://docs.crewai.com/learn/using-annotations)
-- [CrewAI sequential process](https://docs.crewai.com/learn/sequential-process)
+- [CrewAI versioned LLM source](https://github.com/crewAIInc/crewAI/blob/main/docs/v1.15.4/en/concepts/llms.mdx)
 
 ## Provider-documented capacity
 
 ```yaml
 context_window_tokens: 131072
 maximum_output_tokens: 65536
-capabilities:
-  - tool_use
-  - json_object_mode
-  - json_schema_mode
-  - reasoning
-free_plan_documented_limits:
+reasoning_effort:
+  - low
+  - medium
+  - high
+tool_use: true
+json_object_mode: true
+json_schema_mode: true
+free_plan_base_limits:
   requests_per_minute: 30
   requests_per_day: 1000
   tokens_per_minute: 8000
   tokens_per_day: 200000
-monthly_token_limit: NOT_DOCUMENTED_AS_A_FIXED_FREE_QUOTA
 ```
 
-The exact limits for the connected Groq organization must be read from the account because provider documentation states that exceptions may exist.
+The actual connected organization limits are the runtime source of truth.
 
-## Security and privacy notes
+## Data handling decision
 
-- Customer inference data is not retained by default except for the limited cases described by Groq.
-- Groq documents a Zero Data Retention setting.
-- Usage metadata is retained.
-- Repository secrets, credentials, personal data, and unrestricted private files must not be sent to the hosted model.
-- Provider-managed browser search and code execution are disabled in the Galax design.
+Groq states that inference customer data is not retained by default except for limited reliability/abuse circumstances or features requiring retention. It also provides a Zero Data Retention control. Groq states that inputs/outputs are not used for model training unless the customer explicitly permits it.
 
-## Why it is not active
+Galax must enable the strongest available data controls and still redact secrets, credentials, customer personal data, and unrelated private repository content.
 
-Cerebras GPT-OSS 120B is being validated first because its documented free token and request quotas are larger. Using two active providers during the initial build would increase integration, testing, monitoring, and failure-handling complexity.
+## CrewAI candidate profile
 
-Groq may be selected later only through this sequence:
+```python
+from crewai import LLM
 
-```text
-owner approves provider switch
-→ source card revalidated
-→ Groq-specific live tests pass
-→ affected agent profiles updated
-→ no automatic fallback enabled
+llm = LLM(
+    model="groq/openai/gpt-oss-120b",
+    reasoning_effort="low",
+    temperature=1.0,
+    timeout=120,
+    max_retries=1,
+)
 ```
 
-## Compatibility risks
+Dependency:
+
+```bash
+uv add 'crewai[litellm]'
+```
+
+## Important limitations
 
 ```text
-- Groq is mostly, not fully, OpenAI compatible.
-- Unsupported OpenAI parameters can return HTTP 400.
-- CrewAI compatibility must be tested with exact pinned versions.
-- Tool calling and structured output must be tested separately and together.
-- Rate-limit handling and checkpoint recovery must be tested.
+- 8K tokens/minute is the main throughput bottleneck despite the 131K model context.
+- Groq is mostly, not completely, OpenAI compatible.
+- Unsupported parameters can produce HTTP 400.
+- Tool calling and strict structured output must be tested through CrewAI/LiteLLM.
+- Provider built-in browser/code tools remain disabled; Galax uses controlled tools.
+- No agent may be enabled from documentation evidence alone.
+```
+
+## Required tests
+
+```text
+- exact model authentication and completion
+- system instruction handling
+- low/medium/high reasoning
+- one Galax tool call with valid arguments
+- actual tool-result round trip
+- structured AgentTaskResult output
+- unsupported parameter rejection
+- timeout and HTTP 429 checkpoint behavior
+- exact usage/rate header recording
+- two-agent Process.sequential handoff
+- prompt-injection and secret-redaction tests
 ```
 
 ## Current decision
 
 ```yaml
 identity_verified: true
-official_links_recorded: true
-free_plan_verified: true
-crewai_runtime_verified: false
-tool_calling_verified: false
-structured_output_verified: false
-security_tests_passed: false
+permanent_free_plan_verified: true
+privacy_review_completed: true
+CrewAI_provider_path_found: true
+CrewAI_live_test_completed: false
+tool_calling_live_test_completed: false
+structured_output_live_test_completed: false
 active_for_agents: false
-automatic_fallback: false
 approved: false
 ```
