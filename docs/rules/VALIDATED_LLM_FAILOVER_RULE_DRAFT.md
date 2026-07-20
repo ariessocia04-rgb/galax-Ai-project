@@ -1,30 +1,85 @@
-# Validated LLM Failover Rule — Draft
+# Validated LLM Routing and Failover Rule — Draft
 
 **Status:** `DRAFT_MUTABLE`  
-**Primary candidate:** `cerebras/gpt-oss-120b`  
-**Fallback candidate:** `groq/openai/gpt-oss-120b`
+**Private repository primary candidate:** `groq/openai/gpt-oss-120b`  
+**Private hosted fallback candidate:** Cloudflare `@cf/openai/gpt-oss-120b`  
+**Public/redacted long-context candidate:** `gemini/gemini-2.5-flash`  
+**Optional local fallback candidate:** `ollama/gpt-oss:20b`  
+**Rejected active candidate:** `cerebras/gpt-oss-120b` — trial only
 
 ## 1. Core rule
 
-A free-tier or trial LLM profile must have at least one separately validated fallback profile before it can be approved for Galax execution.
+A provider profile is not approved merely because CrewAI can construct the LLM or the provider publishes a free plan. Every provider/model/agent combination must be separately tested.
 
-A fallback is not automatic model substitution. It is a deterministic Flow transition between two independently tested provider profiles.
+```text
+NO SILENT PROVIDER SWITCH
+NO UNVALIDATED FALLBACK
+NO TRIAL-ONLY ACTIVE PROVIDER
+```
 
-## 2. Separate approval requirement
+CrewAI does not provide the complete Galax failover policy automatically. The deterministic Flow owns provider selection, checkpointing, and safe retry boundaries.
 
-The same underlying model hosted by a different provider is treated as a different runtime capability.
+## 2. Active routing classes
 
-Each provider profile must separately pass:
+### Private repository and code tasks
+
+```yaml
+primary:
+  provider: Groq
+  model: groq/openai/gpt-oss-120b
+  status: DISABLED_PENDING_TESTS
+
+hosted_fallback:
+  provider: Cloudflare Workers AI
+  model: '@cf/openai/gpt-oss-120b'
+  connection: custom_OpenAI_compatible
+  status: DISABLED_PENDING_TESTS
+
+local_fallback:
+  provider: Ollama
+  model: ollama/gpt-oss:20b
+  status: DISABLED_PENDING_HARDWARE_AND_AGENT_TESTS
+```
+
+### Public or fully redacted long-context tasks
+
+```yaml
+candidate:
+  provider: Google Gemini API
+  model: gemini/gemini-2.5-flash
+  status: DISABLED_PENDING_TESTS
+  private_repository_content: prohibited
+```
+
+Gemini free-tier content may be used to improve Google products. It is not a failover for confidential repository work.
+
+## 3. Rejected providers
+
+```yaml
+cerebras/gpt-oss-120b:
+  reason: current_official_offer_is_free_trial_credit
+openrouter/free:
+  reason: selected_model_can_change_and_free_quota_is_low
+trial_credit_only_providers:
+  reason: not_durable_for_Galax_runtime
+```
+
+Historical source cards remain for traceability but must not appear in active agent configuration.
+
+## 4. Separate approval requirement
+
+Every profile must independently pass:
 
 ```text
 authentication
 exact model ID
+current free-plan/account capacity
 system instruction handling
-reasoning effort
+reasoning behavior
 single assigned tool selection
 strict tool argument schema
 actual tool-result round trip
-strict structured output
+structured output
 usage accounting
 timeout handling
 HTTP 429 handling
@@ -32,134 +87,149 @@ context-limit handling
 secret redaction
 sequential task handoff
 self-diagnostic consistency
+privacy and data classification
 ```
 
-## 3. Selected profiles
+The same GPT-OSS model hosted by Groq, Cloudflare, or Ollama is three different runtime capabilities.
 
-```yaml
-primary:
-  provider: Cerebras
-  model: cerebras/gpt-oss-120b
-  status: DISABLED_PENDING_TESTS
-
-fallback:
-  provider: Groq
-  model: groq/openai/gpt-oss-120b
-  status: DISABLED_PENDING_TESTS
-
-tertiary_research_candidate:
-  provider: OpenRouter
-  model: openrouter/openai/gpt-oss-120b:free
-  status: NOT_APPROVED_LOW_RELIABILITY_FREE_CAPACITY
-```
-
-## 4. Approved failover triggers
+## 5. Approved failover triggers
 
 Failover may be considered only for:
 
 ```text
 - provider connection failure
-- provider service-unavailable response
-- provider timeout after the one approved retry
-- HTTP 429 when the required retry delay exceeds the run policy
-- provider reports model temporarily unavailable
+- service unavailable response
+- timeout after one approved retry
+- HTTP 429 when Retry-After exceeds the run policy
+- model temporarily unavailable
 - primary account quota exhausted
 ```
 
 Failover is prohibited for:
 
 ```text
-- factual disagreement with the primary answer
-- malformed output that indicates a prompt/schema defect
+- factual disagreement
+- malformed output caused by prompt/schema defect
 - security or permission failure
-- tool authorization failure
 - repository conflict
 - failed tests
 - blocked human approval
+- an active non-idempotent external operation
 ```
 
 Those failures require correction, not provider switching.
 
-## 5. Safe transition
+## 6. Safe transition
 
 ```text
 primary LLM failure
-→ verify no external write transaction is active
+→ verify no repository/database/external write is active
 → save canonical checkpoint
-→ record failure class and provider response
-→ verify fallback profile status is APPROVED_FOR_AGENT
-→ capture fallback account rate/context snapshot
-→ rebuild the LLM client explicitly
+→ record provider response and failure class
+→ verify alternate profile is APPROVED_FOR_AGENT
+→ capture alternate account capacity snapshot
+→ verify data-classification compatibility
+→ instantiate alternate LLM explicitly
 → rerun only the safe LLM stage
-→ record fallback provider in every output and evidence record
+→ record provider/model/profile in evidence
 ```
 
-## 6. Non-idempotent boundary
+## 7. Non-idempotent boundary
 
-Never change providers in the middle of:
+Never switch providers in the middle of:
 
 ```text
-- Git commit/tree update
-- database migration
-- external API mutation
-- Notion write
-- file upload
-- deployment
-- merge
+Git tree/commit/ref update
+database mutation or migration
+Notion or Drive write
+external API mutation
+file upload
+deployment
+merge
 ```
 
-The application must first reconcile the actual external state and resume from a safe checkpoint.
+The Flow must reconcile real external state before resuming.
 
-## 7. Parameter translation
+## 8. Provider-specific restrictions
 
-Provider-specific unsupported parameters must be removed through an explicit profile, not silently dropped.
+### Groq
 
-Groq documents that it is mostly, not fully, OpenAI-compatible and rejects unsupported fields with HTTP 400. Therefore, the Groq fallback profile must declare its exact supported parameter set.
-
-```yaml
-shared_required:
-  temperature: provider_valid_value
-  reasoning_effort: low_or_medium_or_high
-  parallel_tool_calls: false
-  strict_tool_schema: true
-  structured_output: tested
-
-prohibited_unless_tested:
-  - logprobs
-  - top_logprobs
-  - logit_bias
-  - n_greater_than_1
-  - provider_builtin_browser_or_code_tools
+```text
+- Keep within current organization RPM/RPD/TPM/TPD.
+- Do not send unsupported OpenAI parameters.
+- Use Galax tools, not provider built-in browser/code tools.
+- Test strict tool and structured-output behavior separately and together.
 ```
 
-Galax uses its own controlled tools and does not enable provider-built browser search or code execution in the initial profiles.
+### Cloudflare Workers AI
 
-## 8. Capacity rule
+```text
+- Use a tested custom OpenAI-compatible CrewAI profile.
+- Treat 10,000 neurons/day as compute allocation, not a fixed token quota.
+- Capture remaining allocation before failover.
+- Test tool-call round trips and JSON schemas through the exact endpoint.
+```
 
-The fallback cannot run solely because it has a model page with a large context window. The effective capacity is:
+### Gemini free tier
+
+```text
+- Public or fully redacted data only.
+- Capture actual AI Studio RPM/TPM/RPD.
+- Do not use as private-repository failover.
+```
+
+### Ollama local
+
+```text
+- Require hardware qualification and exact model digest.
+- Bind only to approved local/internal interfaces.
+- Enforce timeout, context, memory, and latency ceilings.
+- Do not assume 128K context is usable on the available hardware.
+```
+
+## 9. Capacity rule
+
+Effective capacity is always:
 
 ```text
 minimum(
-  provider model limit,
-  connected account/plan limit,
-  current rate-limit snapshot,
-  Galax internal safety budget
+  provider/model limit,
+  connected account or local hardware limit,
+  current rate/allocation snapshot,
+  data-classification policy,
+  Galax internal token budget
 )
 ```
 
-## 9. Failure when both providers are unavailable
+## 10. Failure when no profile is available
 
 ```yaml
 status: BLOCKED_ALL_VALIDATED_LLMS_UNAVAILABLE
 action:
   - preserve_checkpoint
   - preserve_repository_state
-  - report_primary_failure
-  - report_fallback_failure
+  - report_each_provider_failure
   - do_not_use_unvalidated_provider
   - do_not_continue_agents
 ```
 
-## 10. Revalidation
+## 11. Revalidation
 
-Any change to provider, model, LiteLLM, CrewAI, API version, prompt, tool schema, reasoning mode, structured-output schema, or rate/context limit returns the affected profile to `REVALIDATION_REQUIRED`.
+Any change to provider, model, CrewAI, LiteLLM/provider SDK, base URL, API behavior, prompt, tool schema, privacy setting, reasoning mode, structured-output schema, rate limit, free allocation, or local model digest returns the affected profile to:
+
+```text
+REVALIDATION_REQUIRED
+```
+
+## 12. Current status
+
+```yaml
+Groq_profile: SELECTED_NOT_TESTED
+Cloudflare_profile: SELECTED_NOT_TESTED
+Gemini_public_profile: SELECTED_NOT_TESTED
+Ollama_local_profile: OPTIONAL_NOT_TESTED
+Cerebras_profile: REJECTED_TRIAL_ONLY
+native_CrewAI_failover_found: false
+Flow_failover_implemented: false
+agents_enabled: 0
+```
