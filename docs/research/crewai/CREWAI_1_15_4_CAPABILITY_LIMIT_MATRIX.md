@@ -1,41 +1,26 @@
 # CrewAI 1.15.4 Capability and Limitation Matrix
 
-**Status:** `DRAFT_RESEARCH_RECORD`  
-**Framework version:** `crewai==1.15.4`  
-**Python:** `>=3.10,<3.14`  
-**Reviewed:** 2026-07-20  
-**Purpose:** Define what Galax may and may not assign to CrewAI agents.
+**Status:** `RESEARCH_RECORD`  
+**Verified:** 2026-07-20  
+**Framework:** CrewAI `1.15.4`  
+**Decision:** CrewAI is the orchestration and bounded-agent framework. External systems provide repository, research, knowledge, memory, browser, database, test, security, and sandbox capabilities.
 
-## 1. Version evidence
-
-- [CrewAI 1.15.4 on PyPI](https://pypi.org/project/crewai/)
-- [CrewAI source repository](https://github.com/crewAIInc/crewAI)
-- [Versioned CrewAI 1.15.4 agent documentation](https://github.com/crewAIInc/crewAI/blob/69c0308f2cf4fa17214eab4db10071abc08602fd/docs/v1.15.4/en/concepts/agents.mdx)
-- [CrewAI tasks documentation](https://docs.crewai.com/en/concepts/tasks)
-- [CrewAI processes documentation](https://docs.crewai.com/en/concepts/processes)
-- [CrewAI Flows documentation](https://docs.crewai.com/en/concepts/flows)
-- [CrewAI memory documentation](https://docs.crewai.com/en/concepts/memory)
-- [CrewAI checkpointing documentation](https://docs.crewai.com/en/concepts/checkpointing)
-- [CrewAI MCP overview](https://docs.crewai.com/en/mcp/overview)
-- [CrewAI MCP security](https://docs.crewai.com/en/mcp/security)
-
-## 2. Capability classifications
+## 1. Support classifications
 
 ```text
 NATIVE_SUPPORTED
 SUPPORTED_BY_CONFIGURATION
-SUPPORTED_BY_CUSTOM_TOOL
-SUPPORTED_BY_MCP
 SUPPORTED_BY_FLOW
+SUPPORTED_BY_CUSTOM_TOOL_OR_MCP
 REQUIRES_EXTERNAL_SERVICE
-REQUIRES_HUMAN_GATE
-DEPRECATED
+MODEL_DEPENDENT
 EARLY_RELEASE
+DEPRECATED
 UNSUPPORTED
 UNKNOWN_UNTIL_LIVE_TEST
 ```
 
-## 3. Core matrix
+## 2. Core matrix
 
 | Capability | CrewAI status | Galax decision | Required proof |
 |---|---|---|---|
@@ -55,20 +40,23 @@ UNKNOWN_UNTIL_LIVE_TEST
 | Agent self-diagnosis | `UNSUPPORTED_AS_GUARANTEE` | Custom pattern only | Schema + deterministic validator + auditor |
 | Repository read/write | `SUPPORTED_BY_CUSTOM_TOOL_OR_MCP` | Role-scoped only | GitHub gateway tests |
 | Internet research | `SUPPORTED_BY_TOOL_OR_MCP` | Evidence Researcher only | Search/fetch tool tests |
+| Google Drive learning material | `SUPPORTED_BY_EXTERNAL_API_OR_TOOL` | Flow-managed read-only knowledge gateway | Drive search/export/LearningPacket tests |
+| Notion as native CrewAI memory backend | `NOT_PROVEN` | Prohibited claim | No native provider approval exists in project evidence |
+| Notion as external structured memory | `SUPPORTED_BY_EXTERNAL_API_OR_MCP` | Flow-managed dedicated memory gateway | Notion schema/read/write/security tests |
 | Code execution through agent setting | `DEPRECATED` | Prohibited | Use external sandbox tool |
 | External sandbox execution | `REQUIRES_EXTERNAL_SERVICE` | Planned local sandbox | Isolation and command tests |
 | Database operations | `SUPPORTED_BY_TOOL_OR_MCP` | Local/test DB only initially | DB tool and permission tests |
 | Browser automation | `SUPPORTED_BY_TOOL_OR_MCP` | Staging/local targets only | Browser tool tests |
 | Production deployment | `REQUIRES_EXTERNAL_TOOL_AND_HUMAN_GATE` | Agent cannot authorize | CI/deploy tool plus owner approval |
 | Pull-request merge | `REQUIRES_EXTERNAL_TOOL_AND_HUMAN_GATE` | Human only | No merge operation exposed to agents |
-| Memory | `NATIVE_SUPPORTED` | Disabled initially | Local privacy-safe design required |
-| Knowledge sources | `NATIVE_SUPPORTED` | Candidate only | Ingestion, retrieval, privacy tests |
+| CrewAI native memory | `NATIVE_SUPPORTED` | Disabled initially | Local privacy-safe design required |
+| Knowledge sources | `NATIVE_SUPPORTED` | Not selected for raw Drive ingestion initially | Ingestion, retrieval, privacy, and version tests |
 | Multimodal understanding | `MODEL_DEPENDENT` | Not available with current Cerebras model | Current model has no vision |
 | Accurate current facts without tool | `UNSUPPORTED` | Prohibited | Current facts require research tool |
 | Guaranteed correctness/security | `UNSUPPORTED` | Prohibited claim | Tests and human review only |
 | Background execution without process | `UNSUPPORTED` | Prohibited claim | Runtime must be actively running |
 
-## 4. Agent execution controls available in CrewAI
+## 3. Agent execution controls available in CrewAI
 
 CrewAI 1.15.4 exposes configuration fields including:
 
@@ -93,7 +81,7 @@ embedder
 
 Galax must test every field used with the pinned model and cannot infer support from the field's existence alone.
 
-## 5. Code execution limitation
+## 4. Code execution limitation
 
 The versioned CrewAI 1.15.4 agent documentation states:
 
@@ -115,20 +103,21 @@ coding_agents:
 
 The LLM may propose a patch. Only the workspace tool may write it and run approved commands inside the sandbox.
 
-## 6. Sequential process limitation
+## 5. Sequential process limitation
 
-`Process.sequential` executes tasks in the predefined list order and can pass previous task output as context. It does not itself decide that an agent is necessary, create safe permissions, or validate business rules.
+`Process.sequential` executes tasks in the predefined list order and can pass previous task output as context. It does not itself decide that an agent is necessary, create safe permissions, retrieve Google Drive knowledge, query Notion memory, or validate business rules.
 
 Galax consequence:
 
 ```text
-Flow/application selects approved agents and tasks first.
-CrewAI sequential process executes only that selected list.
+Flow/application performs preflight, memory retrieval, knowledge retrieval,
+agent selection, branch creation, and permission setup first.
+CrewAI sequential process executes only the selected task list.
 ```
 
 No dynamic delegation or manager allocation occurs inside the Crew.
 
-## 7. Structured output limitation
+## 6. Structured output limitation
 
 CrewAI tasks can declare `output_pydantic` or `output_json`, and can apply one or more guardrails. Guardrail failures can cause an LLM retry.
 
@@ -150,213 +139,72 @@ max_retry_limit: 1
 
 Tool use and strict output must be live-tested both separately and in the same task flow.
 
-## 8. Tool-use reliability limitation
+## 7. Tool-use reliability limitation
 
-CrewAI can register and invoke tools. However, reliable execution depends on:
+CrewAI can register and invoke tools. Reliable execution still depends on:
 
 ```text
-- provider/model function-calling behavior
-- exact schema compatibility
-- agent loop behavior
-- tool implementation
-- network/service reliability
+- exact model tool-calling behavior
+- valid tool schema
+- actual invocation evidence
+- tool timeout and error behavior
+- result validation
+- prompt-injection resistance
 ```
 
-An official CrewAI issue documented a case where an agent generated a plausible tool observation without an actual tool call. The issue is closed as not planned, but it demonstrates why Galax requires trusted tool invocation IDs and output hashes rather than accepting agent narration.
+A correct-looking answer is not proof that a tool executed. Galax requires trusted invocation IDs, actual tool results, and deterministic evidence comparison.
 
-Source:
+## 8. Google Drive knowledge limitation
 
-- [CrewAI issue #3154: fabricated tool observation](https://github.com/crewAIInc/crewAI/issues/3154)
+CrewAI does not automatically understand the user's Google Drive. Drive access requires an authenticated API or tool.
 
-## 9. Context limitation
+The selected Galax design does not expose Drive directly to every agent. The Flow uses a read-only `DriveKnowledgeGateway` to search approved roots, retrieve content, and build a verified `LearningPacket`.
 
-CrewAI can automatically summarize when context exceeds the model window if `respect_context_window=True`.
+Drive file titles are not trusted. The gateway uses body text, metadata, folders, labels, properties, versions, and content hashes. Google Drive `fullText` search is lexical; semantic relevance is not guaranteed without an additional tested retrieval layer.
 
-This is useful for broad research but unsafe for exact code, security, rules, migrations, or audit evidence because summarization may omit critical details.
+## 9. Notion memory limitation
 
-Galax defaults:
+Notion is not treated as CrewAI native memory.
+
+The supported integration path is:
+
+```text
+CrewAI Flow/application
+→ dedicated Notion memory gateway
+→ official Notion API
+→ scoped Galax memory data source/pages
+```
+
+Agents receive bounded verified memory context. They do not browse the entire workspace or write memory directly.
+
+The hosted Notion MCP proves an MCP interoperability path, but broad user-level workspace access makes it unsuitable as the initial unattended memory-write default.
+
+## 10. Memory and knowledge distinction
+
+```text
+Google Drive knowledge:
+  owner-provided tutorials and reference material used before implementation
+
+Notion memory:
+  validated decisions, lessons, failures, checkpoints, and reusable evidence
+
+GitHub repository:
+  current source of truth
+```
+
+Neither Drive nor Notion can override active repository rules, current official documentation, or live test evidence.
+
+## 11. Current framework decision
 
 ```yaml
-precision_agents:
-  respect_context_window: false
-
-context_strategy:
-  - scoped_repository_search
-  - relevant_file_chunks
-  - structured_task_output
-  - file_hashes
-  - stage_checkpoints
-```
-
-When exact context cannot fit, stop with `BLOCKED_CONTEXT_LIMIT`.
-
-## 10. Memory limitation
-
-Current CrewAI memory documentation states:
-
-```text
-- default storage is LanceDB
-- default embedder is OpenAI when no embedder is configured
-- memory content is sent to the configured LLM for analysis
-- some memory-analysis failures degrade gracefully without raising an exception
-```
-
-Galax decision:
-
-```yaml
-memory_enabled_initially: false
-canonical_truth:
-  - repository
-  - Flow state
-  - run ledger
-  - tool evidence
-  - Git history
-```
-
-Memory cannot approve a task, override repository rules, or serve as evidence that a fact is current.
-
-## 11. Checkpoint limitation
-
-CrewAI documents checkpointing as early release and says APIs may change. It also describes manual checkpoint writes as best-effort, with execution continuing if a write fails.
-
-Galax decision:
-
-```text
-CrewAI checkpoint = optional secondary recovery aid
-Galax run ledger + run branch commits = canonical recovery evidence
-```
-
-A failure to write the canonical Galax checkpoint stops the run.
-
-## 12. MCP limitation
-
-CrewAI supports MCP tools through local stdio and remote HTTP/SSE transports and supports tool filtering.
-
-Security limitations:
-
-```text
-- server metadata can contain prompt injection
-- remote servers require authentication
-- credentials require least privilege
-- the MCP server controls the actual external operation
-- malformed responses and network failures remain possible
-```
-
-CrewAI's own security documentation states that malicious server metadata can affect the agent simply when tools are listed.
-
-Current official open issues also report:
-
-- an SSRF/DNS-rebinding concern affecting URL validation and MCP tool argument handling
-- a request for a production MCP reliability layer
-- a request for a framework-level governance hook for tool authorization
-
-Sources:
-
-- [CrewAI MCP security guidance](https://docs.crewai.com/en/mcp/security)
-- [CrewAI issue #6504: SSRF and MCP URL validation](https://github.com/crewAIInc/crewAI/issues/6504)
-- [CrewAI issue #6545: MCP reliability layer proposal](https://github.com/crewAIInc/crewAI/issues/6545)
-- [CrewAI issue #5888: governance tool-authorization hook request](https://github.com/crewAIInc/crewAI/issues/5888)
-
-Galax must enforce permission and validation inside every role-scoped tool wrapper; it cannot rely on a future CrewAI-wide governance feature.
-
-## 13. LLM provider integration limitation
-
-CrewAI has native SDK paths for some providers and uses LiteLLM for other providers. A provider prefix or adapter existing in source code proves a connection path, not complete feature compatibility.
-
-For Cerebras, Galax must separately test:
-
-```text
-- model discovery
-- system messages
-- reasoning effort
-- function call arguments
-- tool-result round trip
-- strict JSON schema
-- Pydantic task output
-- usage reporting
-- timeout
-- HTTP 429
-- API version patch behavior
-```
-
-## 14. Free Cerebras limitation
-
-Current official Cerebras documentation and terms establish:
-
-```text
-- Free access is a trial with free credits, not permanent unlimited service.
-- General free-trial rate limits are account/provider controlled.
-- The current gpt-oss-120b table documents 5 RPM, 30,000 TPM,
-  1,000,000 TPH, and 1,000,000 TPD.
-- The service and outputs are provided as-is and as-available.
-- Cerebras may change fees or discontinue offerings.
-- The free trial does not provide the enterprise uptime guarantees.
-```
-
-Sources:
-
-- [Cerebras pricing](https://www.cerebras.ai/pricing)
-- [Cerebras rate limits](https://inference-docs.cerebras.ai/support/rate-limits)
-- [Cerebras terms](https://www.cerebras.ai/terms-of-service)
-
-Galax cannot promise monthly continuity based on this free provider.
-
-## 15. Current exact model limitation
-
-Candidate model:
-
-```yaml
-provider: Cerebras
-model: gpt-oss-120b
-crewai_model_id: cerebras/gpt-oss-120b
-context_window_tokens: 131072
-maximum_completion_tokens: 40960
-reasoning: true
-function_calling: true
-structured_output: true
-parallel_tool_calls: false
-vision: false
-```
-
-Implications:
-
-```text
-- No agent may be assigned image or screenshot understanding through this LLM.
-- Browser/UI agents need textual DOM/accessibility output from their tool.
-- Only one tool call should be active at a time.
-- Exact tool and structured-output behavior remains disabled until live tests pass.
-```
-
-## 16. Per-agent proof requirement
-
-Each agent must have a capability contract containing:
-
-```yaml
-agent_id:
-role:
-required_crewai_features: []
-required_llm_capabilities: []
-required_tool_operations: []
-required_permissions: []
-unsupported_actions: []
-human_gates: []
-source_links: []
-mandatory_tests: []
-status:
-```
-
-No shared generic claim such as `CrewAI supports agents` is sufficient to approve an individual agent's actual task.
-
-## 17. Final framework decision
-
-```yaml
-framework: crewai
-version_candidate: 1.15.4
-version_pinned_for_tests: false
-framework_supported_for_bounded_assistant_tasks: true
-framework_supported_as_unrestricted_autonomous_software_company: false
-sequential_process_supported: true
-tool_and_llm_compatibility_universally_guaranteed: false
+CrewAI_version: 1.15.4
+status: SELECTED_FOR_PINNED_VALIDATION
+sequential_process: required
+agent_delegation: disabled
+async_tasks: disabled
+built_in_code_execution: prohibited
+CrewAI_native_memory: disabled_initially
+Drive_knowledge_gateway: specified_not_implemented
+Notion_external_memory_gateway: specified_not_implemented
 production_ready: false
-next_gate: PIN_INSTALL_AND_LIVE_COMPATIBILITY_SUITE
 ```
