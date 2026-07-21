@@ -1,0 +1,84 @@
+pointer_version: 1
+status: ACTIVE_DOCUMENTATION_REVIEW
+updated_at_utc: 2026-07-21T00:00:00Z
+
+repository: ariessocia04-rgb/galax-Ai-project
+repository_url: https://github.com/ariessocia04-rgb/galax-Ai-project
+
+current_task:
+  task_id: AI-CONTRIBUTOR-GOVERNANCE-CONTINUITY-001
+  canonical_goal: >-
+    Maintain repository-first continuity so a new ChatGPT or development-agent
+    session can recover exact authorized work after a chat-length, quota, crash,
+    or handoff interruption without relying on old conversation memory.
+  current_phase: DOCUMENTATION_CREATED_PENDING_HUMAN_REVIEW
+  work_branch: research/ai-qualification-framework
+  approved_research_base_branch: agent/agent-01-tool-inspection
+  approved_research_base_sha: 897ded61c5edea4e6153112361c6e929f5a84294
+  pointer_parent_sha: 122c9f5c2a470238f0616e505e9bd621d9e6f7c1
+
+latest_checkpoint:
+  stable_pointer_path: docs/handoffs/ai-contributor-governance/LATEST.yaml
+  checkpoint_path: docs/handoffs/ai-contributor-governance/checkpoints/2026-07-21-chat-continuity-protocol-chatgpt.yaml
+  checkpoint_commit_sha: 3971c1eaa7c5a1f88d90b59dfb36f2329737776a
+  checkpoint_status: READY_FOR_POINTER_AND_HUMAN_REVIEW
+
+selected_contributor:
+  id: ChatGPT
+  product: GPT-5.6-Thinking
+  exact_role: RESEARCH_AND_GOVERNANCE_DOCUMENTATION_WRITER
+  source_write_authorized: false
+  reviewer_only_for_next_step: true
+
+task_lock:
+  status: RELEASED
+  active_writer: none
+  overlapping_writer_allowed: false
+
+allowed_paths_for_next_step:
+  - docs/continuity/**
+  - docs/rules/CHAT_SESSION_CONTINUITY_AND_RECOVERY_RULE.md
+  - docs/templates/CHAT_SESSION_CHECKPOINT_TEMPLATE.yaml
+  - docs/prompts/NEW_CHAT_REPOSITORY_RECOVERY_PROMPT.md
+  - docs/state/ACTIVE_WORK_POINTER.yaml
+  - docs/handoffs/ai-contributor-governance/**
+
+required_reading_order:
+  - README.md
+  - docs/continuity/README.md
+  - docs/rules/CHAT_SESSION_CONTINUITY_AND_RECOVERY_RULE.md
+  - docs/state/ACTIVE_WORK_POINTER.yaml
+  - docs/handoffs/ai-contributor-governance/LATEST.yaml
+  - docs/handoffs/ai-contributor-governance/checkpoints/2026-07-21-chat-continuity-protocol-chatgpt.yaml
+  - docs/templates/CHAT_SESSION_CHECKPOINT_TEMPLATE.yaml
+  - docs/prompts/NEW_CHAT_REPOSITORY_RECOVERY_PROMPT.md
+  - docs/rules/AI_DEVELOPMENT_CONTRIBUTOR_QUALIFICATION_GATE.md
+  - docs/plan/AI_DEVELOPMENT_CONTRIBUTOR_COORDINATION_PLAN_DRAFT.md
+  - docs/research/ai-tools/README.md
+
+recovery_prompt: docs/prompts/NEW_CHAT_REPOSITORY_RECOVERY_PROMPT.md
+
+next_safe_action:
+  action: VERIFY_CONTINUITY_PACKAGE_AND_REQUEST_HUMAN_REVIEW
+  instructions:
+    - retrieve every continuity file from research/ai-qualification-framework
+    - compare the branch against 897ded61c5edea4e6153112361c6e929f5a84294
+    - confirm no main modification
+    - report exact branch HEAD and changed files
+    - do not implement source code
+    - wait for human approval
+
+prohibited_actions:
+  - source_implementation
+  - creating_implementation_branch_from_main
+  - direct_main_write
+  - force_push
+  - automatic_merge
+  - merge
+  - deployment
+  - LLM_profile_activation
+  - Agents_02_to_15_activation
+  - automatic_resume_without_human_approval
+
+recovery_status_expected: READY_TO_CONTINUE
+human_approval_required: true
