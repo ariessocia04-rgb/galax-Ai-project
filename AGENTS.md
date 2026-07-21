@@ -25,25 +25,30 @@ Stop immediately with `BLOCKED_REPOSITORY_STATE_MISMATCH` when the repository, b
 Read every item completely and in this order:
 
 1. `README.md`
-2. `docs/research/readiness/FINAL_PRE_PROMPT_CONFLICT_AUDIT_2026-07-20.md`
-3. The alias target identified by that file
-4. `docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md`
-5. `docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md`
-6. Every applicable file under `docs/rules/`
-7. Every applicable file under `docs/plan/`
-8. `docs/sources/SOURCE_INDEX.md`
-9. Exact source cards for every framework, model, tool, and external contributor involved
-10. `docs/research/agents/AGENT-01-engineering-manager/03_TOOL_INSPECTION.md`
-11. `docs/prompts/GALAX_FOUNDATION_AGENT01_IMPLEMENTATION_VALIDATION_PROMPT.md`
-12. `docs/plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md`
-13. The exact platform assignment in `docs/prompts/EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md`
+2. `docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md`
+3. `docs/research/readiness/FINAL_PRE_PROMPT_CONFLICT_AUDIT_2026-07-20.md`
+4. The alias target identified by that file
+5. `docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md`
+6. `docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md`
+7. Every applicable file under `docs/rules/`
+8. Every applicable file under `docs/plan/`
+9. `docs/sources/SOURCE_INDEX.md`
+10. Exact source cards for every framework, model, tool, and external contributor involved
+11. `docs/research/agents/AGENT-01-engineering-manager/03_TOOL_INSPECTION.md`
+12. `docs/prompts/GALAX_FOUNDATION_AGENT01_IMPLEMENTATION_VALIDATION_PROMPT.md`
+13. `docs/plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md`
+14. The exact platform assignment in `docs/prompts/EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md`
+15. Current branch heads, draft PR, and assignment issues required by the active task
 
 Do not edit before producing a concise `REPOSITORY_READ_RECEIPT` that lists the files actually read, their branch/ref, the current HEAD SHA, detected conflicts, and the exact permitted scope.
+
+When the owner uses a conversation-length trigger, the stronger receipt and state-reconstruction rules in `docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md` apply before any substantive answer or action.
 
 ## 3. Decision priority
 
 ```text
 README current readiness
+→ canonical chat-continuity protocol
 → canonical conflict audit and its alias target
 → active Foundation and Agent 01 Flow execution contract
 → CrewAI 1.15.4 remediation blueprint
@@ -53,6 +58,7 @@ README current readiness
 → current Agent 01 research
 → exact task assignment
 → historical drafts
+→ old chat memory or summaries
 ```
 
 The active Foundation and Agent 01 Flow execution contract supersedes only conflicting older instructions that attach `RepositoryPreflightTool` directly to Agent 01, require an Agent 01 tool call, or use `result_as_answer` for that path. All non-conflicting research, security, testing, and implementation requirements remain active.
@@ -143,6 +149,7 @@ OpenCode and goose are not active contributors. Their source cards preserve decl
 - Never use hidden chain-of-thought as evidence. Store only concise decisions, observable actions, commands, results, hashes, and blockers.
 - Never continue after a blocking repository, security, permission, test, or evidence failure.
 - Never run a direct agent-to-agent MCP mesh or simultaneous repository writers.
+- Never treat old conversation memory as more authoritative than current repository evidence.
 
 ## 7. Required working behavior
 
@@ -203,6 +210,7 @@ BLOCKED
 FAIL
 PARTIALLY_VALIDATED_WITH_EXACT_BLOCKERS
 BLOCKED_REPOSITORY_STATE_MISMATCH
+BLOCKED_REPOSITORY_ACCESS_REQUIRED
 BLOCKED_REQUIRED_DOCUMENT
 BLOCKED_UNSUPPORTED_CAPABILITY
 BLOCKED_SANDBOX_NOT_AVAILABLE
@@ -231,3 +239,29 @@ The exact entry criteria, outputs, handoffs, and commands are defined in the ext
 ## 10. Human authority
 
 The human owner retains final authority for scope, architecture acceptance, credentials, risk acceptance, branch publication, PR approval, merge, and deployment. An AI contributor may recommend; it may not self-authorize.
+
+## 11. Conversation-length trigger protocol
+
+Treat these phrases and close spelling variations as the same command:
+
+```text
+length chat problem
+chat length problem
+conversation length problem
+continue exact Galax flow
+operation length problem solve
+operatiion length problem solve
+```
+
+On detection:
+
+```text
+read docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md
+→ verify repository access and all required branch heads
+→ read current PR and assignment issues
+→ reconstruct the current stage
+→ produce OPERATION_LENGTH_CONTINUITY_RECEIPT
+→ answer or act only when safe_to_continue=true
+```
+
+Do not ask the owner what the previous work was when repository access exists. Do not rely on an old conversation summary for a repository-changing decision. If repository access is unavailable, return `BLOCKED_REPOSITORY_ACCESS_REQUIRED` with the exact remedy defined by the continuity protocol.
