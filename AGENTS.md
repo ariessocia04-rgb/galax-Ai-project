@@ -27,15 +27,16 @@ Read every item completely and in this order:
 1. `README.md`
 2. `docs/research/readiness/FINAL_PRE_PROMPT_CONFLICT_AUDIT_2026-07-20.md`
 3. The alias target identified by that file
-4. `docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md`
-5. Every applicable file under `docs/rules/`
-6. Every applicable file under `docs/plan/`
-7. `docs/sources/SOURCE_INDEX.md`
-8. Exact source cards for every framework, model, tool, and external contributor involved
-9. `docs/research/agents/AGENT-01-engineering-manager/03_TOOL_INSPECTION.md`
-10. `docs/prompts/GALAX_FOUNDATION_AGENT01_IMPLEMENTATION_VALIDATION_PROMPT.md`
-11. `docs/plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md`
-12. The exact platform assignment in `docs/prompts/EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md`
+4. `docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md`
+5. `docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md`
+6. Every applicable file under `docs/rules/`
+7. Every applicable file under `docs/plan/`
+8. `docs/sources/SOURCE_INDEX.md`
+9. Exact source cards for every framework, model, tool, and external contributor involved
+10. `docs/research/agents/AGENT-01-engineering-manager/03_TOOL_INSPECTION.md`
+11. `docs/prompts/GALAX_FOUNDATION_AGENT01_IMPLEMENTATION_VALIDATION_PROMPT.md`
+12. `docs/plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md`
+13. The exact platform assignment in `docs/prompts/EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md`
 
 Do not edit before producing a concise `REPOSITORY_READ_RECEIPT` that lists the files actually read, their branch/ref, the current HEAD SHA, detected conflicts, and the exact permitted scope.
 
@@ -44,6 +45,7 @@ Do not edit before producing a concise `REPOSITORY_READ_RECEIPT` that lists the 
 ```text
 README current readiness
 → canonical conflict audit and its alias target
+→ active Foundation and Agent 01 Flow execution contract
 → CrewAI 1.15.4 remediation blueprint
 → active rules
 → active plans
@@ -53,11 +55,63 @@ README current readiness
 → historical drafts
 ```
 
-A lower-priority or historical file cannot reactivate Cerebras, Notion-primary runtime memory, CrewAI planning/reasoning/native memory, hierarchical delegation, generic MCP exposure, direct-main writes, automatic merge, or privileged Docker-in-Docker.
+The active Foundation and Agent 01 Flow execution contract supersedes only conflicting older instructions that attach `RepositoryPreflightTool` directly to Agent 01, require an Agent 01 tool call, or use `result_as_answer` for that path. All non-conflicting research, security, testing, and implementation requirements remain active.
+
+A lower-priority or historical file cannot reactivate Cerebras, Notion-primary runtime memory, CrewAI planning/reasoning/native memory, hierarchical delegation, generic MCP exposure, direct-main writes, automatic merge, privileged Docker-in-Docker, or the superseded direct Agent 01 preflight-tool pattern.
 
 Never resolve a conflict by guessing. Return `BLOCKED_SUPERSESSION_CONFLICT` and name the conflicting files and safe remedy.
 
-## 4. External contributors are not Galax CrewAI agents
+## 4. Foundation and Agent 01 architecture invariants
+
+The following active architecture is mandatory:
+
+```yaml
+RepositoryPreflightTool:
+  owner: GalaxFoundationFlow
+  invoked_by_agent: false
+  invoked_before_agent: true
+  calls_per_run: 1
+
+engineering_manager:
+  tools: []
+  receives:
+    - trusted RepositoryPreflightResult
+  produces:
+    - AgentTaskResult
+
+Agent_01_LLM_calls: 1
+Agent_01_direct_tools: 0
+result_as_answer_for_this_path: prohibited
+hidden_second_agent_call: prohibited
+unconditional_listen_chain: prohibited
+```
+
+Every conditional stage must use an explicit `@router` and named route labels. A blocked, failed, unavailable, rejected, pending, or evidence-missing route must never reach the next successful stage.
+
+Required order:
+
+```text
+validate_run_manifest()
+→ router
+→ check_external_preflight_tool_availability()
+→ router
+→ invoke_repository_preflight_tool()
+→ router
+→ check_llm_profile_readiness()
+→ router
+→ run_agent_01_evaluation()
+→ validate supported claims
+→ router
+→ build_human_review_request() using pure Python/Pydantic
+→ authenticated human decision pause and router
+→ complete_foundation_plan()
+```
+
+Offline permission declaration uses `REPO_PERMISSION_PROFILE_DECLARED`. Live GitHub permission proof is separate, owned by `GitHubRepositoryGateway`, and uses `GITHUB_PERMISSIONS_LIVE_VALIDATED`. Missing required live evidence produces `BLOCKED_LIVE_PERMISSION_EVIDENCE_MISSING`.
+
+Both Agent 01 LLM profiles remain disabled. Do not activate them in CrewAI Studio or claim the plan is operational or tested.
+
+## 5. External contributors are not Galax CrewAI agents
 
 Cline, OpenHands Core, mini-SWE-agent, Aider, and PR-Agent are controlled development contributors. They are not Agents 01–15, do not join the CrewAI production roster, and cannot approve themselves or Galax.
 
@@ -74,7 +128,9 @@ Cline primary implementation
 
 The order may skip stages, but it must never run two writers against the same worktree or files concurrently.
 
-## 5. Universal non-negotiable rules
+OpenCode and goose are not active contributors. Their source cards preserve declined/deferred research decisions only and grant no repository, MCP, credential, review, or production permission.
+
+## 6. Universal non-negotiable rules
 
 - Never write directly to `main`.
 - Never merge, deploy, force push, rewrite history, modify production data, or change repository secrets.
@@ -86,8 +142,9 @@ The order may skip stages, but it must never run two writers against the same wo
 - Never silently change the framework, pinned version, provider, architecture, role boundaries, or execution process.
 - Never use hidden chain-of-thought as evidence. Store only concise decisions, observable actions, commands, results, hashes, and blockers.
 - Never continue after a blocking repository, security, permission, test, or evidence failure.
+- Never run a direct agent-to-agent MCP mesh or simultaneous repository writers.
 
-## 6. Required working behavior
+## 7. Required working behavior
 
 Before edits:
 
@@ -136,7 +193,7 @@ final_report:
   deployment_requested: false
 ```
 
-## 7. Allowed status values
+## 8. Allowed status values
 
 Use only factual statuses appropriate to the result:
 
@@ -151,6 +208,8 @@ BLOCKED_UNSUPPORTED_CAPABILITY
 BLOCKED_SANDBOX_NOT_AVAILABLE
 BLOCKED_MISSING_CREDENTIAL
 BLOCKED_SUPERSESSION_CONFLICT
+BLOCKED_LLM_PROFILE_NOT_APPROVED
+BLOCKED_LIVE_PERMISSION_EVIDENCE_MISSING
 FAILED_TEST
 FAILED_SECURITY_GATE
 FAILED_FABRICATED_TOOL_RESULT
@@ -159,7 +218,7 @@ REVALIDATION_REQUIRED
 
 Do not use `production ready`, `fully autonomous`, `all agents working`, `100% bug-free`, or equivalent claims without the exact repository approval and live evidence required by the canonical rules.
 
-## 8. Platform assignments
+## 9. Platform assignments
 
 - **Cline:** primary supervised implementation on the dedicated foundation branch; auto-approval and YOLO are prohibited.
 - **OpenHands Core:** Docker-isolated fallback reproduction only; process sandbox and cloud GitHub app are prohibited.
@@ -169,6 +228,6 @@ Do not use `production ready`, `fully autonomous`, `all agents working`, `100% b
 
 The exact entry criteria, outputs, handoffs, and commands are defined in the external contributor execution plan and command pack.
 
-## 9. Human authority
+## 10. Human authority
 
 The human owner retains final authority for scope, architecture acceptance, credentials, risk acceptance, branch publication, PR approval, merge, and deployment. An AI contributor may recommend; it may not self-authorize.
