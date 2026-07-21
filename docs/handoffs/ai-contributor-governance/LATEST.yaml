@@ -1,0 +1,14 @@
+latest_checkpoint_version: 1
+status: CURRENT
+repository: ariessocia04-rgb/galax-Ai-project
+task_id: AI-CONTRIBUTOR-GOVERNANCE-CONTINUITY-001
+branch: research/ai-qualification-framework
+approved_base_sha: 897ded61c5edea4e6153112361c6e929f5a84294
+checkpoint_path: docs/handoffs/ai-contributor-governance/checkpoints/2026-07-21-chat-continuity-protocol-chatgpt.yaml
+checkpoint_commit_sha: 3971c1eaa7c5a1f88d90b59dfb36f2329737776a
+checkpoint_status: READY_FOR_POINTER_AND_HUMAN_REVIEW
+required_recovery_prompt: docs/prompts/NEW_CHAT_REPOSITORY_RECOVERY_PROMPT.md
+human_review_required: true
+source_implementation_authorized: false
+merge_authorized: false
+deployment_authorized: false
