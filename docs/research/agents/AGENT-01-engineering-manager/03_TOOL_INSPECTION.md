@@ -1,10 +1,16 @@
-# Agent 01 Tool Inspection — Draft
-
-**Agent:** AI Engineering Manager and CrewAI Execution Planning Lead  
-**Research status:** `CONDITIONALLY_COMPATIBLE`  
-**Document status:** `DRAFT_MUTABLE`  
-**Reviewed:** 2026-07-20  
+d:** 2026-07-20  
 **Permanent rule:** No. This record may be revised when repository rules, CrewAI, the LLM, or the execution design changes.
+
+> **SUPERSESSION NOTICE (2026-07-21):** The active Foundation and Agent 01 Flow execution contract at `docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md` supersedes sections of this document where they assign `RepositoryPreflightTool` directly to Agent 01, require an Agent 01 tool call, or use `result_as_answer` for this path.
+>
+> **Active architecture for current Foundation scope:**
+> - `RepositoryPreflightTool` is owned and invoked exactly once by `GalaxFoundationFlow`, NOT by Agent 01.
+> - Agent 01 (`engineering_manager`) has zero direct tools (`tools: []`; `direct_tool_calls: 0`).
+> - `result_as_answer` is prohibited for this Foundation path.
+> - Agent 01 executes exactly one LLM call and produces `AgentTaskResult`.
+> - Sections 14 (agent usage rule), 15 (self-diagnostic requiring tool call), 16 (token controls exposing tool schema), and 18 (tests requiring Agent 01 to call a tool) are superseded. All non-conflicting security boundaries, check definitions, and input/output contracts remain active evidence.
+>
+> This notice preserves this record's historical research value. No historical content has been deleted.
 
 ## 1. Scope of this inspection
 
