@@ -1,0 +1,219 @@
+checkpoint_version: 1
+status: DOCUMENTATION_STAGE_CHECKPOINT
+created_at_utc: 2026-07-21T00:00:00Z
+updated_at_utc: 2026-07-21T00:00:00Z
+
+trigger:
+  type: HUMAN_REQUESTED_HANDOFF
+  observed_message: >-
+    Add a repository solution for the ChatGPT maximum-conversation-length event
+    so a new chat or contributor can recover the exact path, pattern, and work state.
+
+repository_state:
+  repository: ariessocia04-rgb/galax-Ai-project
+  repository_url: https://github.com/ariessocia04-rgb/galax-Ai-project
+  required_base_branch: agent/agent-01-tool-inspection
+  required_base_sha: 897ded61c5edea4e6153112361c6e929f5a84294
+  current_branch: research/ai-qualification-framework
+  current_head_sha_before_checkpoint_commit: ba8cabc67c9fe1d5ae0a9aa832120d969b17d4ad
+  remote_branch_exists: true
+  working_tree_clean: NOT_APPLICABLE_CONNECTOR_WRITE
+  modified_files: []
+  untracked_files: []
+  staged_files: []
+
+assignment:
+  task_id: AI-CONTRIBUTOR-GOVERNANCE-CONTINUITY-001
+  canonical_goal: >-
+    Define a repository-first continuity protocol that allows a new ChatGPT or
+    development-agent session to recover the exact authorized task state after a
+    conversation-length, quota, crash, or handoff interruption without guessing.
+  phase_scope:
+    - research_documentation
+    - contributor_governance
+    - continuity_and_handoff
+  contributor_id: ChatGPT
+  contributor_product: GPT-5.6-Thinking
+  exact_assigned_role: RESEARCH_AND_GOVERNANCE_DOCUMENTATION_WRITER
+  selected_as_single_writer: true
+  reviewer_only: false
+  human_approver: Aries Socia
+
+control_state:
+  task_lock:
+    status: RELEASED_AFTER_CHECKPOINT
+    writer_id: ChatGPT
+    branch: research/ai-qualification-framework
+    base_sha: 897ded61c5edea4e6153112361c6e929f5a84294
+    allowed_paths:
+      - docs/rules/**
+      - docs/templates/**
+      - docs/prompts/**
+      - docs/continuity/**
+      - docs/state/**
+      - docs/handoffs/ai-contributor-governance/**
+  allowed_paths:
+    - docs/rules/**
+    - docs/templates/**
+    - docs/prompts/**
+    - docs/continuity/**
+    - docs/state/**
+    - docs/handoffs/ai-contributor-governance/**
+  protected_paths:
+    - main
+    - .github/workflows/**
+    - secrets/**
+    - .env
+  prohibited_actions:
+    - direct_main_write
+    - force_push
+    - automatic_merge
+    - deployment
+    - runtime_activation
+    - Agents_02_to_15_activation
+
+canonical_reading:
+  completed: true
+  files_read:
+    - README.md
+    - docs/rules/AI_DEVELOPMENT_CONTRIBUTOR_QUALIFICATION_GATE.md
+    - docs/plan/AI_DEVELOPMENT_CONTRIBUTOR_COORDINATION_PLAN_DRAFT.md
+    - docs/research/ai-tools/README.md
+    - docs/research/ai-tools/AI_DEVELOPMENT_TOOL_STRICT_RESCREEN_V2_2026-07-21.md
+  files_missing: []
+  files_not_verified: []
+  authority_order_applied: true
+
+work_completed:
+  requirements_completed:
+    - Defined the maximum-conversation-length and interruption trigger.
+    - Established repository-first authority over chat memory.
+    - Defined proactive checkpoint timing.
+    - Defined deterministic new-chat recovery stages and stop statuses.
+    - Added anti-hallucination and privacy rules.
+    - Added a structured YAML checkpoint template.
+    - Added a paste-ready new-chat recovery prompt.
+    - Added a continuity entry point and owner shortcut.
+  decisions_made:
+    - decision: Do not depend on a warning before checkpointing.
+      evidence:
+        - docs/rules/CHAT_SESSION_CONTINUITY_AND_RECOVERY_RULE.md
+    - decision: A new chat performs no-change recovery before any implementation.
+      evidence:
+        - docs/prompts/NEW_CHAT_REPOSITORY_RECOVERY_PROMPT.md
+    - decision: Chat text and model memory are lower authority than repository evidence.
+      evidence:
+        - docs/rules/CHAT_SESSION_CONTINUITY_AND_RECOVERY_RULE.md
+  files_changed:
+    - path: docs/rules/CHAT_SESSION_CONTINUITY_AND_RECOVERY_RULE.md
+      purpose: mandatory interruption and recovery rules
+    - path: docs/templates/CHAT_SESSION_CHECKPOINT_TEMPLATE.yaml
+      purpose: machine-readable checkpoint contract
+    - path: docs/prompts/NEW_CHAT_REPOSITORY_RECOVERY_PROMPT.md
+      purpose: paste-ready no-change bootstrap prompt
+    - path: docs/continuity/README.md
+      purpose: continuity entry point and owner instructions
+    - path: docs/handoffs/ai-contributor-governance/checkpoints/2026-07-21-chat-continuity-protocol-chatgpt.yaml
+      purpose: current structured checkpoint
+
+commands_and_tools:
+  repository_tools_used:
+    - tool: GitHub connector
+      action: read canonical repository files and create documentation files
+      result: succeeded_on_research_branch
+  external_sources_used: []
+
+test_evidence:
+  required_tests:
+    - verify files are retrievable from the target branch
+    - compare branch against approved base
+    - verify main was not modified
+  tests_run: []
+  lint_status: NOT_APPLICABLE_DOCUMENTATION_ONLY
+  type_check_status: NOT_APPLICABLE_DOCUMENTATION_ONLY
+  unit_test_status: NOT_RUN
+  contract_test_status: NOT_RUN
+  integration_test_status: NOT_RUN
+  security_negative_test_status: NOT_RUN
+  live_test_status: NOT_RUN
+  fabricated_test_claims: 0
+
+research_and_evidence:
+  confirmed_facts:
+    - The work is isolated on research/ai-qualification-framework.
+    - The approved research base SHA is 897ded61c5edea4e6153112361c6e929f5a84294.
+    - The continuity package is documentation only and does not activate contributors.
+  assumptions:
+    - A future repository-aware session has access to the connected GitHub repository.
+  unknown_not_verified:
+    - Automatic machine validation of checkpoint hashes is not implemented.
+    - Automatic task-lock enforcement is not implemented.
+  conflicting_records: []
+  superseded_records: []
+
+safety_results:
+  unauthorized_operation_count: 0
+  direct_main_write_attempts: 0
+  force_push_attempts: 0
+  automatic_merge_attempts: 0
+  secret_exposure_events: 0
+  allowed_path_violations: 0
+  concurrent_writer_conflicts: 0
+
+continuity_state:
+  current_stage: CONTINUITY_DOCUMENTATION_CREATED
+  completion_percentage_claim: DOCUMENTATION_SCOPE_COMPLETE_PENDING_VERIFICATION
+  requirements_remaining:
+    - create docs/state/ACTIVE_WORK_POINTER.yaml referencing this checkpoint
+    - verify all continuity files are retrievable
+    - verify final branch diff against approved base
+    - human review of the continuity package
+  blockers: []
+  known_failures: []
+  known_risks:
+    - A stale pointer could misdirect a future session if it is not updated after task changes.
+    - A checkpoint cannot prove implementation correctness without tests and evidence.
+  quota_or_cost_observed: NOT_RECORDED
+  context_or_session_status: ACTIVE
+  previous_checkpoint_path: null
+  next_checkpoint_due_after: active_pointer_creation_and_verification
+
+resume_contract:
+  recovery_status: READY_TO_CONTINUE
+  exact_next_safe_action: >-
+    Read the continuity package, create and verify the active-work pointer, then
+    return a documentation-only verification report for human review.
+  next_contributor: ChatGPT_or_authorized_repository_aware_contributor
+  next_required_branch: research/ai-qualification-framework
+  next_required_starting_sha: CHECK_ACTUAL_BRANCH_HEAD_AND_VERIFY_DESCENDANT_OF_APPROVED_BASE
+  next_allowed_paths:
+    - docs/state/ACTIVE_WORK_POINTER.yaml
+    - docs/continuity/**
+    - docs/rules/CHAT_SESSION_CONTINUITY_AND_RECOVERY_RULE.md
+    - docs/templates/CHAT_SESSION_CHECKPOINT_TEMPLATE.yaml
+    - docs/prompts/NEW_CHAT_REPOSITORY_RECOVERY_PROMPT.md
+  next_required_tests:
+    - retrieve all continuity files from research/ai-qualification-framework
+    - compare branch with 897ded61c5edea4e6153112361c6e929f5a84294
+  must_wait_for_human_approval: true
+  actions_still_prohibited:
+    - source_implementation
+    - direct_main_write
+    - merge
+    - deployment
+    - force_push
+    - runtime_activation
+    - Agents_02_to_15_activation
+
+integrity:
+  checkpoint_body_sha256: NOT_IMPLEMENTED
+  generated_by: ChatGPT
+  reviewed_by_human: false
+  review_timestamp_utc: null
+
+validation:
+  required_fields_complete: true
+  branch_and_sha_verified_to_pre_checkpoint_head: true
+  latest_checkpoint_pointer_updated: false
+  no_secrets_present: true
+  final_status: READY_FOR_POINTER_AND_HUMAN_REVIEW
