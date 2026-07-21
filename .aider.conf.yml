@@ -1,0 +1,19 @@
+# Galax Aider configuration for controlled surgical-fix trials only.
+# Do not store API keys in this file.
+
+auto-commits: false
+dirty-commits: false
+git-commit-verify: true
+auto-lint: true
+auto-test: false
+suggest-shell-commands: false
+show-diffs: true
+
+read:
+  - AGENTS.md
+  - docs/plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md
+  - docs/prompts/GALAX_FOUNDATION_AGENT01_IMPLEMENTATION_VALIDATION_PROMPT.md
+  - docs/prompts/EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md
+
+# The human assignment must provide --test-cmd and the exact editable files.
+# Aider is not authorized for broad project ownership, commits, push, merge, or deployment.
