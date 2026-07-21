@@ -1,0 +1,185 @@
+checkpoint_version: 1
+status: DRAFT_NOT_VALID_UNTIL_COMPLETED
+created_at_utc: null
+updated_at_utc: null
+
+trigger:
+  type: null
+  allowed_values:
+    - PERIODIC_STAGE_CHECKPOINT
+    - BEFORE_LONG_RESPONSE
+    - CHAT_LENGTH_LIMIT
+    - PROVIDER_QUOTA_LIMIT
+    - TOOL_OR_AGENT_SWITCH
+    - FAILURE_OR_BLOCKER
+    - HUMAN_REQUESTED_HANDOFF
+    - TASK_COMPLETION
+  observed_message: null
+
+repository_state:
+  repository: ariessocia04-rgb/galax-Ai-project
+  repository_url: https://github.com/ariessocia04-rgb/galax-Ai-project
+  required_base_branch: null
+  required_base_sha: null
+  current_branch: null
+  current_head_sha: null
+  remote_branch_exists: null
+  working_tree_clean: null
+  modified_files: []
+  untracked_files: []
+  staged_files: []
+  observed_by_command_or_tool: []
+
+assignment:
+  task_id: null
+  canonical_goal: null
+  phase_scope: []
+  contributor_id: null
+  contributor_product: null
+  exact_assigned_role: null
+  selected_as_single_writer: false
+  reviewer_only: false
+  human_approver: null
+
+control_state:
+  task_lock:
+    status: null
+    allowed_values: [ACTIVE, RELEASED, EXPIRED, BLOCKED, NOT_APPLICABLE]
+    writer_id: null
+    branch: null
+    base_sha: null
+    allowed_paths: []
+    acquired_at_utc: null
+    expires_at_utc: null
+  allowed_paths: []
+  protected_paths: []
+  maximum_changed_files: null
+  maximum_diff_size: null
+  maximum_cost_or_quota: null
+  prohibited_actions:
+    - direct_main_write
+    - force_push
+    - automatic_merge
+    - workflow_or_secret_write_without_authorization
+    - widening_allowed_paths
+    - enabling_Agents_02_to_15
+
+canonical_reading:
+  completed: false
+  files_read: []
+  files_missing: []
+  files_not_verified: []
+  authority_order_applied: false
+
+work_completed:
+  requirements_completed: []
+  decisions_made:
+    - decision: null
+      evidence: []
+  files_changed:
+    - path: null
+      purpose: null
+      change_summary: null
+  commits_created:
+    - sha: null
+      message: null
+      verified_on_remote: null
+  branches_created_or_updated: []
+  pull_requests_created_or_updated: []
+
+commands_and_tools:
+  commands_run:
+    - command: null
+      result: null
+      evidence: null
+  repository_tools_used:
+    - tool: null
+      action: null
+      result: null
+  external_sources_used: []
+
+test_evidence:
+  required_tests: []
+  tests_run:
+    - command: null
+      status: null
+      allowed_values: [PASS, FAIL, BLOCKED, SKIPPED_MISSING_SECRET, NOT_RUN]
+      output_summary: null
+      evidence_path_or_reference: null
+  lint_status: NOT_RUN
+  type_check_status: NOT_RUN
+  unit_test_status: NOT_RUN
+  contract_test_status: NOT_RUN
+  integration_test_status: NOT_RUN
+  security_negative_test_status: NOT_RUN
+  live_test_status: NOT_RUN
+  fabricated_test_claims: 0
+
+research_and_evidence:
+  confirmed_facts: []
+  assumptions: []
+  unknown_not_verified: []
+  conflicting_records: []
+  superseded_records: []
+
+safety_results:
+  unauthorized_operation_count: 0
+  direct_main_write_attempts: 0
+  force_push_attempts: 0
+  automatic_merge_attempts: 0
+  secret_exposure_events: 0
+  allowed_path_violations: 0
+  concurrent_writer_conflicts: 0
+
+continuity_state:
+  current_stage: null
+  completion_percentage_claim: NOT_ESTABLISHED_UNLESS_MEASURED
+  requirements_remaining: []
+  blockers:
+    - blocker_id: null
+      description: null
+      evidence: []
+      safe_remedy: null
+  known_failures: []
+  known_risks: []
+  quota_or_cost_observed: null
+  context_or_session_status: null
+  previous_checkpoint_path: null
+  next_checkpoint_due_after: null
+
+resume_contract:
+  recovery_status: null
+  allowed_values:
+    - READY_TO_CONTINUE
+    - BLOCKED_CONTEXT_MISMATCH
+    - BLOCKED_CHECKPOINT_INCOMPLETE
+    - BLOCKED_TASK_LOCK_CONFLICT
+    - BLOCKED_STALE_CHECKPOINT
+    - COMPLETED_NO_CONTINUATION_REQUIRED
+  exact_next_safe_action: null
+  next_contributor: null
+  next_required_branch: null
+  next_required_starting_sha: null
+  next_allowed_paths: []
+  next_required_tests: []
+  must_wait_for_human_approval: true
+  actions_still_prohibited:
+    - source_changes_before_recovery_verification
+    - direct_main_write
+    - merge
+    - deployment
+    - force_push
+    - Agents_02_to_15_activation
+
+integrity:
+  checkpoint_body_sha256: NOT_IMPLEMENTED
+  generated_by: null
+  reviewed_by_human: false
+  review_timestamp_utc: null
+
+validation:
+  required_fields_complete: false
+  branch_and_sha_verified: false
+  latest_checkpoint_pointer_updated: false
+  no_secrets_present: null
+  final_status: BLOCKED_CHECKPOINT_INCOMPLETE
