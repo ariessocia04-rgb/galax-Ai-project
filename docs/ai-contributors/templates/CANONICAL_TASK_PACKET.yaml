@@ -1,0 +1,158 @@
+task_packet_version: 1
+status: DRAFT_REQUIRES_HUMAN_APPROVAL
+
+identity:
+  task_id: ""
+  canonical_goal: ""
+  why_this_task_exists: ""
+  repository: ariessocia04-rgb/galax-Ai-project
+  selected_contributor: ""
+  selected_role: ""
+  role_card_path: ""
+  human_approver: ""
+
+repository_state:
+  required_base_branch: ""
+  required_base_sha: ""
+  work_branch: ""
+  expected_current_head_sha: ""
+  working_tree_must_be_clean: true
+  active_writer_lock_required: true
+  overlapping_writer_sessions_allowed: false
+
+scope:
+  current_project_scope: Governance_Foundation_and_Agent_01_Phases_0_to_4_only
+  allowed_paths: []
+  protected_paths:
+    - ".github/workflows/**"
+    - "**/.env"
+    - "**/.env.*"
+    - "**/*secret*"
+    - "**/*credential*"
+  maximum_changed_files: 0
+  maximum_diff_lines: 0
+  architecture_change_allowed: false
+  schema_or_migration_change_allowed: false
+  dependency_change_allowed: false
+  workflow_change_allowed: false
+  documentation_change_allowed: false
+
+required_reading:
+  - README.md
+  - AGENTS.md
+  - docs/ai-contributors/GALAX_EXTERNAL_CONTRIBUTOR_OPERATING_STANDARD.md
+  - docs/rules/AI_DEVELOPMENT_CONTRIBUTOR_QUALIFICATION_GATE.md
+  - docs/research/ai-tools/AI_DEVELOPMENT_CONTRIBUTOR_FINAL_QUALIFICATION_REVIEW_V3_2026-07-21.md
+  - docs/plan/AI_DEVELOPMENT_CONTRIBUTOR_COORDINATION_PLAN_V2.md
+
+inputs:
+  issue_or_requirement: ""
+  observed_behavior: ""
+  expected_behavior: ""
+  relevant_files: []
+  prior_handoff_path: ""
+  fixtures: []
+  known_exceptions: []
+
+outputs:
+  expected_files: []
+  expected_artifacts: []
+  output_schema: docs/ai-contributors/templates/CONTRIBUTOR_HANDOFF.yaml
+  draft_PR_allowed: false
+  branch_push_allowed: false
+  merge_allowed: false
+  deployment_allowed: false
+
+acceptance_criteria: []
+
+acceptance_tests:
+  commands: []
+  all_commands_required: true
+  skipped_test_status: BLOCKED_REQUIRED_TEST_NOT_RUN
+
+security_negative_tests:
+  wrong_repository_rejected: true
+  wrong_branch_rejected: true
+  stale_SHA_rejected: true
+  direct_main_write_rejected: true
+  force_push_rejected: true
+  automatic_merge_rejected: true
+  protected_path_rejected: true
+  secret_file_access_rejected: true
+  path_traversal_rejected: true
+  architecture_scope_expansion_rejected: true
+
+permissions:
+  file_read: allowed_within_repository_and_task_scope
+  file_write: selected_role_and_allowed_paths_only
+  terminal: explicit_commands_or_human_approval
+  network: deny_by_default
+  MCP: disabled_unless_explicit_local_allowlist
+  GitHub_token: prohibited_inside_agent_unless_separate_gateway_approval
+  secret_access: prohibited
+  repository_settings: prohibited
+
+limits:
+  maximum_steps: 0
+  maximum_wall_clock_minutes: 0
+  maximum_cost: 0
+  quota_unit: ""
+  maximum_retries: 0
+  automatic_external_write_retries: 0
+
+plan_requirement:
+  plan_before_edit: true
+  human_plan_approval_required: true
+  required_plan_fields:
+    - understood_goal
+    - repository_state
+    - files_to_read
+    - files_expected_to_change
+    - contracts_affected
+    - tests_to_add_or_run
+    - security_cases
+    - risks
+    - minimum_change_strategy
+    - stop_conditions
+
+stop_conditions:
+  - BLOCKED_TASK_PACKET_INCOMPLETE
+  - BLOCKED_REPOSITORY_STATE_MISMATCH
+  - BLOCKED_ACTIVE_WRITER_OVERLAP
+  - BLOCKED_UNAUTHORIZED_PATH
+  - BLOCKED_SECURITY_BOUNDARY_NOT_PROVEN
+  - BLOCKED_REQUIRED_TEST_NOT_RUN
+  - BLOCKED_SCOPE_REQUIRES_NEW_ARCHITECTURE_DECISION
+  - BLOCKED_COST_QUOTA_TIME_OR_STEP_LIMIT
+  - BLOCKED_MISSING_REQUIRED_EVIDENCE
+
+handoff_required_fields:
+  - repository
+  - task_id
+  - contributor
+  - role
+  - branch
+  - starting_sha
+  - current_sha
+  - working_tree_clean
+  - files_changed
+  - files_untracked
+  - commands_run
+  - tests_run
+  - requirements_completed
+  - requirements_remaining
+  - known_failures
+  - security_observations
+  - quota_or_cost_observed
+  - prohibited_actions_attempted
+  - next_safe_action
+  - lock_release_status
+  - status
+
+approval:
+  prepared_by: ""
+  prepared_at: ""
+  task_packet_hash: ""
+  approved_by: ""
+  approved_at: ""
+  approval_status: NOT_APPROVED
