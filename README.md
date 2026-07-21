@@ -2,65 +2,76 @@
 
 Galax AI is being designed as a fact-checked, strictly sequential CrewAI multi-agent software-development assistant system.
 
-## Current Phase
+## Current phase
 
-The repository is in planning, research, conflict-reconciliation, and minimum-runtime validation mode. Agent roles, tools, LLMs, prompts, knowledge, memory, Docker infrastructure, and execution behavior are not final until individually researched, implemented, live-tested, audited, and approved.
+The repository is in planning, research, conflict-reconciliation, and minimum-runtime validation mode. Agent roles, tools, LLMs, prompts, knowledge, memory, Docker infrastructure, contributor workflows, and execution behavior are not operational until individually implemented, tested, audited, and approved.
 
-## Current Readiness Decision
+## Current readiness decision
 
 ```yaml
 full_build_prompt_status: BLOCKED_NOT_READY_TO_PROMPT_CREWAI
 current_master_prompt_status: DO_NOT_USE_STALE_CONFLICTS
+Foundation_Agent01_Flow_contract: ACTIVE_CANONICAL
+Foundation_repository_implementation: NOT_PERFORMED
 full_free_runtime_proven: false
 agents_enabled: 0
+external_contributors_fully_qualified: 0
 production_ready: false
 ```
 
-Do not execute the complete Galax build prompt. The architecture is technically possible, but the exact CrewAI + LLM + GitHub/Drive/memory gateways + Docker/sandbox chain has not passed the minimum integration tests.
+Do not execute the complete 15-agent build prompt. The architecture is technically possible, but the exact CrewAI, LLM, GitHub/Drive/memory gateways, permission evidence, Docker/sandbox, and sequential runtime chain has not passed the required integration and live tests.
 
-Canonical current records:
+## Canonical current records
 
 - `docs/research/readiness/FINAL_PRE_PROMPT_CONFLICT_AUDIT_2026-07-20.md`
+- the canonical audit target named by that alias
+- `docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md`
 - `docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md`
 - `docs/plan/LLM_ASSIGNMENT_PLAN_DRAFT.md`
 - `docs/sources/SOURCE_INDEX.md`
-- `docs/research/readiness/FINAL_FREE_TIER_READINESS_AUDIT_2026-07-20.md`
+- `docs/plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md`
+- `docs/prompts/EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md`
 
-## Canonical Decision Priority
-
-When an older draft conflicts with a newer record, use:
+## Canonical decision priority
 
 ```text
 README current readiness
-→ final pre-prompt conflict audit
+→ canonical conflict audit and alias target
+→ Foundation and Agent 01 Flow execution contract
 → full CrewAI 1.15.4 remediation blueprint
-→ validated LLM routing/failover rule
-→ corrected LLM assignment plan
-→ framework/provider/tool source cards
-→ older historical research
+→ active rules and plans
+→ validated LLM routing and assignment
+→ source index and exact source cards
+→ exact authorized assignment
+→ historical research
 ```
 
-Historical files remain evidence. They cannot reactivate Cerebras, Notion-primary runtime memory, generic MCP exposure, CrewAI planning, CrewAI reasoning, native CrewAI memory, direct-main writes, automatic merge, or privileged Docker-in-Docker.
+The active Flow execution contract supersedes only older instructions that attach `RepositoryPreflightTool` directly to Agent 01, require an Agent 01 direct tool call, or use `result_as_answer` for that path.
 
-## Required Reading Order
+Historical files remain evidence. They cannot reactivate Cerebras, Notion-primary runtime memory, generic MCP exposure, CrewAI planning/reasoning/native memory, hierarchical delegation, direct-main writes, automatic merge, privileged Docker-in-Docker, or the superseded direct Agent 01 preflight-tool architecture.
 
-Before changing or implementing any agent, LLM, tool, prompt, knowledge source, memory behavior, infrastructure, or workflow:
+## Required reading order
+
+Before changing or implementing any agent, LLM, tool, prompt, knowledge source, memory behavior, infrastructure, contributor workflow, or runtime:
 
 1. Read `README.md`.
-2. Read the final pre-prompt conflict audit.
-3. Read the full CrewAI 1.15.4 remediation blueprint.
-4. Read all applicable files under `docs/rules/`.
-5. Read the applicable files under `docs/plan/`.
-6. Read `docs/sources/SOURCE_INDEX.md` and exact source cards.
-7. Read the current agent record under `docs/research/agents/`.
-8. Verify current facts using authoritative sources and exact pinned source code/adapters.
-9. Inspect current official issues/security notices when documentation is insufficient.
-10. Define and pass live tests in the exact pinned environment.
-11. Only then prepare or execute an approved change.
+2. Read `AGENTS.md`.
+3. Read the canonical conflict audit and alias target.
+4. Read `docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md`.
+5. Read the full CrewAI 1.15.4 remediation blueprint.
+6. Read all applicable files under `docs/rules/` and `docs/plan/`.
+7. Read `docs/sources/SOURCE_INDEX.md` and exact source cards.
+8. Read the applicable agent research and exact authorized assignment.
+9. Verify current external facts using authoritative sources and pinned source/adapters.
+10. Inspect current official issues and security notices when documentation is insufficient.
+11. Define and pass tests in the exact pinned environment.
+12. Only then execute a human-authorized bounded change.
 
-## Meaning of 100% Fact-Checked
+A repository-aware contributor must produce `REPOSITORY_READ_RECEIPT` before editing.
 
-Galax does not promise perfect AI behavior. The allowed claim is:
+## Meaning of 100% fact-checked
+
+Galax does not promise perfect AI behavior. The permitted statement is:
 
 ```text
 100% of the defined documentation, source-code or adapter, compatibility,
@@ -70,26 +81,39 @@ and recorded date.
 
 Any material fingerprint change returns affected capabilities to `REVALIDATION_REQUIRED`.
 
-## Non-Negotiable Capability Gate
+## Non-negotiable capability gate
 
 ```text
-Never assign a CrewAI agent work that the complete verified runtime cannot perform.
+Never assign an agent or external contributor work that the complete verified runtime cannot perform.
 ```
 
 A task requires verified support from:
 
 ```text
 CrewAI framework and exact version
-+ exact agent prompt/task/output contract
-+ exact LLM/provider profile
-+ exactly one assigned role-specific tool interface
-+ required permissions and data classification
-+ deterministic Flow and stage ordering
++ exact role, prompt, task, and output contract
++ exact LLM/provider profile when an LLM is used
++ exact zero-or-one direct role interface according to the active contract
++ trusted Flow/application dependencies when external actions are not agent-owned
++ permissions and data classification
++ deterministic routers and stage ordering
 + knowledge and memory context when required
 + Docker/sandbox boundary when required
-+ hooks, guardrails, invocation evidence, and checkpoint
-+ live tests
++ hooks or governed executors, guardrails, invocation evidence, and checkpoint
++ deterministic and applicable live tests
 + human approval when required
+```
+
+Agent 01 is the current explicit zero-direct-tool evaluator exception:
+
+```yaml
+RepositoryPreflightTool_owner: GalaxFoundationFlow
+RepositoryPreflightTool_calls: 1
+engineering_manager_tools: []
+Agent_01_direct_tools: 0
+Agent_01_LLM_calls: 1
+result_as_answer_for_this_path: prohibited
+HumanReviewRequest: pure_Python_Pydantic
 ```
 
 If any layer is missing, incompatible, or unverified:
@@ -98,13 +122,15 @@ If any layer is missing, incompatible, or unverified:
 STATUS: BLOCKED_UNSUPPORTED_CAPABILITY
 ```
 
-The agent must not simulate success, fabricate tool output, invent missing evidence, or claim it studied content that was never retrieved.
+The system must not simulate success, fabricate tool output, invent missing evidence, or claim content was studied when it was not retrieved.
 
-## Exact-Duplicate Rule
+## Exact-duplicate rule
 
-Exact normalized duplicates are reduced to one canonical record only after every reference is updated and removal is safely verified. Similar records with materially different roles, permissions, inputs, outputs, workflow stages, or historical evidence may remain.
+Exact normalized duplicates are reduced to one canonical record only after every reference is updated and removal is safely verified. Similar records with materially different roles, permissions, inputs, outputs, workflow stages, decisions, or historical evidence remain.
 
-## Current CrewAI Direction
+No historical file was deleted merely because a newer record superseded part of it.
+
+## Current CrewAI direction
 
 ```yaml
 framework_candidate: CrewAI_1.15.4
@@ -123,189 +149,173 @@ respect_context_window: false
 framework_status: SELECTED_FOR_PINNED_VALIDATION_NOT_APPROVED
 ```
 
-CrewAI is the agent/Flow framework. It is not the GitHub API, Google Drive API, database, Docker orchestrator, secure code sandbox, or correctness guarantee.
+CrewAI is the agent/Flow framework. It is not the GitHub API, Google Drive API, database, Docker orchestrator, secure code sandbox, permission proof, or correctness guarantee.
 
 ### Why planning and reasoning are disabled
 
-- CrewAI `planning=True` adds an AgentPlanner call and defaults to an OpenAI planning model unless explicitly changed.
-- CrewAI `reasoning=True` adds a separate refinement loop, and CrewAI documents that task execution can continue when that reasoning stage fails.
-- Galax uses provider-native `reasoning_effort`, explicit structured planning/requirements tasks, and deterministic Flow validation instead.
+- CrewAI `planning=True` adds another planning model call and may introduce an unapproved provider and wider prompt exposure.
+- CrewAI `reasoning=True` adds a separate refinement loop and is not the selected fail-closed planning boundary.
+- CrewAI native memory is not the selected source of truth.
+- Galax uses explicit typed tasks, provider-native reasoning settings only after profile testing, and deterministic Flow validation.
 
-## Governance and Evidence Direction
-
-CrewAI 1.15.4 tool and model hooks are selected for validation:
+## Foundation and Agent 01 final sequence
 
 ```text
-PRE_MODEL_CALL → profile, data, secret, context, and capacity gate
-POST_MODEL_CALL → usage and redaction evidence
-PRE_TOOL_CALL → agent/tool/operation/path/permission gate
-POST_TOOL_CALL → raw result and invocation evidence
+validate_run_manifest()
+→ router
+→ check_external_preflight_tool_availability()
+→ router
+→ invoke_repository_preflight_tool()
+→ router
+→ check_llm_profile_readiness()
+→ router
+→ run_agent_01_evaluation()
+→ validate supported claims
+→ router
+→ build_human_review_request() with pure Python/Pydantic
+→ authenticated human decision pause/router
+→ complete_foundation_plan()
 ```
-
-Hooks are not the final authority. A blocked tool hook may return control to the agent, and hook implementation errors can be unsafe if not wrapped correctly. Typed tool results, deterministic task guardrails, a Flow stop transition, and an append-only invocation ledger are required.
-
-An agent cannot claim a tool ran without a trusted invocation ID. CrewAI issue #3154 is retained as risk evidence for fabricated Action/Observation text.
-
-## Current GitHub Repository Direction
 
 ```yaml
-GithubSearchTool:
-  semantic_read_search: supported
-  GitHub_write_commit_PR: unsupported
-
-FileWriterTool:
-  local_filesystem_write: supported
-  GitHub_commit_push_PR: unsupported
-
-CrewAI_MCP_adapter:
-  external_MCP_tools: supported
-  exact_tool_filtering: supported
-
-Official_GitHub_MCP_Server:
-  repository_read_write: supported_with_GitHub_permissions
-  push_files_single_commit: supported
-  direct_Galax_agent_exposure: rejected
-  Galax_live_tested: false
+repository_preflight_tool_calls: 1
+Agent_01_LLM_calls: 1
+Agent_01_direct_tools: 0
+hidden_second_agent_call: prohibited
+unconditional_listen_chain: prohibited
+merge: prohibited
+deployment: prohibited
+Agents_02_to_15: disabled
 ```
 
-The official GitHub MCP `push_files` schema does not require an expected branch-head SHA. Galax therefore uses a trusted role-scoped gateway that verifies branch/blob hashes and performs an optimistic-concurrency Git Database transaction.
+Every blocked, failed, unavailable, pending, rejected, or evidence-missing route must stop or pause. It cannot trigger the next successful stage.
+
+## Governance and evidence direction
+
+Trusted application code must enforce model/profile readiness, governed external invocation, strict typed results, evidence validation, routing, persistence, and human-review state.
+
+An LLM cannot claim an external action ran without trusted invocation evidence. Narrative `Action`, `Observation`, `test passed`, `file written`, or `commit created` is not proof.
+
+`RepositoryPreflightTool` is offline and read-only. It verifies `REPO_PERMISSION_PROFILE_DECLARED` only. Live GitHub identity and permissions require separate trusted `GITHUB_PERMISSIONS_LIVE_VALIDATED` evidence from `GitHubRepositoryGateway`.
+
+Both Agent 01 LLM profiles remain disabled until the exact profile tests and human approval pass. Missing profile readiness returns `BLOCKED_LLM_PROFILE_NOT_APPROVED` before token use.
+
+## GitHub repository direction
+
+The official GitHub MCP Server and GitHub APIs provide repository operations, but Galax does not expose a broad tool catalog directly to an agent.
+
+A future bounded write transaction requires:
 
 ```text
-one role-scoped CrewAI tool
-→ trusted repository gateway
-→ GitHub API or filtered GitHub MCP operation
-→ dedicated run branch
-→ expected-head verification
-→ one verified commit
+trusted Flow/application gateway
+→ exact repository and branch
+→ expected-head and path/hash verification
+→ force=false update
+→ post-write commit/diff verification
+→ invocation evidence
 → QA/security/audit
-→ trusted Flow creates or updates a draft PR
+→ human-controlled draft PR and later merge decision
 ```
 
-Direct writes to `main`, force push, automatic merge, broad deletion, workflow/secret changes, and unrestricted GitHub tokens are prohibited.
+Direct writes to `main`, force push, automatic merge, broad deletion, workflow/secret changes, unrestricted tokens, and ambiguous automatic write retries are prohibited.
 
-## MCP Security Direction
-
-Current CrewAI issue #6504 reports MCP URL-argument SSRF and DNS-rebinding risks; PR #6519 is an open proposed fix. Until a patched version is pinned and tested:
+## MCP security direction
 
 ```yaml
 generic_remote_MCP: prohibited
 arbitrary_URL_MCP_tools: prohibited
 full_MCP_tool_catalog_to_agents: prohibited
-local_role_scoped_gateway: required
+direct_agent_to_agent_MCP_mesh: prohibited
+local_role_scoped_gateway: required_for_future_use
 URL_domain_and_IP_validation: required
 private_link_local_metadata_IPs: blocked
 write_retry: zero_automatic_retries
 ```
 
-## Corrected LLM Direction
-
-### Bounded low/medium private work
+## Corrected LLM direction
 
 ```yaml
-primary_candidate: groq/openai/gpt-oss-20b
-hosted_fallback_candidate: cloudflare/@cf/openai/gpt-oss-20b
+bounded_private_primary: groq/openai/gpt-oss-20b
+bounded_hosted_fallback: cloudflare/@cf/openai/gpt-oss-20b
+high_complexity_private_primary: groq/openai/gpt-oss-120b
+high_complexity_hosted_fallback: cloudflare/@cf/openai/gpt-oss-120b
+public_redacted_long_context: gemini/gemini-2.5-flash
 optional_local_fallback: ollama/gpt-oss:20b
-status: DISABLED_PENDING_PER_AGENT_TESTS
+rejected_trial_only: cerebras/gpt-oss-120b
+all_profiles: DISABLED_PENDING_EXACT_TESTS
 ```
 
-### High-complexity private work
+Provider switching is deterministic Flow behavior only, after independent approval and a safe checkpoint. It is prohibited during non-idempotent operations.
 
-```yaml
-primary_candidate: groq/openai/gpt-oss-120b
-hosted_fallback_candidate: cloudflare/@cf/openai/gpt-oss-120b
-status: DISABLED_PENDING_PER_AGENT_TESTS
-```
+## External development contributors
 
-### Public or fully redacted long context
+Selected for controlled trial only:
 
-```yaml
-candidate: gemini/gemini-2.5-flash
-private_repository_content: prohibited_on_free_tier
-status: DISABLED_PENDING_TESTS
-```
+| Contributor | Paper score | Exact role |
+|---|---:|---|
+| Cline | 86 | Primary supervised Foundation implementer |
+| OpenHands Core | 84 | Docker-isolated fallback reproducer |
+| mini-SWE-agent | 83 | Isolated patch comparator |
+| Aider | 82 | Surgical exact-failure fixer |
+| PR-Agent | 82 | Read-only stable PR reviewer |
 
-### Removed active candidate
+Declined or deferred:
 
-```yaml
-provider: Cerebras
-model: cerebras/gpt-oss-120b
-status: REJECTED_TRIAL_ONLY
-```
+| Contributor | Paper score | Decision |
+|---|---:|---|
+| OpenCode | 74 | Declined: security boundary not proven |
+| goose | 77 | Declined now: scope too broad and role duplication; research later |
 
-The same model/provider must pass a separate `agent + prompt + task + tool + output + data-class` test suite for every agent. Provider switching is deterministic Flow behavior only and is prohibited during non-idempotent operations.
-
-## Current 15-Agent Direction
-
-The roster remains unchanged. Exact candidate LLM classes, one-tool interfaces, restrictions, and remedies for all 15 agents are defined in:
+The five selected tools are not fully qualified, installed, connected, or authorized for production. They are not Galax Agents 01–15.
 
 ```text
-docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
+Cline plan and bounded implementation
+→ optional Aider exact repair
+→ optional mini-SWE isolated comparison
+→ optional OpenHands blocker reproduction
+→ PR-Agent read-only review
+→ human decision
 ```
 
-No agent after Agent 01 may be implemented or enabled before Agent 01, governance hooks, invocation evidence, canonical checkpointing, and the foundation tests pass.
+Stages are conditional and sequential. Simultaneous overlapping writers are prohibited.
 
-## Knowledge Direction
+## Knowledge, memory, Docker, and sandbox direction
 
-- Owner tutorials and copied website materials live in approved Google Drive folders.
-- File titles are not trusted as the primary relevance signal.
-- A controlled Drive gateway searches metadata and body text, reads related files, checks version/conflicts, and produces a verified `LearningPacket`.
-- A selected agent produces a validated `StudyReceipt` before knowledge-dependent write work.
-- Copied web content is untrusted and cannot override repository rules or permissions.
-- Drive credentials are never exposed to agents.
-- The gateway is specified but not implemented or live-tested.
-
-## Memory Direction
-
-- Supabase Postgres is selected for validation as primary machine/runtime memory.
-- Keyword/exact-filter retrieval comes before embeddings.
-- Notion is an optional curated human-readable mirror.
-- Neither is claimed as native CrewAI memory.
-- Trusted Flow infrastructure queries and writes memory; agents receive bounded validated `MemoryContext` only.
+- Approved Google Drive folders are future controlled knowledge sources through a bounded gateway and `LearningPacket`/`StudyReceipt` evidence.
+- Supabase/Postgres is the selected primary machine/runtime memory candidate; Notion is an optional curated mirror.
 - GitHub/current evidence outranks memory.
 - CrewAI native memory remains disabled.
+- Application services may use hardened Docker Compose.
+- Coding/test execution requires a separate rootless sandbox boundary.
+- Privileged Docker-in-Docker and unrestricted Docker socket mounts are prohibited.
+- These gateways and sandbox components remain unimplemented or untested unless exact evidence states otherwise.
 
-## Docker and Sandbox Direction
-
-- Galax application services may run in Docker Compose.
-- Services must be non-root, read-only where possible, capability-dropped, resource-limited, health-checked, and use service-specific secrets.
-- Privileged Docker-in-Docker and unrestricted Docker socket mounts are rejected.
-- Coding/test agents require a separate rootless sandbox daemon or host through their one role-specific workspace tool.
-- The Docker stack and sandbox remain unimplemented and untested.
-
-## Automatic Revalidation
-
-Changes to CrewAI, provider SDK/LiteLLM, model/API behavior, agent prompt, task/output schema, tool schema, hooks, permissions, repository structure, provider limits/allocation, security rules, memory schema, or Docker image/configuration fingerprints set affected capabilities to:
+## Minimum gate before full build
 
 ```text
-REVALIDATION_REQUIRED
+1. Reconcile active conflicts and keep the old full master prompt blocked.
+2. Pin the exact Foundation dependency set.
+3. Implement strict models, statuses, ledger, hashes, persistence, and blockers.
+4. Implement explicit Flow routers and stop routes.
+5. Implement Flow-owned RepositoryPreflightTool invocation and its deterministic executor.
+6. Implement Agent 01 as a zero-tool, one-LLM-call evaluator.
+7. Implement LLM profile readiness and keep profiles disabled until tested.
+8. Separate offline permission declaration from live GitHub permission evidence.
+9. Implement deterministic HumanReviewRequest and authenticated pause/resume contract.
+10. Pass unit, contract, security, integration, and applicable live tests.
+11. Complete controlled external contributor trials.
+12. Only then research and implement Agents 02–15 one at a time.
 ```
 
-The Flow disables affected profiles and may run Agent 03 in a separate official-source research stage. Research never automatically enables implementation.
+## Current next action
 
-## Minimum Gate Before the Full Build Prompt
-
-```text
-1. Reconcile every stale active Cerebras and Notion-primary instruction.
-2. Pin Python, CrewAI, crewai-tools, MCP/mcpadapt, and provider integrations.
-3. Build and audit the base Docker image.
-4. Implement typed statuses, invocation ledger, and fail-closed manual checkpoint.
-5. Implement and test PRE/POST model and tool governance hooks.
-6. Start/stop and inspect the pinned GitHub MCP Server; do not expose its full catalog.
-7. Implement and test RepositoryPreflightTool and Agent 01.
-8. Prove authorized run-branch read/write and reject direct-main/force/secret/role violations.
-9. Test Groq 20B and 120B separately through CrewAI.
-10. Test Cloudflare 20B and 120B separately through CrewAI custom OpenAI mode.
-11. Test Gemini only with public/redacted fixtures and qualify Ollama hardware.
-12. Pass a real two-agent read-only Process.sequential smoke test.
-13. Implement Drive LearningPacket/StudyReceipt.
-14. Implement Supabase memory, backup, RLS, and bounded retrieval.
-15. Implement the external sandbox, then research/implement Agents 02–15 one at a time.
+```yaml
+next_scope: Governance_Foundation_and_Agent_01_only
+next_environment: repository_aware_coding_agent
+next_contributor_stage: Cline_plan_only
+implementation_branch: implementation/foundation-agent-01
+commit_or_push_authorized: false_until_separate_human_approval
+full_master_prompt: still_blocked
 ```
 
-The complete implementation prompt may be prepared only after all required gates for the exact requested scope pass.
-
-No agent is approved unless its decision record explicitly says:
-
-```text
-APPROVED_FOR_IMPLEMENTATION
-```
+The Foundation plan is finalized for bounded coding handoff. It is not operational, implemented, live-tested, runtime-approved, merged, deployed, or production-ready.
