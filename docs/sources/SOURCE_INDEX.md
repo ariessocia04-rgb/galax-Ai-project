@@ -1,9 +1,9 @@
 # Galax AI Source Index — Draft
 
 **Status:** `DRAFT_MUTABLE`  
-**Verified:** 2026-07-20
+**Verified:** 2026-07-21
 
-Canonical entry point for Galax agent, framework, LLM, tool, knowledge, memory, infrastructure, risk, and readiness evidence.
+Canonical entry point for Galax agent, framework, LLM, tool, external contributor, knowledge, memory, infrastructure, risk, and readiness evidence.
 
 ## Current readiness
 
@@ -15,20 +15,23 @@ private_20B_profiles: DISABLED_PENDING_TESTS
 private_120B_profiles: DISABLED_PENDING_TESTS
 public_long_context_profile: DISABLED_PENDING_TESTS
 local_profile: DISABLED_PENDING_HARDWARE_TESTS
+external_contributors_fully_qualified: 0
 production_ready: false
 ```
 
-- [Final pre-prompt conflict audit](../research/readiness/FINAL_PRE_PROMPT_CONFLICT_AUDIT_2026-07-20.md)
+- [Final pre-prompt conflict audit path alias](../research/readiness/FINAL_PRE_PROMPT_CONFLICT_AUDIT_2026-07-20.md)
+- [Canonical conflict audit content](../research/readiness/PRE_PROMPT_FINAL_CONFLICT_AUDIT_2026-07-20.md)
 - [Full CrewAI 1.15.4 15-agent remediation blueprint](../research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md)
 - [Active decision supersession rule](../rules/ACTIVE_DECISION_SUPERSESSION_RULE_DRAFT.md)
 - [Corrected LLM assignment plan](../plan/LLM_ASSIGNMENT_PLAN_DRAFT.md)
 - [Final free/runtime readiness audit](../research/readiness/FINAL_FREE_TIER_READINESS_AUDIT_2026-07-20.md)
+- [External AI contributor source index](EXTERNAL_AI_CONTRIBUTOR_INDEX.md)
 
 ## Canonical decision priority
 
 ```text
 README current readiness
-→ final pre-prompt conflict audit
+→ final pre-prompt conflict audit and canonical alias target
 → full 15-agent remediation blueprint
 → active decision supersession rule
 → validated LLM routing/failover rule
@@ -46,6 +49,27 @@ Historical records cannot reactivate Cerebras, Notion-primary runtime memory, ge
 | [`engineering_manager`](agents/engineering_manager/SOURCE_CARD.md) | AI Engineering Manager and CrewAI Execution Planning Lead | Groq 20B bounded primary candidate | [`RepositoryPreflightTool`](tools/repository_preflight_tool/SOURCE_CARD.md) | `RESEARCHING` |
 
 Agents 02–15 have candidate model classes, one-tool interfaces, restrictions, and remedies in the full remediation blueprint. Their individual cards are created and approved one agent at a time.
+
+## External development contributors
+
+These are controlled development tools, not Galax CrewAI agents.
+
+| Contributor | Bounded role | Status | Source card |
+|---|---|---|---|
+| Cline | Primary supervised foundation implementer | `CANDIDATE_CONTROLLED_TRIAL` | [`TOOL-external-cline`](tools/cline/SOURCE_CARD.md) |
+| OpenHands Core | Docker-isolated fallback reproducer | `CANDIDATE_CONTROLLED_TRIAL` | [`TOOL-external-openhands-core`](tools/openhands-core/SOURCE_CARD.md) |
+| mini-SWE-agent | Isolated patch comparison worker | `CANDIDATE_CONTROLLED_TRIAL` | [`TOOL-external-mini-swe-agent`](tools/mini-swe-agent/SOURCE_CARD.md) |
+| Aider | Surgical test or lint fixer | `CANDIDATE_CONTROLLED_TRIAL` | [`TOOL-external-aider`](tools/aider/SOURCE_CARD.md) |
+| PR-Agent | Read-only stable PR reviewer | `CANDIDATE_CONTROLLED_TRIAL` | [`TOOL-external-pr-agent`](tools/pr-agent/SOURCE_CARD.md) |
+
+Canonical contributor records:
+
+- [Repository-wide external AI instructions](../../AGENTS.md)
+- [Contributor execution plan](../plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md)
+- [Official platform command survey](../research/ai-qualification-framework/PLATFORM_COMMAND_AND_INSTRUCTION_SURVEY_2026-07-21.md)
+- [Platform-specific command pack](../prompts/EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md)
+
+Paper scores permit controlled trials only. They do not authorize repository writes, production use, merge, deployment, or direct MCP coordination.
 
 ## Framework
 
@@ -125,12 +149,15 @@ It currently records SearXNG, Playwright, Bandit, pip-audit, Trivy, Gitleaks, Ha
 - [Full 15-agent remediation blueprint](../research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md)
 - [Corrected LLM assignment](../plan/LLM_ASSIGNMENT_PLAN_DRAFT.md)
 - [GitHub read/write and free-LLM audit](../research/crewai/CREWAI_GITHUB_RW_FREE_LLM_AUDIT_2026-07-20.md)
-- [Final pre-prompt conflict audit](../research/readiness/FINAL_PRE_PROMPT_CONFLICT_AUDIT_2026-07-20.md)
+- [Final pre-prompt conflict audit path alias](../research/readiness/FINAL_PRE_PROMPT_CONFLICT_AUDIT_2026-07-20.md)
+- [Canonical conflict audit content](../research/readiness/PRE_PROMPT_FINAL_CONFLICT_AUDIT_2026-07-20.md)
 - [Final free/runtime readiness audit](../research/readiness/FINAL_FREE_TIER_READINESS_AUDIT_2026-07-20.md)
 - [CrewAI capability matrix](../research/crewai/CREWAI_1_15_4_CAPABILITY_LIMIT_MATRIX.md)
 - [Docker fact check](../research/docker/CREWAI_DOCKER_FACT_CHECK_2026-07-20.md)
 - [GitHub repository read/write architecture](../architecture/GITHUB_REPOSITORY_READ_WRITE_DRAFT.md)
 - [Notion vs Supabase decision](../research/memory/NOTION_VS_SUPABASE_MEMORY_DECISION_2026-07-20.md)
+- [External contributor execution plan](../plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md)
+- [External platform command survey](../research/ai-qualification-framework/PLATFORM_COMMAND_AND_INSTRUCTION_SURVEY_2026-07-21.md)
 
 ## Deterministic query mapping
 
@@ -146,10 +173,17 @@ aliases:
   gemini-2.5-flash: llms/google-gemini-2.5-flash/SOURCE_CARD.md
   ollama-gpt-oss-20b: llms/ollama-gpt-oss-20b/SOURCE_CARD.md
   cerebras-gpt-oss-120b: llms/cerebras-gpt-oss-120b/SOURCE_CARD.md
+  external-cline: tools/cline/SOURCE_CARD.md
+  external-openhands-core: tools/openhands-core/SOURCE_CARD.md
+  external-mini-swe-agent: tools/mini-swe-agent/SOURCE_CARD.md
+  external-aider: tools/aider/SOURCE_CARD.md
+  external-pr-agent: tools/pr-agent/SOURCE_CARD.md
+  external-contributor-index: EXTERNAL_AI_CONTRIBUTOR_INDEX.md
   open-source-tool-stack: ../research/tools/OPEN_SOURCE_AGENT_TOOL_STACK_2026-07-20.md
   active-supersession: ../rules/ACTIVE_DECISION_SUPERSESSION_RULE_DRAFT.md
   full-agent-remediation: ../research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
   pre-prompt-conflict-audit: ../research/readiness/FINAL_PRE_PROMPT_CONFLICT_AUDIT_2026-07-20.md
+  canonical-pre-prompt-conflict-audit: ../research/readiness/PRE_PROMPT_FINAL_CONFLICT_AUDIT_2026-07-20.md
   free-runtime-readiness: ../research/readiness/FINAL_FREE_TIER_READINESS_AUDIT_2026-07-20.md
 ```
 
