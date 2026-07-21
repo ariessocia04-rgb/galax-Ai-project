@@ -5,6 +5,7 @@ This rule is always active for the Galax repository.
 ## Mandatory context
 
 - Read `README.md` and `AGENTS.md` first and obey their decision priority.
+- Read `docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md` completely.
 - Read `docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md` completely.
 - Read `docs/plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md`.
 - Use only the Cline assignment in `docs/prompts/EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md`.
@@ -29,6 +30,20 @@ You are only the `PRIMARY_SUPERVISED_FOUNDATION_IMPLEMENTER` for the Galax Gover
 Return `REPOSITORY_READ_RECEIPT` with the exact repository, branch, HEAD SHA, git status, files read, permitted paths, prohibited paths, conflicts, blockers, and proposed commands/tests.
 
 Do not install dependencies, create files, edit files, run mutation commands, commit, or push during the plan-only stage.
+
+## Conversation-length trigger
+
+When the owner or assignment says `length chat problem`, `conversation length problem`, `continue exact Galax flow`, `operation length problem solve`, or an equivalent phrase:
+
+```text
+read docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md
+→ verify branch heads, PR, and assignment issues
+→ reconstruct the current stage
+→ return OPERATION_LENGTH_CONTINUITY_RECEIPT
+→ continue only when safe_to_continue=true
+```
+
+Do not ask what the previous chat was doing when repository access exists. Do not use remembered conversation fragments as project authority.
 
 ## Active Foundation invariants
 
