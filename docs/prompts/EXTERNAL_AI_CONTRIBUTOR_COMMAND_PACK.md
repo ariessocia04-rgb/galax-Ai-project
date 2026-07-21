@@ -27,6 +27,20 @@ secrets_access: prohibited
 human_owner: required_for_scope_commit_push_merge_and_deployment
 ```
 
+Mandatory authority order:
+
+```text
+AGENTS.md
+→ docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md
+→ canonical conflict audit and target
+→ CrewAI remediation blueprint
+→ applicable active rules and plans
+→ non-conflicting Foundation prompt requirements
+→ exact contributor assignment
+```
+
+Where an older record attaches `RepositoryPreflightTool` directly to Agent 01 or requires `result_as_answer`, the active Flow execution contract controls.
+
 Every contributor must first return:
 
 ```yaml
@@ -47,25 +61,63 @@ REPOSITORY_READ_RECEIPT:
 
 `safe_to_begin` remains false until the exact platform entry gate is satisfied.
 
----
+## 2. Active Foundation architecture all contributors must preserve
 
-# 2. Cline — Primary supervised implementer
+```yaml
+RepositoryPreflightTool:
+  owner: GalaxFoundationFlow
+  invoked_by_agent: false
+  calls_per_run: 1
 
-## 2.1 Role
+engineering_manager:
+  tools: []
+  direct_tool_calls: 0
+  receives: trusted_RepositoryPreflightResult
+  produces: AgentTaskResult
+
+Agent_01_LLM_calls: 1
+result_as_answer_for_this_path: prohibited
+hidden_second_agent_call: prohibited
+HumanReviewRequest_builder: pure_Python_Pydantic
+explicit_router_per_branching_stage: required
+check_llm_profile_readiness_before_Agent_01: required
+LLM_profiles_enabled: false
+```
+
+Required sequence:
+
+```text
+validate_run_manifest()
+→ router
+→ check_external_preflight_tool_availability()
+→ router
+→ invoke_repository_preflight_tool()
+→ router
+→ check_llm_profile_readiness()
+→ router
+→ run_agent_01_evaluation()
+→ validate supported claims
+→ router
+→ build_human_review_request()
+→ authenticated human decision pause/router
+→ complete_foundation_plan()
+```
+
+No blocked route may trigger a successful stage. Offline `REPO_PERMISSION_PROFILE_DECLARED` is not live GitHub proof; live evidence must be produced separately by `GitHubRepositoryGateway` as `GITHUB_PERMISSIONS_LIVE_VALIDATED`.
+
+# 3. Cline — Primary supervised implementer
+
+## 3.1 Role and goal
 
 ```yaml
 role: PRIMARY_SUPERVISED_FOUNDATION_IMPLEMENTER
 ```
 
-## 2.2 Professional operating background
-
 Operate using the documented practices expected from a senior Python, CrewAI integration, GitHub transaction, application-security, and test-automation engineer. You are an external coding contributor, not Galax Agent 01, not an approval authority, and not a production operator.
 
-## 2.3 Goal
+Goal: implement and prove only the minimum Governance Foundation and Agent 01 evaluator architecture. Deliver auditable code, deterministic tests, and evidence reports while leaving unsupported, untested, or unapproved capabilities disabled.
 
-Implement and prove only the minimum Galax Governance Foundation and Agent 01 deterministic preflight described in the authorized foundation prompt. Deliver auditable code, deterministic tests, and evidence reports while leaving every unsupported or untested capability disabled.
-
-## 2.4 Cline safety configuration
+## 3.2 Safety configuration
 
 ```yaml
 auto_approve: false
@@ -78,27 +130,25 @@ commit: human_approval_required
 push: human_approval_required
 ```
 
-Cline CLI documentation currently shows auto-approval enabled by default, so always pass `--auto-approve false` explicitly.
+Always pass `--auto-approve false` explicitly.
 
-## 2.5 Stage A — plan-only command
-
-Run from a dedicated worktree whose HEAD matches `<EXACT_40_CHARACTER_SHA>`:
+## 3.3 Stage A — plan-only command
 
 ```bash
-cline --plan --auto-approve false --cwd "<ABSOLUTE_CLINE_WORKTREE>" --timeout 0 "Read AGENTS.md and every file in its mandatory reading order. Verify repository ariessocia04-rgb/galax-Ai-project, branch implementation/foundation-agent-01, HEAD <EXACT_40_CHARACTER_SHA>, and clean or explicitly understood git status. Do not create, edit, move, delete, commit, push, install, browse, or call MCP. Return only: (1) REPOSITORY_READ_RECEIPT, (2) detected canonical conflicts, (3) exact implementation plan for Phases 0-4, (4) exact proposed files, (5) exact commands and tests, (6) risks and blockers, and (7) the human approvals required before Act mode. Stop if any required document is missing or the repository state differs."
+cline --plan --auto-approve false --cwd "<ABSOLUTE_CLINE_WORKTREE>" --timeout 0 "Execute assignment <ASSIGNMENT_ID> in plan-only mode. Verify repository ariessocia04-rgb/galax-Ai-project, branch implementation/foundation-agent-01, exact HEAD <EXACT_40_CHARACTER_SHA>, and git status. Read AGENTS.md and its full mandatory reading order, including docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md. Do not create, edit, move, delete, install, browse, call MCP, commit, or push. Return only: (1) REPOSITORY_READ_RECEIPT, (2) canonical conflict reconciliation, (3) exact Phases 0-4 implementation plan, (4) proposed files, (5) commands and tests, (6) risks/blockers, and (7) human approval points. The plan must keep RepositoryPreflightTool Flow-owned with one call, engineering_manager.tools empty, Agent 01 direct tools zero, Agent 01 LLM calls exactly one, explicit routers for every branch, check_llm_profile_readiness before Agent 01, deterministic HumanReviewRequest construction, and separate offline/live GitHub permission evidence. Stop on any mismatch or missing record."
 ```
 
 Human approval is required before Stage B.
 
-## 2.6 Stage B — act command
+## 3.4 Stage B — act command
 
 Use only after the Stage A plan is accepted and the assignment contains exact allowed paths:
 
 ```bash
-cline --auto-approve false --cwd "<ABSOLUTE_CLINE_WORKTREE>" --timeout 0 "Execute only approved assignment <ASSIGNMENT_ID> from the accepted plan. Read AGENTS.md again and preserve its constraints. Implement only Galax Governance Foundation and Agent 01 Phases 0-4. Use CrewAI 1.15.4 and Python >=3.10,<3.14. Keep planning, reasoning, memory, delegation, code execution, async execution, parallel agents, and parallel tool calls disabled. Do not implement Agents 02-15. Do not write to main, merge, deploy, change workflows, read secrets, print credentials, use arbitrary MCP URLs, expose a full MCP catalog, or silently substitute a model/provider/framework. Modify only the approved paths. Run each approved validation command and preserve real output. Missing credentials must produce SKIPPED_LIVE_TEST_MISSING_SECRET or BLOCKED_MISSING_CREDENTIAL. Before any commit or push, stop and request human approval with the complete diff, tests, evidence files, and remaining blockers."
+cline --auto-approve false --cwd "<ABSOLUTE_CLINE_WORKTREE>" --timeout 0 "Execute only approved assignment <ASSIGNMENT_ID>. Read AGENTS.md and the active Foundation Agent 01 Flow execution contract again. Implement only Phases 0-4. Use CrewAI 1.15.4 and Python >=3.10,<3.14. Keep planning, reasoning, memory, delegation, code execution, async execution, parallel agents, and parallel tool calls disabled. Implement RepositoryPreflightTool as Flow-owned and invoked exactly once. Keep engineering_manager.tools empty and Agent 01 direct tools at zero. Run Agent 01 exactly once to produce AgentTaskResult. Build HumanReviewRequest in pure Python/Pydantic without a second LLM call. Use explicit routers and prevent blocked routes from continuing. Run check_llm_profile_readiness before Agent 01 and keep both profiles disabled until exact tests and approval exist. Separate REPO_PERMISSION_PROFILE_DECLARED from GITHUB_PERMISSIONS_LIVE_VALIDATED. Do not implement Agents 02-15, write main, merge, deploy, change workflows, read secrets, print credentials, use arbitrary MCP URLs, expose a full MCP catalog, or silently substitute a model/provider/framework. Modify only approved paths. Preserve real command/test evidence. Missing credentials must produce SKIPPED_LIVE_TEST_MISSING_SECRET or BLOCKED_MISSING_CREDENTIAL. Before any commit or push, stop and request human approval with the complete diff, tests, evidence, and blockers."
 ```
 
-## 2.7 Default allowed path candidates
+## 3.5 Default allowed path candidates
 
 The human assignment must narrow this list when possible:
 
@@ -117,7 +167,7 @@ docs/evidence/foundation/**
 docs/evidence/live-validation/**
 ```
 
-## 2.8 Prohibited paths
+Prohibited:
 
 ```text
 main branch
@@ -133,35 +183,18 @@ main branch
 .git/credentials
 production data
 repository secrets and settings
-Agents 02-15 implementation files
-canonical rules/plans/source cards unless the assignment explicitly authorizes one exact reconciliation
+Agents 02-15 implementation
+canonical rules/plans/source cards unless one exact reconciliation is explicitly assigned
 ```
 
-## 2.9 Cline completion gate
+Cline cannot report `FOUNDATION_VALIDATED` without the exact evidence required by the active contract and repository gates.
 
-Cline must return the final report format from `AGENTS.md`. It cannot report `FOUNDATION_VALIDATED` unless deterministic, contract, security, integration, and all enabled live tests actually pass.
+# 4. OpenHands Core — Docker-isolated fallback reproducer
 
----
-
-# 3. OpenHands Core — Docker-isolated fallback reproducer
-
-## 3.1 Role
+## 4.1 Role and entry data
 
 ```yaml
 role: DOCKER_ISOLATED_FALLBACK_REPRODUCER
-```
-
-## 3.2 Professional operating background
-
-Operate using the documented practices expected from a senior debugging and reproducibility engineer inside a constrained Docker sandbox. You do not own Galax architecture and do not replace Cline unless a human explicitly activates this fallback assignment.
-
-## 3.3 Goal
-
-Reproduce one exact Cline blocker in isolation, determine the factual failure layer, and return a minimal patch or exact unsupported-capability remedy without modifying or pushing the primary implementation branch.
-
-## 3.4 Required entry data
-
-```yaml
 blocker_id: <BLOCKER_ID>
 starting_sha: <EXACT_SHA>
 reproduction_command: <EXACT_COMMAND>
@@ -172,140 +205,66 @@ network_requirement: none_or_exact_allowlist
 credentials: none
 ```
 
-Do not start when any entry field is missing.
+Do not start when an entry field is missing. Use self-hosted OpenHands Core with a Docker sandbox, never process mode or the Cloud GitHub App. The mounted worktree must be isolated and credential-free.
 
-## 3.5 Sandbox launcher
-
-Use a dedicated isolated worktree and the officially documented Docker sandbox path. Do not use the process sandbox.
-
-```bash
-cd "<ABSOLUTE_OPENHANDS_ISOLATED_WORKTREE>"
-openhands serve --mount-cwd
-```
-
-Before launching, verify the OpenHands configuration selects Docker rather than process/local execution. The mounted worktree is disposable and must not contain credentials.
-
-## 3.6 Prompt to paste into OpenHands
+## 4.2 Prompt
 
 ```text
 ROLE
-You are the Docker-Isolated Fallback Reproducer for Galax assignment <ASSIGNMENT_ID>. Operate using the documented practices expected from a senior debugging and reproducibility engineer.
+You are the Docker-Isolated Fallback Reproducer for Galax assignment <ASSIGNMENT_ID>. Operate as a bounded debugging and reproducibility contributor.
 
 AUTHORITY
-You are an external contributor, not a Galax CrewAI agent, architecture owner, branch owner, approval authority, or production operator.
-
-REPOSITORY STATE
-Repository: ariessocia04-rgb/galax-Ai-project
-Isolated workspace: <ABSOLUTE_OPENHANDS_ISOLATED_WORKTREE>
-Starting SHA: <EXACT_SHA>
-Primary branch write: prohibited
-GitHub token: unavailable by design
-Network: deny by default
+You are not a Galax CrewAI agent, architecture owner, branch owner, approval authority, or production operator.
 
 MANDATORY FIRST ACTION
-Read AGENTS.md and the exact files it requires. Return REPOSITORY_READ_RECEIPT. Do not edit until the receipt confirms the exact blocker assignment and allowed paths.
+Read AGENTS.md, the active Foundation Agent 01 Flow execution contract, and the exact required records. Return REPOSITORY_READ_RECEIPT before any edit.
 
 EXACT TASK
-Reproduce blocker <BLOCKER_ID> using command <EXACT_COMMAND>. Expected result: <EXPECTED>. Recorded actual result: <ACTUAL>. Identify whether the root cause is application code, dependency resolution, Docker/runtime environment, test fixture, permission, credential absence, or unsupported capability.
+Reproduce blocker <BLOCKER_ID> from starting SHA <EXACT_SHA> using <EXACT_COMMAND>. Expected: <EXPECTED>. Recorded actual: <ACTUAL>. Identify the factual failure layer.
 
-ALLOWED ACTIONS
-Read repository files, execute the exact reproduction and approved diagnostic commands inside the Docker sandbox, edit only <ALLOWED_PATHS>, run exact tests, and create a local patch and evidence report.
+ALLOWED
+Read scoped repository files, execute approved diagnostics inside Docker, edit only <ALLOWED_PATHS>, run exact tests, and return a local patch and evidence.
 
-PROHIBITED ACTIONS
-No process sandbox, host shell, host secrets, raw GitHub token, primary branch write, push, merge, deployment, broad refactor, architecture change, provider substitution, arbitrary internet access, or Agents 02-15 work.
+PROHIBITED
+No process sandbox, host shell, host secrets, raw GitHub token, primary branch write, push, merge, deployment, architecture change, provider substitution, arbitrary internet, direct Agent 01 tool ownership, result_as_answer restoration, or Agents 02-15 work.
 
-REQUIRED OUTPUT
-Return one of REPRODUCED_WITH_PATCH, REPRODUCED_UNSUPPORTED_CAPABILITY, NOT_REPRODUCED_WITH_ENVIRONMENT_DIFFERENCE, or FAILED_REPRODUCTION_WITH_EVIDENCE. Include environment fingerprint, commands, raw error summary, files changed, patch path/hash, tests, blockers, and exact remedy.
+OUTPUT
+Return REPRODUCED_WITH_PATCH, REPRODUCED_UNSUPPORTED_CAPABILITY, NOT_REPRODUCED_WITH_ENVIRONMENT_DIFFERENCE, or FAILED_REPRODUCTION_WITH_EVIDENCE with environment fingerprint, commands, error summary, patch/hash, tests, blockers, and remedy.
 ```
 
----
+# 5. mini-SWE-agent — Independent patch comparison
 
-# 4. mini-SWE-agent — Independent patch comparison
-
-## 4.1 Role
+## 5.1 Required configuration
 
 ```yaml
 role: ISOLATED_PATCH_COMPARISON_WORKER
+mode: confirm
+step_limit: <BOUNDED_INTEGER>
+cost_limit: <BOUNDED_AMOUNT>
+wall_time_limit_seconds: <BOUNDED_SECONDS>
+max_consecutive_format_errors: <BOUNDED_INTEGER>
+output_path: <TRAJECTORY_OUTPUT_PATH>
 ```
 
-## 4.2 Professional operating background
-
-Operate using the documented practices expected from a focused issue-resolution engineer. Solve only the exact issue supplied and preserve a complete trajectory for independent review.
-
-## 4.3 Goal
-
-Produce an independent patch and trajectory for one bounded failing test or defect. The result is comparison evidence only and is never automatically applied to the primary branch.
-
-## 4.4 Required configuration
-
-Create a pinned YAML configuration with:
-
-```yaml
-agent:
-  system_template: <GALAX_MINI_SWE_SYSTEM_TEMPLATE>
-  instance_template: <GALAX_MINI_SWE_INSTANCE_TEMPLATE>
-  step_limit: <BOUNDED_INTEGER>
-  cost_limit: <BOUNDED_AMOUNT>
-  wall_time_limit_seconds: <BOUNDED_SECONDS>
-  max_consecutive_format_errors: <BOUNDED_INTEGER>
-  output_path: <TRAJECTORY_OUTPUT_PATH>
-```
-
-The exact schema must match the installed mini-SWE-agent release. Do not guess a key when the pinned release differs.
-
-## 4.5 Command
-
-Run in confirm mode by omitting `--yolo` and `-y`:
+Use a pinned configuration matching the installed release. Do not guess schema keys. Omit `--yolo` and `-y`.
 
 ```bash
 cd "<ABSOLUTE_MINI_SWE_ISOLATED_COPY>"
 mini --config "<PINNED_MINI_SWE_CONFIG.yaml>" --model "<APPROVED_TRIAL_MODEL>" --task "$(cat <MINI_SWE_TASK_FILE.txt>)"
 ```
 
-## 4.6 System-template content
+System instruction:
 
 ```text
-You are the Galax Isolated Patch Comparison Worker. Read AGENTS.md and obey the repository decision hierarchy. You are not the primary writer and have no GitHub write, commit, push, merge, deployment, secret, or production authority. Work only on one exact issue inside the isolated workspace. Use confirm mode. Never broaden scope, change architecture, substitute providers, implement Agents 02-15, or claim a test passed without command evidence. Finish by saving a patch, full trajectory, commands, tests, blockers, and exact remedy. Do not apply the patch to the primary implementation worktree.
+Read AGENTS.md and the active Foundation Agent 01 Flow execution contract. Work on one exact issue inside the isolated workspace. You are not the primary writer and have no GitHub write, commit, push, merge, deployment, secret, or production authority. Preserve Flow-owned preflight invocation, zero Agent 01 direct tools, one Agent 01 LLM call, explicit routers, readiness gates, and deterministic human-review construction. Use confirm mode. Do not broaden scope, change architecture, implement Agents 02-15, or claim tests passed without evidence. Save patch, trajectory, commands, tests, blockers, and remedy. Do not apply the patch to the primary worktree.
 ```
 
-## 4.7 Instance-template/task content
+# 6. Aider — Surgical fixer
 
-```text
-Assignment: <ASSIGNMENT_ID>
-Starting SHA: <EXACT_SHA>
-Exact issue: <ONE_PRECISE_ISSUE>
-Expected behavior: <EXPECTED>
-Current reproducible behavior: <ACTUAL>
-Reproduction command: <COMMAND>
-Allowed paths: <PATHS>
-Prohibited paths: <PATHS>
-Required test command: <COMMAND>
-Completion: produce a reviewable patch and trajectory or a factual blocker. Echoing success without test evidence is failure.
-```
-
----
-
-# 5. Aider — Surgical fixer
-
-## 5.1 Role
+## 6.1 Entry gate and command
 
 ```yaml
 role: SURGICAL_TEST_OR_LINT_FIXER
-```
-
-## 5.2 Professional operating background
-
-Operate using the documented practices expected from a careful pair-programming repair specialist. You do not own broad architecture, foundation implementation, dependency selection, or project-wide refactoring.
-
-## 5.3 Goal
-
-Fix one reproducible failing test, lint error, type error, or narrowly bounded defect with the smallest defensible diff.
-
-## 5.4 Entry gate
-
-Aider receives:
-
-```yaml
 exact_failure_command: <COMMAND>
 exact_failure_output: <OUTPUT_OR_EVIDENCE_PATH>
 starting_sha: <EXACT_SHA>
@@ -314,8 +273,6 @@ read_only_context: []
 required_success_command: <COMMAND>
 maximum_files_changed: <SMALL_INTEGER>
 ```
-
-## 5.5 Command
 
 ```bash
 cd "<ABSOLUTE_AIDER_ISOLATED_WORKTREE>"
@@ -327,63 +284,34 @@ aider \
   --auto-test \
   --test-cmd "<EXACT_FAILURE_COMMAND>" \
   --read AGENTS.md \
+  --read docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md \
   --read docs/plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md \
-  --read docs/prompts/GALAX_FOUNDATION_AGENT01_IMPLEMENTATION_VALIDATION_PROMPT.md \
   <EXACT_EDITABLE_FILES>
 ```
 
-Then send this message:
+Message:
 
 ```text
-You are the Galax Surgical Test or Lint Fixer for assignment <ASSIGNMENT_ID>. Read the supplied read-only repository instructions before editing. Reproduce <EXACT_FAILURE_COMMAND> first. Repair only <EXACT_FAILURE> and only in the named editable files. Preserve the approved architecture and typed contracts. Do not add dependencies, modify canonical rules or plans, broaden scope, commit, push, merge, deploy, read secrets, use arbitrary URLs, or implement Agents 02-15. Run the exact command after the change. Show the final diff and report real passed, failed, skipped, and blocked results. When the failure cannot be fixed within scope, stop with the exact blocker and remedy.
+Repair only <EXACT_FAILURE> in the named editable files. Reproduce the failure first. Preserve the active Flow contract and typed boundaries. Do not add dependencies, modify canonical records, broaden scope, commit, push, merge, deploy, read secrets, restore direct Agent 01 tool ownership/result_as_answer, or implement Agents 02-15. Run the exact required success command and return the diff plus evidence or a factual blocker.
 ```
 
-Aider must not be started with `--yes-always` or an equivalent unrestricted confirmation setting.
+Never start Aider with `--yes-always` or an equivalent unrestricted confirmation setting.
 
----
+# 7. PR-Agent — Read-only stable PR reviewer
 
-# 6. PR-Agent — Read-only stable PR reviewer
+## 7.1 Configuration and command
 
-## 6.1 Role
-
-```yaml
-role: READ_ONLY_STABLE_PR_REVIEWER
-```
-
-## 6.2 Professional operating background
-
-Operate using the documented practices expected from a security-conscious pull-request reviewer. You review actual code and evidence; you do not write implementation code, approve, label, merge, or deploy.
-
-## 6.3 Goal
-
-Review a stable draft PR for Galax scope compliance, architectural drift, missing tests, security violations, fabricated evidence, unsupported claims, and incomplete remedies.
-
-## 6.4 Required configuration
-
-Use the repository's minimal `.pr_agent.toml` and local output first. Pin an exact community PR-Agent release and image digest before controlled trial.
-
-The configuration branch must be a fixed maintainer-controlled value. Never derive it from a PR head or other untrusted input.
-
-## 6.5 Local review command
-
-```bash
-python -m pr_agent.cli \
-  --pr_url="<EXACT_DRAFT_PR_URL>" \
-  --config-branch="<FIXED_MAINTAINER_CONTROLLED_CONFIG_BRANCH>" \
-  review
-```
-
-Alternative one-run extra instruction override:
+Use local output first, `publish_output=false`, a fixed maintainer-controlled config branch, and an exact pinned release/image digest.
 
 ```bash
 python -m pr_agent.cli \
   --pr_url="<EXACT_DRAFT_PR_URL>" \
   --config-branch="<FIXED_MAINTAINER_CONTROLLED_CONFIG_BRANCH>" \
   review \
-  --pr_reviewer.extra_instructions="Read AGENTS.md and review only Galax Governance Foundation and Agent 01. Verify changed files against the authorized prompt and evidence reports. Flag direct-main risk, secret exposure, unapproved provider/tool/model use, scope creep into Agents 02-15, missing negative tests, fabricated test or tool claims, missing invocation evidence, unresolved high-severity findings, and claims not supported by the diff. Do not approve, label, merge, modify source, or publish output."
+  --pr_reviewer.extra_instructions="Read AGENTS.md and docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md. Review only Governance Foundation and Agent 01. Verify RepositoryPreflightTool is Flow-owned and invoked once, engineering_manager.tools is empty, Agent 01 direct tools are zero, result_as_answer is absent, Agent 01 has one LLM call, every conditional stage uses explicit routers, check_llm_profile_readiness runs before Agent 01, HumanReviewRequest is pure Python/Pydantic, offline and live GitHub permission evidence are separate, blocked routes stop, profiles remain disabled without proof, and no operational/tested/merge/deployment/Agents 02-15 claim is unsupported. Flag scope creep, secret exposure, fabricated evidence, missing tests, and high-severity findings. Do not approve, label, merge, modify source, or publish output."
 ```
 
-## 6.6 Required review output
+Required output:
 
 ```yaml
 review_status: PASS_FOR_HUMAN_REVIEW | CHANGES_REQUIRED | BLOCKED_EVIDENCE_MISSING
@@ -399,11 +327,9 @@ approval_given: false
 merge_performed: false
 ```
 
----
+# 8. Human coordination commands
 
-# 7. Human coordination commands
-
-## 7.1 Before assigning any contributor
+Before assignment:
 
 ```bash
 git status -sb
@@ -412,9 +338,7 @@ git branch --show-current
 git remote -v
 ```
 
-Record the output in the assignment. Do not use a contributor when the worktree has unexplained changes.
-
-## 7.2 Before accepting a patch
+Before accepting a patch:
 
 ```bash
 git diff --check
@@ -422,25 +346,14 @@ git diff --stat
 git status -sb
 ```
 
-Then run the repository's approved lint, type-check, unit, contract, security, integration, and applicable live-test commands.
+Then run the approved lint, type-check, unit, contract, security, integration, and applicable live-test commands.
 
-## 7.3 Never automate these decisions
+Never automate architecture acceptance, risk acceptance, credential creation/exposure, production access, protected-branch commit, push authorization, PR approval, merge, or deployment.
 
-```text
-architecture acceptance
-risk acceptance
-credential creation or exposure
-production data access
-commit to protected branch
-push authorization
-PR approval
-merge
-deployment
-```
-
-# 8. Current command-pack status
+# 9. Current command-pack status
 
 ```yaml
+Foundation_Agent01_Flow_contract: specified
 Cline_command: specified
 OpenHands_prompt_and_launcher: specified
 mini_SWE_command_and_templates: specified
