@@ -22,43 +22,65 @@ These contributors are development tools. They are not Galax CrewAI Agents 01–
 
 ## 2. Current qualification decision
 
+| Contributor | Paper score | Exact role | Decision |
+|---|---:|---|---|
+| Cline | 86 | Primary supervised implementer | `PASS_TO_CONTROLLED_TRIAL` |
+| OpenHands Core | 84 | Docker-isolated fallback reproducer | `PASS_TO_CONTROLLED_TRIAL` |
+| mini-SWE-agent | 83 | Independent issue solver and patch comparator | `PASS_TO_CONTROLLED_TRIAL` |
+| Aider | 82 | Small surgical fix and test repair | `PASS_TO_CONTROLLED_TRIAL` |
+| PR-Agent | 82 | Read-only stable PR reviewer | `PASS_TO_CONTROLLED_TRIAL` |
+| OpenCode | 74 | Proposed reviewer or backup writer | `DECLINED_SECURITY_BOUNDARY_NOT_PROVEN` |
+| goose | 77 | Proposed MCP integration or general agent | `DECLINED_NOW_RESEARCH_LATER` |
+
+The scores are Galax paper-compatibility scores, not AI accuracy percentages. A score of 80 or higher makes the selected candidate eligible for its exact controlled trial only. It does not activate repository permissions.
+
 ```yaml
-Cline:
-  paper_compatibility_score: 86
-  decision: PASS_TO_CONTROLLED_TRIAL
-OpenHands_Core:
-  paper_compatibility_score: 84
-  decision: PASS_TO_CONTROLLED_TRIAL
-mini_SWE_agent:
-  paper_compatibility_score: 83
-  decision: PASS_TO_CONTROLLED_TRIAL
-Aider:
-  paper_compatibility_score: 82
-  decision: PASS_TO_CONTROLLED_TRIAL
-PR_Agent:
-  paper_compatibility_score: 82
-  decision: PASS_TO_CONTROLLED_TRIAL
 fully_qualified_today: false
+next_gate: controlled_Galax_trial
 ```
 
-The scores are Galax paper-compatibility scores, not accuracy percentages. A contributor becomes approved for a specific role only after passing its exact repository, security, command, output, and human-review trial.
+OpenCode and goose are not added to the active sequence. Their source cards preserve the declined/deferred research decisions without creating roles, assignments, or permissions.
 
-## 3. Shared project objective
+## 3. Canonical Foundation objective
 
-Implement and prove only the authorized foundation scope in:
+All contributors must follow, in priority order:
 
 ```text
-docs/prompts/GALAX_FOUNDATION_AGENT01_IMPLEMENTATION_VALIDATION_PROMPT.md
+AGENTS.md
+→ docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md
+→ docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
+→ applicable active rules and plans
+→ docs/prompts/GALAX_FOUNDATION_AGENT01_IMPLEMENTATION_VALIDATION_PROMPT.md
+→ exact platform assignment
 ```
 
-Authorized phases:
+The active Flow execution contract supersedes only older conflicting instructions that attach `RepositoryPreflightTool` directly to Agent 01, require an Agent 01 tool call, or use `result_as_answer` for that path.
+
+Authorized implementation scope:
 
 ```text
-Phase 0 — reconcile repository state and pin dependencies
-Phase 1 — implement governance foundation
-Phase 2 — implement Agent 01 RepositoryPreflightTool
-Phase 3 — validate temporary-branch GitHub read/write safely
-Phase 4 — run one-tool and two-agent framework smoke tests
+Phase 0 — reconcile repository state and stale active instructions
+Phase 1 — pin the minimum Foundation dependency set
+Phase 2 — implement typed models, blockers, ledger, policies, and deterministic state
+Phase 3 — implement Flow routers, readiness gates, Flow-owned RepositoryPreflightTool invocation, and one Agent 01 evaluation
+Phase 4 — implement deterministic HumanReviewRequest construction and required unit/contract/security/integration fixtures
+```
+
+Active Foundation invariants:
+
+```yaml
+RepositoryPreflightTool_owner: GalaxFoundationFlow
+repository_preflight_tool_calls: 1
+engineering_manager_tools: []
+Agent_01_direct_tools: 0
+Agent_01_LLM_calls: 1
+Agent_01_output: AgentTaskResult
+result_as_answer_for_this_path: prohibited
+hidden_second_agent_call: prohibited
+HumanReviewRequest_builder: pure_Python_Pydantic
+explicit_routers_for_every_branch: required
+check_llm_profile_readiness_before_agent: required
+LLM_profiles_enabled: false
 ```
 
 Agents 02–15, production deployment, automatic merge, paid resource creation, and claims of full Galax readiness remain prohibited.
@@ -124,32 +146,8 @@ Missing required fields produce `BLOCKED_ASSIGNMENT_INCOMPLETE`.
 
 ## 6. Contributor 1 — Cline
 
-### Role
-
-`PRIMARY_SUPERVISED_FOUNDATION_IMPLEMENTER`
-
-### Professional operating background
-
-Operate using the documented practices expected from a senior Python, CrewAI integration, GitHub transaction, application-security, and test-automation engineer. This is a behavioral instruction, not a claim of employment history, certification, or guaranteed correctness.
-
-### Goal
-
-Implement the smallest complete Galax Governance Foundation and Agent 01 runtime that satisfies the authorized prompt, produces reproducible evidence, and remains disabled where live proof is missing.
-
-### Exact responsibilities
-
-- Perform Phase 0 repository reconciliation.
-- Pin the exact foundation dependency set.
-- Implement typed models, blockers, policies, governance hooks, invocation ledger, checkpoint records, and deterministic Flow transitions.
-- Implement Agent 01 and `RepositoryPreflightTool` only.
-- Implement the narrowly filtered GitHub validation gateway and negative tests.
-- Create unit, contract, security, integration, and opt-in live tests.
-- Create required evidence reports.
-- Stop rather than enabling an untested model, provider, gateway, or agent.
-
-### Required controls
-
 ```yaml
+role: PRIMARY_SUPERVISED_FOUNDATION_IMPLEMENTER
 auto_approve: false
 YOLO: prohibited
 mode: plan_then_act_with_human_approval
@@ -163,44 +161,45 @@ push: human_approval_required
 merge: prohibited
 ```
 
+### Professional operating background
+
+Operate using the documented practices expected from a senior Python, CrewAI integration, GitHub transaction, application-security, and test-automation engineer. This is a behavioral instruction, not a claim of employment history, certification, or guaranteed correctness.
+
+### Goal and responsibilities
+
+Implement the smallest complete Governance Foundation and Agent 01 evaluator architecture that satisfies the active Flow execution contract and leaves every unsupported or untested capability disabled.
+
+Cline must:
+
+- perform Phase 0 repository reconciliation;
+- pin the exact Foundation dependency set;
+- implement strict typed models, blockers, policies, invocation ledger, checkpoint records, and deterministic routers;
+- implement `RepositoryPreflightTool` as a Flow-owned read-only external tool;
+- keep `engineering_manager.tools` empty;
+- run exactly one Agent 01 LLM evaluation that produces `AgentTaskResult`;
+- build `HumanReviewRequest` deterministically without another LLM call;
+- split offline permission declaration from live GitHub gateway evidence;
+- implement applicable unit, contract, security, integration, and opt-in live tests;
+- create the required evidence reports;
+- stop rather than enabling an untested profile, gateway, or agent.
+
 ### Entry gate
 
-- Repository and branch verified.
-- `AGENTS.md` and all required records read.
+- Repository, branch, and exact starting SHA verified.
+- `AGENTS.md` and the complete mandatory reading order read.
 - `REPOSITORY_READ_RECEIPT` accepted by the human.
-- Implementation plan names exact files and tests.
+- Plan names exact files, commands, and tests.
 - No unresolved canonical conflict blocks the task.
+- Cline begins in plan-only mode.
 
 ### Exit gate
 
-Cline may report completion only with actual files, commands, test outputs, hashes, blockers, and evidence reports. Missing credentials must be recorded as skipped/blocked, never passed.
+Cline may report completion only with actual files, commands, test outputs, hashes, blockers, and evidence reports. Missing credentials are skipped or blocked, never passed. Commit and push require a separate human decision.
 
 ## 7. Contributor 2 — OpenHands Core
 
-### Role
-
-`DOCKER_ISOLATED_FALLBACK_REPRODUCER`
-
-### Professional operating background
-
-Operate using the documented practices expected from a senior debugging and reproducibility engineer working inside a constrained container. Do not act as the primary project architect or branch owner.
-
-### Goal
-
-Reproduce a Cline blocker or disputed behavior in an isolated Docker sandbox, determine whether the problem is code, dependency, environment, or unsupported capability, and return a patch or factual blocker without modifying the primary branch.
-
-### Exact responsibilities
-
-- Start only after Cline returns a reproducible blocker or a human assigns a specific reproduction.
-- Use the self-hosted OpenHands Core Docker sandbox.
-- Reproduce the exact command and failure from the recorded starting SHA.
-- Create the smallest candidate patch in the isolated workspace.
-- Run the exact relevant tests.
-- Return patch, logs, environment fingerprint, and conclusion.
-
-### Required controls
-
 ```yaml
+role: DOCKER_ISOLATED_FALLBACK_REPRODUCER
 variant: SELF_HOSTED_CORE_ONLY
 sandbox_provider: Docker
 process_sandbox: prohibited
@@ -213,13 +212,17 @@ push: prohibited
 merge: prohibited
 ```
 
+### Goal
+
+Reproduce one exact Cline blocker in an isolated Docker sandbox, determine whether the cause is code, dependency, environment, test fixture, permission, credential absence, or unsupported capability, and return a minimal patch or factual remedy without modifying the primary branch.
+
 ### Entry gate
 
-A specific blocker ID, reproduction command, expected result, actual result, starting SHA, and bounded file scope must exist.
+A blocker ID, reproduction command, expected result, actual result, starting SHA, bounded file scope, network policy, and credential policy must exist.
 
 ### Exit gate
 
-Return one of:
+Return exactly one:
 
 ```text
 REPRODUCED_WITH_PATCH
@@ -228,32 +231,12 @@ NOT_REPRODUCED_WITH_ENVIRONMENT_DIFFERENCE
 FAILED_REPRODUCTION_WITH_EVIDENCE
 ```
 
+Include environment fingerprint, commands, raw-error summary, patch/hash, tests, blockers, and exact remedy.
+
 ## 8. Contributor 3 — mini-SWE-agent
 
-### Role
-
-`ISOLATED_PATCH_COMPARISON_WORKER`
-
-### Professional operating background
-
-Operate using the documented practices expected from a focused issue-resolution engineer. Work from one precise problem statement and preserve a complete trajectory for independent review.
-
-### Goal
-
-Solve one bounded issue in an isolated copy, generate an independent patch and complete trajectory, and provide a comparison artifact. Never auto-apply the patch to the primary implementation branch.
-
-### Exact responsibilities
-
-- Receive one exact issue or failing test.
-- Run in confirm mode.
-- Use a pinned YAML configuration with system and instance templates.
-- Enforce step, cost, wall-clock, and format-error limits.
-- Run the specified tests.
-- Save the patch, trajectory, command log, and test results.
-
-### Required controls
-
 ```yaml
+role: ISOLATED_PATCH_COMPARISON_WORKER
 mode: confirm
 YOLO: prohibited
 environment: Docker_or_bubblewrap_or_equivalent_isolation
@@ -265,39 +248,18 @@ wall_clock_limit: required
 output_trajectory: required
 ```
 
-### Entry gate
+### Goal
 
-A single issue, starting SHA, expected behavior, allowed paths, and test command are provided.
+Solve one bounded issue in an isolated copy, generate an independent patch and complete trajectory, and provide comparison evidence. Never auto-apply the patch to the primary implementation branch.
 
-### Exit gate
+### Entry and exit gates
 
-Return a reviewable patch and full trajectory. A human or Cline may compare it, but no automated stage applies it.
+A single issue, starting SHA, expected behavior, current reproducible behavior, allowed paths, and exact test command are required. Return a reviewable patch, full trajectory, commands, tests, blockers, and exact remedy.
 
 ## 9. Contributor 4 — Aider
 
-### Role
-
-`SURGICAL_TEST_OR_LINT_FIXER`
-
-### Professional operating background
-
-Operate using the documented practices expected from a careful pair-programming repair specialist. Do not own broad architecture, dependency selection, or full-project implementation.
-
-### Goal
-
-Repair one reproducible failing test, lint error, type error, or narrowly bounded defect with the minimum changed files and no automatic commit.
-
-### Exact responsibilities
-
-- Load `AGENTS.md` and the exact task records as read-only context.
-- Edit only explicitly named files.
-- Preserve existing architecture and typed contracts.
-- Run the exact failing command before and after the repair.
-- Show the diff and report any unresolved failure.
-
-### Required controls
-
 ```yaml
+role: SURGICAL_TEST_OR_LINT_FIXER
 maximum_scope: one_reproducible_failure
 auto_commits: false
 dirty_commits: false
@@ -308,39 +270,16 @@ push: prohibited
 merge: prohibited
 ```
 
-### Entry gate
+### Goal
 
-A reproducible command currently fails, the failure output is attached, and the human names the allowed files or directory.
+Repair one reproducible failing test, lint error, type error, or narrowly bounded defect with the smallest defensible diff.
 
-### Exit gate
-
-The exact command passes, or Aider returns a factual blocker. It must not broaden the task to unrelated cleanup.
+Aider starts only when the exact command currently fails, failure output is attached, starting SHA is known, and editable files plus the required success command are named. It must not broaden the task, change architecture, add unrelated dependencies, or perform a commit or push.
 
 ## 10. Contributor 5 — PR-Agent
 
-### Role
-
-`READ_ONLY_STABLE_PR_REVIEWER`
-
-### Professional operating background
-
-Operate using the documented practices expected from a security-conscious pull-request reviewer. Review evidence and changed code; do not act as an implementation writer or approval authority.
-
-### Goal
-
-Review a stable draft pull request for scope compliance, architecture drift, missing tests, fabricated evidence, security violations, and unresolved blockers, initially producing local output only.
-
-### Exact responsibilities
-
-- Run only after the implementation branch has a stable diff and test evidence.
-- Read `AGENTS.md`, the authorized foundation prompt, and the contributor plan.
-- Compare PR claims with actual changed files and evidence reports.
-- Flag direct-main risk, secret exposure, unapproved tools/models, missing negative tests, unsupported claims, and scope creep.
-- Produce findings with file/path evidence and severity.
-
-### Required controls
-
 ```yaml
+role: READ_ONLY_STABLE_PR_REVIEWER
 source_write: prohibited
 publish_output: false_initially
 automatic_feedback: disabled
@@ -351,11 +290,9 @@ config_branch: fixed_maintainer_controlled_branch_only
 exact_release_and_digest: required_before_trial
 ```
 
-### Entry gate
+### Goal
 
-The PR is draft, stable, and has actual test/evidence artifacts. The review configuration is pinned and local output is enabled.
-
-### Exit gate
+Review a stable draft PR for scope compliance, architecture drift, missing tests, fabricated evidence, security violations, and unresolved blockers. It must compare the implementation against `AGENTS.md`, the active Flow execution contract, the authorized Foundation prompt's non-conflicting requirements, and actual evidence artifacts.
 
 Return:
 
@@ -367,9 +304,9 @@ medium_findings: []
 missing_tests: []
 unsupported_claims: []
 recommended_next_action:
+approval_given: false
+merge_performed: false
 ```
-
-PR-Agent cannot approve or merge.
 
 ## 11. Deterministic work sequence
 
@@ -377,21 +314,19 @@ PR-Agent cannot approve or merge.
 STAGE 0 Human creates assignment and verifies source branch
 STAGE 1 Cline plan-only repository reading and preflight
 STAGE 2 Human accepts or rejects Cline plan
-STAGE 3 Cline implements bounded foundation work
+STAGE 3 Cline implements bounded Foundation work
 STAGE 4 Deterministic tests run
 STAGE 5 Aider may repair one exact reproducible failure
 STAGE 6 mini-SWE-agent may produce one isolated comparison patch
-STAGE 7 OpenHands may reproduce an unresolved environment/blocker issue
+STAGE 7 OpenHands may reproduce one unresolved environment or blocker issue
 STAGE 8 Human selects or rejects external patches
 STAGE 9 PR-Agent performs local read-only review
-STAGE 10 Human decides revise, publish draft PR, stop, or later merge
+STAGE 10 Human decides revise, publish/update draft PR, stop, or later merge
 ```
 
-Stages 5–7 are conditional and sequential. They are not parallel writers.
+Stages 5–7 are conditional and sequential. They are not parallel writers and may be skipped when their entry conditions are absent.
 
 ## 12. Handoff package
-
-Every handoff must include:
 
 ```yaml
 handoff_id:
@@ -426,11 +361,9 @@ gateway_implemented: false
 MCP_connection_authorized_now: false
 ```
 
-MCP may later expose narrow operations such as `submit_task`, `get_status`, `cancel_task`, and `read_artifact` through trusted adapters. It must not provide raw tokens, main-branch writes, merge, force push, workflow/secret writes, arbitrary shell, or arbitrary filesystem access.
+MCP may later expose narrow operations such as `submit_task`, `get_status`, `cancel_task`, and `read_artifact` through trusted adapters. It must not provide raw tokens, main writes, merge, force push, workflow/secret writes, arbitrary shell, arbitrary filesystem, or arbitrary MCP URLs.
 
 ## 14. Controlled trial pass criteria
-
-A contributor passes its exact role trial only when:
 
 ```yaml
 repository_read_receipt_complete: true
@@ -447,16 +380,58 @@ human_review: accepted
 
 Failure in one role does not prove the tool is unusable for every role. It remains rejected for the failed profile until a revised controlled trial passes.
 
-## 15. Current status
+## 15. Time and quality planning boundary
+
+The five contributors do not make the work five times faster because simultaneous overlapping writers are prohibited. Their benefit is reduced rework, independent comparison, fallback reproduction, and earlier defect detection.
+
+| Work | Planning estimate |
+|---|---|
+| Repository setup, dependency pinning, fixtures | 1–2 working days |
+| Typed models, ledger, policies, gates | 2–4 working days |
+| Flow, Agent 01 evaluator, preflight tool, executor | 3–5 working days |
+| Unit, contract, security, integration tests | 3–5 working days |
+| mini-SWE independent comparison when needed | 1–2 working days |
+| OpenHands sandbox reproduction when needed | 1–2 working days |
+| PR-Agent and human review | 1–3 working days |
+| Live provider/GitHub tests when credentials are authorized | 2–4 working days |
+
+```yaml
+best_case: 10_working_days
+realistic: 14_to_20_working_days
+high_rework_or_blocked: 21_to_35_working_days
+scope: Governance_Foundation_and_Agent_01_only
+```
+
+These are planning estimates, not delivery guarantees.
+
+Before controlled trials, no honest quality percentage may be claimed. After every exact gate passes, an internal engineering-process quality target of `85–92/100` may be used only as a review target, not as a probability of being bug-free.
+
+Required quality conditions:
+
+```yaml
+unauthorized_operations: 0
+fabricated_evidence: 0
+required_tests_executed: 100_percent
+security_negative_tests_passed: 100_percent
+repeated_results: stable
+high_severity_findings: 0_unresolved
+human_review: accepted
+```
+
+## 16. Current status
 
 ```yaml
 plan_documented: true
-platform_prompts_documented: pending_command_pack
-source_cards_documented: pending
-implementation_branch_created: pending_after_research_records
+Foundation_Agent01_Flow_contract_documented: true
+platform_prompts_documented: true
+selected_source_cards_documented: true
+declined_source_cards_documented: true
+implementation_branch_created: true
 contributors_installed_or_connected: false
+exact_versions_pinned: false
 controlled_trials_run: false
 fully_qualified_contributors: 0
 Agent_01_runtime_approved: false
 production_ready: false
+next_action: Cline_plan_only_after_implementation_branch_fast_forward_and_assignment_SHA_update
 ```
