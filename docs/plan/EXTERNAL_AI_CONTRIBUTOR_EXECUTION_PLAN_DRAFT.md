@@ -427,11 +427,13 @@ platform_prompts_documented: true
 selected_source_cards_documented: true
 declined_source_cards_documented: true
 implementation_branch_created: true
+implementation_branch_synchronized: true
+Cline_assignment_SHA_updated: true
 contributors_installed_or_connected: false
 exact_versions_pinned: false
 controlled_trials_run: false
 fully_qualified_contributors: 0
 Agent_01_runtime_approved: false
 production_ready: false
-next_action: Cline_plan_only_after_implementation_branch_fast_forward_and_assignment_SHA_update
+next_action: Cline_plan_only_ready_for_human_launch
 ```
