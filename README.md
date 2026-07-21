@@ -12,6 +12,7 @@ The repository is in planning, research, conflict-reconciliation, and minimum-ru
 full_build_prompt_status: BLOCKED_NOT_READY_TO_PROMPT_CREWAI
 current_master_prompt_status: DO_NOT_USE_STALE_CONFLICTS
 Foundation_Agent01_Flow_contract: ACTIVE_CANONICAL
+chat_continuity_protocol: ACTIVE_CANONICAL
 Foundation_repository_implementation: NOT_PERFORMED
 full_free_runtime_proven: false
 agents_enabled: 0
@@ -23,6 +24,7 @@ Do not execute the complete 15-agent build prompt. The architecture is technical
 
 ## Canonical current records
 
+- `docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md`
 - `docs/research/readiness/FINAL_PRE_PROMPT_CONFLICT_AUDIT_2026-07-20.md`
 - the canonical audit target named by that alias
 - `docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md`
@@ -32,10 +34,26 @@ Do not execute the complete 15-agent build prompt. The architecture is technical
 - `docs/plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md`
 - `docs/prompts/EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md`
 
+## Conversation-length continuity trigger
+
+When the owner says `length chat problem`, `conversation length problem`, `continue exact Galax flow`, `operation length problem solve`, or a close spelling variation:
+
+```text
+read AGENTS.md
+→ read docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md
+→ verify repository, branch heads, PR, and assignment issues
+→ reconstruct the exact current stage
+→ produce OPERATION_LENGTH_CONTINUITY_RECEIPT
+→ answer or act only when safe_to_continue=true
+```
+
+Do not ask the owner what the previous work was when repository access exists. Do not rely on old chat memory or summaries as repository truth.
+
 ## Canonical decision priority
 
 ```text
 README current readiness
+→ canonical chat-continuity protocol
 → canonical conflict audit and alias target
 → Foundation and Agent 01 Flow execution contract
 → full CrewAI 1.15.4 remediation blueprint
@@ -44,6 +62,7 @@ README current readiness
 → source index and exact source cards
 → exact authorized assignment
 → historical research
+→ old chat memory or summaries
 ```
 
 The active Flow execution contract supersedes only older instructions that attach `RepositoryPreflightTool` directly to Agent 01, require an Agent 01 direct tool call, or use `result_as_answer` for that path.
@@ -56,18 +75,19 @@ Before changing or implementing any agent, LLM, tool, prompt, knowledge source, 
 
 1. Read `README.md`.
 2. Read `AGENTS.md`.
-3. Read the canonical conflict audit and alias target.
-4. Read `docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md`.
-5. Read the full CrewAI 1.15.4 remediation blueprint.
-6. Read all applicable files under `docs/rules/` and `docs/plan/`.
-7. Read `docs/sources/SOURCE_INDEX.md` and exact source cards.
-8. Read the applicable agent research and exact authorized assignment.
-9. Verify current external facts using authoritative sources and pinned source/adapters.
-10. Inspect current official issues and security notices when documentation is insufficient.
-11. Define and pass tests in the exact pinned environment.
-12. Only then execute a human-authorized bounded change.
+3. Read `docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md`.
+4. Read the canonical conflict audit and alias target.
+5. Read `docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md`.
+6. Read the full CrewAI 1.15.4 remediation blueprint.
+7. Read all applicable files under `docs/rules/` and `docs/plan/`.
+8. Read `docs/sources/SOURCE_INDEX.md` and exact source cards.
+9. Read the applicable agent research and exact authorized assignment.
+10. Verify current external facts using authoritative sources and pinned source/adapters.
+11. Inspect current official issues and security notices when documentation is insufficient.
+12. Define and pass tests in the exact pinned environment.
+13. Only then execute a human-authorized bounded change.
 
-A repository-aware contributor must produce `REPOSITORY_READ_RECEIPT` before editing.
+A repository-aware contributor must produce `REPOSITORY_READ_RECEIPT` before editing. A conversation-length trigger additionally requires `OPERATION_LENGTH_CONTINUITY_RECEIPT`.
 
 ## Meaning of 100% fact-checked
 
