@@ -213,6 +213,43 @@ git status --short
 
 Cline checkpoint comparison may be used for recovery, but no restore action is authorized until the exact checkpoint diff is inspected.
 
+### Verified local recovery state - 2026-07-22
+
+The earlier keyboard-incident state above is retained as historical evidence. The following local state was subsequently verified:
+
+```yaml
+classification: VERIFIED_LOCAL_NOT_REMOTE_PROOF
+local_repository: 'C:\Users\socia\Desktop\repo clone GALAX\galax-Ai-project'
+local_branch: implementation/foundation-agent-01
+pre_sync_local_head: 867f82ab0252b27c3f876d29901274140ef1b18c
+local_head_before_this_record_update: b5c837ae4ddeb11d532b1e0079cf13a5be376982
+remote_implementation_head: bafb230a995744743af5c0bdd612ad1e7c7568ae
+local_commits_preserved: 4
+CODE_RED_governance_commits_cherry_picked: 10
+local_commits_ahead_after_cherry_pick: 14
+cherry_pick_conflicts: 0
+safety_branch: safety/pre-code-red-sync-20260722
+safety_branch_head: 867f82ab0252b27c3f876d29901274140ef1b18c
+backup_path: 'C:\Users\socia\Desktop\GALAX_STAGE1_BACKUP_20260722_163127'
+CODE_RED_backup_path: 'C:\Users\socia\Desktop\CODE_RED_before_Stage5G.md'
+CODE_RED_backup_SHA256_match: true
+tracked_worktree_changes_before_this_record_edit: none
+untracked_files:
+  - src/galax/__init__.py
+  - src/galax/foundation/__init__.py
+  - src/galax/foundation/models.py
+src_galax_init_state: accepted_content_preserved
+foundation_init_state: accepted_content_preserved
+models_state: empty_0_bytes
+rejected_models_code_restored: false
+backup_hash_match_all_three_Phase_2A_files: true
+push_performed: false
+remote_implementation_updated: false
+main_write: false
+merge_performed: false
+deployment_performed: false
+```
+
 ## 8. Material action ledger
 
 ### `CR-001` — Active Foundation architecture selected
@@ -343,26 +380,53 @@ old_file_behavior: compatibility_redirect
 reason: one_clear_discoverable_state_and_recovery_entry_point
 ```
 
+### `CR-010` - Local recovery and governance synchronization
+
+```yaml
+date: 2026-07-22
+operation: local_state_recovery_and_governance_synchronization
+branch: implementation/foundation-agent-01
+pre_sync_local_head: 867f82ab0252b27c3f876d29901274140ef1b18c
+local_head_before_this_record_update: b5c837ae4ddeb11d532b1e0079cf13a5be376982
+remote_implementation_head: bafb230a995744743af5c0bdd612ad1e7c7568ae
+local_commits_preserved: 4
+governance_commits_cherry_picked: 10
+local_commits_ahead_after_cherry_pick: 14
+cherry_pick_conflicts: 0
+backup_created: true
+safety_branch_created: true
+untracked_Phase_2A_files_preserved: 3
+two_accepted_init_files_preserved: true
+models_file_state: empty_0_bytes
+rejected_models_code_restored: false
+backup_hash_comparison_passed: true
+push_performed: false
+remote_implementation_updated: false
+main_write: false
+merge_performed: false
+deployment_performed: false
+```
+
 ## 9. Current stage and exact next action
 
 ```yaml
-current_stage: LOCAL_STATE_RECOVERY_AND_CODE_RED_SYNCHRONIZATION_REQUIRED
+current_stage: CODE_RED_RECOVERY_RECORD_REVIEW_REQUIRED
 safe_to_continue_implementation: false
 next_allowed_action:
-  - obtain_exact_local_branch_HEAD_and_git_status
-  - inspect_Cline_checkpoint_diff_when_recovery_is_needed
-  - preserve_all_confirmed_local_commits
-  - do_not_restore_rejected_models_code
-  - plan_a_safe_fast_forward_or_cherry_pick_of_governance_updates_only_after_local_state_is_verified
+  - review_the_exact_CODE_RED_diff
+  - verify_only_docs_operations_CODE_RED_md_changed
+  - separately_authorize_commit_of_the_recovery_record
+  - verify_the_record_commit_before_Phase_2A_resume_precheck
 ```
 
 Prohibited now:
 
 ```text
-new models.py implementation
+Phase 2A models.py implementation
 validation.py creation
 test creation
-Ruff or pytest execution against unverified files
+Ruff or pytest execution for Phase 2A
+git commit without separate authorization
 git pull
 git sync
 git merge
@@ -374,7 +438,7 @@ main write
 workflow change
 merge
 deployment
-Agents 02–15
+Agents 02-15
 ```
 
 ## 10. Required record after every coherent job
@@ -524,18 +588,30 @@ CODE RED. Open GitHub repository ariessocia04-rgb/galax-Ai-project. Read README.
 
 ## 15. Current authorization boundary
 
-This CODE RED update authorizes documentation and continuity canonicalization on the research branch only.
+This local recovery job authorized and completed:
+
+```yaml
+read_only_local_state_verification: completed
+Phase_2A_src_backup_creation: completed
+CODE_RED_document_backup_creation: completed
+safety_branch_creation: completed
+remote_governance_fetch: completed
+governance_only_cherry_pick_to_local_implementation_branch: completed
+CODE_RED_record_edit: authorized_for_current_step
+```
 
 It does not authorize:
 
 ```yaml
-local_implementation_change: false
-implementation_branch_sync: false
+Phase_2A_implementation_change: false
+commit_of_this_CODE_RED_record: false
+remote_implementation_branch_update: false
 local_commit_publication: false
-push_of_reported_local_commits: false
+push_of_local_commits: false
 main_write: false
 merge: false
 deployment: false
+workflow_change: false
 LLM_profile_activation: false
 Agents_02_to_15: false
 production_ready_claim: false
