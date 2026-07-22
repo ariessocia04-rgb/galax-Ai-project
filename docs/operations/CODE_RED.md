@@ -407,26 +407,60 @@ merge_performed: false
 deployment_performed: false
 ```
 
+### `CR-011` - Phase 2A resume precheck passed
+
+```yaml
+date: 2026-07-22
+operation: Phase_2A_resume_precheck
+branch: implementation/foundation-agent-01
+verified_HEAD: 9a66670ec2dcb6a63b4cca58167278282a31247e
+remote_implementation_head: bafb230a995744743af5c0bdd612ad1e7c7568ae
+local_commits_ahead: 15
+tracked_worktree_changes: none
+untracked_Phase_2A_files: 3
+src_galax_init_length: 59
+src_galax_init_backup_hash_match: true
+foundation_init_length: 26
+foundation_init_backup_hash_match: true
+models_file_length: 0
+models_file_SHA256: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+models_file_backup_hash_match: true
+rejected_models_code_present: false
+Phase_2A_resume_precheck: PASS
+push_performed: false
+remote_implementation_updated: false
+main_write: false
+merge_performed: false
+deployment_performed: false
+```
+
 ## 9. Current stage and exact next action
 
 ```yaml
-current_stage: CODE_RED_RECOVERY_RECORD_REVIEW_REQUIRED
-safe_to_continue_implementation: false
+current_stage: PHASE_2A_MODELS_PROPOSAL_REVIEW_REQUIRED
+safe_to_continue_implementation: true
 next_allowed_action:
-  - review_the_exact_CODE_RED_diff
-  - verify_only_docs_operations_CODE_RED_md_changed
-  - separately_authorize_commit_of_the_recovery_record
-  - verify_the_record_commit_before_Phase_2A_resume_precheck
+  - Cline_reads_the_approved_Phase_2A_contracts
+  - Cline_proposes_src_galax_foundation_models_py_only
+  - ChatGPT_reviews_the_complete_models_py_proposal
+  - human_selects_Save_or_Reject
 ```
 
 Prohibited now:
 
 ```text
-Phase 2A models.py implementation
+modification of src/galax/__init__.py
+modification of src/galax/foundation/__init__.py
 validation.py creation
 test creation
-Ruff or pytest execution for Phase 2A
-git commit without separate authorization
+Flow runtime implementation
+Agent runtime implementation
+RepositoryPreflightTool implementation
+terminal commands
+Ruff execution
+pytest execution
+git add
+git commit
 git pull
 git sync
 git merge
@@ -436,7 +470,6 @@ git clean
 git push
 main write
 workflow change
-merge
 deployment
 Agents 02-15
 ```
@@ -588,23 +621,27 @@ CODE RED. Open GitHub repository ariessocia04-rgb/galax-Ai-project. Read README.
 
 ## 15. Current authorization boundary
 
-This local recovery job authorized and completed:
+The verified Phase 2A resume precheck authorizes:
 
 ```yaml
-read_only_local_state_verification: completed
-Phase_2A_src_backup_creation: completed
-CODE_RED_document_backup_creation: completed
-safety_branch_creation: completed
-remote_governance_fetch: completed
-governance_only_cherry_pick_to_local_implementation_branch: completed
-CODE_RED_record_edit: authorized_for_current_step
+read_only_contract_and_plan_review: true
+models_py_proposal_by_Cline: true
+models_py_complete_diff_review: true
+human_Save_or_Reject_decision: true
 ```
 
 It does not authorize:
 
 ```yaml
-Phase_2A_implementation_change: false
-commit_of_this_CODE_RED_record: false
+automatic_models_py_save: false
+accepted_init_file_modification: false
+validation_py_creation: false
+test_creation: false
+terminal_command_execution: false
+Ruff_execution: false
+pytest_execution: false
+git_add: false
+git_commit: false
 remote_implementation_branch_update: false
 local_commit_publication: false
 push_of_local_commits: false
