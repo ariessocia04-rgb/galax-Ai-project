@@ -1,7 +1,7 @@
 # ChatGPT + Cline + GitHub Draft PR Execution Control Plan
 
 **Status:** `ACTIVE_CANONICAL_CONTROL_PLAN`  
-**Verified:** 2026-07-22  
+**Verified:** `2026-07-22`  
 **Scope:** Galax Governance Foundation and Agent 01 only  
 **Framework target:** CrewAI `1.15.4`  
 **Production approval:** No  
@@ -27,12 +27,10 @@ No contributor may invent a different workflow, bypass this plan, or act only fr
 
 ## 2. Mandatory authority order
 
-Every AI contributor must obey the repository in this order:
-
 ```text
 README.md
 → AGENTS.md
-→ docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md
+→ docs/operations/CODE_RED.md
 → canonical conflict audit and alias target
 → docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md
 → docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
@@ -42,6 +40,8 @@ README.md
 → current GitHub branch, PR, issue, test, and evidence state
 ```
 
+`docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md` is a compatibility redirect only.
+
 An AI must stop with a factual blocker when any higher-priority instruction conflicts with a lower-priority instruction.
 
 Old chat memory, an old summary, or an AI-generated guess cannot override repository evidence.
@@ -50,6 +50,7 @@ Old chat memory, an old summary, or an AI-generated guess cannot override reposi
 
 ```yaml
 repo_first: required
+CODE_RED_reconstruction: required_when_triggered
 vague_assignment: prohibited
 self_authorization: prohibited
 out_of_plan_work: prohibited
@@ -67,7 +68,7 @@ Agents_02_to_15: prohibited
 
 Every AI must execute only an assignment that exists in the repository or in an exact human-authorized GitHub assignment linked to the repository plan.
 
-No AI may treat “helpful improvement,” “cleanup,” “best practice,” “refactor,” or “future-proofing” as authorization to change files that are outside the exact plan.
+No AI may treat `helpful improvement`, `cleanup`, `best practice`, `refactor`, or `future-proofing` as authorization to change files outside the exact plan.
 
 ## 4. Role boundaries
 
@@ -77,16 +78,17 @@ ChatGPT is the repository-aware architect, task author, fact checker, compatibil
 
 ChatGPT must:
 
-1. Open and inspect the repository before giving any implementation, correction, or review instruction.
-2. Read the current plan, rules, branch state, active draft PR, assignment issue, and relevant evidence.
+1. Open and inspect the repository before giving any implementation, correction, cleanup, deletion, or review instruction.
+2. Read README, AGENTS, CODE RED, the current plan, rules, branch state, active draft PR, assignment issue, and relevant evidence.
 3. Verify version-sensitive facts against authoritative current sources before changing a CrewAI-dependent contract.
 4. Write instructions in specific machine-oriented language when ordinary prose could be ambiguous.
-5. Give Cline only one bounded assignment or one coherent stage at a time.
+5. Give Cline only one bounded assignment or coherent stage at a time.
 6. Name exact allowed files, prohibited files, allowed commands, prohibited commands, required tests, stop conditions, and expected output.
 7. Inspect every completed coherent job through the exact GitHub draft PR diff before marking that job accepted.
-8. Deeply analyze the result for compatibility with the pinned CrewAI version and the active Galax Flow contract.
-9. Reject any implementation not authorized by the repository plan.
+8. Deeply analyze the result for compatibility with the pinned CrewAI version and active Galax Flow contract.
+9. Reject any implementation or cleanup absent from the repository plan.
 10. Return an explicit review receipt: `PASS`, `CHANGES_REQUIRED`, or `BLOCKED`.
+11. Update CODE RED when a material stage, decision, blocker, accepted artifact, rejection, or cleanup state changes.
 
 ChatGPT must not claim to have inspected local Cline work that has not been published to the authorized remote branch or otherwise supplied as exact evidence.
 
@@ -96,16 +98,16 @@ Cline is the sole primary local writer for the active implementation worktree.
 
 Cline must:
 
-1. Read `README.md`, `AGENTS.md`, `.clinerules/00-galax-governance.md`, this plan, and the exact assignment before proposing an edit.
+1. Read `README.md`, `AGENTS.md`, `.clinerules/00-galax-governance.md`, `docs/operations/CODE_RED.md`, this plan, and the exact assignment before proposing an edit.
 2. Start in Plan mode unless the exact current assignment already contains a separately accepted Act authorization.
 3. Return `REPOSITORY_READ_RECEIPT` before any edit.
-4. Use only the exact allowed paths and commands.
+4. Use only exact allowed paths and commands.
 5. Stop after the assigned file, repair, or coherent stage is complete.
-6. Never continue into validation, commit, push, another file, or another phase unless separately authorized.
+6. Never continue into validation, commit, push, another file, another phase, or cleanup unless separately authorized.
 7. Keep auto-approval and YOLO disabled.
 8. Keep browser and MCP disabled unless an exact named capability is separately authorized.
 9. Preserve completed accepted work and never delete, rename, overwrite, restore, or refactor it without an explicit change authorization.
-10. Return actual files changed, commands run, tests, blockers, and evidence. Narrative claims are not proof.
+10. Return actual files changed, files deleted, commands run, tests, blockers, evidence, and CrewAI compatibility. Narrative claims are not proof.
 
 ### 4.3 Human owner
 
@@ -114,15 +116,18 @@ The human owner retains final authority for:
 ```yaml
 scope: human_only
 Act_mode: human_only
+local_restore: human_only
+accepted_artifact_unlock: human_only
 commit: human_only
 push: human_only
 architecture_acceptance: human_only
+cleanup_acceptance: human_only
+deletion: human_only
 risk_acceptance: human_only
 PR_approval: human_only
 merge: human_only
 deployment: human_only
 credentials: human_only
-unlocking_accepted_work: human_only
 ```
 
 ### 4.4 Other external contributors
@@ -135,7 +140,7 @@ Only one contributor may write to the active implementation worktree at a time.
 
 ## 5. Machine-oriented assignment language
 
-ChatGPT must use the following schema for Cline and other AI contributors whenever implementation, repair, or review is authorized.
+ChatGPT must use this schema whenever implementation, repair, cleanup, deletion, or review is authorized:
 
 ```yaml
 GALAX_AI_ASSIGNMENT_V1:
@@ -154,7 +159,10 @@ GALAX_AI_ASSIGNMENT_V1:
   objective: <ONE_EXACT_OBJECTIVE>
 
   required_reading:
-    - <EXACT_PATH>
+    - README.md
+    - AGENTS.md
+    - docs/operations/CODE_RED.md
+    - <OTHER_EXACT_PATH>
 
   allowed_paths:
     - <EXACT_PATH_OR_NARROW_GLOB>
@@ -193,10 +201,14 @@ GALAX_AI_ASSIGNMENT_V1:
     - path_not_allowlisted
     - failed_required_test
     - missing_evidence
+    - accepted_artifact_without_unlock
+    - cleanup_candidate_not_proven
 
   required_output:
+    - CODE_RED_receipt_when_triggered
     - repository_read_receipt
     - exact_files_changed
+    - exact_files_deleted
     - exact_diff_summary
     - commands_run
     - tests_passed
@@ -215,7 +227,7 @@ Cline must not infer omitted permissions.
 ## 6. Exact movement of work
 
 ```text
-STAGE 0 — ChatGPT reconstructs repository truth
+STAGE 0 — ChatGPT reconstructs repository truth through CODE RED
 STAGE 1 — ChatGPT issues one exact bounded assignment
 STAGE 2 — Cline returns REPOSITORY_READ_RECEIPT and plan
 STAGE 3 — Human accepts or rejects the plan
@@ -225,10 +237,10 @@ STAGE 6 — Cline runs only separately authorized validation commands
 STAGE 7 — Human authorizes a coherent local commit
 STAGE 8 — Human separately authorizes push to the implementation branch
 STAGE 9 — Draft PR updates with the exact remote diff
-STAGE 10 — ChatGPT inspects the exact PR diff, repository rules, tests, and CrewAI compatibility
+STAGE 10 — ChatGPT inspects the exact PR diff, repository rules, tests, cleanup effects, accepted-work preservation, and CrewAI compatibility
 STAGE 11 — ChatGPT returns PASS, CHANGES_REQUIRED, or BLOCKED
 STAGE 12 — Human accepts the stage or authorizes one exact correction
-STAGE 13 — Accepted files and stage are recorded as locked
+STAGE 13 — Accepted files and stage are recorded as LOCKED_ACCEPTED in CODE RED
 ```
 
 A job is not `DONE` merely because Cline created a file locally.
@@ -243,6 +255,7 @@ push_authorized_by_human: true
 draft_PR_diff_available: true
 ChatGPT_exact_diff_review: PASS
 human_stage_acceptance: true
+CODE_RED_updated: true
 ```
 
 ## 7. Draft PR review contract
@@ -265,6 +278,7 @@ required_tests_and_real_results: required
 security_and_secret_risk: required
 unsupported_claims: required
 completed_work_preservation: required
+cleanup_and_reference_integrity: required_when_applicable
 ```
 
 ChatGPT review output:
@@ -279,10 +293,12 @@ GALAX_CHATGPT_REVIEW_RECEIPT_V1:
   plan_alignment: PASS | FAIL | BLOCKED
   CrewAI_compatibility: PASS | FAIL | BLOCKED
   architecture_compatibility: PASS | FAIL | BLOCKED
+  cleanup_integrity: PASS | FAIL | NOT_APPLICABLE | BLOCKED
   tests_verified: []
   tests_missing: []
   unauthorized_changes: []
   regressions: []
+  broken_references: []
   blockers: []
   exact_required_corrections: []
   accepted_files: []
@@ -291,13 +307,13 @@ GALAX_CHATGPT_REVIEW_RECEIPT_V1:
   next_allowed_action:
 ```
 
-ChatGPT must not mark `PASS` when the exact diff, required test evidence, or pinned compatibility evidence is unavailable.
+ChatGPT must not mark `PASS` when the exact diff, required test evidence, pinned compatibility evidence, or required cleanup proof is unavailable.
 
 ## 8. Completed-work protection
 
 A completed accepted file or stage must not be casually changed or deleted.
 
-Each accepted item must be recorded with:
+Each accepted item must be recorded in CODE RED with:
 
 ```yaml
 GALAX_ACCEPTED_ARTIFACT_V1:
@@ -338,26 +354,60 @@ GALAX_ACCEPTED_ARTIFACT_CHANGE_V1:
 
 Without this contract, an accepted file must be treated as read-only.
 
-Deleting accepted work is prohibited unless the repository contains an explicit deletion plan, reference reconciliation, recovery proof, tests, ChatGPT review, and human approval.
+## 9. Repository cleanup contract
 
-## 9. Cline instruction quality rules
+Cleanup is a separate bounded task. It is never implied by implementation work.
+
+Every file must be classified as:
+
+```text
+ACTIVE_CANONICAL
+ACTIVE_OPERATIONAL
+HISTORICAL_EVIDENCE
+COMPATIBILITY_REDIRECT
+EXACT_DUPLICATE_CANDIDATE
+STALE_CONFLICT_CANDIDATE
+UNREFERENCED_GENERATED_JUNK
+```
+
+Required cleanup procedure:
+
+```text
+inventory all files
+→ identify purpose, authority, owner, and references
+→ prove normalized exact duplicate or genuinely unreferenced generated junk
+→ select one canonical record
+→ migrate all references
+→ preserve unique evidence
+→ run checks
+→ produce exact deletion candidate report
+→ obtain human deletion authorization
+→ delete only authorized files
+→ verify no broken references
+→ record the deletion in CODE RED
+```
+
+No file is useless merely because it is old, verbose, declined, historical, or superseded.
+
+## 10. Cline instruction quality rules
 
 To make Cline follow instructions more reliably:
 
-1. Keep durable project rules in `.clinerules/` and `AGENTS.md`.
-2. Use exact file paths, not phrases such as “the models file.”
+1. Keep durable rules in `.clinerules/`, `AGENTS.md`, and CODE RED.
+2. Use exact file paths.
 3. Give one bounded objective at a time.
-4. Separate Plan authorization from Act authorization.
+4. Separate Plan, Act, validation, commit, push, cleanup, and deletion authorization.
 5. State prohibitions as explicit actions and paths.
 6. Require a fixed output contract.
 7. Require Cline to stop after the assigned objective.
-8. Never combine file creation, broad refactoring, testing, commit, and push in one vague instruction.
+8. Never combine file creation, broad refactoring, cleanup, testing, commit, and push in one vague instruction.
 9. Require exact SHA and branch verification before mutation.
 10. Repeat critical architecture invariants inside the exact assignment.
+11. Require CODE RED reconstruction whenever state is uncertain or the owner triggers it.
 
-This plan uses structured AI-to-AI language to reduce ambiguity. It is not a hidden language and does not grant additional authority.
+This structured AI-to-AI language reduces ambiguity. It is not a hidden language and grants no additional authority.
 
-## 10. CrewAI compatibility gate
+## 11. CrewAI compatibility gate
 
 The development-control workflow is external to CrewAI and does not modify CrewAI runtime semantics by itself.
 
@@ -375,7 +425,7 @@ HumanReviewRequest: deterministic_Python_Pydantic
 Agents_02_to_15: disabled
 ```
 
-Every implementation result must be checked against the pinned environment:
+Every result must be checked against:
 
 ```yaml
 python: ">=3.10,<3.14"
@@ -387,9 +437,9 @@ ruff: "0.15.1"
 
 Current online CrewAI documentation may describe features newer than `1.15.4`. A feature is not authorized merely because it exists in current documentation. It must be verified in the pinned environment and aligned with the active Flow contract.
 
-CrewAI must not be used to control Cline while the Galax Foundation itself is incomplete. That would create a circular trust dependency.
+CrewAI must not control Cline while the Galax Foundation itself is incomplete. That would create a circular trust dependency.
 
-## 11. Current simplification decision
+## 12. Current simplification decision
 
 ```yaml
 Cline_bridge: deferred
@@ -405,9 +455,9 @@ reason:
   - human_control_preserved
 ```
 
-Cline built-in rules, manual approvals, checkpoints, Git commits, the implementation branch, and the existing draft PR are sufficient for the current controlled stage.
+Cline built-in rules, manual approvals, checkpoints, Git commits, implementation branch, draft PR, ChatGPT review, and CODE RED are sufficient for the current controlled stage.
 
-## 12. Non-negotiable stop conditions
+## 13. Non-negotiable stop conditions
 
 Stop with a factual blocker when any of these are true:
 
@@ -416,9 +466,11 @@ repository or branch mismatch
 unexpected HEAD SHA
 working tree contains unexplained changes
 required repository record is missing
+CODE RED reconstruction is incomplete
 assignment is vague or incomplete
 requested file is outside the plan
 accepted artifact would be altered without unlock authorization
+cleanup candidate is not proven safe
 CrewAI feature compatibility is unverified
 required command or test is not allowlisted
 required test fails
@@ -429,21 +481,9 @@ commit or push lacks separate human authorization
 
 No blocked stage may continue to the next successful stage.
 
-## 13. Official-source basis
-
-The control method is based on currently documented platform capabilities:
-
-- Cline persistent workspace rules and `AGENTS.md` support.
-- Cline checkpoints for restoring project changes while preserving the task context.
-- GitHub draft pull requests as reviewable proposed changes.
-- GitHub protected-branch and required-status-check controls.
-- CrewAI Flows for deterministic runtime orchestration, state, routing, persistence, and resumability.
-
-These platform capabilities support the method. They do not guarantee AI correctness. Deterministic checks, exact diffs, evidence, ChatGPT review, and human acceptance remain required.
-
 ## 14. Current authorization boundary
 
-This document updates contributor coordination and review procedure only.
+This document controls contributor coordination and review only.
 
 It does not authorize:
 
@@ -452,6 +492,7 @@ implementation_file_change: false
 implementation_branch_publication: false
 commit_of_local_unpushed_work: false
 push_of_local_unpushed_work: false
+cleanup_deletion: false
 merge: false
 deployment: false
 LLM_profile_activation: false
