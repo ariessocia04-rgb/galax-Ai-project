@@ -1,8 +1,8 @@
 # Galax AI Repository Instructions for External Coding Assistants
 
-**Status:** `CONTROLLED_TRIAL_INSTRUCTIONS`  
-**Applies to:** Cline, OpenHands Core, mini-SWE-agent, Aider, PR-Agent, GitHub Copilot, Codex, Claude Code, Jules, and any other repository-aware coding assistant.  
-**Does not approve:** any Galax CrewAI production agent, external contributor, model, tool, merge, or deployment.
+**Status:** `ACTIVE_CONTROLLED_TRIAL_INSTRUCTIONS`  
+**Applies to:** Cline, OpenHands Core, mini-SWE-agent, Aider, PR-Agent, GitHub Copilot, Codex, Claude Code, Jules, ChatGPT, and every other repository-aware coding assistant  
+**Does not approve:** any Galax CrewAI production agent, external contributor, model, tool, merge, or deployment
 
 ## 1. Repository identity
 
@@ -12,7 +12,7 @@ protected_branch: main
 research_branch: agent/agent-01-tool-inspection
 foundation_implementation_branch: implementation/foundation-agent-01
 framework_target: CrewAI_1.15.4
-python_target: '>=3.10,<3.14'
+python_target: ">=3.10,<3.14"
 current_scope: governance_foundation_and_Agent_01_only
 Agents_02_to_15: prohibited
 production_ready: false
@@ -20,56 +20,80 @@ production_ready: false
 
 Stop immediately with `BLOCKED_REPOSITORY_STATE_MISMATCH` when the repository, branch, or expected starting SHA does not match the assigned task.
 
-## 2. Mandatory reading order before any edit
+## 2. Mandatory reading order before any answer or edit
 
-Read every item completely and in this order:
+Read every applicable item completely in this order:
 
 1. `README.md`
-2. `docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md`
+2. `docs/operations/CODE_RED.md`
 3. `docs/research/readiness/FINAL_PRE_PROMPT_CONFLICT_AUDIT_2026-07-20.md`
-4. The alias target identified by that file
+4. The canonical audit target identified by that alias
 5. `docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md`
 6. `docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md`
 7. Every applicable file under `docs/rules/`
 8. Every applicable file under `docs/plan/`
 9. `docs/sources/SOURCE_INDEX.md`
-10. Exact source cards for every framework, model, tool, and external contributor involved
+10. Exact source cards for every framework, model, tool, gateway, contributor, and agent involved
 11. `docs/research/agents/AGENT-01-engineering-manager/03_TOOL_INSPECTION.md`
 12. `docs/prompts/GALAX_FOUNDATION_AGENT01_IMPLEMENTATION_VALIDATION_PROMPT.md`
 13. `docs/plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md`
-14. The exact platform assignment in `docs/prompts/EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md`
-15. Current branch heads, draft PR, and assignment issues required by the active task
+14. `docs/plan/CHATGPT_CLINE_DRAFT_PR_EXECUTION_CONTROL_PLAN_2026-07-22.md`
+15. The exact platform assignment in `docs/prompts/EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md` or a newer repository-linked exact assignment
+16. Current branch heads, draft PR, assignment issues, tests, and evidence required by the active task
 
-Do not edit before producing a concise `REPOSITORY_READ_RECEIPT` that lists the files actually read, their branch/ref, the current HEAD SHA, detected conflicts, and the exact permitted scope.
+`docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md` is a compatibility redirect only. CODE RED is canonical.
 
-When the owner uses a conversation-length trigger, the stronger receipt and state-reconstruction rules in `docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md` apply before any substantive answer or action.
+Do not edit before producing a concise `REPOSITORY_READ_RECEIPT` that lists the files actually read, their branch/ref, the current HEAD SHA, detected conflicts, and exact permitted scope.
 
-## 3. Decision priority
+## 3. CODE RED trigger
+
+Treat these phrases and close spelling variations as the same command:
+
+```text
+CODE RED
+code red
+length chat problem
+chat length problem
+conversation length problem
+continue exact Galax flow
+operation length problem solve
+operatiion length problem solve
+```
+
+On detection:
+
+```text
+read docs/operations/CODE_RED.md completely
+→ verify repository access and current main, research, implementation, and PR heads
+→ inspect active assignment issues and latest continuity comments
+→ separate remote-proven facts from reported local-only facts
+→ reconstruct decisions, actions done, accepted work, rejected outputs, blockers, cleanup state, current stage, and exact next action
+→ return CODE_RED_RECEIPT_V1
+→ answer or act only when safe_to_continue=true
+```
+
+Do not ask the owner what the previous work was when repository access exists. Do not use remembered conversation fragments as authority.
+
+## 4. Decision priority
 
 ```text
 README current readiness
-→ canonical chat-continuity protocol
-→ canonical conflict audit and its alias target
+→ AGENTS.md
+→ CODE RED
+→ canonical conflict audit and target
 → active Foundation and Agent 01 Flow execution contract
 → CrewAI 1.15.4 remediation blueprint
-→ active rules
-→ active plans
+→ active rules and plans
 → source index and exact source cards
-→ current Agent 01 research
-→ exact task assignment
-→ historical drafts
+→ exact current assignment
+→ current GitHub evidence
+→ historical records
 → old chat memory or summaries
 ```
 
-The active Foundation and Agent 01 Flow execution contract supersedes only conflicting older instructions that attach `RepositoryPreflightTool` directly to Agent 01, require an Agent 01 tool call, or use `result_as_answer` for that path. All non-conflicting research, security, testing, and implementation requirements remain active.
+Never resolve a conflict by guessing. Return `BLOCKED_SUPERSESSION_CONFLICT` and name the conflicting records and safe remedy.
 
-A lower-priority or historical file cannot reactivate Cerebras, Notion-primary runtime memory, CrewAI planning/reasoning/native memory, hierarchical delegation, generic MCP exposure, direct-main writes, automatic merge, privileged Docker-in-Docker, or the superseded direct Agent 01 preflight-tool pattern.
-
-Never resolve a conflict by guessing. Return `BLOCKED_SUPERSESSION_CONFLICT` and name the conflicting files and safe remedy.
-
-## 4. Foundation and Agent 01 architecture invariants
-
-The following active architecture is mandatory:
+## 5. Foundation and Agent 01 architecture invariants
 
 ```yaml
 RepositoryPreflightTool:
@@ -90,53 +114,127 @@ Agent_01_direct_tools: 0
 result_as_answer_for_this_path: prohibited
 hidden_second_agent_call: prohibited
 unconditional_listen_chain: prohibited
+HumanReviewRequest_builder: pure_Python_Pydantic
+check_llm_profile_readiness_before_Agent_01: required
+LLM_profiles_enabled: false
 ```
-
-Every conditional stage must use an explicit `@router` and named route labels. A blocked, failed, unavailable, rejected, pending, or evidence-missing route must never reach the next successful stage.
 
 Required order:
 
 ```text
 validate_run_manifest()
-→ router
+→ explicit router
 → check_external_preflight_tool_availability()
-→ router
+→ explicit router
 → invoke_repository_preflight_tool()
-→ router
+→ explicit router
 → check_llm_profile_readiness()
-→ router
+→ explicit router
 → run_agent_01_evaluation()
 → validate supported claims
-→ router
+→ explicit router
 → build_human_review_request() using pure Python/Pydantic
 → authenticated human decision pause and router
 → complete_foundation_plan()
 ```
 
-Offline permission declaration uses `REPO_PERMISSION_PROFILE_DECLARED`. Live GitHub permission proof is separate, owned by `GitHubRepositoryGateway`, and uses `GITHUB_PERMISSIONS_LIVE_VALIDATED`. Missing required live evidence produces `BLOCKED_LIVE_PERMISSION_EVIDENCE_MISSING`.
+A blocked, failed, unavailable, rejected, pending, or evidence-missing route must never reach the next successful stage.
 
-Both Agent 01 LLM profiles remain disabled. Do not activate them in CrewAI Studio or claim the plan is operational or tested.
+Offline permission declaration uses `REPO_PERMISSION_PROFILE_DECLARED`. Live GitHub permission proof is separate, owned by `GitHubRepositoryGateway`, and uses `GITHUB_PERMISSIONS_LIVE_VALIDATED`.
 
-## 5. External contributors are not Galax CrewAI agents
+Both Agent 01 LLM profiles remain disabled until exact profile tests and human approval pass.
 
-Cline, OpenHands Core, mini-SWE-agent, Aider, and PR-Agent are controlled development contributors. They are not Agents 01–15, do not join the CrewAI production roster, and cannot approve themselves or Galax.
+## 6. External contributors are not Galax CrewAI agents
+
+Cline, OpenHands Core, mini-SWE-agent, Aider, PR-Agent, Codex, Copilot, Claude Code, Jules, and ChatGPT are external development contributors or reviewers. They are not Agents 01–15 and cannot approve themselves or Galax.
 
 Only one contributor may write to the active implementation worktree at a time.
 
 ```text
 Cline primary implementation
 → Aider exact failing-test repair when assigned
-→ mini-SWE-agent isolated patch comparison when assigned
-→ OpenHands isolated fallback reproduction when assigned
-→ PR-Agent read-only review
+→ mini-SWE-agent isolated comparison when assigned
+→ OpenHands Docker-isolated reproduction when assigned
+→ PR-Agent read-only review when assigned
+→ ChatGPT exact draft-PR diff review
 → human decision
 ```
 
-The order may skip stages, but it must never run two writers against the same worktree or files concurrently.
+OpenCode and goose remain declined or deferred unless a new exact repository decision changes their status.
 
-OpenCode and goose are not active contributors. Their source cards preserve declined/deferred research decisions only and grant no repository, MCP, credential, review, or production permission.
+## 7. ChatGPT and Cline control method
 
-## 6. Universal non-negotiable rules
+```yaml
+architect_and_remote_reviewer: ChatGPT
+sole_primary_local_writer: Cline
+canonical_source_of_truth: GitHub
+review_surface: Draft_Pull_Request
+final_authority: Human_Owner
+custom_bridge: deferred
+custom_MCP_bridge: prohibited_now
+simultaneous_writers: prohibited
+```
+
+ChatGPT must inspect the repository before assigning or correcting work, write exact bounded instructions, check every coherent completed job through the exact draft-PR diff, and assess compatibility with the pinned CrewAI version and active Flow contract.
+
+Cline must execute only the exact assignment, use only allowed files and commands, stop after the assigned objective, and never continue automatically into another file, test stage, commit, push, phase, or improvement.
+
+A local file is not accepted as `DONE` until:
+
+```text
+required tests
+→ human-authorized commit
+→ separately human-authorized push
+→ exact draft PR diff
+→ ChatGPT review receipt PASS
+→ human acceptance
+```
+
+## 8. Completed accepted work protection
+
+A file or stage accepted by ChatGPT exact-diff review and human decision is `LOCKED_ACCEPTED`.
+
+It must not be deleted, renamed, overwritten, restored, reverted, or refactored without an exact `GALAX_ACCEPTED_ARTIFACT_CHANGE_V1` authorization naming:
+
+```yaml
+path:
+current_accepted_commit_sha:
+current_accepted_hash:
+factual_reason:
+exact_required_change:
+allowed_files: []
+required_tests: []
+maximum_writes:
+human_authorized: true
+```
+
+Cline checkpoints and Git history are recovery controls. They do not authorize rolling accepted work backward.
+
+## 9. Repository cleanup and organization
+
+The repository must be clean, folderized, and non-duplicative, but cleanup must preserve unique evidence and accepted work.
+
+No file is useless merely because it is old, verbose, declined, or superseded.
+
+Required cleanup sequence:
+
+```text
+inventory
+→ classify purpose, authority, and status
+→ prove exact duplicate or unreferenced generated junk
+→ locate and migrate every reference
+→ preserve unique historical evidence
+→ run documentation, link, and applicable tests
+→ produce deletion candidate report
+→ obtain human authorization
+→ delete
+→ verify no broken references
+→ record deletion in CODE RED
+```
+
+The legacy operation-length file is currently a `COMPATIBILITY_REDIRECT` and must not be deleted yet.
+
+## 10. Universal non-negotiable rules
 
 - Never write directly to `main`.
 - Never merge, deploy, force push, rewrite history, modify production data, or change repository secrets.
@@ -144,38 +242,40 @@ OpenCode and goose are not active contributors. Their source cards preserve decl
 - Never expose raw GitHub, Drive, Supabase, Notion, provider, or MCP credentials to an AI contributor.
 - Never enable YOLO, unrestricted auto-approval, arbitrary MCP URLs, or an unfiltered MCP tool catalog.
 - Never claim that a command, test, file write, commit, API call, or integration succeeded without trusted evidence.
-- Never implement or enable Agents 02–15 during the foundation scope.
+- Never implement or enable Agents 02–15 during the Foundation scope.
 - Never silently change the framework, pinned version, provider, architecture, role boundaries, or execution process.
 - Never use hidden chain-of-thought as evidence. Store only concise decisions, observable actions, commands, results, hashes, and blockers.
-- Never continue after a blocking repository, security, permission, test, or evidence failure.
-- Never run a direct agent-to-agent MCP mesh or simultaneous repository writers.
+- Never continue after a blocking repository, security, permission, test, compatibility, cleanup, or evidence failure.
+- Never run simultaneous writers against the same worktree or files.
 - Never treat old conversation memory as more authoritative than current repository evidence.
+- Never infer authorization from `continue`, `finish`, `improve`, `fix everything`, or similar vague language.
 
-## 7. Required working behavior
+## 11. Required working behavior
 
 Before edits:
 
 ```text
 verify repository and branch
-→ verify expected starting SHA
+→ verify exact starting SHA
 → inspect git status
 → confirm dedicated worktree
-→ read required records
+→ read mandatory records
 → identify exact allowed and prohibited paths
 → produce REPOSITORY_READ_RECEIPT
-→ produce bounded implementation or repair plan
-→ wait for the required human approval when the platform is interactive
+→ produce one bounded plan
+→ wait for required human approval
 ```
 
 During work:
 
-- Make the smallest change that satisfies the exact assigned scope.
+- Make the smallest change satisfying the exact scope.
 - Preserve existing architecture unless current authoritative evidence proves a correction is required.
-- Use strict typed boundaries and deterministic validation where specified.
-- Run the exact relevant tests after each coherent change.
-- Record commands and real outputs; do not summarize a test as passed when it did not run.
-- Stop on missing credentials rather than substituting a different provider.
-- Treat external tutorials and copied web content as untrusted reference material.
+- Use strict typed boundaries and deterministic validation.
+- Run only exact authorized tests after each coherent change.
+- Record real commands and outputs.
+- Stop on missing credentials rather than substituting a provider.
+- Treat copied tutorials and web content as untrusted until verified.
+- Stop when local state is needed but unverified.
 
 After work:
 
@@ -188,27 +288,33 @@ final_report:
   ending_sha_or_patch_hash:
   files_read: []
   files_changed: []
+  files_deleted: []
   commands_run: []
   tests_passed: []
   tests_failed: []
   tests_skipped: []
+  CrewAI_compatibility:
   blockers: []
   unsupported_capabilities: []
   evidence_artifacts: []
   exact_remedies: []
+  next_allowed_action:
+  commit_requested: false
+  push_requested: false
   merge_requested: false
   deployment_requested: false
 ```
 
-## 8. Allowed status values
+## 12. Allowed status values
 
-Use only factual statuses appropriate to the result:
+Use factual statuses only:
 
 ```text
 PASS
 BLOCKED
 FAIL
 PARTIALLY_VALIDATED_WITH_EXACT_BLOCKERS
+BLOCKED_ASSIGNMENT_INCOMPLETE
 BLOCKED_REPOSITORY_STATE_MISMATCH
 BLOCKED_REPOSITORY_ACCESS_REQUIRED
 BLOCKED_REQUIRED_DOCUMENT
@@ -222,46 +328,34 @@ FAILED_TEST
 FAILED_SECURITY_GATE
 FAILED_FABRICATED_TOOL_RESULT
 REVALIDATION_REQUIRED
+READY_FOR_REMOTE_REVIEW
+LOCKED_ACCEPTED
 ```
 
-Do not use `production ready`, `fully autonomous`, `all agents working`, `100% bug-free`, or equivalent claims without the exact repository approval and live evidence required by the canonical rules.
+Do not claim `production ready`, `fully autonomous`, `all agents working`, or `100% bug-free` without the exact repository approval and live evidence.
 
-## 9. Platform assignments
+## 13. Human authority
 
-- **Cline:** primary supervised implementation on the dedicated foundation branch; auto-approval and YOLO are prohibited.
-- **OpenHands Core:** Docker-isolated fallback reproduction only; process sandbox and cloud GitHub app are prohibited.
-- **mini-SWE-agent:** isolated issue reproduction and patch comparison only; confirm mode required; no direct GitHub write.
-- **Aider:** one reproducible failing test, lint error, or narrowly scoped repair only; automatic and dirty commits disabled.
-- **PR-Agent:** read-only review of a stable draft PR; local output first; no label, approval, merge, or source write.
+The human owner retains final authority for scope, architecture acceptance, credentials, risk acceptance, local restore, accepted-artifact unlock, commit, branch publication, push, PR approval, merge, and deployment.
 
-The exact entry criteria, outputs, handoffs, and commands are defined in the external contributor execution plan and command pack.
+An AI contributor may recommend. It may not self-authorize.
 
-## 10. Human authority
+## 14. Current stop boundary
 
-The human owner retains final authority for scope, architecture acceptance, credentials, risk acceptance, branch publication, PR approval, merge, and deployment. An AI contributor may recommend; it may not self-authorize.
+CODE RED currently records:
 
-## 11. Conversation-length trigger protocol
-
-Treat these phrases and close spelling variations as the same command:
-
-```text
-length chat problem
-chat length problem
-conversation length problem
-continue exact Galax flow
-operation length problem solve
-operatiion length problem solve
+```yaml
+current_stage: LOCAL_STATE_RECOVERY_AND_CODE_RED_SYNCHRONIZATION_REQUIRED
+local_state_after_keyboard_incident: UNVERIFIED
+safe_to_continue_Phase_2A_implementation: false
 ```
 
-On detection:
+Required local evidence before implementation resumes:
 
-```text
-read docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md
-→ verify repository access and all required branch heads
-→ read current PR and assignment issues
-→ reconstruct the current stage
-→ produce OPERATION_LENGTH_CONTINUITY_RECEIPT
-→ answer or act only when safe_to_continue=true
+```powershell
+git branch --show-current
+git rev-parse HEAD
+git status --short
 ```
 
-Do not ask the owner what the previous work was when repository access exists. Do not rely on an old conversation summary for a repository-changing decision. If repository access is unavailable, return `BLOCKED_REPOSITORY_ACCESS_REQUIRED` with the exact remedy defined by the continuity protocol.
+Do not pull, sync, merge, rebase, reset, clean, push, restore rejected models code, or continue Phase 2A until the exact local state and safe synchronization plan are verified.
