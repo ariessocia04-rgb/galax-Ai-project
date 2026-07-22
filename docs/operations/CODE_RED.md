@@ -172,7 +172,7 @@ active_PR_draft: true
 active_PR_merged: false
 active_PR_head_branch: agent/agent-01-tool-inspection
 active_PR_head_before_CODE_RED_commit: 3f7dad528a13a0a81069771c52cb4c65f0b0cf20
-latest_CODE_RED_research_head: b6ce572107d197cfbb47e7e8fbe101517f58e8d2
+latest_CODE_RED_research_head_before_final_controls: b6ce572107d197cfbb47e7e8fbe101517f58e8d2
 ```
 
 The exact current SHAs must be re-read dynamically on every CODE RED trigger.
@@ -319,7 +319,7 @@ Rejected code must not be restored as accepted implementation.
 ```yaml
 control_plan_file: docs/plan/CHATGPT_CLINE_DRAFT_PR_EXECUTION_CONTROL_PLAN_2026-07-22.md
 control_plan_commit: 1df8fb4c8712d57549ed0c93ddd223b2db3d96d3
-Cline_rule_commit: 3f7dad528a13a0a81069771c52cb4c65f0b0cf20
+initial_Cline_rule_commit: 3f7dad528a13a0a81069771c52cb4c65f0b0cf20
 method: Cline_local_writer_plus_GitHub_Draft_PR_plus_ChatGPT_review
 custom_bridge: deferred
 custom_MCP_bridge: prohibited_now
@@ -335,6 +335,10 @@ canonical_file: docs/operations/CODE_RED.md
 CODE_RED_create_commit: d7ffb577987e707b3fe799edc50f8d1524debc38
 legacy_redirect_commit: 228ad374101ca082211345261fd41951d22cfe40
 Cline_CODE_RED_rule_commit: b6ce572107d197cfbb47e7e8fbe101517f58e8d2
+CODE_RED_ledger_update_commit: 8a43992b6201eb529d124e18cd7201d8a307c0aa
+README_CODE_RED_commit: 1bbab91c0ef189e20adab0aa3aba5f84606e5f91
+AGENTS_CODE_RED_commit: aeff5b772cc39d5f353a7307c3146c10372a350e
+control_plan_CODE_RED_commit: d591e5fc67d26f809e3158fdca2b7065194a41f2
 old_file_behavior: compatibility_redirect
 reason: one_clear_discoverable_state_and_recovery_entry_point
 ```
