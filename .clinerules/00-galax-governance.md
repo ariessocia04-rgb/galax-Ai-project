@@ -5,7 +5,8 @@ This rule is always active for the Galax repository.
 ## Mandatory context
 
 - Read `README.md` and `AGENTS.md` first and obey their decision priority.
-- Read `docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md` completely.
+- Read `docs/operations/CODE_RED.md` completely.
+- Treat `docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md` only as a compatibility redirect.
 - Read `docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md` completely.
 - Read `docs/plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md`.
 - Read `docs/plan/CHATGPT_CLINE_DRAFT_PR_EXECUTION_CONTROL_PLAN_2026-07-22.md` completely.
@@ -31,6 +32,22 @@ You are not the architecture owner, approval authority, merge authority, product
 - Stop immediately after the exact assigned objective is complete.
 - Do not continue automatically into another file, test stage, commit, push, phase, or improvement.
 
+## CODE RED trigger
+
+When the owner says `CODE RED`, `code red`, `length chat problem`, `conversation length problem`, `continue exact Galax flow`, `operation length problem solve`, or a close spelling variation:
+
+```text
+read docs/operations/CODE_RED.md completely
+→ verify repository access and all required branch heads
+→ read the active draft PR and assignment issues
+→ separate remote-proven state from reported local-only state
+→ reconstruct decisions, completed actions, accepted work, rejected outputs, blockers, cleanup state, and current stage
+→ return CODE_RED_RECEIPT_V1
+→ continue only when safe_to_continue=true
+```
+
+Do not ask what the previous chat was doing when repository access exists. Do not use remembered conversation fragments as project authority.
+
 ## Before any edit
 
 Return `REPOSITORY_READ_RECEIPT` with the exact repository, branch, HEAD SHA, git status, files read, permitted paths, prohibited paths, conflicts, blockers, and proposed commands/tests.
@@ -39,21 +56,7 @@ The active assignment must state exact allowed paths, prohibited paths, allowed 
 
 Do not install dependencies, create files, edit files, run mutation commands, commit, or push during the plan-only stage.
 
-Do not infer missing permission from phrases such as “continue,” “finish,” “improve,” “fix everything,” or “make it production ready.”
-
-## Conversation-length trigger
-
-When the owner or assignment says `length chat problem`, `conversation length problem`, `continue exact Galax flow`, `operation length problem solve`, or an equivalent phrase:
-
-```text
-read docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md
-→ verify branch heads, PR, and assignment issues
-→ reconstruct the current stage
-→ return OPERATION_LENGTH_CONTINUITY_RECEIPT
-→ continue only when safe_to_continue=true
-```
-
-Do not ask what the previous chat was doing when repository access exists. Do not use remembered conversation fragments as project authority.
+Do not infer missing permission from phrases such as `continue`, `finish`, `improve`, `fix everything`, or `make it production ready`.
 
 ## Active Foundation invariants
 
@@ -77,7 +80,7 @@ Offline permission declaration and live GitHub permission proof are separate evi
 
 Implement only the authorized Galax Governance Foundation and Agent 01 Phases 0–4. Do not implement Agents 02–15.
 
-No file, refactor, dependency, command, test, documentation rewrite, or cleanup is authorized merely because it appears useful. It must be named by the active repository plan and exact assignment.
+No file, refactor, dependency, command, test, documentation rewrite, cleanup, deletion, or improvement is authorized merely because it appears useful. It must be named by the active repository plan and exact assignment.
 
 ## Completed accepted work protection
 
@@ -101,6 +104,26 @@ Without that contract, accepted work is read-only.
 
 Cline checkpoints and Git history are recovery controls. They do not authorize Cline to roll accepted work backward.
 
+## Repository cleanup rule
+
+Cline must not classify a file as useless from age, title, verbosity, declined status, or supersession alone.
+
+Cleanup must follow CODE RED:
+
+```text
+inventory
+→ classify authority and purpose
+→ verify exact duplicate or proven unreferenced junk
+→ migrate references
+→ preserve unique evidence
+→ run checks
+→ obtain human deletion authorization
+→ delete
+→ record deletion in CODE RED
+```
+
+The legacy operation-length file is currently a `COMPATIBILITY_REDIRECT` and must not be deleted yet.
+
 ## Draft PR and ChatGPT inspection gate
 
 Local file creation is not final completion.
@@ -111,7 +134,7 @@ After a coherent local stage and separately authorized validation:
 human authorizes commit
 → human separately authorizes push to implementation branch
 → draft PR exposes exact diff
-→ ChatGPT inspects plan alignment, CrewAI compatibility, architecture, tests, security, and regressions
+→ ChatGPT inspects plan alignment, CrewAI compatibility, architecture, tests, security, regressions, and accepted-work preservation
 → ChatGPT returns PASS, CHANGES_REQUIRED, or BLOCKED
 → human accepts or authorizes one exact correction
 ```
@@ -132,11 +155,13 @@ Cline may report `READY_FOR_REMOTE_REVIEW`, but may not report an accepted job a
 
 ## Stop conditions
 
-Stop and report a factual blocker when repository identity, branch, starting SHA, required documents, allowed paths, permissions, sandbox, credentials, dependencies, tests, evidence, profile readiness, accepted-artifact hash, or assignment completeness cannot be verified.
+Stop and report a factual blocker when repository identity, branch, starting SHA, required documents, allowed paths, permissions, sandbox, credentials, dependencies, tests, evidence, profile readiness, accepted-artifact hash, cleanup proof, or assignment completeness cannot be verified.
 
 Stop when another contributor is writing to the same worktree.
 
-Stop when an requested change is absent from the repository plan.
+Stop when a requested change is absent from the repository plan.
+
+Stop when local state is required but cannot be verified after the reported keyboard deletion.
 
 No blocked route may be planned as continuing to the next successful stage.
 
