@@ -85,8 +85,9 @@ reasoning_setting: xhigh
 status: PROVISIONAL_ACTIVE_PROFILE
 best_observed_use:
   - literal full-section replacement with exact anchors
+  - short same-task serialization retry after a blank pending-edit card
 known_risks:
-  - one later atomic edit produced no visible pending diff
+  - one atomic edit produced no visible pending diff
 recommended_control:
   - require complete visible SEARCH and REPLACE blocks
   - reject blank or invisible edit cards
@@ -243,6 +244,30 @@ evidence_summary: Cline read the target file and displayed Save/Reject, but no v
 remedy_selected: same-task short retry requiring a complete visible diff; otherwise return BLOCKED_PATCH_SERIALIZATION
 ```
 
+### `OBS-DS4F-003` — same-task short retry recovered from the blank diff
+
+```yaml
+profile_id: CLINE-DS4F-XHIGH-001
+short_name: DS4F-XH
+task_freshness: CONTAMINATED
+mode: ACT
+requested_action: retry the same Section 9 edit and show a complete visible diff without rereading
+immediate_instruction_pickup: PASS
+selected_tool: replace_in_file
+tool_selection_compliance: PASS
+anchor_compliance: PASS
+scope_compliance: PASS
+old_task_memory_intrusion: NONE_OBSERVED
+semantic_content_accuracy: PASS
+patch_serialization_accuracy: PASS
+stop_condition_compliance: PASS
+first_failure_stage: NONE
+review_decision: Save
+repository_change_saved: unknown
+evidence_summary: The retry reused the existing Section 9 state, produced complete visible SEARCH and REPLACE blocks, kept control markers outside Markdown fences, preserved both closing fences, removed exact_conversation_stop_point, separated the single authorization item from the post-authorization sequence, added MCP integration, and stopped for Save or Reject.
+remedy_selected: for DS4F-XH, permit exactly one short same-task serialization retry after an otherwise scoped T4 blank-diff failure
+```
+
 ## Active operating rules
 
 ```yaml
@@ -254,6 +279,7 @@ plan_and_act_tasks_separated: true
 full_block_replacement_preferred: true
 complete_visible_diff_required: true
 blank_edit_card_accepted: false
+same_task_T4_retry_limit: 1
 issue_comment_is_canonical_ledger: false
 this_file_is_canonical_ledger: true
 ```
