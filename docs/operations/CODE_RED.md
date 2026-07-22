@@ -172,6 +172,7 @@ active_PR_draft: true
 active_PR_merged: false
 active_PR_head_branch: agent/agent-01-tool-inspection
 active_PR_head_before_CODE_RED_commit: 3f7dad528a13a0a81069771c52cb4c65f0b0cf20
+latest_CODE_RED_research_head: b6ce572107d197cfbb47e7e8fbe101517f58e8d2
 ```
 
 The exact current SHAs must be re-read dynamically on every CODE RED trigger.
@@ -331,6 +332,9 @@ custom_hook_system: deferred
 old_protocol_name: Operation_Length_Problem_Solve
 new_protocol_name: CODE_RED
 canonical_file: docs/operations/CODE_RED.md
+CODE_RED_create_commit: d7ffb577987e707b3fe799edc50f8d1524debc38
+legacy_redirect_commit: 228ad374101ca082211345261fd41951d22cfe40
+Cline_CODE_RED_rule_commit: b6ce572107d197cfbb47e7e8fbe101517f58e8d2
 old_file_behavior: compatibility_redirect
 reason: one_clear_discoverable_state_and_recovery_entry_point
 ```
@@ -410,7 +414,7 @@ CODE_RED_ACTION_RECORD_V1:
   deployment_performed: false
 ```
 
-A narrative such as “done,” “fixed,” or “tests passed” is insufficient without this evidence.
+A narrative such as `done`, `fixed`, or `tests passed` is insufficient without this evidence.
 
 ## 11. Repository cleanup and organization policy
 
@@ -419,8 +423,8 @@ The repository must remain clean, folderized, and non-duplicative, but cleanup m
 Every file must be classified as one of:
 
 ```yaml
-ACTIVE_CANONICAL: current authority
-ACTIVE_OPERATIONAL: current assignment_status_or_evidence
+ACTIVE_CANONICAL: current_authority
+ACTIVE_OPERATIONAL: current_assignment_status_or_evidence
 HISTORICAL_EVIDENCE: retained_because_it_proves_decision_history
 COMPATIBILITY_REDIRECT: temporary_pointer_during_reference_migration
 EXACT_DUPLICATE_CANDIDATE: removable_only_after_hash_and_reference_verification
@@ -432,12 +436,12 @@ UNREFERENCED_GENERATED_JUNK: removable_after_proof_and_human_authorization
 
 ```text
 inventory all files
-→ identify owner/purpose/authority/status
+→ identify owner, purpose, authority, and status
 → calculate or verify exact normalized duplicates
 → locate every inbound reference
 → select one canonical owner
 → update references
-→ run documentation/link/tests where applicable
+→ run documentation, link, and applicable tests
 → preserve unique historical evidence
 → produce deletion candidate report
 → obtain human authorization
@@ -472,7 +476,7 @@ exact_duplicate_files:
   deletion_now: only_after_normalized_hash_equality_and_reference_migration
 ```
 
-No repository file is declared useless merely because it is old, verbose, declined, or superseded. “Useless” must be proven through purpose, reference, uniqueness, and evidence analysis.
+No repository file is declared useless merely because it is old, verbose, declined, or superseded. `Useless` must be proven through purpose, reference, uniqueness, and evidence analysis.
 
 ## 12. Accepted-work protection
 
