@@ -86,16 +86,20 @@ status: PROVISIONAL_ACTIVE_PROFILE
 best_observed_use:
   - literal full-section replacement with exact anchors
   - short same-task serialization retry after a blank pending-edit card
+  - explicit-gate sequential exact-block replacement on one low-risk fixture
 known_risks:
   - one atomic edit produced no visible pending diff
+  - automatic continuation after Save caused a later anchor mismatch and uncontrolled retry in ACT 001
 recommended_control:
   - require complete visible SEARCH and REPLACE blocks
   - reject blank or invisible edit cards
-  - on T4 failure, use one short same-task serialization retry before starting a fresh task
+  - use an exact continuation token after every saved subtask
+  - stop immediately after an anchor mismatch
+  - prohibit full-file fallback for exact-block tasks
 validation_gate:
-  successful_atomic_edits_required: 3
-  successful_plan_inspections_required: 1
-  rejected_patch_corrections_required: 1
+  working_method_observed: true
+  explicit_gate_full_clean_pass_counter: 1/10
+  validated_default: false
 ```
 
 ## Recorded observations
@@ -268,18 +272,47 @@ evidence_summary: The retry reused the existing Section 9 state, produced comple
 remedy_selected: for DS4F-XH, permit exactly one short same-task serialization retry after an otherwise scoped T4 blank-diff failure
 ```
 
+### `OBS-DS4F-023` — ACT 002 explicit-gate method completed with a clean full PASS
+
+```yaml
+profile_id: CLINE-DS4F-XHIGH-001
+short_name: DS4F-XH
+task_freshness: FRESH_CONTINUATION_AFTER_EXACT_TOKEN
+mode: ACT
+requested_action: after RUN_FINAL_VERIFICATION, read the authorized ACT 002 fixture once and return the exact final receipt
+immediate_instruction_pickup: PASS
+selected_tool: read_file_then_final_receipt
+tool_selection_compliance: PASS
+anchor_compliance: PASS
+scope_compliance: PASS
+old_task_memory_intrusion: NONE_OBSERVED
+semantic_content_accuracy: PASS
+patch_serialization_accuracy: NOT_APPLICABLE
+stop_condition_compliance: PASS
+first_failure_stage: NONE
+review_decision: Save
+repository_change_saved: true
+evidence_summary: The final receipt confirmed setup and three saved subtasks, all explicit tokens, one maximum pending edit, zero automatic retries, no unauthorized files, commands, tests, or Git actions, exact-block verification, and overall_status PASS.
+remedy_selected: retain the explicit-gate method as WORKING_OBSERVED at 1/10 and repeat the exact method in fresh isolated runs
+```
+
 ## Active operating rules
 
 ```yaml
 one_file_per_task: true
-one_section_per_task: true
+one_section_per_pending_edit: true
 one_pending_edit_per_task: true
 fresh_task_preferred: true
 plan_and_act_tasks_separated: true
-full_block_replacement_preferred: true
 complete_visible_diff_required: true
 blank_edit_card_accepted: false
-same_task_T4_retry_limit: 1
+explicit_continue_token_between_saved_subtasks: true
+explicit_final_verification_token: true
+automatic_retry_after_anchor_mismatch: false
+full_file_fallback_for_exact_block_method: false
+working_method_record: research/ai-qualification-framework/WORKING_METHOD_EXPLICIT_GATE_SEQUENTIAL_EXACT_REPLACEMENT.md
+explicit_gate_method_counter: 1/10
+validated_default: false
 issue_comment_is_canonical_ledger: false
 this_file_is_canonical_ledger: true
 ```
@@ -293,10 +326,15 @@ MODEL_SWITCH_HANDOFF_V1:
   current_task:
   exact_file:
   exact_section:
-  last_reviewed_observation_id:
-  last_accepted_patch:
+  last_reviewed_observation_id: OBS-DS4F-023
+  last_accepted_patch: ACT 002 final verification receipt
   rejected_patches: []
-  T0_to_T5_findings: []
-  unfinished_action:
-  prohibited_actions: []
+  T0_to_T5_findings:
+    - all stages passed in ACT 002 final verification
+  unfinished_action: repeat the exact method in a fresh isolated run to seek 2/10
+  prohibited_actions:
+    - ACT 003 before 10/10
+    - application-code edits
+    - commands, tests, and Git operations
+    - parallel execution
 ```
