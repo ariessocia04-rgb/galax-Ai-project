@@ -1,10 +1,12 @@
-# OBS-DS4F-010 — Section 15 mode and scope intrusion
+# OBS-DS4F-010 — Section 15 task-reuse and mode mismatch
+
+> Correction: the user confirmed that the Section 15 prompt was pasted into an older Act task. This event must not be treated as confirmed DeepSeek memory intrusion.
 
 ```yaml
 profile_id: CLINE-DS4F-XHIGH-001
 short_name: DS4F-XH
-task_freshness: FRESH
-requested_mode: PLAN
+task_freshness: CONTAMINATED_BY_USER_TASK_REUSE
+requested_mode_in_prompt: PLAN
 actual_mode: ACT
 requested_action: read only Section 15 from its heading through end of file and return SECTION_15_CURRENT_BLOCK_V1
 immediate_instruction_pickup: PARTIAL
@@ -14,7 +16,9 @@ selected_tools:
 tool_selection_compliance: FAIL
 anchor_compliance: FAIL
 scope_compliance: FAIL
-old_task_memory_intrusion: CONFIRMED
+old_task_memory_intrusion: NOT_DETERMINABLE
+model_fault_confirmed: false
+user_setup_error_confirmed: true
 semantic_content_accuracy: FAIL
 patch_serialization_accuracy: NOT_APPLICABLE
 stop_condition_compliance: FAIL
@@ -22,26 +26,27 @@ first_failure_stage: T0
 review_decision: Reject
 repository_change_saved: false
 commands_run: []
-evidence_summary: The task opened in Act Mode despite the requested Plan Mode. Cline invoked the repository startup/governance workflow, read README.md, CODE_RED.md, three planning documents, and a prompt pack, then requested a git branch/HEAD/status command. It did not return the requested literal Section 15 block and did not remain within read-only Section 15 scope.
+root_cause: The Section 15 Plan-mode prompt was pasted into an existing Act-mode task instead of a genuinely new Plan task.
+evidence_summary: Cline was already operating inside an older Act task. It detected the Plan-versus-Act discrepancy, then followed the existing task's repository startup/governance context, read six files, and proposed a git branch/HEAD/status command. Because the task was reused, this output cannot be used as clean evidence of DeepSeek behavior in a fresh Plan task.
 reasoning_pattern_observed:
-  - mode mismatch detected but not treated as a hard stop
-  - governance startup memory overrode the narrow inspection request
-  - broad repository bootstrapping occurred before target-section extraction
-  - unauthorized command proposal followed the broad read
+  - mixed old-task context and new prompt were simultaneously present
+  - actual task mode remained Act despite Plan wording in the pasted prompt
+  - broad repository bootstrapping followed the older task context
+  - unauthorized command proposal remained pending and was rejected
 remedy_selected:
-  - reject the command
-  - close the contaminated Act task
-  - create a genuinely fresh Plan task
-  - place a hard mode-mismatch stop at the top of the next prompt
-  - forbid reading README, AGENTS, plans, prompts, or any file other than CODE_RED.md
+  - reject the pending command
+  - do not count this event against the DS4F-XH validation profile
+  - close the reused Act task
+  - create a genuinely new Plan task before repeating Section 15 inspection
 ```
 
-## New DS4F-XH control rule
+## Corrected control rule
 
 ```yaml
 section_read_only_inspection:
+  user_must_create_new_task: true
   required_mode: PLAN
-  on_actual_mode_not_plan: return BLOCKED_MODE_MISMATCH without reading files
+  verify_mode_before_paste: true
   allowed_files:
     - docs/operations/CODE_RED.md
   maximum_file_reads: 1
