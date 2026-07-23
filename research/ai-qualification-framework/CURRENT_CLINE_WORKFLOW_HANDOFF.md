@@ -100,24 +100,30 @@ experiment_id: DS4F-XH_ACT_004
 experiment_name: fresh explicit-gate repetition
 protocol: research/ai-qualification-framework/experiments/DS4F_XH_ACT_004_EXPLICIT_GATE_REPETITION_PROTOCOL.md
 fixture: research/ai-qualification-framework/experiments/fixtures/DS4F_XH_ACT_004_FIXTURE.md
-current_step: FRESH_CLINE_TASK_AND_SETUP_PROMPT_REQUIRED
+current_step: SETUP_FIXTURE_CREATION_REVIEWED_PENDING_SAVE
 counter_before: 1/10
 target_after_clean_pass: 2/10
-setup_saved: false
+setup_review: PASS
+setup_saved: pending
 subtask_1_saved: false
 subtask_2_saved: false
 subtask_3_saved: false
 final_verification_complete: false
+latest_observation: OBS-DS4F-025
 ```
 
 Exact next action:
 
-1. Close the completed ACT 002 Cline session.
-2. Open a fresh isolated Cline task.
-3. Select `deepseek-v4-flash`, reasoning `xhigh`, mode `Act`.
-4. Paste the exact ACT 004 setup-and-sequence prompt supplied by ChatGPT.
-5. The first pending mutation must be fixture creation only.
-6. Review that fixture creation before Save.
+1. The human selects `Save` on the pending ACT 004 fixture creation.
+2. Cline must return only `WAITING_FOR_CONTINUE_SUBTASK_1`.
+3. Cline must not read or edit the fixture again before the exact token `CONTINUE_SUBTASK_1`.
+4. After the wait token is confirmed, the human sends exactly `CONTINUE_SUBTASK_1`.
+
+The approved pending setup content is the exact fixture defined in the ACT 004 protocol. No Subtask 1 mutation is authorized by the setup Save.
+
+## Latest observation
+
+- `OBS-DS4F-025`: ACT 004 fixture creation matched the exact authorized setup and stopped for Save. Status is `PASS_PENDING_USER_SAVE`; the method counter remains `1/10`.
 
 ## Experiment history
 
@@ -147,7 +153,7 @@ The ten-task stress-test protocol exists but remains postponed until this workin
 
 ### ACT 004
 
-ACT 004 is the next fresh repetition of the same proven method. It must not change the model, reasoning, mode, method key, fixture task class, patch shape, or gate behavior.
+ACT 004 is the current fresh repetition of the same proven method. Its setup fixture creation passed review and is pending human Save. It must not change the model, reasoning, mode, method key, fixture task class, patch shape, or gate behavior.
 
 ## Separate counters
 
@@ -174,5 +180,5 @@ Do not create focused validator tests, `validation.py`, runtime Flow/Agent/Repos
 ## Exact resume instruction for a new chat
 
 ```text
-Read README.md, AGENTS.md, docs/operations/CODE_RED.md, CURRENT_CLINE_WORKFLOW_HANDOFF.md, WORKING_METHOD_EXPLICIT_GATE_SEQUENTIAL_EXACT_REPLACEMENT.md, METHOD_VALIDATION_10_CONSECUTIVE_PASS_RULE.md, the ACT 004 protocol, the canonical observation ledger, and the latest observations. DS4F-XH uses deepseek-v4-flash with xhigh reasoning in Act Mode. ACT 002 completed with PASS and the explicit-gate method is WORKING_OBSERVED at 1/10. The current job is ACT 004, a fresh exact repetition seeking 2/10. Start with a fresh Cline task and fixture-creation setup only. Do not run ACT 003, edit application code, run commands/tests/Git, or change the method key.
+Read README.md, AGENTS.md, docs/operations/CODE_RED.md, CURRENT_CLINE_WORKFLOW_HANDOFF.md, WORKING_METHOD_EXPLICIT_GATE_SEQUENTIAL_EXACT_REPLACEMENT.md, METHOD_VALIDATION_10_CONSECUTIVE_PASS_RULE.md, the ACT 004 protocol, the canonical observation ledger, and the latest observations. DS4F-XH uses deepseek-v4-flash with xhigh reasoning in Act Mode. ACT 002 completed with PASS and the explicit-gate method is WORKING_OBSERVED at 1/10. The current job is ACT 004 seeking 2/10. The exact ACT 004 setup fixture creation passed review and is pending human Save. Begin the pending review with Save. After Save, accept only WAITING_FOR_CONTINUE_SUBTASK_1, then send CONTINUE_SUBTASK_1. Do not run ACT 003, edit application code, run commands/tests/Git, or change the method key.
 ```
