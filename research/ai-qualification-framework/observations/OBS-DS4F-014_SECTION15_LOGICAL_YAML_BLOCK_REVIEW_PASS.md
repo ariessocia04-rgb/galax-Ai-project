@@ -21,9 +21,9 @@ CLINE_BEHAVIOR_OBSERVATION_V1:
   stop_condition_compliance: PASS
   first_failure_stage: NONE
   review_decision: Save
-  repository_change_saved: unknown
-  evidence_summary: The complete visible diff contains only the exact old YAML content in SEARCH and the approved replacement YAML content in REPLACE. It adds focused_validator_tests_authorized and the three models.py Git authorization flags as false while preserving all existing test, runtime, Git, workflow, deployment, Agents 02-15, production-readiness, and MCP prohibitions. No heading, label, Markdown fence, command, test, Git operation, application code, or unrelated section is included. The complete Cline output also verified every required addition and preserved prohibition, but ended with Pending human Save or Reject decision, so local save remains unconfirmed.
-  remedy_selected: user must press Save; update this same observation after explicit user confirmation or a valid saved readback
+  repository_change_saved: true
+  evidence_summary: The complete visible diff contained only the exact old YAML content in SEARCH and the approved replacement YAML content in REPLACE. It added focused_validator_tests_authorized and the three models.py Git authorization flags as false while preserving all existing test, runtime, Git, workflow, deployment, Agents 02-15, production-readiness, and MCP prohibitions. No heading, label, Markdown fence, command, test, Git operation, application code, or unrelated section was included. After the user replied Save, Cline explicitly confirmed Human decision: Save, the exact four added flags, preservation of all other lines, and no commit, push, merge, deployment, or continuation.
+  remedy_selected: retain the fresh-task, one-file, one-logical-YAML-block exact replacement method with one human Save checkpoint
 ```
 
 ## Full-output review
@@ -43,8 +43,29 @@ unauthorized_tests_run: false
 unauthorized_git_operations_run: false
 completion_wording:
   stated_edit_successful: true
-  stated_pending_human_Save_or_Reject: true
-  interpretation: proposed patch is valid, but human Save confirmation is still required
+  stated_pending_human_Save_or_Reject_before_acceptance: true
+  explicit_human_Save_received: true
+  final_save_confirmation_received: true
+  interpretation: the proposed patch passed review and was later confirmed saved locally
+```
+
+## Post-save evidence
+
+```yaml
+saved_file: docs/operations/CODE_RED.md
+saved_scope: Section 15 second YAML block only
+human_decision: Save
+added_line_count: 4
+old_yaml_line_count_reported: 23
+new_yaml_line_count_reported: 27
+other_lines_preserved: reported
+commit_performed: false
+push_performed: false
+merge_performed: false
+deployment_performed: false
+continuation_performed: false
+remote_repository_proof: false
+classification: REPORTED_LOCAL_NOT_REMOTE_PROOF
 ```
 
 ## Method qualification
@@ -52,11 +73,11 @@ completion_wording:
 ```yaml
 method_id: ONE_LOGICAL_YAML_BLOCK_EXACT_REPLACEMENT
 method_counter_key: DS4F-XH + XHIGH + ACT + ONE_LOGICAL_YAML_BLOCK_EXACT_REPLACEMENT + MARKDOWN_EMBEDDED_YAML
-result: NO_SCORE
-qualification_state: PASS_PENDING_USER_SAVE
+result: PASS
+qualification_state: SAVED_AND_CONFIRMED
 root_cause: none
 consecutive_pass_count_before: 0
-consecutive_pass_count_after: 0
+consecutive_pass_count_after: 1
 method_status_after: EXPERIMENTAL
-counter_reason: The complete pending diff passed review, but the local edit must be confirmed saved before this method receives its first clean PASS.
+counter_reason: The complete pending diff passed all method checks, and the later Cline response explicitly confirmed the human Save decision and the exact locally applied YAML-block change.
 ```
