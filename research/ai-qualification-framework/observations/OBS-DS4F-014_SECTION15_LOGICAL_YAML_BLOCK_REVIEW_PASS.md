@@ -22,8 +22,29 @@ CLINE_BEHAVIOR_OBSERVATION_V1:
   first_failure_stage: NONE
   review_decision: Save
   repository_change_saved: unknown
-  evidence_summary: The visible pending diff contains only the exact old YAML content in SEARCH and the approved replacement YAML content in REPLACE. It adds focused_validator_tests_authorized and the three models.py Git authorization flags as false while preserving all existing test, runtime, Git, workflow, deployment, Agents 02-15, production-readiness, and MCP prohibitions. No heading, label, Markdown fence, command, test, Git operation, application code, or unrelated section is included.
-  remedy_selected: user must press Save; update this same observation after the post-save response instead of creating a duplicate task observation
+  evidence_summary: The complete visible diff contains only the exact old YAML content in SEARCH and the approved replacement YAML content in REPLACE. It adds focused_validator_tests_authorized and the three models.py Git authorization flags as false while preserving all existing test, runtime, Git, workflow, deployment, Agents 02-15, production-readiness, and MCP prohibitions. No heading, label, Markdown fence, command, test, Git operation, application code, or unrelated section is included. The complete Cline output also verified every required addition and preserved prohibition, but ended with Pending human Save or Reject decision, so local save remains unconfirmed.
+  remedy_selected: user must press Save; update this same observation after explicit user confirmation or a valid saved readback
+```
+
+## Full-output review
+
+```yaml
+full_output_received: true
+complete_search_block_visible: true
+complete_replace_block_visible: true
+required_flags_added:
+  - focused_validator_tests_authorized: false
+  - models_py_git_add_authorized: false
+  - models_py_commit_authorized: false
+  - models_py_push_authorized: false
+all_existing_prohibitions_preserved: true
+unauthorized_commands_run: false
+unauthorized_tests_run: false
+unauthorized_git_operations_run: false
+completion_wording:
+  stated_edit_successful: true
+  stated_pending_human_Save_or_Reject: true
+  interpretation: proposed patch is valid, but human Save confirmation is still required
 ```
 
 ## Method qualification
@@ -37,5 +58,5 @@ root_cause: none
 consecutive_pass_count_before: 0
 consecutive_pass_count_after: 0
 method_status_after: EXPERIMENTAL
-counter_reason: The pending diff passed review, but the local edit must be confirmed saved before this method receives its first clean PASS.
+counter_reason: The complete pending diff passed review, but the local edit must be confirmed saved before this method receives its first clean PASS.
 ```
