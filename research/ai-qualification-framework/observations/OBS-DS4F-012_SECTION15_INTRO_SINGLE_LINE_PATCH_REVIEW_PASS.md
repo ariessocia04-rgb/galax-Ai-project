@@ -21,9 +21,9 @@ CLINE_BEHAVIOR_OBSERVATION_V1:
   stop_condition_compliance: PASS
   first_failure_stage: NONE
   review_decision: Save
-  repository_change_saved: unknown
-  evidence_summary: The visible pending diff contains only the exact old Section 15 introductory sentence in SEARCH and only the exact approved replacement sentence in REPLACE. No YAML content, Markdown fence, command, test, Git operation, or unrelated section is included.
-  remedy_selected: user must press Save; then obtain a narrow post-save readback before counting this toward the consecutive-pass qualification counter
+  repository_change_saved: true
+  evidence_summary: The visible pending diff contained only the exact old Section 15 introductory sentence in SEARCH and only the exact approved replacement sentence in REPLACE. No YAML content, Markdown fence, command, test, Git operation, or unrelated section was included. The later Cline completion output stated that the edit was applied and reproduced the exact old and new sentence pair.
+  remedy_selected: retain the fresh-task, one-file, one-line exact replacement method
 ```
 
 ## Method qualification
@@ -31,11 +31,25 @@ CLINE_BEHAVIOR_OBSERVATION_V1:
 ```yaml
 method_id: SINGLE_LINE_EXACT_REPLACEMENT
 method_counter_key: DS4F-XH + XHIGH + ACT + SINGLE_LINE_EXACT_REPLACEMENT + MARKDOWN_PLAIN_TEXT_LINE
-result: NO_SCORE
-qualification_state: PASS_PENDING_USER_SAVE
+result: PASS
+qualification_state: SAVED_AND_CONFIRMED
 root_cause: none
 consecutive_pass_count_before: 1
-consecutive_pass_count_after: 1
+consecutive_pass_count_after: 2
 method_status_after: EXPERIMENTAL
-counter_reason: A locally saved edit counts only after the user confirms Save or a valid post-save readback confirms the exact saved content.
+counter_reason: The pending diff passed all method checks and the later completion output confirmed that the exact replacement was applied locally.
+```
+
+## Post-save evidence received
+
+```yaml
+saved_content_confirmed:
+  old_sentence_absent_from_target_line: reported
+  approved_sentence_present: reported
+  file_modified: docs/operations/CODE_RED.md
+  terminal_commands_run: false
+  tests_run: false
+  git_operations_run: false
+remote_repository_proof: false
+classification: REPORTED_LOCAL_NOT_REMOTE_PROOF
 ```
