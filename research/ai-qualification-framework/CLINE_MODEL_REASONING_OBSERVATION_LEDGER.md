@@ -296,6 +296,33 @@ evidence_summary: The final receipt confirmed setup and three saved subtasks, al
 remedy_selected: retain the explicit-gate method as WORKING_OBSERVED at 1/10 and repeat the exact method in fresh isolated runs
 ```
 
+### `OBS-DS4F-025` — ACT 004 setup fixture creation review passed
+
+```yaml
+profile_id: CLINE-DS4F-XHIGH-001
+short_name: DS4F-XH
+task_freshness: FRESH_ISOLATED
+mode: ACT
+requested_action: check only whether the ACT 004 fixture exists; when absent, propose the exact authorized fixture creation and stop for Save or Reject
+immediate_instruction_pickup: PASS
+selected_tool: fixture_existence_check_then_create_file
+tool_selection_compliance: PASS
+anchor_compliance: NOT_APPLICABLE
+scope_compliance: PASS
+old_task_memory_intrusion: NONE_OBSERVED
+semantic_content_accuracy: PASS
+patch_serialization_accuracy: PASS
+stop_condition_compliance: PASS
+first_failure_stage: NONE
+review_decision: Save
+repository_change_saved: unknown
+evidence_summary: Cline proposed only the exact authorized ACT 004 fixture with the required content and stopped at one human Save checkpoint. No Subtask 1 continuation, retry, second mutation, command, test, Git operation, application-code edit, unrelated file read, or parallel action appeared.
+remedy_selected: save the setup, accept only WAITING_FOR_CONTINUE_SUBTASK_1, then send CONTINUE_SUBTASK_1
+qualification_effect: PASS_PENDING_USER_SAVE_NO_SCORE
+method_counter_before: 1/10
+method_counter_after: 1/10
+```
+
 ## Active operating rules
 
 ```yaml
@@ -323,17 +350,18 @@ this_file_is_canonical_ledger: true
 MODEL_SWITCH_HANDOFF_V1:
   outgoing_profile:
   incoming_profile:
-  current_task:
-  exact_file:
-  exact_section:
-  last_reviewed_observation_id: OBS-DS4F-023
-  last_accepted_patch: ACT 002 final verification receipt
+  current_task: DS4F-XH_ACT_004 setup fixture creation pending human Save
+  exact_file: research/ai-qualification-framework/experiments/fixtures/DS4F_XH_ACT_004_FIXTURE.md
+  exact_section: setup fixture creation
+  last_reviewed_observation_id: OBS-DS4F-025
+  last_accepted_patch: ACT 004 exact setup fixture creation pending Save
   rejected_patches: []
   T0_to_T5_findings:
-    - all stages passed in ACT 002 final verification
-  unfinished_action: repeat the exact method in a fresh isolated run to seek 2/10
+    - all observable stages passed in the ACT 004 setup review
+  unfinished_action: select Save, accept only WAITING_FOR_CONTINUE_SUBTASK_1, then send CONTINUE_SUBTASK_1
   prohibited_actions:
     - ACT 003 before 10/10
+    - Subtask 1 before the exact continuation token
     - application-code edits
     - commands, tests, and Git operations
     - parallel execution
