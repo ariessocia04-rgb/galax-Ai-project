@@ -434,16 +434,104 @@ merge_performed: false
 deployment_performed: false
 ```
 
+### `CR-012` - Phase 2A models structural and static validation passed
+
+```yaml
+date: 2026-07-23
+classification: REPORTED_LOCAL_NOT_REMOTE_PROOF
+operation: Phase_2A_models_structural_and_static_validation
+branch: implementation/foundation-agent-01
+last_verified_local_HEAD: c7d5ca1352f491be8290ef6024f9ae7a91ade8cf
+remote_implementation_head: bafb230a995744743af5c0bdd612ad1e7c7568ae
+remote_proof_available: false
+local_commits_ahead: 16
+working_tree_status:
+  tracked_changes: none
+  untracked_files:
+    - src/galax/__init__.py
+    - src/galax/foundation/__init__.py
+    - src/galax/foundation/models.py
+models_py_complete_schema_proposal_saved: true
+models_py_structural_review: PASS
+models_py_import_check: PASS
+models_py_import_check_evidence:
+  command: uv run python -c "import sys; sys.path.insert(0, 'src'); import galax.foundation.models; print('MODELS_IMPORT_OK')"
+  stdout: MODELS_IMPORT_OK
+  exit_code: 0
+models_py_ruff_check: PASS
+models_py_ruff_evidence:
+  command: uv run ruff check src/galax/foundation/models.py
+  stdout: All checks passed!
+confirmed_models_py_corrections:
+  - allowed_paths uses tuple[str, ...], list[str], set[str], and result.append(strict)
+  - protected_paths uses tuple[str, ...], list[str], set[str], and result.append(strict)
+  - approved_agent_ids accepts exactly ('engineering_manager',)
+  - RunManifest contains validate_live_github_evidence
+  - RunManifest does not contain validate_resolved_at
+  - BlockerRecord contains exactly one validate_resolved_at
+  - AgentTaskResult.direct_tool_calls remains Literal[0]
+  - RepositoryPreflightTool ownership remains GalaxFoundationFlow
+  - result_as_answer remains prohibited
+  - hidden second Agent 01 call remains prohibited
+  - Agents 02 to 15 remain prohibited
+rejected_or_superseded_outputs:
+  - stale PHASE_2A_MODELS_CONTRACT_INVENTORY_V1 is not an implementation authority
+  - rejected models code must not be restored
+  - removal-only misplaced-validator patch was rejected
+  - identical SEARCH/REPLACE no-op patch was rejected
+  - redirected import command creating .models_import_test.log was rejected
+  - duplicate import reruns after PASS were rejected
+  - Ruff command chaining that caused E902 parsing errors was rejected
+  - no Ruff --fix was authorized
+push_performed: false
+sync_performed: false
+merge_performed: false
+deployment_performed: false
+  main_write_performed: false
+  ```
+
+### `CR-013` - Phase 2A focused validator tests validation completed
+
+```yaml
+classification: VERIFIED_LOCAL_NOT_REMOTE_PROOF
+date: 2026-07-24
+operation: Phase_2A_focused_validator_tests_validation
+branch: implementation/foundation-agent-01
+local_head_sha: c7d5ca1352f491be8290ef6024f9ae7a91ade8cf
+validation_status: PASS
+test_file: tests/test_foundation_contracts.py
+test_result: 70 passed in 0.50s
+test_exit_code: 0
+tests_failed: []
+tracked_deletions_detected: false
+test_file_read_only_setting_applied: true
+previous_stage: PHASE_2A_MODELS_FOCUSED_VALIDATOR_TESTS_AUTHORIZATION_REQUIRED
+previous_stage_completed: true
+implementation_authorized: false
+commit_authorized: false
+push_authorized: false
+merge_authorized: false
+deployment_authorized: false
+commit_scope_review_required: true
+```
+
 ## 9. Current stage and exact next action
 
 ```yaml
-current_stage: PHASE_2A_MODELS_PROPOSAL_REVIEW_REQUIRED
-safe_to_continue_implementation: true
+current_stage: "Read-only coherent local commit-scope review required before STAGE 7 — Human authorizes a coherent local commit"
+safe_to_continue_implementation: false
+last_completed_action:
+  - Phase 2A Models Validation Step 1 import check passed
+  - Phase 2A Models Validation Step 2 Ruff check passed
+  - Phase 2A Models Validation Step 3 focused validator tests passed: 70 passed in 0.50s, exit code 0
 next_allowed_action:
-  - Cline_reads_the_approved_Phase_2A_contracts
-  - Cline_proposes_src_galax_foundation_models_py_only
-  - ChatGPT_reviews_the_complete_models_py_proposal
-  - human_selects_Save_or_Reject
+  - human authorizes a read-only coherent local commit-scope review
+action_sequence_after_authorization:
+  - read-only inventory of every modified and untracked path
+  - classify each path as include, exclude, local-only, or unresolved
+  - produce the exact proposed coherent commit scope
+  - human reviews the inclusion/exclusion matrix
+  - separate human authorization is required before any git add or commit
 ```
 
 Prohibited now:
@@ -472,6 +560,7 @@ main write
 workflow change
 deployment
 Agents 02-15
+MCP integration
 ```
 
 ## 10. Required record after every coherent job
@@ -616,40 +705,54 @@ CrewAI must not control Cline while the Foundation is incomplete because that wo
 ## 14. Minimal command for any new AI
 
 ```text
-CODE RED. Open GitHub repository ariessocia04-rgb/galax-Ai-project. Read README.md, AGENTS.md, and docs/operations/CODE_RED.md completely. Verify the current main, research, implementation, and draft-PR head SHAs and active assignment issues. Reconstruct all confirmed decisions, completed actions, reported local-only work, accepted locked artifacts, rejected outputs, blockers, cleanup state, current stage, and exact next allowed action. Return CODE_RED_RECEIPT_V1. Do not guess, do not duplicate, do not restore rejected code, do not alter accepted work, and continue only when safe_to_continue=true.
+CODE RED. Open GitHub repository ariessocia04-rgb/galax-Ai-project. Read README.md, AGENTS.md, and docs/operations/CODE_RED.md completely. Verify the current main, research, implementation, and Draft PR #1 head SHAs. Read the latest Issue #2 continuity checkpoint and Draft PR #1 before returning CODE_RED_RECEIPT_V1. Reconstruct all confirmed decisions, completed actions, reported local-only work, accepted locked artifacts, rejected outputs, blockers, cleanup state, current stage, and exact next allowed action. The exact resume point is a read-only coherent commit-scope review before "STAGE 7 — Human authorizes a coherent local commit." Do not guess, do not duplicate, do not restore rejected code, do not alter accepted work, and continue only when safe_to_continue=true.
 ```
 
 ## 15. Current authorization boundary
 
-The verified Phase 2A resume precheck authorizes:
+Current boundary after Phase 2A Models Validation Steps 1, 2, and focused validator tests:
 
 ```yaml
 read_only_contract_and_plan_review: true
-models_py_proposal_by_Cline: true
-models_py_complete_diff_review: true
-human_Save_or_Reject_decision: true
+models_py_complete_schema_proposal_saved: true
+models_py_structural_review: true
+models_py_import_check: true
+models_py_ruff_check: true
+focused_validator_tests_completed: true
+focused_validator_tests_status: PASS
+CODE_RED_documentation_sync_applied: true
+commit_scope_review_completed: false
+commit_authorized: false
 ```
 
 It does not authorize:
 
 ```yaml
-automatic_models_py_save: false
-accepted_init_file_modification: false
+focused_validator_tests_authorized: false
+automatic_test_creation: false
+models_py_git_add_authorized: false
+models_py_commit_authorized: false
+models_py_push_authorized: false
 validation_py_creation: false
-test_creation: false
+Flow_runtime_implementation: false
+Agent_runtime_implementation: false
+RepositoryPreflightTool_runtime: false
 terminal_command_execution: false
 Ruff_execution: false
 pytest_execution: false
 git_add: false
 git_commit: false
-remote_implementation_branch_update: false
-local_commit_publication: false
-push_of_local_commits: false
+git_pull: false
+git_sync: false
+git_merge: false
+git_rebase: false
+git_reset: false
+git_clean: false
+git_push: false
 main_write: false
-merge: false
-deployment: false
 workflow_change: false
-LLM_profile_activation: false
+deployment: false
 Agents_02_to_15: false
 production_ready_claim: false
+MCP_integration: false
 ```
