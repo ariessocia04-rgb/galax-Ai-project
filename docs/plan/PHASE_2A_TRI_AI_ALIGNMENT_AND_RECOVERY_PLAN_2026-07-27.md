@@ -19,27 +19,74 @@ deployment_authorized: false
 
 ## 1. Purpose
 
-This document is the complete repository plan for integrating an optional external review layer composed of PR-Agent and/or Codex into the existing ChatGPT + Cline + Draft PR governance workflow.
+This is the complete governance plan for adding an optional external review layer to the existing Galax development workflow.
 
-It does not create an automatic AI-to-AI bridge. It does not make Codex or PR-Agent a writer. It does not replace ChatGPT as the canonical exact-diff reviewer. It does not change the Galax CrewAI runtime architecture or Agents 01–15.
-
-The exact intended workflow is:
+It integrates PR-Agent and/or Codex without changing the Galax CrewAI runtime, Foundation logic, Agent 01 execution contract, or Agents 02–15.
 
 ```text
-ChatGPT defines the architecture and exact assignment
+ChatGPT defines architecture and one exact assignment
 → Cline is the sole primary local writer
-→ optional narrow repair/comparison/reproduction contributors run only when separately assigned
-→ exact tests
-→ separate human commit authorization
-→ separate human push authorization
-→ Draft PR exposes the exact remote diff
-→ optional external review layer runs according to the Stage 1 assignment policy
-→ ChatGPT performs the canonical exact-diff review and reconciles any external receipts
+→ Aider, mini-SWE-agent, or OpenHands may act only under separate narrow assignments
+→ separately authorized validation
+→ separately authorized commit
+→ separately authorized push
+→ Draft PR exposes the exact current remote diff
+→ optional external review layer runs according to the Stage 1 policy
+→ ChatGPT performs the required canonical exact-diff review
 → Human Owner makes the final decision
-→ accepted work becomes LOCKED_ACCEPTED and is recorded in CODE RED
+→ accepted work becomes LOCKED_ACCEPTED in CODE RED
 ```
 
-## 2. Repository evidence at plan publication
+## 2. Compatibility baseline
+
+This plan must remain compatible with:
+
+```text
+AGENTS.md
+→ docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md
+→ docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
+→ docs/plan/CHATGPT_CLINE_DRAFT_PR_EXECUTION_CONTROL_PLAN_2026-07-22.md
+→ docs/plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md
+```
+
+The following runtime decisions are preserved and are not modified by this plan:
+
+```yaml
+CrewAI_process: sequential
+CrewAI_native_planning: false
+CrewAI_native_reasoning: false
+CrewAI_native_memory: false
+allow_delegation: false
+allow_code_execution: false
+async_execution: false
+parallel_agents: false
+parallel_tool_calls: false
+
+RepositoryPreflightTool_owner: GalaxFoundationFlow
+RepositoryPreflightTool_invoked_before_Agent_01: true
+RepositoryPreflightTool_calls_per_run: 1
+engineering_manager_tools: []
+Agent_01_direct_tool_calls: 0
+Agent_01_LLM_calls: 1
+Agent_01_output: AgentTaskResult
+result_as_answer_for_Agent_01_path: prohibited
+hidden_second_agent_call: prohibited
+HumanReviewRequest_builder: pure_Python_Pydantic
+explicit_router_for_every_branch: required
+blocked_route_reaches_success: prohibited
+LLM_profiles_enabled: false
+Agents_02_to_15_enabled: false
+```
+
+The only permitted change to the Foundation execution contract is a narrow documentation alignment inside:
+
+```text
+Section 11 — External contributor boundary
+```
+
+No runtime section, router, model, tool, permission, test contract, or Agent 01 invariant may change.
+
+## 3. Repository evidence at plan publication
 
 ```yaml
 local_observed_state:
@@ -70,9 +117,9 @@ classification:
   current_PR_review_classification: UNREVIEWED_AFTER_ADDITIONAL_COMMIT
 ```
 
-This plan branch is intentionally separate from `implementation/foundation-agent-01` and Draft PR #7. Publication of this plan must not change, rebase, reset, merge, or otherwise mutate the implementation branch or PR #7.
+This plan branch is separate from `implementation/foundation-agent-01` and Draft PR #7. It must not reset, rebase, merge, force-update, or otherwise mutate that implementation branch or PR.
 
-## 3. Authority and role model
+## 4. Authority and roles
 
 ```yaml
 Human_Owner:
@@ -87,7 +134,7 @@ Human_Owner:
   deployment_authority: true
 
 ChatGPT:
-  role:
+  roles:
     - repository_aware_architect
     - exact_assignment_author
     - fact_checker
@@ -138,22 +185,47 @@ shared_coordination:
   simultaneous_writers: prohibited
 ```
 
-## 4. Non-goals and prohibited interpretations
+## 5. Scope and applicability
 
 ```yaml
-not_part_of_this_plan:
+policy_applicability:
+  current_scope:
+    - Governance_Foundation
+    - Agent_01
+
+  effective_for:
+    - new_GALAX_AI_ASSIGNMENT_V1_records_created_after_Human_Owner_acceptance_of_this_plan
+
+  historical_assignments_retroactively_invalidated: false
+
+  historical_assignments:
+    treatment:
+      - remain_evidence_of_their_original_authorized_scope
+      - do_not_gain_new_permissions
+      - do_not_become_invalid_only_because_the_external_review_field_did_not_exist
+
+  Agents_02_to_15:
+    status: prohibited_until_separately_researched_implemented_tested_and_approved
+```
+
+This plan does not authorize any Agent 02–15 implementation, reviewer policy, runtime activation, tool access, LLM profile, or deployment.
+
+## 6. Non-goals and prohibitions
+
+```yaml
+not_authorized:
   - automatic_ChatGPT_to_Codex_trigger
   - automatic_Codex_to_Cline_trigger
   - automatic_PR_Agent_trigger
-  - custom_MCP_bridge
   - generic_agent_mesh
+  - custom_MCP_bridge
   - Codex_write_mode
   - PR_Agent_write_mode
   - mandatory_global_Codex_PASS
   - replacement_of_ChatGPT_canonical_review
   - replacement_of_Human_Owner_final_authority
-  - change_to_Foundation_Agent01_Flow_runtime
-  - change_to_Agents_01_to_15
+  - change_to_Foundation_or_Agent_01_runtime
+  - change_to_Agents_02_to_15
   - Stage_10C
   - alternative_A_to_J_workflow
   - direct_write_to_main
@@ -162,9 +234,9 @@ not_part_of_this_plan:
   - deployment
 ```
 
-## 5. Unified external-review policy
+## 7. Unified external-review policy
 
-Every Stage 1 `GALAX_AI_ASSIGNMENT_V1` must declare one exact external-review combination and one exact Codex receipt policy.
+Every new in-scope Stage 1 `GALAX_AI_ASSIGNMENT_V1` created after Human Owner acceptance must declare one exact combination and one exact Codex receipt policy.
 
 ```yaml
 external_review_policy:
@@ -182,7 +254,7 @@ external_review_policy:
       - ADVISORY_REQUIRED_RECEIPT
 ```
 
-### 5.1 Policy validation
+### 7.1 Validation
 
 ```yaml
 external_review_policy_validation:
@@ -211,20 +283,36 @@ invalid_or_missing_policy:
   continue_to_Stage_10B: false
 ```
 
-### 5.2 When both PR-Agent and Codex are used
+### 7.2 Both-reviewer execution contract
+
+When both reviewers are selected, they run sequentially, never in parallel:
 
 ```yaml
 when_PR_Agent_and_Codex_are_both_used:
+  execution_mode: SEQUENTIAL_READ_ONLY
+  execution_order:
+    - PR_Agent
+    - Codex
+
+  parallel_execution: prohibited
   same_current_PR_head_required: true
   independent_reviews_required: true
-  PR_Agent_must_not_copy_Codex_receipt_before_completion: true
-  Codex_must_not_copy_PR_Agent_receipt_before_completion: true
-  ChatGPT_reconciles_both_receipts: true
+
+  receipt_isolation:
+    PR_Agent_may_not_read_Codex_receipt_before_completion: true
+    Codex_may_not_read_PR_Agent_receipt_before_completion: true
+
+  head_change_between_reviews:
+    first_receipt_becomes_stale: true
+    continue_to_second_review: false
+    next_action: HUMAN_EXTERNAL_REVIEW_POLICY_DECISION
+
+  ChatGPT_reconciles_after_required_reviews_complete: true
   neither_receipt_replaces_ChatGPT_review: true
   neither_reviewer_has_final_authority: true
 ```
 
-### 5.3 Current-head and stale-review rules
+### 7.3 Current-head and stale rules
 
 ```yaml
 review_head_rule:
@@ -271,7 +359,7 @@ stale_review_actions:
         - otherwise_BLOCK_FOR_HUMAN_DECISION
 ```
 
-### 5.4 Receipt relay
+### 7.4 Receipt relay
 
 ```yaml
 receipt_relay:
@@ -287,9 +375,9 @@ receipt_relay:
   ChatGPT_must_verify_receipt_evidence: true
 ```
 
-## 6. Stage 1 assignment schema extension
+## 8. Stage 1 assignment extension
 
-Add this required field to `GALAX_AI_ASSIGNMENT_V1` after `mode`:
+Add after `mode` for new in-scope assignments:
 
 ```yaml
 external_review_policy:
@@ -301,7 +389,7 @@ Add these stop conditions:
 
 ```yaml
 stop_conditions:
-  - external_review_policy_missing
+  - external_review_policy_missing_for_new_in_scope_assignment
   - external_review_policy_invalid
   - selected_external_reviewer_not_authorized
   - selected_external_reviewer_head_mismatch
@@ -309,13 +397,11 @@ stop_conditions:
   - required_external_review_receipt_stale
 ```
 
-A missing or invalid external-review policy produces `BLOCKED_POLICY_VALIDATION_CONFLICT`.
+A missing field in a historical pre-acceptance assignment is not, by itself, a blocker.
 
-## 7. Canonical Stage 0–13 workflow
+## 9. Canonical Stage 0–13 workflow
 
-The existing Stage 0–9 sequence remains unchanged.
-
-Replace only the existing Stage 10 line with Stage 10A and Stage 10B. Preserve the canonical Stage 11–13 wording.
+Stage 0–9 remain unchanged. Replace only the existing Stage 10 line with Stage 10A and Stage 10B. Preserve Stage 11–13 verbatim.
 
 ```text
 STAGE 0 — ChatGPT reconstructs repository truth through CODE RED
@@ -335,37 +421,30 @@ STAGE 12 — Human accepts the stage or authorizes one exact correction
 STAGE 13 — Accepted files and stage are recorded as LOCKED_ACCEPTED in CODE RED
 ```
 
-### 7.1 Stage 10A behavior
+### 9.1 Stage 10A
 
-The Stage 1 external-review policy selects exactly one:
-
-```text
-NEITHER
-PR_AGENT_ONLY
-CODEX_ONLY
-PR_AGENT_AND_CODEX
-```
+The Stage 1 policy selects exactly one combination.
 
 Every selected reviewer:
 
 - operates in `REVIEW_ONLY`;
 - reviews the exact current Draft PR head SHA;
-- returns its own independent receipt;
+- returns an independent receipt;
 - performs no edit, fix, commit, push, approval, label, merge, deployment, or workflow mutation;
-- does not replace ChatGPT review;
-- does not make a final decision.
+- does not replace ChatGPT;
+- does not make the final decision.
 
-### 7.2 Stage 10B behavior
+For `PR_AGENT_AND_CODEX`, PR-Agent completes first. The current PR head is rechecked. Codex runs second only when the head is unchanged.
+
+### 9.2 Stage 10B
 
 ChatGPT independently reviews the exact current Draft PR diff and repository authority.
 
-When PR-Agent or Codex receipts exist, ChatGPT verifies their repository identity, PR identity, base SHA, head SHA, reviewed SHA, evidence, and findings before reconciliation.
+ChatGPT verifies and reconciles any current-head PR-Agent and Codex receipts, but remains the canonical reviewer.
 
-ChatGPT remains the canonical reviewer and returns the Stage 11 result.
+## 10. Review receipt schemas
 
-## 8. External-review receipt schemas
-
-### 8.1 PR-Agent receipt
+### 10.1 PR-Agent
 
 ```yaml
 GALAX_PR_AGENT_REVIEW_RECEIPT_V1:
@@ -394,7 +473,7 @@ GALAX_PR_AGENT_REVIEW_RECEIPT_V1:
   next_action: RETURN_TO_HUMAN_OWNER
 ```
 
-### 8.2 Codex receipt
+### 10.2 Codex
 
 ```yaml
 GALAX_CODEX_REVIEW_RECEIPT_V1:
@@ -426,9 +505,9 @@ GALAX_CODEX_REVIEW_RECEIPT_V1:
   next_action: RETURN_TO_HUMAN_OWNER
 ```
 
-No Codex receipt exists when `Codex_receipt_policy` is `NOT_USED`.
+No Codex receipt exists when the policy is `NOT_USED`.
 
-## 9. ChatGPT reconciliation schema
+## 11. ChatGPT reconciliation
 
 ```yaml
 external_review_reconciliation:
@@ -465,7 +544,7 @@ external_review_reconciliation:
 
 External reviewer findings have no independent canonical authority. A finding affects the canonical result only when ChatGPT independently confirms it or the Human Owner rejects the associated risk.
 
-## 10. Definition of done
+## 12. Definition of done
 
 ```yaml
 definition_of_done:
@@ -520,9 +599,7 @@ external_review_policy_requirements:
 
 Codex `PASS` is never a permanent acceptance requirement.
 
-## 11. Exact repository document changes
-
-Implementation of this plan is limited to these paths:
+## 13. Exact repository changes
 
 ```yaml
 allowed_paths:
@@ -531,10 +608,10 @@ allowed_paths:
   - docs/operations/CODE_RED.md
   - docs/plan/CHATGPT_CLINE_DRAFT_PR_EXECUTION_CONTROL_PLAN_2026-07-22.md
   - docs/plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md
+  - docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md
   - docs/prompts/EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md
 
 explicit_no_change:
-  - docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md
   - docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
   - src/**
   - tests/**
@@ -543,230 +620,149 @@ explicit_no_change:
   - .github/**
 ```
 
-### 11.1 `AGENTS.md`
+Maximum changed files: `7`.
 
-Replace the current contributor sequence with:
+### 13.1 AGENTS.md
+
+Replace the contributor sequence with:
 
 ```text
 Cline performs the exact bounded primary implementation
 → Aider, mini-SWE-agent, or OpenHands may act only when separately assigned
   for their existing narrow repair, comparison, or reproduction roles
-→ optional external review layer executes according to the exact Stage 1
-  external-review policy
+→ optional external review layer executes according to the exact Stage 1 policy
 → ChatGPT performs the required canonical exact Draft PR diff review
 → Human Owner makes the final decision
 ```
 
-Add immediately after the contributor sequence:
+Add the role block from Section 4 and policy summary from Sections 5 and 7.
+
+Do not duplicate or replace the existing:
 
 ```yaml
-external_review_roles:
-  PR_Agent:
-    contributor_class: EXTERNAL_DEVELOPMENT_CONTRIBUTOR
-    role: OPTIONAL_READ_ONLY_STABLE_PR_REVIEWER
-    mode: REVIEW_ONLY
-    automatic_trigger: prohibited
-    automatic_feedback: disabled
-    write_authority: false
-    approval_authority: false
-    canonical_review_authority: false
-    final_acceptance_authority: false
-    merge_authority: false
-
-  Codex:
-    contributor_class: EXTERNAL_DEVELOPMENT_CONTRIBUTOR
-    role: INDEPENDENT_ADVISORY_REMOTE_REVIEWER
-    mode: REVIEW_ONLY
-    exact_model: recorded_at_authorized_review_trigger
-    automatic_trigger: prohibited
-    write_authority: false
-    canonical_review_authority: false
-    final_acceptance_authority: false
-    direct_Cline_control: prohibited
-    direct_ChatGPT_control: prohibited
-    custom_bridge: deferred
-    custom_MCP_bridge: prohibited_now
-
-  ChatGPT:
-    canonical_exact_diff_reviewer: true
-
-  Human_Owner:
-    final_authority: true
+custom_bridge: deferred
+custom_MCP_bridge: prohibited_now
 ```
 
-Then add the complete policy from Sections 5.1 and 5.2.
+### 13.2 Foundation Agent 01 Flow execution contract
 
-Do not duplicate or replace the existing Section 7 `custom_bridge: deferred` and `custom_MCP_bridge: prohibited_now` block.
+Modify only `Section 11 — External contributor boundary`.
 
-### 11.2 `CHATGPT_CLINE_DRAFT_PR_EXECUTION_CONTROL_PLAN_2026-07-22.md`
-
-In `GALAX_AI_ASSIGNMENT_V1`, add the Section 6 fields and stop conditions from this document.
-
-In the canonical movement-of-work list, replace only:
+Replace its contributor sequence with:
 
 ```text
-STAGE 10 — ChatGPT inspects the exact PR diff, repository rules, tests, cleanup effects, accepted-work preservation, and CrewAI compatibility
+Cline primary implementation
+→ Aider one exact repair when separately assigned
+→ mini-SWE-agent isolated comparison when separately assigned
+→ OpenHands isolated fallback reproduction when separately assigned
+→ optional external review layer according to the exact Stage 1 policy:
+    - NEITHER
+    - PR_AGENT_ONLY
+    - CODEX_ONLY
+    - PR_AGENT_AND_CODEX
+→ when both are selected: PR-Agent REVIEW_ONLY, verify unchanged head,
+  then Codex REVIEW_ONLY
+→ ChatGPT canonical exact-diff review
+→ Human Owner decision
 ```
 
-with:
+Add:
+
+```yaml
+external_review_alignment:
+  scope:
+    - Governance_Foundation
+    - Agent_01
+  PR_Agent_optional: true
+  Codex_optional: true
+  both_reviewers_execution: SEQUENTIAL_READ_ONLY
+  parallel_external_reviews: prohibited
+  same_current_PR_head_required: true
+  ChatGPT_canonical_review_required: true
+  Human_Owner_final_authority: true
+  runtime_architecture_changed: false
+```
+
+Do not modify Sections 1–10 or Section 12. Do not change any Agent 01 invariant.
+
+### 13.3 ChatGPT+Cline control plan
+
+In `GALAX_AI_ASSIGNMENT_V1`, add the Section 8 fields and stop conditions for new in-scope assignments.
+
+Replace only the existing Stage 10 line with:
 
 ```text
 STAGE 10A — OPTIONAL EXTERNAL REVIEW LAYER
 STAGE 10B — CHATGPT CANONICAL EXACT-DIFF REVIEW
 ```
 
-Preserve the existing Stage 11–13 lines verbatim.
+Preserve Stage 11–13 verbatim.
 
-Immediately after the Stage 13 line, add a new section:
+Immediately after Stage 13, add a section containing the complete role, scope, policy, sequential review, receipt, reconciliation, done, and Mermaid rules from this plan.
 
-```markdown
-## 6A. Optional external review layer
-```
+### 13.4 External contributor execution plan
 
-The new section must contain, literally and without unresolved placeholders:
+Preserve the existing Cline, Aider, mini-SWE-agent, OpenHands, and PR-Agent role boundaries.
 
-1. the role model from Section 3;
-2. the complete unified policy from Section 5;
-3. the assignment schema extension from Section 6;
-4. the Stage 10A and Stage 10B behavior from Section 7;
-5. both receipt schemas from Section 8;
-6. the ChatGPT reconciliation schema from Section 9;
-7. the definition of done from Section 10;
-8. the Mermaid source from Section 12.
+Add Codex as an optional human-authorized `REVIEW_ONLY` reviewer.
 
-### 11.3 `EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md`
-
-Preserve the existing PR-Agent role definition.
-
-Add after the PR-Agent role:
-
-```markdown
-## Optional reviewer — Codex
-
-Codex is an optional human-authorized independent advisory remote reviewer.
-It operates only in `REVIEW_ONLY` mode against the exact current Draft PR head
-SHA. It cannot edit, commit, push, approve, label, merge, deploy, trigger Cline,
-replace ChatGPT, or make the final decision.
-
-The unified reviewer policy and receipt requirements are canonical in
-`docs/plan/CHATGPT_CLINE_DRAFT_PR_EXECUTION_CONTROL_PLAN_2026-07-22.md`.
-```
-
-Replace the old deterministic review tail with:
+Replace the old review tail with:
 
 ```text
 After the Human Owner selects or rejects any external patches:
 
 → canonical Stage 9 exposes the exact Draft PR diff
-→ canonical Stage 10A runs the optional external-review combination declared
-  in the Stage 1 assignment:
-    - NEITHER
-    - PR_AGENT_ONLY
-    - CODEX_ONLY
-    - PR_AGENT_AND_CODEX
-→ canonical Stage 10B runs the required ChatGPT exact-diff review
-→ canonical Stage 11 records ChatGPT PASS, CHANGES_REQUIRED, or BLOCKED
+→ canonical Stage 10A runs the exact optional external-review combination
+→ for PR_AGENT_AND_CODEX: PR-Agent completes first, the head is verified
+  unchanged, then Codex reviews the same current head
+→ canonical Stage 10B runs ChatGPT canonical exact-diff review
+→ canonical Stage 11 records PASS, CHANGES_REQUIRED, or BLOCKED
 → canonical Stage 12 records the Human Owner decision
-→ canonical Stage 13 records LOCKED_ACCEPTED when all acceptance gates pass
+→ canonical Stage 13 records LOCKED_ACCEPTED after every gate passes
 ```
 
-Do not create a mandatory PR-Agent stage. Do not create Stage 10C.
+Do not create a mandatory reviewer, Stage 10C, or parallel review.
 
-### 11.4 `EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md`
+### 13.5 External contributor command pack
 
-In the existing PR-Agent section:
+Preserve the pinned PR-Agent command and security boundaries.
 
-- preserve its exact pinned local command and security boundaries;
-- replace the existing short output schema with `GALAX_PR_AGENT_REVIEW_RECEIPT_V1`;
-- add a cross-reference to the canonical unified policy.
+Replace the short PR-Agent output with `GALAX_PR_AGENT_REVIEW_RECEIPT_V1`.
 
-Add an unnumbered top-level Codex section after the PR-Agent section and before the existing Section 8:
-
-```markdown
-# Codex — Independent advisory remote reviewer
-```
+Add an unnumbered Codex section before the existing numbered Section 8. Do not renumber existing sections.
 
 The Codex section must include:
 
-1. the Codex role from Section 3;
-2. the valid policy mappings below;
-3. `GALAX_CODEX_REVIEW_RECEIPT_V1`;
-4. the ChatGPT reconciliation cross-reference;
-5. exact prohibitions.
+- `INDEPENDENT_ADVISORY_REMOTE_REVIEWER`;
+- `REVIEW_ONLY`;
+- valid policy mappings;
+- `GALAX_CODEX_REVIEW_RECEIPT_V1`;
+- same-current-head rules;
+- no edits, commits, pushes, approval, labels, merge, deployment, secret access, Cline trigger, or canonical authority.
 
-```yaml
-valid_PR_Agent_policy_mappings:
-  PR_AGENT_ONLY:
-    external_review_policy:
-      combination: PR_AGENT_ONLY
-      Codex_receipt_policy: NOT_USED
+### 13.6 README.md
 
-  PR_AGENT_AND_CODEX:
-    external_review_policy:
-      combination: PR_AGENT_AND_CODEX
-      Codex_receipt_policy:
-        allowed_values:
-          - ADVISORY_OPTIONAL
-          - ADVISORY_REQUIRED_RECEIPT
-```
-
-```yaml
-valid_Codex_policy_mappings:
-  CODEX_ONLY:
-    external_review_policy:
-      combination: CODEX_ONLY
-      Codex_receipt_policy:
-        allowed_values:
-          - ADVISORY_OPTIONAL
-          - ADVISORY_REQUIRED_RECEIPT
-
-  PR_AGENT_AND_CODEX:
-    external_review_policy:
-      combination: PR_AGENT_AND_CODEX
-      Codex_receipt_policy:
-        allowed_values:
-          - ADVISORY_OPTIONAL
-          - ADVISORY_REQUIRED_RECEIPT
-```
-
-Codex prohibitions:
-
-```text
-- no file edit, creation, deletion, or rename
-- no commit or push
-- no approval, label, merge, deployment, or workflow mutation
-- no secret or credential access
-- no Cline trigger
-- no direct ChatGPT control
-- no claim of canonical review authority
-- no claim of final acceptance authority
-```
-
-Do not renumber the existing Sections 8 and 9.
-
-### 11.5 `README.md`
-
-Replace the current development-control workflow with:
+Replace the development-control workflow with:
 
 ```text
 ChatGPT issues one exact bounded assignment
 → Cline works locally with manual approvals and checkpoints
 → exact tests
 → separately authorized commit
-→ separately authorized push to implementation branch
-→ draft PR exposes the exact diff
-→ optional external review layer according to the Stage 1 policy (Stage 10A)
-→ ChatGPT canonical exact-diff review and receipt reconciliation (Stage 10B)
-→ ChatGPT returns PASS, CHANGES_REQUIRED, or BLOCKED (Stage 11)
-→ Human Owner accepts, authorizes one exact correction, or rejects (Stage 12)
-→ accepted work is recorded as LOCKED_ACCEPTED in CODE RED (Stage 13)
+→ separately authorized push
+→ Draft PR exposes the exact diff
+→ optional external review layer according to the Stage 1 policy
+→ when both reviewers are selected: PR-Agent then Codex sequentially
+  against the same unchanged current PR head
+→ ChatGPT canonical exact-diff review and receipt reconciliation
+→ ChatGPT returns PASS, CHANGES_REQUIRED, or BLOCKED
+→ Human Owner accepts, authorizes one exact correction, or rejects
+→ accepted work is recorded as LOCKED_ACCEPTED in CODE RED
 ```
 
-Do not name a specific Codex model in README.
+### 13.7 CODE_RED.md
 
-### 11.6 `CODE_RED.md`
-
-Append a bounded governance decision record without changing the operational Phase 2A implementation stage:
+Append a bounded governance decision without changing the operational Phase 2A implementation stage:
 
 ```yaml
 CODE_RED_EXTERNAL_REVIEW_POLICY_DECISION:
@@ -774,35 +770,39 @@ CODE_RED_EXTERNAL_REVIEW_POLICY_DECISION:
   plan_id: PHASE_2A_TRI_AI_ALIGNMENT_AND_RECOVERY_PLAN_001
   operational_Phase_2A_stage_changed: false
   runtime_architecture_changed: false
+  Foundation_contract_change_scope: Section_11_external_contributor_boundary_only
+
+  policy_applicability:
+    current_scope:
+      - Governance_Foundation
+      - Agent_01
+    historical_assignments_retroactively_invalidated: false
+    Agents_02_to_15_enabled: false
 
   external_review_layer:
     PR_Agent_optional: true
     Codex_optional: true
+    both_reviewers_execution: SEQUENTIAL_READ_ONLY
+    parallel_external_reviews: prohibited
     ChatGPT_canonical_review_required: true
     Human_Owner_final_authority: true
-
-  allowed_combinations:
-    - NEITHER
-    - PR_AGENT_ONLY
-    - CODEX_ONLY
-    - PR_AGENT_AND_CODEX
 
   automatic_reviewer_trigger_enabled: false
   custom_bridge_status: deferred
   custom_MCP_bridge_status: prohibited_now
 
   plan_publication_performed: true
-  governance_file_mutation_performed: false
+  governance_implementation_performed: false
   implementation_file_mutation_performed: false
-  commit_performed_by_Cline: false
-  push_performed_by_Cline: false
+  Cline_commit_performed: false
+  Cline_push_performed: false
   PR_Agent_triggered: false
   Codex_triggered: false
 ```
 
-When Cline later executes the governance edits, the same record must be updated with the actual commit, push, Draft PR, review, and Human Owner acceptance evidence. Do not claim those events before they occur.
+Update factual fields only after the corresponding events occur.
 
-## 12. Canonical Mermaid flow
+## 14. Canonical Mermaid flow
 
 ````text
 ```mermaid
@@ -822,7 +822,9 @@ flowchart TD
     N["No optional external reviewer"]
     PRA["PR-Agent independent<br/>REVIEW_ONLY review"]
     CX["Codex independent<br/>REVIEW_ONLY review"]
-    BOTH["PR-Agent and Codex<br/>independent REVIEW_ONLY reviews"]
+    PRA_BOTH["PR-Agent independent<br/>REVIEW_ONLY review"]
+    HEAD_CHECK{"PR head unchanged<br/>after PR-Agent review?"}
+    CX_BOTH["Codex independent REVIEW_ONLY review<br/>of the same unchanged PR head"]
 
     R{"External-review policy<br/>requirements satisfied?"}
     POLICY_GATE{"Human external-review<br/>policy decision"}
@@ -847,12 +849,15 @@ flowchart TD
     P -->|NEITHER| N
     P -->|PR_AGENT_ONLY| PRA
     P -->|CODEX_ONLY| CX
-    P -->|PR_AGENT_AND_CODEX| BOTH
+    P -->|PR_AGENT_AND_CODEX| PRA_BOTH
 
     N --> S10B
     PRA --> R
     CX --> R
-    BOTH --> R
+    PRA_BOTH --> HEAD_CHECK
+    HEAD_CHECK -->|Yes| CX_BOTH
+    HEAD_CHECK -->|No; first receipt is stale| POLICY_GATE
+    CX_BOTH --> R
 
     R -->|Yes| S10B
     R -->|No| POLICY_GATE
@@ -872,59 +877,54 @@ flowchart TD
 ```
 ````
 
-## 13. Execution ownership
+## 15. Execution ownership
 
 ```yaml
-plan_creation_and_architecture:
+plan_architecture:
   owner: ChatGPT
   status: COMPLETE_IN_THIS_DOCUMENT
 
-repository_plan_publication:
+plan_publication:
   owner: ChatGPT
-  status: AUTHORIZED_BY_HUMAN_OWNER
+  status: PUBLISHED_TO_DRAFT_PR_8
 
-local_governance_file_edits:
-  owner: Cline
+Human_Owner_plan_acceptance:
+  status: REQUIRED_BEFORE_CLINE_EXECUTION
+
+Cline_governance_edits:
   mode: ACT_BOUNDED
-  status: NOT_YET_AUTHORIZED
+  status: PREPARED_NOT_AUTHORIZED
 
 validation:
   owner: Cline
-  mode: separately_authorized_commands
-  status: NOT_YET_AUTHORIZED
+  status: REQUIRES_SEPARATE_AUTHORIZATION
 
 commit:
   owner: Cline
-  authorization: separate_Human_Owner_gate
-  status: NOT_YET_AUTHORIZED
+  status: REQUIRES_SEPARATE_HUMAN_AUTHORIZATION
 
 push:
   owner: Cline
-  authorization: separate_Human_Owner_gate
-  status: NOT_YET_AUTHORIZED
+  status: REQUIRES_SEPARATE_HUMAN_AUTHORIZATION
 
 optional_PR_Agent_review:
-  owner: PR_Agent
   mode: REVIEW_ONLY
-  status: NOT_SELECTED_BY_THIS_DOCUMENT
+  status: NOT_SELECTED
 
 optional_Codex_review:
-  owner: Codex
   mode: REVIEW_ONLY
-  status: NOT_SELECTED_BY_THIS_DOCUMENT
+  status: NOT_SELECTED
 
-canonical_exact_diff_review:
-  owner: ChatGPT
-  status: REQUIRED_AFTER_Draft_PR_update
+ChatGPT_canonical_review:
+  status: REQUIRED_AFTER_CURRENT_DRAFT_PR_DIFF_EXISTS
 
-final_acceptance:
-  owner: Human_Owner
+Human_Owner_final_acceptance:
   status: REQUIRED
 ```
 
-## 14. Cline implementation contract
+## 16. Cline execution contract
 
-Cline must not redesign this plan. Cline's Stage 2 output is limited to a compliance receipt confirming that it can apply the literal fragments in this document.
+Cline must execute this plan, not redesign it.
 
 ```yaml
 CLINE_EXECUTION_READINESS_RECEIPT_V1:
@@ -936,6 +936,7 @@ CLINE_EXECUTION_READINESS_RECEIPT_V1:
   files_read: []
   allowed_paths_verified:
   prohibited_paths_verified:
+  Foundation_contract_Section_11_boundary_verified:
   exact_fragments_located:
   unresolved_placeholders_found: []
   conflicts_with_current_files: []
@@ -946,22 +947,27 @@ CLINE_EXECUTION_READINESS_RECEIPT_V1:
   blocker:
 ```
 
-Cline must return `BLOCKED_REPOSITORY_STATE_MISMATCH` if the assigned branch or head differs from the exact assignment.
+Cline must stop with:
 
-Cline must return `BLOCKED_PLAN_FRAGMENT_CONFLICT` if a literal fragment cannot be applied without changing a decision in this plan.
+- `BLOCKED_REPOSITORY_STATE_MISMATCH` for branch or HEAD mismatch;
+- `BLOCKED_PLAN_FRAGMENT_CONFLICT` when a literal fragment cannot be applied;
+- `BLOCKED_SCOPE_EXPANSION_REQUIRED` when any change outside the seven files or Foundation Section 11 is required.
 
 Cline must not silently invent a replacement.
 
-## 15. Required validation after Cline edits
-
-The later exact Act assignment must separately authorize the relevant read-only validation commands.
-
-Minimum validation:
+## 17. Required validation after Cline edits
 
 ```yaml
 documentation_validation:
-  - verify_all_six_allowed_files_are_the_only_changed_files
-  - verify_no_source_or_test_file_changed
+  - verify_exactly_seven_or_fewer_allowed_files_changed
+  - verify_no_source_test_dependency_or_workflow_file_changed
+  - verify_Foundation_contract_only_Section_11_changed
+  - verify_all_Agent_01_runtime_invariants_unchanged
+  - verify_policy_scope_is_Foundation_and_Agent_01_only
+  - verify_historical_assignments_not_retroactively_invalidated
+  - verify_PR_Agent_then_Codex_is_sequential_when_both_selected
+  - verify_parallel_external_review_is_prohibited
+  - verify_same_current_PR_head_required
   - verify_no_duplicate_Stage_10_definition
   - verify_Stage_11_12_13_canonical_lines_preserved
   - verify_custom_bridge_is_deferred
@@ -972,13 +978,11 @@ documentation_validation:
   - verify_Mermaid_parses
   - verify_no_unresolved_placeholder
   - verify_no_broken_section_reference
-  - verify_PR_Agent_and_Codex_policy_mapping
+  - verify_policy_mapping
   - verify_Codex_receipt_does_not_allow_NOT_USED
   - verify_all_Stage_11_results_route_to_Stage_12
   - verify_rejection_and_blocked_routes_stop_or_require_human_action
 ```
-
-Required evidence:
 
 ```yaml
 required_evidence:
@@ -987,13 +991,15 @@ required_evidence:
   - git_diff_stat
   - exact_changed_file_list
   - per_file_diff_summary
+  - Foundation_contract_section_diff
+  - Agent_01_invariant_comparison
   - Mermaid_validation_result
   - placeholder_search_result
   - policy_mapping_validation_result
   - canonical_stage_line_validation_result
 ```
 
-## 16. Stop conditions
+## 18. Stop conditions
 
 ```yaml
 stop_conditions:
@@ -1003,10 +1009,13 @@ stop_conditions:
   - current_plan_file_missing
   - allowed_path_missing
   - unlisted_path_requires_change
+  - Foundation_contract_section_outside_11_requires_change
+  - Agent_01_runtime_invariant_would_change
   - accepted_artifact_unlock_required
   - conflicting_higher_authority_rule
   - duplicate_Stage_10_required
   - invalid_external_review_policy
+  - parallel_external_review_required
   - Mermaid_parse_failure
   - unresolved_placeholder
   - validation_failure
@@ -1017,12 +1026,16 @@ stop_conditions:
 
 No blocked route may continue to a successful stage.
 
-## 17. Plan completion status
+## 19. Plan status
 
 ```yaml
 plan_complete: true
-architecture_decisions_complete: true
+compatibility_with_original_CrewAI_remediation: true
+compatibility_with_Foundation_Agent_01_runtime: true
+Foundation_contract_alignment_defined: true
 role_boundaries_complete: true
+policy_scope_complete: true
+sequential_dual_review_complete: true
 external_review_policy_complete: true
 assignment_schema_extension_complete: true
 receipt_schemas_complete: true
@@ -1032,7 +1045,7 @@ Mermaid_complete: true
 validation_contract_complete: true
 Cline_redesign_required: false
 
-current_status: READY_FOR_HUMAN_ACT_AUTHORIZATION
+current_status: READY_FOR_HUMAN_PLAN_REVIEW
 next_owner: Human_Owner
-next_action: issue_one_exact_Cline_ACT_BOUNDED_assignment_against_the_plan_branch_after_verifying_its_current_head_SHA
+next_action: accept_or_reject_this_corrected_plan_before_Cline_ACT_BOUNDED_execution
 ```
