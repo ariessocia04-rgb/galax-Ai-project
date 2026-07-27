@@ -4,6 +4,7 @@
 **Previous role:** canonical conversation-length continuity protocol  
 **Canonical protocol:** `docs/operations/CODE_RED.md`  
 **Current exact handoff guide:** `docs/operations/GALAX_NEW_CHAT_CONTINUITY_GUIDE_2026-07-27.md`  
+**Latest exact checkpoint:** `docs/operations/checkpoints/GALAX_LENGTH_CHECKPOINT_2026-07-27_CREWAI_COMPATIBILITY_AUDIT.md`  
 **Do not use this file alone as the source of truth.**
 
 The owner renamed the Galax continuity and recovery protocol to:
@@ -19,10 +20,11 @@ README.md
 → AGENTS.md
 → docs/operations/CODE_RED.md
 → docs/operations/GALAX_NEW_CHAT_CONTINUITY_GUIDE_2026-07-27.md
+→ docs/operations/checkpoints/GALAX_LENGTH_CHECKPOINT_2026-07-27_CREWAI_COMPATIBILITY_AUDIT.md
 → the active assignment, pull requests, issues, branch heads, and newest continuity comments
 ```
 
-`CODE_RED.md` defines the canonical recovery protocol. The dated continuity guide records the material work completed from the beginning through the latest verified stop point and identifies the exact safe continuation action.
+`CODE_RED.md` defines the canonical recovery protocol. The dated continuity guide records the material work completed from the beginning. The latest checkpoint records the newest exact stop point and safe resume action. Live GitHub state must still be verified because no checkpoint grants authority or freezes future branch movement.
 
 Legacy and current trigger phrases all route to this procedure:
 
@@ -47,9 +49,10 @@ On any trigger above, the new chat must:
 ```text
 stop relying on remembered chat fragments
 → verify repository access
-→ verify the current research, implementation, and plan branch HEAD SHAs
+→ verify the current research, implementation, plan, and continuity branch HEAD SHAs
 → read CODE RED completely
 → read the current new-chat continuity guide completely
+→ read the latest exact checkpoint completely
 → inspect active Draft PRs and assignment issues
 → separate remote-proven facts from reported local-only facts
 → reconstruct completed, rejected, active, blocked, and pending work
@@ -59,6 +62,22 @@ stop relying on remembered chat fragments
 ```
 
 Do not ask the owner to repeat repository history when repository access exists. Do not create another plan merely because the conversation changed. Do not repeat completed work.
+
+## Current dual-track stop point
+
+The latest checkpoint separates two independent work tracks:
+
+```yaml
+Track_A_Cline_Issue_9:
+  exact_stop_point: WAITING_FOR_CLINE_EXECUTION_READINESS_RECEIPT_V1
+  Cline_execution_proven: false
+
+Track_B_ChatGPT_CrewAI_compatibility_audit:
+  exact_stop_point: SOURCE_LEVEL_AUDIT_PAUSED_BEFORE_EXACT_ONE_LLM_CALL_PROOF
+  overall_verdict: IN_PROGRESS_CANNOT_CLAIM_100_PERCENT_YET
+```
+
+A new chat must not confuse the active Cline assignment with the separately requested factual CrewAI compatibility audit.
 
 ## Owner standing checkpoint directive
 
@@ -121,7 +140,7 @@ Do not delete it until:
 
 ```text
 all inbound references are inventoried
-→ every active reference is migrated to CODE RED and the current continuity guide
+→ every active reference is migrated to CODE RED, the current continuity guide, and the latest checkpoint
 → historical evidence is preserved
 → link and repository checks pass
 → the human owner explicitly authorizes removal
