@@ -314,18 +314,92 @@ python -m pr_agent.cli \
 Required output:
 
 ```yaml
-review_status: PASS_FOR_HUMAN_REVIEW | CHANGES_REQUIRED | BLOCKED_EVIDENCE_MISSING
-scope_compliance:
-architecture_compliance:
-security_findings: []
-missing_tests: []
-unsupported_claims: []
-fabricated_or_unverifiable_evidence: []
-files_requiring_attention: []
-recommended_next_action:
-approval_given: false
-merge_performed: false
+GALAX_PR_AGENT_REVIEW_RECEIPT_V1:
+  assignment_id:
+  repository:
+  PR_number:
+  base_branch:
+  base_sha:
+  head_branch:
+  current_PR_head_sha:
+  reviewed_head_sha:
+  mode: REVIEW_ONLY
+  files_reviewed: []
+  plan_alignment: PASS | FAIL | BLOCKED
+  architecture_compatibility: PASS | FAIL | BLOCKED
+  test_evidence_assessment: PASS | FAIL | BLOCKED | NOT_APPLICABLE
+  security_assessment: PASS | FAIL | BLOCKED
+  regressions: []
+  unauthorized_changes: []
+  unsupported_claims: []
+  blockers: []
+  exact_advisory_findings: []
+  status: PASS_FOR_HUMAN_REVIEW | CHANGES_REQUIRED | BLOCKED_EVIDENCE_MISSING
+  authoritative: false
+  mutations_performed: false
+  next_action: RETURN_TO_HUMAN_OWNER
 ```
+
+# Codex — Independent advisory remote reviewer
+
+## Role and configuration
+
+```yaml
+role: INDEPENDENT_ADVISORY_REMOTE_REVIEWER
+mode: REVIEW_ONLY
+exact_model: recorded_at_authorized_review_trigger
+automatic_trigger: prohibited
+write_authority: false
+approval_authority: false
+canonical_review_authority: false
+final_acceptance_authority: false
+custom_bridge: deferred
+custom_MCP_bridge: prohibited_now
+```
+
+Codex operates only when an exact Stage 1 `GALAX_AI_ASSIGNMENT_V1` selects `CODEX_ONLY` or `PR_AGENT_AND_CODEX` with a valid Codex receipt policy (`ADVISORY_OPTIONAL` or `ADVISORY_REQUIRED_RECEIPT`). It is never triggered automatically.
+
+### Review head rule
+
+The current PR head SHA is required. A review becomes stale when the head changes. When both PR-Agent and Codex are selected, PR-Agent completes first against the current PR head, the head is verified unchanged, then Codex reviews the same current head.
+
+### Prohibitions
+
+Codex must not edit code, fix tests, suggest commits, commit, push, approve, merge, deploy, read secrets, write repository source, label PRs, publish output, trigger Cline, trigger ChatGPT, or make final decisions.
+
+### Advisory receipt
+
+```yaml
+GALAX_CODEX_REVIEW_RECEIPT_V1:
+  assignment_id:
+  repository:
+  PR_number:
+  base_branch:
+  base_sha:
+  head_branch:
+  current_PR_head_sha:
+  reviewed_head_sha:
+  mode: REVIEW_ONLY
+  Codex_receipt_policy: ADVISORY_OPTIONAL | ADVISORY_REQUIRED_RECEIPT
+  exact_model:
+  files_reviewed: []
+  plan_alignment: PASS | FAIL | BLOCKED
+  CrewAI_compatibility: PASS | FAIL | BLOCKED
+  architecture_compatibility: PASS | FAIL | BLOCKED
+  test_evidence_assessment: PASS | FAIL | BLOCKED | NOT_APPLICABLE
+  security_assessment: PASS | FAIL | BLOCKED
+  regressions: []
+  unauthorized_changes: []
+  unsupported_claims: []
+  blockers: []
+  exact_advisory_findings: []
+  status: ADVISORY_PASS | ADVISORY_CHANGES_SUGGESTED | ADVISORY_BLOCKER_FLAGGED
+  authoritative: false
+  mutations_performed: false
+  next_action: RETURN_TO_HUMAN_OWNER
+```
+
+No Codex receipt exists when the policy is `NOT_USED`.
 
 # 8. Human coordination commands
 

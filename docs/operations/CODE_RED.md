@@ -540,3 +540,41 @@ LLM_profile_activation: false
 Agents_02_to_15: false
 production_ready_claim: false
 ```
+
+### CODE_RED_EXTERNAL_REVIEW_POLICY_DECISION
+
+```yaml
+CODE_RED_EXTERNAL_REVIEW_POLICY_DECISION:
+  classification: HUMAN_OWNER_APPROVED_GOVERNANCE_PLAN
+  plan_id: PHASE_2A_TRI_AI_ALIGNMENT_AND_RECOVERY_PLAN_001
+  operational_Phase_2A_stage_changed: false
+  runtime_architecture_changed: false
+  Foundation_contract_change_scope: Section_11_external_contributor_boundary_only
+
+  policy_applicability:
+    current_scope:
+      - Governance_Foundation
+      - Agent_01
+    historical_assignments_retroactively_invalidated: false
+    Agents_02_to_15_enabled: false
+
+  external_review_layer:
+    PR_Agent_optional: true
+    Codex_optional: true
+    both_reviewers_execution: SEQUENTIAL_READ_ONLY
+    parallel_external_reviews: prohibited
+    ChatGPT_canonical_review_required: true
+    Human_Owner_final_authority: true
+
+  automatic_reviewer_trigger_enabled: false
+  custom_bridge_status: deferred
+  custom_MCP_bridge_status: prohibited_now
+
+  plan_publication_performed: true
+  governance_implementation_performed: true
+  implementation_file_mutation_performed: true
+  Cline_commit_performed: false
+  Cline_push_performed: false
+  PR_Agent_triggered: false
+  Codex_triggered: false
+```

@@ -151,13 +151,12 @@ Cline, OpenHands Core, mini-SWE-agent, Aider, PR-Agent, Codex, Copilot, Claude C
 Only one contributor may write to the active implementation worktree at a time.
 
 ```text
-Cline primary implementation
-→ Aider exact failing-test repair when assigned
-→ mini-SWE-agent isolated comparison when assigned
-→ OpenHands Docker-isolated reproduction when assigned
-→ PR-Agent read-only review when assigned
-→ ChatGPT exact draft-PR diff review
-→ human decision
+Cline performs the exact bounded primary implementation
+→ Aider, mini-SWE-agent, or OpenHands may act only when separately assigned
+  for their existing narrow repair, comparison, or reproduction roles
+→ optional external review layer executes according to the exact Stage 1 policy
+→ ChatGPT performs the required canonical exact Draft PR diff review
+→ Human Owner makes the final decision
 ```
 
 OpenCode and goose remain declined or deferred unless a new exact repository decision changes their status.
@@ -174,6 +173,61 @@ custom_bridge: deferred
 custom_MCP_bridge: prohibited_now
 simultaneous_writers: prohibited
 ```
+
+### External review layer
+
+The optional external review layer executes according to the exact Stage 1 policy for new in-scope Governance Foundation and Agent 01 assignments created after Human Owner acceptance.
+
+```yaml
+PR_Agent:
+  contributor_class: EXTERNAL_DEVELOPMENT_CONTRIBUTOR
+  role: OPTIONAL_READ_ONLY_STABLE_PR_REVIEWER
+  mode: REVIEW_ONLY
+  automatic_trigger: prohibited
+  automatic_feedback: disabled
+  write_authority: false
+  approval_authority: false
+  canonical_review_authority: false
+  final_acceptance_authority: false
+  merge_authority: false
+
+Codex:
+  contributor_class: EXTERNAL_DEVELOPMENT_CONTRIBUTOR
+  role: INDEPENDENT_ADVISORY_REMOTE_REVIEWER
+  mode: REVIEW_ONLY
+  exact_model: recorded_at_authorized_review_trigger
+  automatic_trigger: prohibited
+  write_authority: false
+  canonical_review_authority: false
+  final_acceptance_authority: false
+  direct_Cline_control: prohibited
+  direct_ChatGPT_control: prohibited
+  custom_bridge: deferred
+  custom_MCP_bridge: prohibited_now
+```
+
+### External review policy
+
+Every new Stage 1 `GALAX_AI_ASSIGNMENT_V1` created after Human Owner acceptance must declare one exact combination and one exact Codex receipt policy.
+
+```yaml
+external_review_policy:
+  combination:
+    allowed_values:
+      - NEITHER
+      - PR_AGENT_ONLY
+      - CODEX_ONLY
+      - PR_AGENT_AND_CODEX
+  Codex_receipt_policy:
+    allowed_values:
+      - NOT_USED
+      - ADVISORY_OPTIONAL
+      - ADVISORY_REQUIRED_RECEIPT
+```
+
+When both reviewers are selected, they run sequentially: PR-Agent completes first against the current PR head, the head is verified unchanged, then Codex reviews the same current head. Parallel external reviews are prohibited. The current PR head is required for all reviews. A review becomes stale when the head changes.
+
+PR-Agent and Codex have no canonical or final authority. ChatGPT remains the canonical exact-diff reviewer. The Human Owner is the final authority.
 
 ChatGPT must inspect the repository before assigning or correcting work, write exact bounded instructions, check every coherent completed job through the exact draft-PR diff, and assess compatibility with the pinned CrewAI version and active Flow contract.
 

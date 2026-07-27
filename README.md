@@ -240,10 +240,15 @@ ChatGPT issues one exact bounded assignment
 → Cline works locally with manual approvals and checkpoints
 → exact tests
 → separately authorized commit
-→ separately authorized push to implementation branch
-→ draft PR exposes the exact diff
-→ ChatGPT reviews plan alignment, CrewAI compatibility, architecture, tests, security, regressions, and accepted-work preservation
-→ human accepts or authorizes one exact correction
+→ separately authorized push
+→ Draft PR exposes the exact diff
+→ optional external review layer according to the Stage 1 policy
+→ when both reviewers are selected: PR-Agent then Codex sequentially
+  against the same unchanged current PR head
+→ ChatGPT canonical exact-diff review and receipt reconciliation
+→ ChatGPT returns PASS, CHANGES_REQUIRED, or BLOCKED
+→ Human Owner accepts, authorizes one exact correction, or rejects
+→ accepted work is recorded as LOCKED_ACCEPTED in CODE RED
 ```
 
 A file or stage accepted through ChatGPT exact-diff review and human decision becomes `LOCKED_ACCEPTED`.

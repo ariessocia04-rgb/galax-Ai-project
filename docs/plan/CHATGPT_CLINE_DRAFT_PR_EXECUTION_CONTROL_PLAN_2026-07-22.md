@@ -152,6 +152,10 @@ GALAX_AI_ASSIGNMENT_V1:
   role: <EXACT_ROLE>
   mode: PLAN_ONLY | ACT_BOUNDED | REVIEW_ONLY
 
+  external_review_policy:
+    combination: NEITHER | PR_AGENT_ONLY | CODEX_ONLY | PR_AGENT_AND_CODEX
+    Codex_receipt_policy: NOT_USED | ADVISORY_OPTIONAL | ADVISORY_REQUIRED_RECEIPT
+
   authority:
     source: <REPOSITORY_FILE_OR_GITHUB_ASSIGNMENT>
     human_authorized: true_or_false
@@ -203,6 +207,12 @@ GALAX_AI_ASSIGNMENT_V1:
     - missing_evidence
     - accepted_artifact_without_unlock
     - cleanup_candidate_not_proven
+    - external_review_policy_missing_for_new_in_scope_assignment
+    - external_review_policy_invalid
+    - selected_external_reviewer_not_authorized
+    - selected_external_reviewer_head_mismatch
+    - required_external_review_receipt_missing
+    - required_external_review_receipt_stale
 
   required_output:
     - CODE_RED_receipt_when_triggered
@@ -237,7 +247,8 @@ STAGE 6 — Cline runs only separately authorized validation commands
 STAGE 7 — Human authorizes a coherent local commit
 STAGE 8 — Human separately authorizes push to the implementation branch
 STAGE 9 — Draft PR updates with the exact remote diff
-STAGE 10 — ChatGPT inspects the exact PR diff, repository rules, tests, cleanup effects, accepted-work preservation, and CrewAI compatibility
+STAGE 10A — OPTIONAL EXTERNAL REVIEW LAYER
+STAGE 10B — CHATGPT CANONICAL EXACT-DIFF REVIEW
 STAGE 11 — ChatGPT returns PASS, CHANGES_REQUIRED, or BLOCKED
 STAGE 12 — Human accepts the stage or authorizes one exact correction
 STAGE 13 — Accepted files and stage are recorded as LOCKED_ACCEPTED in CODE RED
