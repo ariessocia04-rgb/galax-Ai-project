@@ -308,6 +308,70 @@ approval_given: false
 merge_performed: false
 ```
 
+### Contributor 6 — Codex
+
+```yaml
+role: INDEPENDENT_ADVISORY_REMOTE_REVIEWER
+mode: REVIEW_ONLY
+exact_model: recorded_at_authorized_review_trigger
+automatic_trigger: prohibited
+direct_Cline_control: prohibited
+direct_ChatGPT_control: prohibited
+write_authority: false
+approval_authority: false
+canonical_review_authority: false
+final_acceptance_authority: false
+custom_bridge: deferred
+custom_MCP_bridge: prohibited_now
+```
+
+### Goal
+
+Provide an independent advisory review of a stable Draft PR for scope compliance, architecture drift, CrewAI compatibility, missing tests, security violations, and unresolved blockers. Codex operates only when an exact Stage 1 assignment selects `CODEX_ONLY` or `PR_AGENT_AND_CODEX` with a valid Codex receipt policy.
+
+Codex must not edit code, commit, push, approve, merge, deploy, access secrets, trigger Cline, or make final decisions.
+
+### Entry gate
+
+- An exact `GALAX_AI_ASSIGNMENT_V1` with `codereviewer` or equivalent role exists.
+- The Codex receipt policy is `ADVISORY_OPTIONAL` or `ADVISORY_REQUIRED_RECEIPT`.
+- The Draft PR exists at a known current head SHA.
+- The human owner has separately authorized the Codex review trigger.
+
+### Exit gate
+
+Return:
+
+```yaml
+GALAX_CODEX_REVIEW_RECEIPT_V1:
+  assignment_id:
+  repository:
+  PR_number:
+  base_branch:
+  base_sha:
+  head_branch:
+  current_PR_head_sha:
+  reviewed_head_sha:
+  mode: REVIEW_ONLY
+  Codex_receipt_policy: ADVISORY_OPTIONAL | ADVISORY_REQUIRED_RECEIPT
+  exact_model:
+  files_reviewed: []
+  plan_alignment: PASS | FAIL | BLOCKED
+  CrewAI_compatibility: PASS | FAIL | BLOCKED
+  architecture_compatibility: PASS | FAIL | BLOCKED
+  test_evidence_assessment: PASS | FAIL | BLOCKED | NOT_APPLICABLE
+  security_assessment: PASS | FAIL | BLOCKED
+  regressions: []
+  unauthorized_changes: []
+  unsupported_claims: []
+  blockers: []
+  exact_advisory_findings: []
+  status: ADVISORY_PASS | ADVISORY_CHANGES_SUGGESTED | ADVISORY_BLOCKER_FLAGGED
+  authoritative: false
+  mutations_performed: false
+  next_action: RETURN_TO_HUMAN_OWNER
+```
+
 ## 11. Deterministic work sequence
 
 ```text
@@ -320,8 +384,17 @@ STAGE 5 Aider may repair one exact reproducible failure
 STAGE 6 mini-SWE-agent may produce one isolated comparison patch
 STAGE 7 OpenHands may reproduce one unresolved environment or blocker issue
 STAGE 8 Human selects or rejects external patches
-STAGE 9 PR-Agent performs local read-only review
-STAGE 10 Human decides revise, publish/update draft PR, stop, or later merge
+
+After the Human Owner selects or rejects any external patches:
+
+→ canonical Stage 9 exposes the exact Draft PR diff
+→ canonical Stage 10A runs the exact optional external-review combination
+→ for PR_AGENT_AND_CODEX: PR-Agent completes first, the head is verified
+  unchanged, then Codex reviews the same current head
+→ canonical Stage 10B runs ChatGPT canonical exact-diff review
+→ canonical Stage 11 records PASS, CHANGES_REQUIRED, or BLOCKED
+→ canonical Stage 12 records the Human Owner decision
+→ canonical Stage 13 records LOCKED_ACCEPTED after every gate passes
 ```
 
 Stages 5–7 are conditional and sequential. They are not parallel writers and may be skipped when their entry conditions are absent.

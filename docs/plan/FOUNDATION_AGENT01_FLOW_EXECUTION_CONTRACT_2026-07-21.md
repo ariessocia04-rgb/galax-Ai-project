@@ -326,7 +326,7 @@ This exception does not generally authorize zero-tool agents. It applies only to
 
 ## 11. External contributor boundary
 
-Cline, OpenHands Core, mini-SWE-agent, Aider, and PR-Agent remain external controlled-trial development contributors. They are not Galax Agents 01–15.
+Cline, OpenHands Core, mini-SWE-agent, Aider, PR-Agent, and Codex remain external controlled-trial development contributors. They are not Galax Agents 01–15.
 
 ```yaml
 simultaneous_repository_writers: prohibited
@@ -340,11 +340,33 @@ The deterministic contributor order remains conditional and sequential:
 
 ```text
 Cline primary implementation
-→ Aider one exact repair when assigned
-→ mini-SWE-agent isolated comparison when assigned
-→ OpenHands isolated fallback reproduction when assigned
-→ PR-Agent read-only review
-→ human decision
+→ Aider one exact repair when separately assigned
+→ mini-SWE-agent isolated comparison when separately assigned
+→ OpenHands isolated fallback reproduction when separately assigned
+→ optional external review layer according to the exact Stage 1 policy:
+    - NEITHER
+    - PR_AGENT_ONLY
+    - CODEX_ONLY
+    - PR_AGENT_AND_CODEX
+→ when both are selected: PR-Agent REVIEW_ONLY, verify unchanged head,
+  then Codex REVIEW_ONLY
+→ ChatGPT canonical exact-diff review
+→ Human Owner decision
+```
+
+```yaml
+external_review_alignment:
+  scope:
+    - Governance_Foundation
+    - Agent_01
+  PR_Agent_optional: true
+  Codex_optional: true
+  both_reviewers_execution: SEQUENTIAL_READ_ONLY
+  parallel_external_reviews: prohibited
+  same_current_PR_head_required: true
+  ChatGPT_canonical_review_required: true
+  Human_Owner_final_authority: true
+  runtime_architecture_changed: false
 ```
 
 Stages may be skipped when their entry condition is absent. No two writers may edit the same worktree or overlapping files concurrently.
