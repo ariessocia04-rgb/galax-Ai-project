@@ -13,6 +13,11 @@ scope: completed_achievements_only
 replaces_CODE_RED: false
 modifies_LOCKED_ACCEPTED_artifacts: false
 runtime_or_source_change: false
+update_authorization: AUTHORIZE_PHASE_2B_LENGTH_ACHIEVEMENT_REPO_UPDATE_035A
+latest_completed_assignment: AUTHORIZE_PHASE_2B_EXACT_DIFF_SPECIFICATION_PLAN_035
+current_progress_estimate: 23_PERCENT
+progress_estimate_range: 20_TO_25_PERCENT
+progress_is_estimate_not_runtime_proof: true
 ```
 
 ## Purpose
@@ -219,8 +224,6 @@ merge_base: bafb230a995744743af5c0bdd612ad1e7c7568ae
 canonical_only_commits: 75
 candidate_only_commits: 18
 changed_path_count: 58
-new_local_branch_created: false
-new_worktree_created: false
 remote_mutation_performed_by_Stage_0: false
 ```
 
@@ -230,29 +233,170 @@ Candidate classification completed:
 REUSE_AS_IS_CANDIDATE:
   - .gitignore
   - src/galax/foundation/__init__.py
-
 REUSE_WITH_EXACT_CORRECTION:
   - pyproject.toml
   - uv.lock
   - src/galax/__init__.py
   - src/galax/foundation/models.py
   - tests/test_foundation_contracts.py
-
 old_candidate_governance_and_documentation_changes: DO_NOT_PORT
 ```
+
+### Achievement 16 — Phase 2B Stage 1 contract-port plan completed and reviewed PASS
+
+```yaml
+assignment_id: AUTHORIZE_PHASE_2B_CLINE_STAGE_1_CONTRACT_PORT_PLAN_026
+mode: PLAN_ONLY
+final_status: PASS
+approved_build_backend_at_that_point: NONE
+uv_lock_policy: REGENERATE_LATER
+missing_runtime_surfaces_split_across_Stages_2_to_4: true
+file_edits_performed: false
+dependencies_installed: false
+tests_run: false
+commit_or_push_performed: false
+```
+
+### Achievement 17 — Dedicated local Phase 2B branch and worktree created
+
+```yaml
+assignment_id: AUTHORIZE_PHASE_2B_CLINE_ACTION_A_WORKTREE_SETUP_028
+local_branch: implementation/phase-2b-agent01-runtime-2026-07-28
+local_worktree: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime
+worktree_head_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
+worktree_status: clean
+remote_branch_created: false
+files_modified: []
+commit_performed: false
+push_performed: false
+checkpoint_comment_id: 5104047789
+```
+
+### Achievement 18 — Action B0 exact-diff investigation completed with a reviewed factual BLOCKED result
+
+```yaml
+assignment_id: AUTHORIZE_PHASE_2B_CLINE_ACTION_B0_EXACT_DIFF_SPECIFICATION_030
+receipt_review: PASS
+assignment_completion: COMPLETE
+final_status: BLOCKED
+blockers:
+  - BLOCKED_PENDING_BACKEND_SELECTION
+  - BLOCKED_INSUFFICIENT_EXACT_CONTRACT_DETAIL
+files_modified: []
+dependencies_installed: false
+tests_run: []
+commit_performed: false
+push_performed: false
+checkpoint_authorization: AUTHORIZE_PHASE_2B_ACTION_B0_CHECKPOINT_SAVE_031
+checkpoint_comment_id: 5105248617
+```
+
+The `BLOCKED` result was the correct result of the read-only specification audit and did not represent a Cline failure.
+
+### Achievement 19 — Exact Python build-backend decision completed
+
+```yaml
+assignment_id: AUTHORIZE_PHASE_2B_BUILD_BACKEND_DECISION_PLAN_032
+mode: PLAN_ONLY
+selected_backend: uv_build
+selected_version: 0.11.29
+build_backend_entrypoint: uv_build
+module_name: galax
+module_root: src
+previous_backend_blocker: RESOLVED_AT_PLAN_LEVEL
+implementation_performed: false
+lockfile_regenerated: false
+tests_run: []
+```
+
+### Achievement 20 — Exact model-contract addendum plan completed
+
+```yaml
+assignment_id: AUTHORIZE_PHASE_2B_MODEL_CONTRACT_ADDENDUM_PLAN_033
+mode: PLAN_ONLY
+review_result: PASS
+exact_fields_defined: true
+exact_types_defined: true
+exact_defaults_defined: true
+exact_validators_defined: true
+exact_invariants_defined: true
+exact_error_conditions_defined: true
+exact_route_transitions_defined: true
+exact_required_tests_defined: true
+FoundationFlowState_frozen_true: REJECTED_INCOMPATIBLE_WITH_CREWAI_FLOW_STATE_MUTATION
+FoundationFlowState_required_frozen_value: false
+previous_model_contract_blocker: RESOLVED_AT_PLAN_LEVEL
+implementation_performed: false
+```
+
+### Achievement 21 — Build-backend and model-contract decisions saved to continuity
+
+```yaml
+assignment_id: AUTHORIZE_PHASE_2B_CONTRACT_DECISIONS_CHECKPOINT_SAVE_034
+record_type: CONTINUITY_ONLY
+checkpoint_comment_id: 5105635239
+source_or_runtime_modified: false
+implementation_authorized: false
+```
+
+### Achievement 22 — New three-file exact-diff specification plan completed
+
+```yaml
+assignment_id: AUTHORIZE_PHASE_2B_EXACT_DIFF_SPECIFICATION_PLAN_035
+mode: PLAN_ONLY_READ_ONLY
+review_result: PASS
+exact_file_specs:
+  pyproject.toml: COMPLETE
+  src/galax/foundation/models.py: COMPLETE
+  tests/test_foundation_contracts.py: COMPLETE
+build_backend_blocker: RESOLVED_AT_PLAN_LEVEL
+model_contract_blocker: RESOLVED_AT_PLAN_LEVEL
+previous_tests_REUSE_AS_IS: SUPERSEDED
+new_tests_status: REUSE_WITH_REQUIRED_CORRECTIONS
+uv_lock_action: REGENERATE_LATER
+files_modified: []
+dependencies_installed: false
+tests_run: []
+commit_performed: false
+push_performed: false
+implementation_authorized: false
+```
+
+## Current progress estimate
+
+```yaml
+overall_Galax_progress_estimate: 23_PERCENT
+reasonable_range: 20_TO_25_PERCENT
+confidence: MEDIUM
+research_governance_architecture: 85_TO_90_PERCENT
+Foundation_and_Agent_01_contract_design: 65_TO_70_PERCENT
+Foundation_and_Agent_01_actual_runtime: 5_TO_10_PERCENT
+Agents_02_to_15_runtime: 0_PERCENT
+full_integration_security_live_tests: 0_TO_5_PERCENT
+deployment_and_production_readiness: 0_PERCENT
+```
+
+This is an engineering estimate, not a claim that 23 percent of source files or runtime behaviour has been proven.
 
 ## Strict achievement boundary
 
 The following are not recorded as completed achievements:
 
 ```yaml
-Phase_2B_Stage_1_contract_port_plan: NOT_EXECUTED
-Phase_2B_target_branch_creation: NOT_COMPLETED
-Phase_2B_target_worktree_creation: NOT_COMPLETED
-Phase_2B_file_porting: NOT_COMPLETED
+Phase_2B_Action_B1_three_file_application: NOT_STARTED_NOT_AUTHORIZED
+pyproject_build_backend_applied: NOT_COMPLETED
+models_contract_addendum_applied: NOT_COMPLETED
+contract_tests_corrected: NOT_COMPLETED
+uv_lock_regenerated: NOT_COMPLETED
+dependencies_installed_or_synced: NOT_COMPLETED
+contract_tests_executed: NOT_COMPLETED
+implementation_branch_commit: NOT_COMPLETED
+implementation_branch_push: NOT_COMPLETED
+remote_implementation_branch_created: false
 Flow_owned_preflight_runtime: NOT_COMPLETED
 Agent_01_executable_runtime: NOT_COMPLETED
 exact_one_LLM_call_runtime_proof: NOT_COMPLETED
+authenticated_pause_resume_runtime: NOT_COMPLETED
 Agents_02_to_15: NOT_STARTED
 deployment: NOT_AUTHORIZED_NOT_PERFORMED
 production_ready: false
@@ -261,10 +405,14 @@ production_ready: false
 ## Current verified stop point
 
 ```yaml
-last_completed_assignment: PHASE_2B_CLINE_STAGE_0_BRANCH_RECONCILIATION_025
-last_completed_result: PASS
-current_stop_point: WAITING_FOR_SEPARATE_HUMAN_AUTHORIZATION_FOR_PLAN_ONLY_STAGE_1
-next_assignment_not_yet_executed: AUTHORIZE_PHASE_2B_CLINE_STAGE_1_CONTRACT_PORT_PLAN_026
+last_completed_assignment: AUTHORIZE_PHASE_2B_EXACT_DIFF_SPECIFICATION_PLAN_035
+last_completed_result: PASS_PLAN_COMPLETE
+current_stop_point: PHASE_2B_EXACT_DIFF_PLAN_COMPLETE_BEFORE_CLINE_ACTION_B1
+next_safe_assignment: AUTHORIZE_PHASE_2B_CLINE_ACTION_B1_APPLY_CONTRACT_FILES_036
+next_safe_assignment_authorized: false
+target_local_branch: implementation/phase-2b-agent01-runtime-2026-07-28
+target_local_worktree: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime
+expected_pre_action_head: c55f131fa4455877fafa4a259be7ba7879ebbe65
 ```
 
-The next assignment remains separate from these achievements and must not be represented as completed until it is actually executed and reviewed.
+The next assignment must remain separate from these achievements and must not be represented as completed until it is explicitly authorized, executed, and reviewed.
