@@ -1,43 +1,32 @@
-# Compatibility Redirect — CODE RED, New-Chat Continuity, and Cline Prompt Path
+# Compatibility Redirect — CODE RED and New-Chat Continuity Guide
 
-```yaml
-document_status: COMPATIBILITY_REDIRECT
-repository: ariessocia04-rgb/galax-Ai-project
-canonical_continuity_protocol: docs/operations/CODE_RED.md
-current_handoff_guide: docs/operations/GALAX_NEW_CHAT_CONTINUITY_GUIDE_2026-07-27.md
-canonical_Cline_prompt_creation_rule: docs/prompts/HOW_TO_PROPER_CREATE_PROMPT_FOR_CLINE.md
-latest_prompt_governance_checkpoint: docs/operations/checkpoints/GALAX_LENGTH_PROBLEM_ACHIEVEMENTS_AND_CURRENT_STATUS_VOLUME_9_2026-07-31.md
-old_generic_Cline_prompt_template_active: false
+**Status:** `COMPATIBILITY_REDIRECT`  
+**Previous role:** canonical conversation-length continuity protocol  
+**Canonical protocol:** `docs/operations/CODE_RED.md`  
+**Current exact handoff guide:** `docs/operations/GALAX_NEW_CHAT_CONTINUITY_GUIDE_2026-07-27.md`  
+**Latest exact checkpoint:** `docs/operations/checkpoints/GALAX_LENGTH_CHECKPOINT_2026-07-27_CREWAI_COMPATIBILITY_AUDIT.md`  
+**Do not use this file alone as the source of truth.**
+
+The owner renamed the Galax continuity and recovery protocol to:
+
+```text
+CODE RED
 ```
 
-> [!IMPORTANT]
-> **Every new chat must read `docs/prompts/HOW_TO_PROPER_CREATE_PROMPT_FOR_CLINE.md` before creating, correcting, reviewing, or approving any prompt for Cline.**
-
-This file is retained because older plans, prompts, issues, PRs, and conversations may still point to the misspelled legacy path.
-
-Do not use this redirect alone as repository truth.
-
-## Mandatory reading order
-
-Any repository-aware AI or new chat that reaches this file must read and verify, in this order:
+Every repository-aware AI or human that reaches this file must immediately read, in this order:
 
 ```text
 README.md
 → AGENTS.md
 → docs/operations/CODE_RED.md
 → docs/operations/GALAX_NEW_CHAT_CONTINUITY_GUIDE_2026-07-27.md
-→ docs/operations/checkpoints/GALAX_LENGTH_PROBLEM_ACHIEVEMENTS_AND_CURRENT_STATUS_VOLUME_9_2026-07-31.md
-→ docs/plan/CHATGPT_CLINE_DRAFT_PR_EXECUTION_CONTROL_PLAN_2026-07-22.md
-→ the exact active plan and assignment
-→ docs/prompts/HOW_TO_PROPER_CREATE_PROMPT_FOR_CLINE.md
-→ current branch heads, PRs, issues, comments, and owner-supplied receipts
+→ docs/operations/checkpoints/GALAX_LENGTH_CHECKPOINT_2026-07-27_CREWAI_COMPATIBILITY_AUDIT.md
+→ the active assignment, pull requests, issues, branch heads, and newest continuity comments
 ```
 
-Live GitHub state must still be verified. A checkpoint or prompt guide does not freeze branch movement and grants no implementation authority.
+`CODE_RED.md` defines the canonical recovery protocol. The dated continuity guide records the material work completed from the beginning. The latest checkpoint records the newest exact stop point and safe resume action. Live GitHub state must still be verified because no checkpoint grants authority or freezes future branch movement.
 
-## Trigger phrases
-
-Treat these phrases and close spelling variations as the same continuity command:
+Legacy and current trigger phrases all route to this procedure:
 
 ```text
 CODE RED
@@ -53,148 +42,48 @@ where did we stop
 resume the latest Galax work
 ```
 
-## Mandatory new-chat procedure
+## Mandatory response to a length problem
 
-On a trigger above:
+On any trigger above, the new chat must:
 
 ```text
 stop relying on remembered chat fragments
 → verify repository access
-→ verify current relevant branch and HEAD SHAs
+→ verify the current research, implementation, plan, and continuity branch HEAD SHAs
 → read CODE RED completely
-→ read the current continuity guide
-→ read the latest applicable checkpoint
-→ read HOW_TO_PROPER_CREATE_PROMPT_FOR_CLINE.md
-→ inspect the active plan, assignment, PR, issue, and newest evidence
-→ separate remote-proven facts from owner-provided local evidence
-→ reconstruct completed, rejected, blocked, active, and pending work
-→ identify actions that must not be repeated
-→ identify the exact stop point and next authorized stage
-→ return the required continuity receipt
-→ create a Cline prompt only through the canonical prompt guide
+→ read the current new-chat continuity guide completely
+→ read the latest exact checkpoint completely
+→ inspect active Draft PRs and assignment issues
+→ separate remote-proven facts from reported local-only facts
+→ reconstruct completed, rejected, active, blocked, and pending work
+→ determine the exact stop point and exact next safe action
+→ return GALAX_NEW_CHAT_CONTINUATION_RECEIPT_V1
+→ continue only when repository evidence and authorization agree
 ```
 
-Do not ask the Human Owner to repeat repository history when repository access and supplied receipts already contain it.
+Do not ask the owner to repeat repository history when repository access exists. Do not create another plan merely because the conversation changed. Do not repeat completed work.
 
-Do not create another plan merely because the conversation changed.
+## Current dual-track stop point
 
-Do not repeat completed work.
-
-## Canonical Cline prompt path
-
-The former generic Cline prompt pattern in:
-
-```text
-docs/prompts/EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md
-```
-
-is retired from active use. That path is now a compatibility redirect.
-
-The only active prompt-construction rule is:
-
-```text
-docs/prompts/HOW_TO_PROPER_CREATE_PROMPT_FOR_CLINE.md
-```
-
-The required prompt style is:
-
-```text
-GALAX_AI_ASSIGNMENT_V1 identity block
-→ OBJECTIVE
-→ CHATGPT-VERIFIED CURRENT FACTS
-→ WHAT HAS ALREADY BEEN COMPLETED
-→ DO NOT REPEAT
-→ MANDATORY CORRECTIONS or AUTHORIZED OBJECTIVE
-→ CANONICAL STAGE MAPPING when applicable
-→ THIS ASSIGNMENT AUTHORIZES ONLY
-→ REPOSITORY-PLAN BOUNDARY
-→ COMMAND EXECUTION CONTROL when applicable
-→ exact numbered steps
-→ REQUIRED RESULT
-→ STOP IMMEDIATELY IF
-→ STRICT REPOSITORY PROHIBITIONS
-→ REQUIRED OUTPUT
-→ FINAL_STATUS
-→ mandatory STOP
-```
-
-Do not replace this with a generic nested YAML prompt, one-line Plan command, one-line Act command, or automatic Plan-to-Act continuation.
-
-## Command approval boundary
-
-When a Cline prompt authorizes commands:
-
-```text
-run exactly one numbered command at a time
-→ show the exact visible command popup
-→ wait for Human Owner approval
-→ keep auto-approval disabled
-→ do not combine separately governed steps
-→ do not silently continue
-```
-
-When a command fails:
-
-```text
-stop immediately
-→ preserve the exact command
-→ preserve the exact exit code
-→ preserve the raw output
-→ do not improvise another method
-→ do not repeat automatically
-→ return the exact blocker
-```
-
-## Current technical stop point
-
-The latest completed Cline discovery established:
+The latest checkpoint separates two independent work tracks:
 
 ```yaml
-local_pyproject_read_completed: true
-final_discovery_receipt_completed: true
-repository_defined_exact_correction_found: false
-exact_corrected_content: NOT_ESTABLISHED
-technical_result: BLOCKED_NO_EXACT_CORRECTION_SPECIFICATION_FOUND
-implementation_authorized: false
+Track_A_Cline_Issue_9:
+  exact_stop_point: WAITING_FOR_CLINE_EXECUTION_READINESS_RECEIPT_V1
+  Cline_execution_proven: false
+
+Track_B_ChatGPT_CrewAI_compatibility_audit:
+  exact_stop_point: SOURCE_LEVEL_AUDIT_PAUSED_BEFORE_EXACT_ONE_LLM_CALL_PROOF
+  overall_verdict: IN_PROGRESS_CANNOT_CLAIM_100_PERCENT_YET
 ```
 
-No prompt may silently invent the missing `src/galax/__init__.py` correction or authorize implementation from that blocked result.
+A new chat must not confuse the active Cline assignment with the separately requested factual CrewAI compatibility audit.
 
-A new exact Human Owner decision and a new bounded assignment are required before any further Cline action.
+## Owner standing checkpoint directive
 
-## Required new-chat prompt-path receipt
+When the owner explicitly indicates that the current conversation or task will stop, pause, continue later, move to a new chat, or has reached a conversation-length problem, the active AI must enter `SAVE_CURRENT_TASK_CHECKPOINT` mode before starting or resuming another assignment.
 
-Before creating a Cline prompt, a new chat must be able to return:
-
-```yaml
-CLINE_PROMPT_CREATION_PATH_RECEIPT_V1:
-  repository: ariessocia04-rgb/galax-Ai-project
-  repository_access_verified:
-  files_read:
-    - README.md
-    - AGENTS.md
-    - docs/operations/CODE_RED.md
-    - docs/operations/GALAX_NEW_CHAT_CONTINUITY_GUIDE_2026-07-27.md
-    - docs/operations/checkpoints/GALAX_LENGTH_PROBLEM_ACHIEVEMENTS_AND_CURRENT_STATUS_VOLUME_9_2026-07-31.md
-    - docs/plan/CHATGPT_CLINE_DRAFT_PR_EXECUTION_CONTROL_PLAN_2026-07-22.md
-    - exact_active_plan_and_assignment
-    - docs/prompts/HOW_TO_PROPER_CREATE_PROMPT_FOR_CLINE.md
-  current_live_state_verified:
-  owner_supplied_receipt_reviewed:
-  completed_actions_identified: []
-  actions_that_must_not_be_repeated: []
-  exact_assignment_mode:
-  exact_single_objective:
-  commands_batched: false
-  automatic_continuation_allowed: false
-  safe_to_draft_prompt: false
-```
-
-`safe_to_draft_prompt` becomes true only after repository truth, current evidence, exact scope, and Human Owner authority agree.
-
-## Standing checkpoint directive
-
-When the Human Owner says the task will stop, pause, move to a new chat, or has reached a length problem, record observable facts only:
+The checkpoint must record exact observable evidence without guessing:
 
 ```yaml
 SAVE_CURRENT_TASK_CHECKPOINT_V1:
@@ -221,8 +110,39 @@ SAVE_CURRENT_TASK_CHECKPOINT_V1:
   prohibited_resume_actions: []
 ```
 
-A checkpoint grants no edit, validation, commit, push, merge, deployment, reviewer-trigger, or new-assignment authority.
+Checkpoint rules:
 
-## Retention rule
+1. Distinguish proposed, displayed, approved, executed, saved, committed, pushed, reviewed, and accepted.
+2. Never treat a displayed patch as a saved edit.
+3. Never treat an active issue as proof that its contributor started.
+4. Never repeat an already completed or saved action.
+5. Never restore or reuse rejected work.
+6. Preserve the exact assignment ID, branch, starting SHA, and allowed scope.
+7. A continuity checkpoint grants no edit, validation, commit, push, merge, deployment, reviewer-trigger, or new-assignment authority.
+8. Store the durable checkpoint in the active GitHub issue or PR when tracked-file mutation is not separately authorized.
+9. Update CODE RED only through a separately authorized bounded repository change.
+10. Resume only from the exact recorded safe action after verifying live repository state.
 
-Do not delete this redirect until all inbound references are inventoried, migrated, checked, explicitly authorized for removal by the Human Owner, and recorded in CODE RED.
+Capability boundary:
+
+```yaml
+silent_chat_close_event_available: false
+background_inactivity_trigger_available: false
+explicit_stop_or_length_message_trigger: required
+controlled_stage_boundary_checkpoint: required
+```
+
+The AI cannot detect a silent browser close or user inactivity when no message is received. Checkpoint behavior therefore starts from an explicit owner message or a controlled stage reaching a human-approval boundary.
+
+This redirect is retained because older repository documents, prompts, issues, and conversations may still reference the old path.
+
+Do not delete it until:
+
+```text
+all inbound references are inventoried
+→ every active reference is migrated to CODE RED, the current continuity guide, and the latest checkpoint
+→ historical evidence is preserved
+→ link and repository checks pass
+→ the human owner explicitly authorizes removal
+→ deletion is recorded in CODE RED
+```
