@@ -4,7 +4,8 @@
 **Previous role:** canonical conversation-length continuity protocol  
 **Canonical protocol:** `docs/operations/CODE_RED.md`  
 **Current exact handoff guide:** `docs/operations/GALAX_NEW_CHAT_CONTINUITY_GUIDE_2026-07-27.md`  
-**Latest exact checkpoint:** `docs/operations/checkpoints/GALAX_LENGTH_CHECKPOINT_2026-07-27_CREWAI_COMPATIBILITY_AUDIT.md`  
+**Latest exact checkpoint:** `docs/operations/checkpoints/GALAX_LENGTH_PROBLEM_ACHIEVEMENTS_AND_CURRENT_STATUS_VOLUME_9_2026-08-01.md`  
+**Current achievements from start:** `docs/operations/checkpoints/GALAX_ACHIEVEMENTS_FROM_START_TO_CURRENT_2026-07-28.md`  
 **Do not use this file alone as the source of truth.**
 
 The owner renamed the Galax continuity and recovery protocol to:
@@ -20,11 +21,12 @@ README.md
 → AGENTS.md
 → docs/operations/CODE_RED.md
 → docs/operations/GALAX_NEW_CHAT_CONTINUITY_GUIDE_2026-07-27.md
-→ docs/operations/checkpoints/GALAX_LENGTH_CHECKPOINT_2026-07-27_CREWAI_COMPATIBILITY_AUDIT.md
-→ the active assignment, pull requests, issues, branch heads, and newest continuity comments
+→ docs/operations/checkpoints/GALAX_LENGTH_PROBLEM_ACHIEVEMENTS_AND_CURRENT_STATUS_VOLUME_9_2026-08-01.md
+→ docs/operations/checkpoints/GALAX_ACHIEVEMENTS_FROM_START_TO_CURRENT_2026-07-28.md
+→ the active assignment, pull requests, issues, branch heads, tests, and newest continuity evidence
 ```
 
-`CODE_RED.md` defines the canonical recovery protocol. The dated continuity guide records the material work completed from the beginning. The latest checkpoint records the newest exact stop point and safe resume action. Live GitHub state must still be verified because no checkpoint grants authority or freezes future branch movement.
+`CODE_RED.md` defines the canonical recovery protocol. The dated continuity guide records the earlier material history. The latest numbered volume records the newest exact stop point and safe resume boundary. The achievements file records completed work from project start to the current verified stop. Live GitHub and local evidence must still be verified because no checkpoint grants authority or freezes future branch movement.
 
 Legacy and current trigger phrases all route to this procedure:
 
@@ -49,35 +51,44 @@ On any trigger above, the new chat must:
 ```text
 stop relying on remembered chat fragments
 → verify repository access
-→ verify the current research, implementation, plan, and continuity branch HEAD SHAs
+→ verify the current research, implementation, plan, continuity, and active work branch HEAD SHAs
 → read CODE RED completely
 → read the current new-chat continuity guide completely
-→ read the latest exact checkpoint completely
+→ read Volume 9 completely
+→ read the current achievements-from-start record completely
 → inspect active Draft PRs and assignment issues
-→ separate remote-proven facts from reported local-only facts
-→ reconstruct completed, rejected, active, blocked, and pending work
-→ determine the exact stop point and exact next safe action
+→ separate remote-proven facts from Human Owner-provided local evidence
+→ reconstruct completed, rejected, corrected, active, blocked, locked, and pending work
+→ determine the exact selected work track, stop point, and next safe action
 → return GALAX_NEW_CHAT_CONTINUATION_RECEIPT_V1
-→ continue only when repository evidence and authorization agree
+→ continue only when repository evidence and Human Owner authorization agree
 ```
 
-Do not ask the owner to repeat repository history when repository access exists. Do not create another plan merely because the conversation changed. Do not repeat completed work.
+Do not ask the owner to repeat repository history when repository access exists. Do not create another plan merely because the conversation changed. Do not repeat completed or locked work.
 
-## Current dual-track stop point
+## Current multi-track stop point
 
-The latest checkpoint separates two independent work tracks:
+The latest checkpoint separates independent work tracks:
 
 ```yaml
-Track_A_Cline_Issue_9:
-  exact_stop_point: WAITING_FOR_CLINE_EXECUTION_READINESS_RECEIPT_V1
-  Cline_execution_proven: false
+Track_A_Phase_2B_local_contract_tests:
+  exact_stop_point: AFTER_test_completion_requires_pass_preflight_PASS_AND_LOCKED
+  full_suite_post_fix: NOT_RUN
+  remote_publication_proven: false
 
-Track_B_ChatGPT_CrewAI_compatibility_audit:
-  exact_stop_point: SOURCE_LEVEL_AUDIT_PAUSED_BEFORE_EXACT_ONE_LLM_CALL_PROOF
-  overall_verdict: IN_PROGRESS_CANNOT_CLAIM_100_PERCENT_YET
+Track_B_Cline_prompt_method_research:
+  method: EXPLICIT_GATE_SEQUENTIAL_MULTI_SUBTASK_EXACT_REPLACEMENT
+  clean_PASS_count: 3_of_10
+  status: PROVISIONAL_NOT_VALIDATED_DEFAULT
+
+Track_C_new_chat_continuity:
+  prompting_control_replacement_commit: 1562b04cc6d4a439c417d878e07a9fb119cc1c3d
+  achievement_update_commit: 9fe328fd96be78af7c2382546613551a4da80222
+  latest_volume_file: docs/operations/checkpoints/GALAX_LENGTH_PROBLEM_ACHIEVEMENTS_AND_CURRENT_STATUS_VOLUME_9_2026-08-01.md
+  PR_10_state: OPEN_DRAFT_UNMERGED
 ```
 
-A new chat must not confuse the active Cline assignment with the separately requested factual CrewAI compatibility audit.
+A new chat must not confuse the Phase 2B local test-correction track, Cline prompting-method research, and continuity-documentation track.
 
 ## Owner standing checkpoint directive
 
@@ -115,7 +126,7 @@ Checkpoint rules:
 1. Distinguish proposed, displayed, approved, executed, saved, committed, pushed, reviewed, and accepted.
 2. Never treat a displayed patch as a saved edit.
 3. Never treat an active issue as proof that its contributor started.
-4. Never repeat an already completed or saved action.
+4. Never repeat an already completed, accepted, saved, or locked action.
 5. Never restore or reuse rejected work.
 6. Preserve the exact assignment ID, branch, starting SHA, and allowed scope.
 7. A continuity checkpoint grants no edit, validation, commit, push, merge, deployment, reviewer-trigger, or new-assignment authority.
@@ -140,7 +151,7 @@ Do not delete it until:
 
 ```text
 all inbound references are inventoried
-→ every active reference is migrated to CODE RED, the current continuity guide, and the latest checkpoint
+→ every active reference is migrated to CODE RED, the current continuity guide, the latest volume, and the current achievement record
 → historical evidence is preserved
 → link and repository checks pass
 → the human owner explicitly authorizes removal
