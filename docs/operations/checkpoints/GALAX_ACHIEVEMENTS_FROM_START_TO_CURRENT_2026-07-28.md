@@ -1,28 +1,37 @@
 # Galax Achievements — From Project Start to Current Verified Stop Point
 
 ```yaml
-document_id: GALAX_ACHIEVEMENTS_FROM_START_TO_CURRENT_2026_07_28
-record_type: LENGTH_PROBLEM_COMPLETED_ACHIEVEMENTS_CHECKPOINT
-recorded_date: 2026-07-28
+document_id: GALAX_ACHIEVEMENTS_FROM_START_TO_CURRENT
+record_type: COMPLETED_ACHIEVEMENTS_CHECKPOINT
+original_recorded_date: 2026-07-28
+updated_date: 2026-08-01
+updated_local_time: 2026-08-01T02:36:00+08:00
 repository: ariessocia04-rgb/galax-Ai-project
 continuity_branch: docs/new-chat-continuity-2026-07-27
 continuity_PR: 10
 canonical_continuity_protocol: docs/operations/CODE_RED.md
 parent_guide: docs/operations/GALAX_NEW_CHAT_CONTINUITY_GUIDE_2026-07-27.md
-scope: completed_achievements_only
+scope: completed_achievements_from_project_start_to_current_verified_stop
 replaces_CODE_RED: false
-modifies_LOCKED_ACCEPTED_artifacts: false
-runtime_or_source_change: false
-update_authorization: AUTHORIZE_PHASE_2B_LENGTH_ACHIEVEMENT_REPO_UPDATE_035A
-latest_completed_assignment: AUTHORIZE_PHASE_2B_EXACT_DIFF_SPECIFICATION_PLAN_035
-current_progress_estimate: 23_PERCENT
-progress_estimate_range: 20_TO_25_PERCENT
-progress_is_estimate_not_runtime_proof: true
+modifies_LOCKED_ACCEPTED_runtime_artifacts: false
+runtime_or_source_change_by_this_record: false
+Human_Owner_authorized_update: true
+last_recorded_progress_estimate: 23_PERCENT
+current_progress_estimate_recalculated: false
 ```
 
-## Purpose
+## Purpose and evidence boundary
 
-This checkpoint records only work that was actually completed, reviewed, accepted, merged, or returned with a final reviewed receipt. It does not convert proposed, pending, displayed, or unauthorized work into an achievement.
+This record contains completed decisions, reviewed plans, accepted work, remote commits, factual blocked audits, and completed local actions supported by Human Owner-provided Cline evidence.
+
+It does not convert proposed, displayed, pending, unapproved, uncommitted, or unpushed work into remote proof.
+
+```yaml
+evidence_classes:
+  REMOTE_PROVEN: branch_commit_PR_or_repository_file_evidence
+  HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE: local_action_or_test_output_supplied_in_the_chat
+  REPORTED_LOCAL_NOT_REMOTE_PROOF: local_state_not_yet_published_to_GitHub
+```
 
 ## Completed achievements from the beginning
 
@@ -63,6 +72,7 @@ engineering_manager_tools: []
 Agent_01_direct_tool_calls: 0
 Agent_01_LLM_calls_required: 1
 Agent_01_output: AgentTaskResult
+result_as_answer_for_this_path: prohibited
 hidden_second_agent_call: prohibited
 HumanReviewRequest_builder: pure_Python_Pydantic
 explicit_router_for_every_branch: required
@@ -93,11 +103,11 @@ pydantic: 2.12.5
 pytest: 9.0.3
 ruff: 0.15.1
 uv: 0.11.29
-python_runtime: 3.13.14
+historical_python_runtime: 3.13.14
 import_evidence: IMPORTS_OK
 ```
 
-### Achievement 6 — Phase 2A Foundation governance contracts published to the implementation branch
+### Achievement 6 — Phase 2A Foundation governance contracts published
 
 ```yaml
 implementation_branch: implementation/foundation-agent-01
@@ -177,9 +187,8 @@ PR_number: 8
 PR_state: CLOSED_MERGED
 merge_commit_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
 target_branch: agent/agent-01-tool-inspection
-target_branch_head_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
+target_branch_head_at_merge: c55f131fa4455877fafa4a259be7ba7879ebbe65
 post_merge_branch_verification: PASS
-post_merge_continuity_update: COMPLETE
 Issue_9_state: CLOSED_COMPLETED
 Phase_2A_progress: 100_PERCENT_COMPLETE
 ```
@@ -196,7 +205,7 @@ missing_deterministic_exact_one_LLM_call_proof_identified: true
 unsupported_100_percent_runtime_claim_rejected: true
 ```
 
-This is a completed audit achievement. The `BLOCKED` result is the factual audit result, not a claim that the runtime was completed.
+The blocked result was the correct factual audit conclusion, not a runtime-completion claim.
 
 ### Achievement 14 — Phase 2B implementation plan completed
 
@@ -227,21 +236,6 @@ changed_path_count: 58
 remote_mutation_performed_by_Stage_0: false
 ```
 
-Candidate classification completed:
-
-```yaml
-REUSE_AS_IS_CANDIDATE:
-  - .gitignore
-  - src/galax/foundation/__init__.py
-REUSE_WITH_EXACT_CORRECTION:
-  - pyproject.toml
-  - uv.lock
-  - src/galax/__init__.py
-  - src/galax/foundation/models.py
-  - tests/test_foundation_contracts.py
-old_candidate_governance_and_documentation_changes: DO_NOT_PORT
-```
-
 ### Achievement 16 — Phase 2B Stage 1 contract-port plan completed and reviewed PASS
 
 ```yaml
@@ -257,22 +251,18 @@ tests_run: false
 commit_or_push_performed: false
 ```
 
-### Achievement 17 — Dedicated local Phase 2B branch and worktree created
+### Achievement 17 — Dedicated local Phase 2B worktree established
 
 ```yaml
-assignment_id: AUTHORIZE_PHASE_2B_CLINE_ACTION_A_WORKTREE_SETUP_028
-local_branch: implementation/phase-2b-agent01-runtime-2026-07-28
+initial_assignment_id: AUTHORIZE_PHASE_2B_CLINE_ACTION_A_WORKTREE_SETUP_028
+initial_local_branch: implementation/phase-2b-agent01-runtime-2026-07-28
+current_reported_local_branch: implementation/phase-2b-agent01-runtime
 local_worktree: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime
-worktree_head_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
-worktree_status: clean
-remote_branch_created: false
-files_modified: []
-commit_performed: false
-push_performed: false
-checkpoint_comment_id: 5104047789
+base_head_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
+remote_Phase_2B_branch_proven: false
 ```
 
-### Achievement 18 — Action B0 exact-diff investigation completed with a reviewed factual BLOCKED result
+### Achievement 18 — Action B0 exact-diff investigation completed with factual BLOCKED result
 
 ```yaml
 assignment_id: AUTHORIZE_PHASE_2B_CLINE_ACTION_B0_EXACT_DIFF_SPECIFICATION_030
@@ -283,15 +273,10 @@ blockers:
   - BLOCKED_PENDING_BACKEND_SELECTION
   - BLOCKED_INSUFFICIENT_EXACT_CONTRACT_DETAIL
 files_modified: []
-dependencies_installed: false
 tests_run: []
 commit_performed: false
 push_performed: false
-checkpoint_authorization: AUTHORIZE_PHASE_2B_ACTION_B0_CHECKPOINT_SAVE_031
-checkpoint_comment_id: 5105248617
 ```
-
-The `BLOCKED` result was the correct result of the read-only specification audit and did not represent a Cline failure.
 
 ### Achievement 19 — Exact Python build-backend decision completed
 
@@ -303,10 +288,7 @@ selected_version: 0.11.29
 build_backend_entrypoint: uv_build
 module_name: galax
 module_root: src
-previous_backend_blocker: RESOLVED_AT_PLAN_LEVEL
-implementation_performed: false
-lockfile_regenerated: false
-tests_run: []
+implementation_performed_by_plan: false
 ```
 
 ### Achievement 20 — Exact model-contract addendum plan completed
@@ -323,10 +305,7 @@ exact_invariants_defined: true
 exact_error_conditions_defined: true
 exact_route_transitions_defined: true
 exact_required_tests_defined: true
-FoundationFlowState_frozen_true: REJECTED_INCOMPATIBLE_WITH_CREWAI_FLOW_STATE_MUTATION
 FoundationFlowState_required_frozen_value: false
-previous_model_contract_blocker: RESOLVED_AT_PLAN_LEVEL
-implementation_performed: false
 ```
 
 ### Achievement 21 — Build-backend and model-contract decisions saved to continuity
@@ -339,7 +318,7 @@ source_or_runtime_modified: false
 implementation_authorized: false
 ```
 
-### Achievement 22 — New three-file exact-diff specification plan completed
+### Achievement 22 — Three-file exact-diff specification plan completed
 
 ```yaml
 assignment_id: AUTHORIZE_PHASE_2B_EXACT_DIFF_SPECIFICATION_PLAN_035
@@ -351,52 +330,144 @@ exact_file_specs:
   tests/test_foundation_contracts.py: COMPLETE
 build_backend_blocker: RESOLVED_AT_PLAN_LEVEL
 model_contract_blocker: RESOLVED_AT_PLAN_LEVEL
-previous_tests_REUSE_AS_IS: SUPERSEDED
-new_tests_status: REUSE_WITH_REQUIRED_CORRECTIONS
 uv_lock_action: REGENERATE_LATER
-files_modified: []
-dependencies_installed: false
-tests_run: []
-commit_performed: false
-push_performed: false
-implementation_authorized: false
+implementation_authorized_by_plan: false
 ```
 
-## Current progress estimate
+### Achievement 23 — Length-problem continuation volumes preserved the later Phase 2B local history
 
 ```yaml
-overall_Galax_progress_estimate: 23_PERCENT
-reasonable_range: 20_TO_25_PERCENT
-confidence: MEDIUM
-research_governance_architecture: 85_TO_90_PERCENT
-Foundation_and_Agent_01_contract_design: 65_TO_70_PERCENT
-Foundation_and_Agent_01_actual_runtime: 5_TO_10_PERCENT
-Agents_02_to_15_runtime: 0_PERCENT
-full_integration_security_live_tests: 0_TO_5_PERCENT
-deployment_and_production_readiness: 0_PERCENT
+continuity_volumes_present:
+  - Volume_2
+  - Volume_3
+  - Volume_4
+  - Volume_5
+  - Volume_6
+  - Volume_7
+  - Volume_8
+latest_previous_volume: docs/operations/checkpoints/GALAX_LENGTH_PROBLEM_ACHIEVEMENTS_AND_CURRENT_STATUS_VOLUME_8_2026-07-30.md
+Volume_8_result: BLOCKED_NO_EXACT_CORRECTION_SPECIFICATION_FOUND
+history_replacement_performed: false
 ```
 
-This is an engineering estimate, not a claim that 23 percent of source files or runtime behaviour has been proven.
-
-## Strict achievement boundary
-
-The following are not recorded as completed achievements:
+### Achievement 24 — A reproducible Phase 2B local test baseline was established
 
 ```yaml
-Phase_2B_Action_B1_three_file_application: NOT_STARTED_NOT_AUTHORIZED
-pyproject_build_backend_applied: NOT_COMPLETED
-models_contract_addendum_applied: NOT_COMPLETED
-contract_tests_corrected: NOT_COMPLETED
-uv_lock_regenerated: NOT_COMPLETED
-dependencies_installed_or_synced: NOT_COMPLETED
-contract_tests_executed: NOT_COMPLETED
-implementation_branch_commit: NOT_COMPLETED
-implementation_branch_push: NOT_COMPLETED
-remote_implementation_branch_created: false
-Flow_owned_preflight_runtime: NOT_COMPLETED
-Agent_01_executable_runtime: NOT_COMPLETED
+evidence_classification: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+reported_local_branch: implementation/phase-2b-agent01-runtime
+reported_local_head: c55f131fa4455877fafa4a259be7ba7879ebbe65
+python_runtime: 3.12.10
+virtual_environment: .venv
+pytest_collected: 110
+pytest_passed: 94
+pytest_failed: 16
+baseline_status: COMPLETED_WITH_RECORDED_FAILURES
+post_fix_full_suite_rerun: NOT_PERFORMED
+remote_commit_or_push_proof: false
+```
+
+Establishing the failing baseline is a completed diagnostic achievement. It is not a claim that the suite passed.
+
+### Achievement 25 — The focused completion/preflight contract test was corrected and passed
+
+```yaml
+evidence_classification: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+test: tests/test_foundation_contracts.py::TestFoundationFlowState::test_completion_requires_pass_preflight
+required_error_match: completion requires PASS preflight_result
+current_route: foundation_completed
+route_history_transitions: 8
+invocation_ledger: empty
+preflight_fixture: valid_FAIL
+AgentTaskResult_supported_claim: valid
+human_decision: authenticated_APPROVED
+completion_record: valid
+focused_pytest_result: 1_passed
+focused_pytest_duration: 0.66s
+status: PASS_LOCKED_ACCEPTED_BY_HUMAN_OWNER
+```
+
+### Achievement 26 — An unrelated accidental test change was corrected before locking the focused test
+
+```yaml
+evidence_classification: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+protected_test: tests/test_foundation_contracts.py::TestFoundationFlowState::test_completion_requires_zero_open_blockers
+required_correction: remove_unrelated_route_history
+final_fixture_boundary_preserved: true
+focused_test_regression_introduced: false
+status: CORRECTED_AND_PRESERVED
+```
+
+### Achievement 27 — The explicit-gate Cline prompting method reached provisional status
+
+```yaml
+method_id: EXPLICIT_GATE_SEQUENTIAL_MULTI_SUBTASK_EXACT_REPLACEMENT
+method_status: WORKING_OBSERVED_PROVISIONAL
+clean_full_method_PASS_count: 3_of_10
+validated_default: false
+ACT_006_result: NO_SCORE_ABANDONED_HUMAN_ERROR
+application_code_validation: false
+terminal_test_or_Git_validation: false
+```
+
+This is a completed research result for the narrow proven scope only. It must not be represented as validated for application code or unrestricted repository work.
+
+### Achievement 28 — The permanent ChatGPT-to-Cline prompting control document was replaced on the continuity branch
+
+```yaml
+evidence_classification: REMOTE_PROVEN
+file: docs/plan/CHATGPT_CLINE_DRAFT_PR_EXECUTION_CONTROL_PLAN_2026-07-22.md
+branch: docs/new-chat-continuity-2026-07-27
+commit: 1562b04cc6d4a439c417d878e07a9fb119cc1c3d
+commit_message: Replace ChatGPT-to-Cline prompting control pattern
+files_changed_by_commit: 1
+Cline_application_changed: false
+Cline_configuration_changed: false
+Galax_runtime_flow_changed: false
+source_or_tests_changed: false
+main_branch_changed: false
+merged_to_main: false
+```
+
+The replacement controls how a new ChatGPT chat reconstructs repository truth and prepares bounded, human-gated prompts for Cline. It does not modify Cline itself.
+
+## Current work tracks
+
+```yaml
+Track_A_Phase_2B_local_contract_tests:
+  latest_completed_action: focused_PASS_preflight_completion_test_fixed_and_passed
+  locked_test: test_completion_requires_pass_preflight
+  full_suite_post_fix_status: NOT_RERUN
+  remote_publication_status: NOT_PROVEN
+
+Track_B_Cline_prompt_method_research:
+  clean_PASS_count: 3_of_10
+  status: PROVISIONAL_NOT_VALIDATED_DEFAULT
+
+Track_C_new_chat_continuity:
+  PR_number: 10
+  PR_state: OPEN_DRAFT_UNMERGED
+  head_branch: docs/new-chat-continuity-2026-07-27
+  prompting_control_replacement_commit: 1562b04cc6d4a439c417d878e07a9fb119cc1c3d
+```
+
+These tracks are separate. Completion or permission in one track does not authorize work in another.
+
+## Current achievement boundary
+
+The following are not completed achievements:
+
+```yaml
+remaining_Phase_2B_failures_corrected: NOT_PROVEN
+post_fix_full_pytest_suite: NOT_RUN
+Phase_2B_local_changes_committed: NOT_PROVEN
+Phase_2B_remote_branch_created_or_pushed: false
+Flow_owned_preflight_runtime_complete: NOT_PROVEN
+Agent_01_executable_runtime_complete: NOT_PROVEN
 exact_one_LLM_call_runtime_proof: NOT_COMPLETED
 authenticated_pause_resume_runtime: NOT_COMPLETED
+prompting_method_10_of_10_validation: NOT_COMPLETED
+continuity_PR_10_merged: false
+prompting_control_available_on_main: false
 Agents_02_to_15: NOT_STARTED
 deployment: NOT_AUTHORIZED_NOT_PERFORMED
 production_ready: false
@@ -405,14 +476,12 @@ production_ready: false
 ## Current verified stop point
 
 ```yaml
-last_completed_assignment: AUTHORIZE_PHASE_2B_EXACT_DIFF_SPECIFICATION_PLAN_035
-last_completed_result: PASS_PLAN_COMPLETE
-current_stop_point: PHASE_2B_EXACT_DIFF_PLAN_COMPLETE_BEFORE_CLINE_ACTION_B1
-next_safe_assignment: AUTHORIZE_PHASE_2B_CLINE_ACTION_B1_APPLY_CONTRACT_FILES_036
-next_safe_assignment_authorized: false
-target_local_branch: implementation/phase-2b-agent01-runtime-2026-07-28
-target_local_worktree: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime
-expected_pre_action_head: c55f131fa4455877fafa4a259be7ba7879ebbe65
+last_completed_local_test_action: test_completion_requires_pass_preflight_PASS_AND_LOCKED
+last_completed_remote_document_action: ChatGPT_to_Cline_prompting_control_replacement
+current_stop_point: AFTER_ONE_FOCUSED_PHASE_2B_TEST_PASS_AND_BEFORE_NEXT_SEPARATELY_AUTHORIZED_FAILURE
+next_safe_Phase_2B_action: select_one_exact_remaining_failure_from_recorded_baseline_and_issue_a_new_bounded_assignment
+next_safe_prompt_research_action: owner_review_one_new_zero_knowledge_clean_trial
+next_safe_continuity_action: preserve_the_current_length_checkpoint_without_merging_PR_10_unless_separately_authorized
 ```
 
-The next assignment must remain separate from these achievements and must not be represented as completed until it is explicitly authorized, executed, and reviewed.
+No next action above is automatically authorized by this achievement record.
