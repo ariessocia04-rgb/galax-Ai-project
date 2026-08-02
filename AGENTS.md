@@ -85,6 +85,8 @@ timezone_name: Asia/Manila
 timezone_offset: "+08:00"
 check_interval: 3_hours
 maximum_delay_after_new_material_event: 3_hours
+actual_GitHub_write_commit_and_branch_publication: required
+draft_only_or_notification_only_behavior: prohibited
 upload_when_no_new_verified_event: false
 
 repository: ariessocia04-rgb/galax-Ai-project
@@ -95,6 +97,8 @@ merge_authorized: false
 
 length_checkpoint:
   automatic_create_or_update: authorized
+  automatic_upload_required: true
+  upload_deadline: within_3_hours_after_new_verified_material_event
   directory: docs/operations/checkpoints
   naming_rule: GALAX_LENGTH_PROBLEM_*_VOLUME_<NEXT_NUMBER>_<YYYY-MM-DD>.md
   append_only_after_previous_stop_boundary: true
@@ -103,10 +107,14 @@ length_checkpoint:
 achievement_record:
   path: docs/operations/checkpoints/GALAX_ACHIEVEMENTS_FROM_START_TO_CURRENT_2026-07-28.md
   automatic_update: authorized_only_when_new_verified_achievement_exists
+  automatic_upload_required_when_triggered: true
+  upload_deadline: within_3_hours_after_new_verified_achievement
   update_when_no_new_verified_achievement: prohibited
 
 maximum_repository_writes_per_cycle: 2
 ```
+
+For this section, `automatic upload` means the actual authorized GitHub file write, commit, and publication to `docs/new-chat-continuity-2026-07-27`. Preparing a draft, displaying a preview, or sending a reminder without performing the repository upload does not satisfy this rule when all verification requirements pass.
 
 Required decision sequence for every automatic cycle:
 
