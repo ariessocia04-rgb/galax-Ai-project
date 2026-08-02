@@ -74,6 +74,96 @@ read docs/operations/CODE_RED.md completely
 
 Do not ask the owner what the previous work was when repository access exists. Do not use remembered conversation fragments as authority.
 
+### 3A. Human Owner standing authorization for bounded three-hour continuity uploads
+
+The Human Owner authorizes a narrow automatic continuity-upload exception. This exception applies only to the Galax continuity records identified below and does not authorize implementation, validation, merge, deployment, or changes to accepted runtime artifacts.
+
+```yaml
+standing_authorization_id: GALAX_THREE_HOUR_CONTINUITY_AUTO_UPLOAD_V1
+human_authorized: true
+timezone_name: Asia/Manila
+timezone_offset: "+08:00"
+check_interval: 3_hours
+maximum_delay_after_new_material_event: 3_hours
+upload_when_no_new_verified_event: false
+
+repository: ariessocia04-rgb/galax-Ai-project
+target_branch: docs/new-chat-continuity-2026-07-27
+target_pull_request: 10
+direct_main_write: prohibited
+merge_authorized: false
+
+length_checkpoint:
+  automatic_create_or_update: authorized
+  directory: docs/operations/checkpoints
+  naming_rule: GALAX_LENGTH_PROBLEM_*_VOLUME_<NEXT_NUMBER>_<YYYY-MM-DD>.md
+  append_only_after_previous_stop_boundary: true
+  exact_Asia_Manila_timestamp_required: true
+
+achievement_record:
+  path: docs/operations/checkpoints/GALAX_ACHIEVEMENTS_FROM_START_TO_CURRENT_2026-07-28.md
+  automatic_update: authorized_only_when_new_verified_achievement_exists
+  update_when_no_new_verified_achievement: prohibited
+
+maximum_repository_writes_per_cycle: 2
+```
+
+Required decision sequence for every automatic cycle:
+
+```text
+verify live repository, continuity branch, PR #10, and latest checkpoint
+→ collect only new verified events after the previous exact stop boundary
+→ classify evidence as REMOTE_PROVEN, HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE, or REPORTED_LOCAL_NOT_REMOTE_PROOF
+→ determine whether a new verified achievement exists
+→ when no new verified achievement exists, create only the next numbered length checkpoint
+→ when a new verified achievement exists, update the achievement record first in its own commit
+→ verify the achievement commit SHA
+→ create the next numbered length checkpoint in a separate commit referencing the verified achievement commit SHA
+→ verify final branch head and PR #10 remain open and draft
+→ stop
+```
+
+Automatic continuity uploads are pre-authorized only when every condition below is satisfied:
+
+- At least one new verified material event exists after the previous checkpoint boundary.
+- The previous checkpoint and exact stop timestamp were read and verified.
+- Every recorded claim has an explicit evidence classification.
+- The upload changes only the authorized continuity file or files.
+- Achievement entries describe completed, verified achievements rather than plans, previews, permission requests, or unsupported completion claims.
+- The length checkpoint includes the exact Philippine date, time, minute, previous checkpoint, coverage start, coverage end, exact stop point, next resume boundary, latest completed action, exact safe resume action, and actions that must not be repeated.
+- When both files change, they use two sequential commits: achievement record first, length checkpoint second.
+- The length checkpoint references the exact achievement-update commit SHA.
+- PR #10 remains open and draft, and no merge is performed.
+
+The automatic cycle must stop without writing and report `BLOCKED_CONTINUITY_AUTO_UPLOAD` when any of the following occurs:
+
+- repository, branch, PR, file, or expected boundary mismatch;
+- exact timestamp is unavailable or would need to be guessed;
+- evidence classification is uncertain;
+- the proposed entry would modify or reinterpret `LOCKED_ACCEPTED` work;
+- a source, runtime, test, dependency, workflow, secret, implementation, or non-continuity file would change;
+- a duplicate or already-covered event would be recorded;
+- the achievement record would be updated without a new verified achievement;
+- GitHub access or write verification fails.
+
+This standing authorization permits the exact continuity file write, commit, and branch publication required by this section without a new per-cycle Human Owner approval. It does not authorize:
+
+```yaml
+not_authorized:
+  - source_or_runtime_edits
+  - test_edits_or_execution
+  - dependency_changes
+  - workflow_or_secret_changes
+  - implementation_branch_commit_or_push
+  - accepted_artifact_unlock
+  - pull_request_merge
+  - deployment
+  - Agents_02_to_15
+  - automatic_retry_after_a_blocker
+```
+
+A repository rule does not itself create a scheduler. The automation service executing this rule must have explicit GitHub access, must run at the configured interval, and must obey every boundary in this section.
+
 ## 4. Decision priority
 
 ```text
@@ -190,6 +280,8 @@ required tests
 → human acceptance
 ```
 
+The bounded continuity exception in Section 3A supersedes the per-write approval requirement only for the exact continuity files, branch, conditions, and commits named there. All implementation and non-continuity work remains subject to the normal approval gates.
+
 ## 8. Completed accepted work protection
 
 A file or stage accepted by ChatGPT exact-diff review and human decision is `LOCKED_ACCEPTED`.
@@ -250,6 +342,8 @@ The legacy operation-length file is currently a `COMPATIBILITY_REDIRECT` and mus
 - Never treat old conversation memory as more authoritative than current repository evidence.
 - Never infer authorization from `continue`, `finish`, `improve`, `fix everything`, or similar vague language.
 
+The Section 3A standing authorization is not unrestricted auto-approval. It is a file-, branch-, evidence-, interval-, and purpose-bounded continuity exception only.
+
 ## 11. Required working behavior
 
 Before edits:
@@ -305,6 +399,8 @@ final_report:
   deployment_requested: false
 ```
 
+For an authorized Section 3A continuity cycle, the required pre-write verification and final report still apply, but a new per-cycle approval is not required when every Section 3A condition is satisfied.
+
 ## 12. Allowed status values
 
 Use factual statuses only:
@@ -324,6 +420,7 @@ BLOCKED_MISSING_CREDENTIAL
 BLOCKED_SUPERSESSION_CONFLICT
 BLOCKED_LLM_PROFILE_NOT_APPROVED
 BLOCKED_LIVE_PERMISSION_EVIDENCE_MISSING
+BLOCKED_CONTINUITY_AUTO_UPLOAD
 FAILED_TEST
 FAILED_SECURITY_GATE
 FAILED_FABRICATED_TOOL_RESULT
@@ -336,9 +433,11 @@ Do not claim `production ready`, `fully autonomous`, `all agents working`, or `1
 
 ## 13. Human authority
 
-The human owner retains final authority for scope, architecture acceptance, credentials, risk acceptance, local restore, accepted-artifact unlock, commit, branch publication, push, PR approval, merge, and deployment.
+The human owner retains final authority for scope, architecture acceptance, credentials, risk acceptance, local restore, accepted-artifact unlock, implementation commit, implementation branch publication, implementation push, PR approval, merge, and deployment.
 
-An AI contributor may recommend. It may not self-authorize.
+The Human Owner has provided standing authorization for the exact continuity uploads defined in Section 3A. An AI contributor may not expand that exception to another branch, file, project, purpose, or action.
+
+An AI contributor may recommend. It may not self-authorize outside the exact Section 3A exception.
 
 ## 14. Current stop boundary
 
