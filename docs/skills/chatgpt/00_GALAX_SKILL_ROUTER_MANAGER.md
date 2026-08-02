@@ -2,61 +2,128 @@
 
 **Status:** `ACTIVE_CHATGPT_ROUTING_CONTROL`  
 **Repository:** `ariessocia04-rgb/galax-Ai-project`  
+**Canonical router ref:** `docs/chatgpt-skill-router-2026-08-02`  
+**Canonical router path:** `docs/skills/chatgpt/00_GALAX_SKILL_ROUTER_MANAGER.md`  
 **Scope:** ChatGPT skill selection and selective repository reading only  
 **Runtime effect:** none  
 **CrewAI Flow routing changed:** false  
 **Galax source or tests changed:** false  
-**Final authority:** Human Owner  
+**Final authority:** Human Owner
 
 ## 1. Purpose
 
 This document defines the ChatGPT routing layer for Galax AI.
 
-Its job is to prevent ChatGPT from reading every Galax skill and scanning the entire repository for every request. It classifies the Human Owner's current request, selects exactly one primary installed Galax skill, loads no more than two genuinely required dependency skills, ignores unrelated skills, and then hands the task to the selected skill.
+For every Galax request, it classifies the current task, selects exactly one primary repository-backed Galax skill document, loads no more than two genuinely required dependency skill documents, ignores unrelated skills, and completes only the current bounded task.
 
-This router is a routing registry and selection policy only. It does not copy or replace the full instructions of Skills 1–7.
-
-It does not implement or modify:
+This router does not implement or modify:
 
 - the CrewAI `@router` architecture;
 - `GalaxFoundationFlow`;
 - Agent 01 or Agents 02–15;
-- source code or tests;
+- Galax source code or tests;
 - Cline software;
 - GitHub workflows, secrets, permissions, merge, or deployment;
 - the authority of the Human Owner.
 
-## 2. Installed Galax skill references
+## 2. Critical terminology and loading contract
 
-The router may select only these installed skills:
+The `$galax-*` names in this router are **routing aliases**. They are not required to be native ChatGPT plugins, native tool names, MCP tools, or separately installed runtime skills.
 
-```text
-$galax-repository-state-scope-guardian
-$galax-strict-cline-prompt-guardian
-$galax-evidence-validation-acceptance-guardian
-$galax-draft-pr-exact-diff-reviewer
-$galax-continuity-achievement-guardian
-$galax-locked-artifact-guardian
-$galax-repository-cleanup-auditor
+```yaml
+skill_representation: repository_backed_markdown_document
+native_plugin_registration_required: false
+native_tool_registration_required: false
+repository_mapping_required: true
+load_method: fetch_exact_mapped_file_from_GitHub
+registry_repository: ariessocia04-rgb/galax-Ai-project
+registry_ref: docs/chatgpt-skill-router-2026-08-02
+same_ref_as_router_required: true
 ```
 
-The router must not invent another Galax skill, silently substitute a general skill, or load all seven skills by default.
+In this contract, **load a skill** means:
 
-## 3. Router-first policy
+```text
+resolve the selected $galax-* alias using the exact registry below
+→ fetch the mapped Markdown file from the same repository and ref as this router
+→ use that file as the selected skill instruction
+```
+
+Do not search for a native registered skill by alias when an exact repository mapping exists.
+
+Do not return `BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE` merely because the `$galax-*` alias is not registered as a native plugin or tool.
+
+Return `BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE` only when:
+
+- this router cannot be fetched from the canonical repository/ref/path; or
+- the exact mapped primary skill file cannot be fetched; or
+- an exact mapped required dependency file cannot be fetched.
+
+## 3. Canonical repository-backed skill registry
+
+```yaml
+GALAX_REPOSITORY_SKILL_REGISTRY_V1:
+  repository: ariessocia04-rgb/galax-Ai-project
+  ref: docs/chatgpt-skill-router-2026-08-02
+
+  skills:
+    $galax-repository-state-scope-guardian:
+      skill_id: GALAX-SKILL-01
+      path: docs/skills/chatgpt/01_GALAX_REPOSITORY_STATE_SCOPE_GUARDIAN.md
+
+    $galax-strict-cline-prompt-guardian:
+      skill_id: GALAX-SKILL-02
+      path: docs/skills/chatgpt/02_GALAX_STRICT_CLINE_PROMPT_GUARDIAN.md
+
+    $galax-evidence-validation-acceptance-guardian:
+      skill_id: GALAX-SKILL-03
+      path: docs/skills/chatgpt/03_GALAX_EVIDENCE_VALIDATION_ACCEPTANCE_GUARDIAN.md
+
+    $galax-draft-pr-exact-diff-reviewer:
+      skill_id: GALAX-SKILL-04
+      path: docs/skills/chatgpt/04_GALAX_DRAFT_PR_EXACT_DIFF_REVIEWER.md
+
+    $galax-continuity-achievement-guardian:
+      skill_id: GALAX-SKILL-05
+      path: docs/skills/chatgpt/05_GALAX_CONTINUITY_ACHIEVEMENT_GUARDIAN.md
+
+    $galax-locked-artifact-guardian:
+      skill_id: GALAX-SKILL-06
+      path: docs/skills/chatgpt/06_GALAX_LOCKED_ARTIFACT_GUARDIAN.md
+
+    $galax-repository-cleanup-auditor:
+      skill_id: GALAX-SKILL-07
+      path: docs/skills/chatgpt/07_GALAX_REPOSITORY_CLEANUP_AUDITOR.md
+```
+
+The exact registry above is authoritative for ChatGPT routing on this branch.
+
+The router must not:
+
+- invent another Galax skill;
+- silently substitute a general skill;
+- infer a different filename;
+- search the repository by alias before using the mapped path;
+- require native plugin installation when the mapped repository file is accessible;
+- load all seven skill documents by default.
+
+## 4. Router-first policy
 
 For every Galax request:
 
 ```text
-classify the current request
-→ select exactly one primary installed skill
-→ select zero to two required dependency skills
-→ ignore all unrelated skills
+fetch this router from the canonical repository/ref/path
+→ classify the current request
+→ select exactly one primary skill alias
+→ resolve the alias to its exact registry path
+→ fetch the exact primary skill document
+→ select zero to two genuinely required dependency aliases
+→ resolve and fetch only those exact dependency documents
+→ ignore all unrelated skill documents
 → let the selected skill determine the minimum repository evidence required
 → complete only the current bounded task
 → stop
 ```
-
-Rules:
 
 ```yaml
 primary_skill_limit: 1
@@ -67,11 +134,7 @@ automatic_next_skill: false
 Human_Owner_final_authority: true
 ```
 
-The router itself is not required to be the only skill loaded in the conversation. Its requirement is router-first selection: before unrelated Galax skills influence the task, the router identifies the one primary skill and any necessary dependencies, and unrelated skills are disregarded.
-
-## 4. Routing categories
-
-Classify the Human Owner's request as one of:
+## 5. Routing categories
 
 ```yaml
 REPOSITORY_STATE:
@@ -99,33 +162,54 @@ UNKNOWN_OR_MULTI_TASK:
   purpose: stop_when_no_single_safe_primary_skill_can_be_selected
 ```
 
-## 5. Primary skill routing table
+## 6. Primary routing table
 
-| Human Owner request | Primary installed skill |
-|---|---|
-| Where did Galax stop, what is current, or what is next? | `$galax-repository-state-scope-guardian` |
-| Make the next Cline prompt or review a Cline permission request | `$galax-strict-cline-prompt-guardian` |
-| Review a proposed edit, saved receipt, focused test, commit, or push evidence | `$galax-evidence-validation-acceptance-guardian` |
-| Review a current remote Draft PR or exact pushed diff | `$galax-draft-pr-exact-diff-reviewer` |
-| Handle length problem, three-hour checkpoint, or separate achievement check | `$galax-continuity-achievement-guardian` |
-| Determine whether accepted work is locked or review an unlock request | `$galax-locked-artifact-guardian` |
-| Audit duplicates, stale conflicts, references, or deletion candidates | `$galax-repository-cleanup-auditor` |
+| Human Owner request | Primary skill alias | Exact repository path |
+|---|---|---|
+| Where did Galax stop, what is current, what is unfinished, or what is next? | `$galax-repository-state-scope-guardian` | `docs/skills/chatgpt/01_GALAX_REPOSITORY_STATE_SCOPE_GUARDIAN.md` |
+| Make the next Cline prompt or review a Cline permission request | `$galax-strict-cline-prompt-guardian` | `docs/skills/chatgpt/02_GALAX_STRICT_CLINE_PROMPT_GUARDIAN.md` |
+| Review a proposed edit, saved receipt, focused test, commit, or push evidence | `$galax-evidence-validation-acceptance-guardian` | `docs/skills/chatgpt/03_GALAX_EVIDENCE_VALIDATION_ACCEPTANCE_GUARDIAN.md` |
+| Review a current remote Draft PR or exact pushed diff | `$galax-draft-pr-exact-diff-reviewer` | `docs/skills/chatgpt/04_GALAX_DRAFT_PR_EXACT_DIFF_REVIEWER.md` |
+| Handle length problem, three-hour checkpoint, or separate achievement check | `$galax-continuity-achievement-guardian` | `docs/skills/chatgpt/05_GALAX_CONTINUITY_ACHIEVEMENT_GUARDIAN.md` |
+| Determine whether accepted work is locked or review an unlock request | `$galax-locked-artifact-guardian` | `docs/skills/chatgpt/06_GALAX_LOCKED_ARTIFACT_GUARDIAN.md` |
+| Audit duplicates, stale conflicts, references, or deletion candidates | `$galax-repository-cleanup-auditor` | `docs/skills/chatgpt/07_GALAX_REPOSITORY_CLEANUP_AUDITOR.md` |
 
-## 6. Conditional dependency rules
+## 7. Exact skill-resolution algorithm
 
-A dependency is loaded only when its condition is true.
+```text
+selected alias
+→ look up exact path in GALAX_REPOSITORY_SKILL_REGISTRY_V1
+→ fetch that exact path from ariessocia04-rgb/galax-Ai-project
+→ use ref docs/chatgpt-skill-router-2026-08-02
+→ verify returned file exists and its declared skill_reference matches the selected alias
+→ mark skill_load_status: LOADED_FROM_REPOSITORY
+```
+
+Required behavior:
+
+```yaml
+alias_found_and_file_fetched: continue
+alias_found_but_file_fetch_failed: BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE
+alias_not_in_registry: BLOCKED_MISSING_REGISTERED_SKILL_MAPPING
+native_plugin_missing_but_repository_file_fetched: continue
+search_repository_by_alias_only: prohibited
+```
+
+A successful exact file fetch is sufficient to load the selected skill for this ChatGPT workflow.
+
+## 8. Conditional dependency rules
 
 ### Repository-state dependency
 
-Load `$galax-repository-state-scope-guardian` as a dependency only when:
+Load `$galax-repository-state-scope-guardian` only when:
 
 - the conversation is new or resumed after context loss;
 - the active branch, exact HEAD SHA, assignment, stop point, or evidence is unclear;
-- the primary skill requires live reconstruction;
+- the primary skill requires live state reconstruction;
 - repository evidence conflicts with chat memory;
 - the Human Owner invokes `CODE RED`, `length problem`, or equivalent continuation language.
 
-Do not load it merely because repository work is mentioned when the exact current state is already verified for the present task.
+Do not load it when the exact current state was already verified for the present bounded task.
 
 ### Locked-artifact dependency
 
@@ -133,9 +217,7 @@ Load `$galax-locked-artifact-guardian` only when:
 
 - a proposed task, PR, cleanup candidate, test, or command may touch accepted work;
 - an unlock request is being reviewed;
-- the exact lock status is materially relevant to the current decision.
-
-### Maximum dependency rule
+- exact lock status is materially relevant.
 
 ```yaml
 maximum_dependencies: 2
@@ -143,19 +225,17 @@ third_dependency_needed: BLOCKED_SCOPE_TOO_BROAD
 required_action: split_into_separate_bounded_task
 ```
 
-## 7. Selective repository reading policy
+## 9. Selective repository reading policy
 
 The router does not authorize a full-repository read.
 
-After routing, the selected skill must use the smallest evidence path sufficient for the current task.
-
-Default reading strategy:
+After routing, the selected skill must use the smallest evidence path sufficient for the current task:
 
 ```text
 read the current authoritative entry point required by the selected skill
-→ read the exact active plan, assignment, checkpoint, test, file, issue, or PR needed
+→ read the exact active plan, assignment, checkpoint, test, file, issue, or PR required
 → follow only mandatory references from a higher-authority record
-→ stop reading when the current task can be decided safely
+→ stop when the current task can be decided safely
 ```
 
 Do not:
@@ -163,38 +243,32 @@ Do not:
 - read every file under `docs/`;
 - read all plans, rules, checkpoints, skills, or history by default;
 - scan all source and tests when one exact file or test is named;
-- search the entire repository when an exact path is already known;
+- search the entire repository when an exact path is known;
 - reread completed evidence without a new factual reason;
 - rely on filename similarity when exact content or authority is required.
 
-Expand repository reading only when:
+Expand reading only when:
 
-- an exact file cannot be located;
+- an exact required file cannot be located;
 - a higher-authority file explicitly requires another record;
 - required evidence is missing or contradictory;
 - the current assignment cannot be verified safely;
 - a reference or dependency must be proven.
 
-Missing evidence returns a factual blocker. It never authorizes guessing or a broad repository scan.
+Missing evidence produces a factual blocker. It never authorizes guessing or a broad repository scan.
 
-## 8. Search, save, and edit determination
+## 10. Action ownership and authorization
 
-The router does not directly search, save, edit, test, commit, push, merge, or deploy.
-
-It decides which installed skill owns the decision.
+The router itself does not search broadly, save, edit, test, commit, push, merge, or deploy. It identifies the skill that owns the current decision.
 
 ```yaml
 where_to_search:
   owner: selected_primary_skill
   rule: exact_file_or_narrow_scope_only
 
-where_to_save:
+where_to_save_or_edit:
   owner: $galax-strict-cline-prompt-guardian
-  rule: exact_allowlisted_path_and_separate_save_authorization
-
-what_to_edit:
-  owner: $galax-strict-cline-prompt-guardian
-  rule: one_exact_file_or_section_and_one_stop_condition
+  rule: exact_allowlisted_path_and_separate_Human_Owner_authorization
 
 how_to_review_edit_or_test:
   owner: $galax-evidence-validation-acceptance-guardian
@@ -212,29 +286,38 @@ how_to_plan_cleanup:
   owner: $galax-repository-cleanup-auditor
 ```
 
-No routing decision grants permission for the later action itself.
+A routing decision does not grant permission for a later consequential action.
 
-## 9. Routing receipt
+## 11. Routing and load receipt
 
-Before handing off to a selected skill, determine:
+Before handing off, return or internally establish:
 
 ```yaml
-GALAX_CHATGPT_SKILL_ROUTE_V1:
+GALAX_CHATGPT_SKILL_ROUTE_V2:
   request_summary:
   repository: ariessocia04-rgb/galax-Ai-project
+  router_ref: docs/chatgpt-skill-router-2026-08-02
+  router_path: docs/skills/chatgpt/00_GALAX_SKILL_ROUTER_MANAGER.md
   task_category:
-  primary_skill:
-  dependency_skills: []
+
+  primary_skill_alias:
+  primary_skill_path:
+  primary_skill_load_status: LOADED_FROM_REPOSITORY | BLOCKED
+
+  dependency_skill_aliases: []
+  dependency_skill_paths: []
+  dependency_load_statuses: []
   dependency_reasons: []
+
   unrelated_skills_ignored: []
   exact_current_output_required:
   repository_state_already_verified:
-  route_status: SELECTED | BLOCKED_AMBIGUOUS | BLOCKED_MISSING_INSTALLED_SKILL | BLOCKED_SCOPE_TOO_BROAD
+  route_status: SELECTED | BLOCKED_AMBIGUOUS | BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE | BLOCKED_SCOPE_TOO_BROAD
 ```
 
-When the route is selected, load only the named primary skill and the listed dependencies.
+When the route is selected, load only the exact mapped primary and dependency files.
 
-## 10. Multi-stage request handling
+## 12. Multi-stage request handling
 
 When one request includes several stages, route only the first repository-authorized stage.
 
@@ -242,26 +325,23 @@ Examples:
 
 ```text
 "Review the edit, test it, commit, and push"
-→ primary skill: $galax-evidence-validation-acceptance-guardian
 → review current edit evidence only
-→ test, commit, and push remain separate later tasks
+→ test, commit, and push remain separate tasks
 
 "Make the prompt, let Cline edit, run tests, and publish"
-→ primary skill: $galax-strict-cline-prompt-guardian
 → create one exact current Cline task only
 → no automatic Act, validation, commit, or push
 
 "Audit duplicates and delete them"
-→ primary skill: $galax-repository-cleanup-auditor
 → produce cleanup evidence and candidates only
 → deletion requires a separate bounded task and Human Owner authorization
 ```
 
-Do not activate several primary skills to satisfy a broad request in one pass.
+Do not activate multiple primary skills to satisfy one broad request.
 
-## 11. Stop and handoff behavior
+## 13. Stop and handoff behavior
 
-After the selected skill returns the current result, stop.
+After the selected skill returns the current bounded result, stop.
 
 ```text
 Skill 3 returns PASS
@@ -271,73 +351,90 @@ Skill 4 returns PASS
 → do not automatically approve or merge the PR
 
 Skill 5 prepares a checkpoint
-→ do not automatically save, commit, or push
+→ do not automatically save, commit, or push unless exact live continuity authority permits it
 
 Skill 7 identifies deletion candidates
 → do not automatically delete or create cleanup commits
 ```
 
-A new Human Owner instruction is required before routing the next stage.
+A new Human Owner instruction is required before routing the next stage, except for an exact active standing authorization already present in the live repository.
 
-## 12. Relationship to Galax runtime routing
-
-This ChatGPT skill router is separate from the canonical CrewAI Flow routing.
+## 14. Relationship to Galax runtime routing
 
 ```text
-ChatGPT skill routing
+ChatGPT repository-backed skill routing
 ≠ CrewAI Flow @router execution
 ≠ Cline tool permission flow
 ≠ GitHub branch or pull-request routing
 ```
 
-This document must not change the active runtime invariant that every conditional Foundation stage uses explicit named CrewAI routes and that blocked, failed, unavailable, pending, rejected, or evidence-missing outcomes do not enter a success path.
+This router must not change the active runtime invariant that every conditional Foundation stage uses explicit named CrewAI routes and that blocked, failed, unavailable, pending, rejected, or evidence-missing outcomes do not enter a success path.
 
-## 13. Strict prohibitions
+## 15. Strict prohibitions
 
 ```yaml
-copy_or_embed_Skills_1_to_7: prohibited
+copy_or_embed_full_Skills_1_to_7_into_router: prohibited
 read_all_skills_by_default: prohibited
 load_unrelated_skills: prohibited
 multiple_primary_skills_for_one_task: prohibited
 more_than_two_dependencies: prohibited
 automatic_next_skill: prohibited
 full_repository_scan_by_default: prohibited
-infer_missing_path_or_authority: prohibited
-invent_installed_skill: prohibited
+infer_unmapped_path: prohibited
+search_by_alias_before_using_registry: prohibited
+require_native_plugin_when_repository_file_is_accessible: prohibited
+claim_repository_skill_file_is_missing_after_successful_fetch: prohibited
+invent_skill_mapping: prohibited
 modify_CrewAI_router: prohibited
 modify_Galax_source_or_tests: prohibited
-direct_repository_edit_by_router: prohibited
 direct_test_execution_by_router: prohibited
-direct_commit_or_push_by_router: prohibited
 merge_or_deployment_by_router: prohibited
 approve_for_Human_Owner: prohibited
 self_authorization: prohibited
 ```
 
-## 14. Failure behavior
+## 16. Failure behavior
 
-Return a blocker when:
+Use the smallest accurate blocker:
 
-- no installed skill matches the current request;
-- more than one independent primary task is present;
-- more than two dependencies are genuinely required;
-- the selected installed skill is unavailable;
-- required repository evidence is missing;
-- a route would conflict with a higher-authority Galax record;
-- the Human Owner has not authorized the current action.
+```yaml
+BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE:
+  use_only_when:
+    - canonical_router_fetch_failed
+    - exact_mapped_primary_skill_fetch_failed
+    - exact_mapped_required_dependency_fetch_failed
+  required_details:
+    - repository
+    - ref
+    - exact_failed_path
 
-The safe response is to name the exact blocker and the smallest required remedy. Do not compensate by reading all skills, scanning the entire repository, or broadening scope.
+BLOCKED_MISSING_REGISTERED_SKILL_MAPPING:
+  use_when: selected_alias_is_not_present_in_the_exact_registry
 
-## 15. Final routing contract
+BLOCKED_SCOPE_TOO_BROAD:
+  use_when:
+    - more_than_one_independent_primary_task
+    - more_than_two_genuine_dependencies
+
+BLOCKED_MISSING_EVIDENCE:
+  use_when: selected_skill_loaded_but_required_task_evidence_is_missing
+```
+
+Do not use `BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE` when the exact mapped Markdown file was successfully fetched.
+
+## 17. Final routing contract
 
 ```text
 Human Owner request
+→ fetch this exact router
 → classify one current task
-→ select one primary installed Galax skill
-→ add no more than two required dependencies
-→ ignore unrelated skills
-→ selected skill reads only the minimum authoritative repository evidence
-→ selected skill returns the exact current output
-→ Human Owner decides any consequential action
+→ select one primary skill alias
+→ resolve the alias to its exact repository path
+→ fetch the mapped primary skill document
+→ resolve and fetch no more than two required dependency documents
+→ ignore unrelated skill documents
+→ selected skill reads only minimum authoritative evidence
+→ selected skill returns the exact bounded result
+→ Human Owner decides any consequential next action
 → stop
 ```
