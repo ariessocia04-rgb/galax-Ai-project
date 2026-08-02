@@ -430,6 +430,31 @@ merged_to_main: false
 
 The replacement controls how a new ChatGPT chat reconstructs repository truth and prepares bounded, human-gated prompts for Cline. It does not modify Cline itself.
 
+### Achievement 29 — Repository-backed ChatGPT routing recovery controls were published and verified
+
+```yaml
+evidence_classification: REMOTE_PROVEN
+router_branch: docs/chatgpt-skill-router-2026-08-02
+router_alias_mapping_commit: c9d543dc42e894bd999e1566bf1908f67e418ed0
+router_alias_mapping_commit_message: fix(chatgpt-router): map skill aliases to exact repository paths
+router_file: docs/skills/chatgpt/00_GALAX_SKILL_ROUTER_MANAGER.md
+summary_memory_setup_commit: cb0a7e5c2832d5b98ad18d7191a89160e4851d12
+summary_memory_setup_commit_message: docs(chatgpt): add exact 5000-character summary memory setup
+summary_memory_file: docs/skills/chatgpt/instructions/GALAX_CHATGPT_SUMMARY_MEMORY_ROUTER_SETUP_5000.md
+summary_memory_blob_sha: 6f5133f8198811adb4b656aae2c6e1e640ae9215
+summary_memory_blob_size_bytes_including_terminal_newline: 5001
+summary_memory_declared_character_count_contract: EXACTLY_5000_CHARACTERS
+exact_repository_path_mapping_established: true
+Galax_runtime_flow_changed: false
+source_or_tests_changed: false
+Cline_application_or_task_changed: false
+implementation_branch_changed: false
+main_branch_changed: false
+merged_to_main: false
+```
+
+The alias-to-exact-file mapping removes the native-plugin identity blocker when the mapped repository file is accessible. The separate summary-memory setup is a repository-backed ChatGPT continuity control. Neither document changes Cline, Galax runtime behavior, source, tests, implementation branches, PR #10, merge state, or deployment readiness.
+
 ## Current work tracks
 
 ```yaml
