@@ -275,6 +275,71 @@ status: BLOCKED_EXACT_RESUME_POINT_UNVERIFIED
 
 Do not guess the resume point.
 
+## Mandatory current-chat and Cline stop snapshot
+
+Every time a length-problem checkpoint is saved, ChatGPT must capture the exact end of the current chat work and the exact state of the Cline work being supervised. This snapshot is mandatory even when no file was edited and even when the current task stopped at investigation, prompt preparation, permission review, preview, save, validation, correction, commit, push, or remote review.
+
+```yaml
+GALAX_EXACT_CHAT_AND_CLINE_STOP_SNAPSHOT_V1:
+  current_chat_last_material_owner_instruction:
+  current_chat_last_completed_ChatGPT_action:
+  current_chat_unfinished_request:
+
+  Cline_active: true | false
+  Cline_task_id:
+  Cline_mode:
+  Cline_workspace:
+  Cline_branch:
+  Cline_expected_or_verified_head_sha:
+  Cline_exact_target:
+  Cline_exact_problem_being_fixed:
+  Cline_last_completed_action:
+  Cline_current_pending_action:
+  Cline_current_permission_or_waiting_state:
+  Cline_edit_preview_status: NOT_REQUESTED | PENDING | PROVIDED_NOT_SAVED | SAVED
+  Cline_validation_status: NOT_AUTHORIZED | NOT_RUN | PASS | FAIL | BLOCKED
+  Cline_commit_status: NOT_AUTHORIZED | NOT_CREATED | CREATED_LOCAL
+  Cline_push_status: NOT_AUTHORIZED | NOT_PUSHED | PUSHED_REMOTE_PROVEN
+
+  exact_resume_instruction_for_new_chat:
+  first_action_new_chat_must_take:
+  first_action_new_chat_must_not_take:
+  continuation_requires_new_owner_authorization: true | false
+```
+
+The checkpoint must use factual values. When Cline is not active, record `Cline_active: false` and identify the actual active track instead of inventing a Cline task.
+
+The `exact_resume_instruction_for_new_chat` must be written as one executable continuation boundary, not a vague summary. It must state exactly:
+
+- what was being fixed or investigated;
+- the exact file, test, section, symbol, prompt, receipt, permission, or command involved;
+- what Cline already completed;
+- what Cline has not yet completed;
+- what the Human Owner already approved;
+- what still requires separate approval;
+- the first and only next action;
+- the exact stop condition for that next action.
+
+The new chat must continue from this snapshot after verifying the live repository. It must not go back to an older checkpoint merely because it contains more history. It must not choose another track while this recorded task remains incomplete.
+
+```yaml
+new_chat_resume_priority:
+  latest_valid_length_checkpoint_exact_snapshot: first
+  live_repository_verification: required
+  older_checkpoint_history: reference_only
+  old_chat_memory: last
+
+resume_same_incomplete_part: required
+change_track_before_current_task_is_completed_or_factually_blocked: prohibited
+repeat_Cline_completed_action: prohibited
+skip_Cline_pending_gate: prohibited
+assume_pending_preview_was_saved: prohibited
+assume_saved_edit_was_validated: prohibited
+assume_local_commit_was_pushed: prohibited
+```
+
+If the exact current chat stop or Cline state cannot be proven, the checkpoint must stop with `BLOCKED_EXACT_RESUME_POINT_UNVERIFIED`. It must not save a guessed continuation instruction.
+
 ## Length-problem checkpoint rules
 
 The length checkpoint is continuity-only. It must not be combined with source, tests, runtime implementation, validation, Ruff, formatting, dependency work, implementation Git operations, merge, or deployment.
@@ -293,10 +358,14 @@ achievement_persistence:
   rewrite_existing_achievements_due_to_incomplete_work: false
   update_when_no_new_verified_achievement_exists: false
   append_only_after_verified_completion: true
+  keep_current_achievement_boundary_until_new_verified_completion: true
+  unfinished_current_task_does_not_replace_or_remove_prior_achievements: true
   replace_length_checkpoint: false
   modify_runtime_or_source: false
   modify_LOCKED_ACCEPTED_artifacts: false
 ```
+
+The current achievement record and its latest verified achievement remain unchanged while the current technical task is unfinished, pending, blocked without a completed bounded audit result, awaiting permission, awaiting save, awaiting validation, or awaiting commit or push evidence.
 
 These are not achievements:
 
@@ -307,6 +376,7 @@ These are not achievements:
 - an unsaved preview;
 - pending approval;
 - incomplete correction;
+- an edit that has not reached its required evidence and acceptance boundary;
 - failed validation by itself unless the factual bounded audit result is the completed authorized objective;
 - speculation;
 - repeated old work;
@@ -317,6 +387,7 @@ When no new verified achievement exists:
 ```yaml
 new_verified_achievement_exists: false
 achievement_upload_action: DO_NOT_CHANGE_ACHIEVEMENT_RECORD
+preserve_latest_verified_achievement_as_current_boundary: true
 ```
 
 When a new verified achievement exists, ChatGPT updates only:
@@ -325,7 +396,7 @@ When a new verified achievement exists, ChatGPT updates only:
 docs/operations/checkpoints/GALAX_ACHIEVEMENTS_FROM_START_TO_CURRENT_2026-07-28.md
 ```
 
-The achievement update must occur before the length checkpoint and in its own commit.
+The achievement update must append only the new verified completion, preserve every prior achievement, and occur before the length checkpoint in its own commit.
 
 ## Exact direct-upload sequence
 
@@ -334,6 +405,7 @@ verify live repository, AGENTS.md, CODE_RED.md, latest checkpoint, achievement r
 → verify the exact current Asia/Manila timestamp
 → collect only new events after the previous exact stop boundary
 → classify every event as REMOTE_PROVEN, HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE, or REPORTED_LOCAL_NOT_REMOTE_PROOF
+→ reconstruct the mandatory current-chat and Cline stop snapshot
 → determine whether a genuinely new verified achievement exists
 → when yes, update and commit the achievement record first through the connected GitHub app
 → verify the achievement commit SHA
@@ -374,6 +446,7 @@ Stop without writing and report `BLOCKED_CONTINUITY_AUTO_UPLOAD` when any of the
 - repository, branch, PR, file, or previous-boundary mismatch;
 - exact timestamp is unavailable or would need to be guessed;
 - evidence classification is uncertain;
+- exact current-chat or Cline stop snapshot cannot be proven;
 - exact resume point cannot be proven;
 - the proposed entry would modify or reinterpret `LOCKED_ACCEPTED` work;
 - a source, runtime, test, dependency, workflow, secret, implementation, or non-continuity file would change;
@@ -393,6 +466,7 @@ assume_standing_authorization_without_reading_live_repo: prohibited
 combine_achievement_and_length_in_one_file_or_commit: prohibited
 repeat_previous_events: prohibited
 invent_timestamp: prohibited
+invent_current_chat_or_Cline_stop_state: prohibited
 modify_completed_Cline_work: prohibited
 modify_LOCKED_ACCEPTED_work: prohibited
 source_or_test_change: prohibited
