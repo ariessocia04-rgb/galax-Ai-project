@@ -5,7 +5,7 @@ document_id: GALAX_ACHIEVEMENTS_FROM_START_TO_CURRENT
 record_type: COMPLETED_ACHIEVEMENTS_CHECKPOINT
 original_recorded_date: 2026-07-28
 updated_date: 2026-08-03
-updated_local_time: 2026-08-03T12:10:00+08:00
+updated_local_time: 2026-08-03T12:37:03+08:00
 repository: ariessocia04-rgb/galax-Ai-project
 continuity_branch: docs/new-chat-continuity-2026-07-27
 continuity_PR: 10
@@ -641,6 +641,56 @@ final_status: BLOCKED_LIVE_EVIDENCE_UNAVAILABLE
 
 The completed factual result narrowed the Issue #2 evidence gap and proved the exact command incompatibility. It did not retrieve the comment count or latest comment and did not clear the live-evidence gate.
 
+### Achievement 37 — The existing commit-scope matrix was reconciled and its receipt was corrected
+
+```yaml
+evidence_classification: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+historical_event_time_local: 2026-08-03T04:13:00+08:00
+reconciliation_assignment_id: GALAX-P2B-COMMIT-SCOPE-MATRIX-RECONCILE-20260803-01
+correction_assignment_id: GALAX-P2B-COMMIT-SCOPE-MATRIX-RECEIPT-CORRECTION-20260803-01
+repository: ariessocia04-rgb/galax-Ai-project
+branch: implementation/foundation-agent-01
+expected_local_head: 0f02475df29b567253131f53c8fa5b162c12ec94
+reconciliation_mode: PLAN_ONLY
+correction_mode: REVIEW_ONLY
+corrected_receipt_status: COMPLETE
+classifications_changed_by_correction: false
+per_path_findings_changed_by_correction: false
+reconciled_matrix:
+  include: []
+  exclude:
+    - src/galax/__pycache__/
+    - src/galax/foundation/__pycache__/
+  local_only:
+    - .clinerules/workflows/
+    - .vscode/
+  unresolved:
+    - research/
+prior_matrix_disposition:
+  accepted_as_written: false
+  corrected_classifications_required: true
+  blocked: false
+commands_run: []
+files_read: []
+files_created: []
+files_modified: []
+files_deleted: []
+tests_run: []
+git_operations: []
+GitHub_mutations: []
+unauthorized_actions: []
+rejected_requests:
+  - git branch --show-current
+rejected_request_executed: false
+staging_authorized: false
+commit_authorized: false
+push_authorized: false
+cleanup_or_deletion_authorized: false
+future_stage_automatically_authorized: false
+```
+
+The corrected receipt preserved the five supported classifications and corrected only the evidence-boundary, limitations, and future-stage fields. The original reconciliation conversation itself was not separately supplied, but the complete correction conversation and corrected full receipt were supplied. The result is advisory for the proposed current coherent commit only; it does not authorize deletion, `.gitignore` changes, staging, commit, push, testing, implementation, ancestry synchronization, or modification of locked work.
+
 ## Current work tracks
 
 ```yaml
@@ -665,10 +715,19 @@ Track_C_new_chat_continuity:
   latest_length_checkpoint_commit_before_this_update: 1d8edaaabf4a7b7113b9d114f65df9a334e682bd
 
 Track_D_foundation_agent01_untracked_and_live_evidence:
-  latest_completed_bounded_result: GALAX-P2B-ISSUE-2-LIVE-EVIDENCE-20260803-01_BLOCKED_LIVE_EVIDENCE_UNAVAILABLE
-  latest_prompt_only_assignment: GALAX-P2B-ISSUE-2-LATEST-COMMENT-20260803-01
-  latest_prompt_execution_status: NOT_PROVEN
-  commit_scope_matrix_final_acceptance: NOT_PROVEN
+  latest_completed_bounded_result: GALAX-P2B-COMMIT-SCOPE-MATRIX-RECEIPT-CORRECTION-20260803-01_COMPLETE
+  final_corrected_reconciled_matrix_available: true
+  final_matrix_include: []
+  final_matrix_local_only:
+    - .clinerules/workflows/
+    - .vscode/
+  final_matrix_exclude:
+    - src/galax/__pycache__/
+    - src/galax/foundation/__pycache__/
+  final_matrix_unresolved:
+    - research/
+  matrix_human_owner_final_acceptance: NOT_SEPARATELY_PROVEN
+  original_03_56_execution_conversation: NOT_SUPPLIED
 ```
 
 These tracks are separate. Completion or permission in one track does not authorize work in another.
@@ -688,11 +747,11 @@ Agent_01_executable_runtime_complete: NOT_PROVEN
 exact_one_LLM_call_runtime_proof: NOT_COMPLETED
 authenticated_pause_resume_runtime: NOT_COMPLETED
 prompting_method_10_of_10_validation: NOT_COMPLETED
-commit_scope_matrix_accepted: NOT_PROVEN
-Issue_2_comment_count_retrieved: NOT_PROVEN
-Issue_2_latest_comment_retrieved: NOT_PROVEN
-GALAX_P2B_ISSUE_2_LATEST_COMMENT_20260803_01_execution: NOT_PROVEN
-GALAX_P2B_ISSUE_2_LATEST_COMMENT_20260803_01_receipt: NOT_SUPPLIED
+corrected_commit_scope_matrix_Human_Owner_acceptance: NOT_SEPARATELY_PROVEN
+research_path_final_classification: UNRESOLVED
+local_remote_ancestry_relationship: NOT_VERIFIED
+safe_synchronization_method: NOT_VERIFIED
+GALAX_P2B_ISSUE_2_LATEST_COMMENT_20260803_01_original_execution_conversation: NOT_SUPPLIED
 continuity_PR_10_merged: false
 prompting_control_available_on_main: false
 Agents_02_to_15: NOT_STARTED
@@ -700,24 +759,24 @@ deployment: NOT_AUTHORIZED_NOT_PERFORMED
 production_ready: false
 ```
 
-The 03:56 GraphQL task prompt is not an achievement. It remains prompt-only until the actual manual approval, command execution, complete raw output, and final receipt are supplied or the Human Owner confirms it was never executed.
+Issue #2 comment-count and latest-comment details were supplied to the 04:13 reconciliation as pre-existing evidence. The 04:13 tasks did not create or independently verify that evidence, and the original 03:56 execution conversation remains absent from the reconstructed timeline.
 
 ## Current verified stop point
 
 ```yaml
 last_completed_local_git_action: FOUNDATION_AGENT_01_LOCAL_STATE_IDENTIFICATION_01_19_COMPLETED_WITH_NONCOMPLIANCE
 last_completed_local_test_action: PHASE_2B_POST_FIX_FULL_SUITE_BASELINE_039_101_PASSED_9_FAILED
-last_completed_local_evidence_action: GALAX_P2B_ISSUE_2_LIVE_EVIDENCE_20260803_01_BLOCKED_LIVE_EVIDENCE_UNAVAILABLE
+last_completed_local_evidence_action: GALAX_P2B_COMMIT_SCOPE_MATRIX_RECEIPT_CORRECTION_20260803_01_COMPLETE
 last_completed_remote_length_document_action: GALAX_LENGTH_PROBLEM_0356_ISSUE_2_LATEST_COMMENT_PROMPT_VOLUME_20
-latest_prompt_only_assignment: GALAX-P2B-ISSUE-2-LATEST-COMMENT-20260803-01
-current_stop_point: AFTER_THE_03_56_CORRECTED_GRAPHQL_PROMPT_AND_BEFORE_ANY_PROVEN_CLINE_APPROVAL_EXECUTION_RAW_OUTPUT_OR_RECEIPT
-exact_next_safe_continuity_action: Human_Owner_supplies_the_actual_03_56_Cline_execution_conversation_or_confirms_that_the_command_was_never_executed
+latest_completed_assignment: GALAX-P2B-COMMIT-SCOPE-MATRIX-RECEIPT-CORRECTION-20260803-01
+current_stop_point: AFTER_THE_COMPLETE_CORRECTED_04_13_COMMIT_SCOPE_MATRIX_RECEIPT_AND_BEFORE_ANY_ANCESTRY_OR_SYNCHRONIZATION_REVIEW
+exact_next_safe_continuity_action: Human_Owner_supplies_the_next_timestamped_prompt_or_whole_conversation_after_the_04_13_corrected_receipt
 next_safe_Phase_2B_action: keep_PHASE_2B_ZERO_OPEN_BLOCKERS_INVESTIGATION_040_NOT_STARTED_until_the_owner_returns_to_that_separate_track
 next_action_scope: review_existing_historical_evidence_only
 next_action_commands_allowed: []
 next_action_edits_allowed: []
 next_action_tests_allowed: []
-next_action_stop_condition: STOP_AFTER_CLASSIFYING_THE_ACTUAL_03_56_RESULT_WITHOUT_RERUNNING_IT
+next_action_stop_condition: STOP_AFTER_CLASSIFYING_AND_RECORDING_THE_NEXT_NEW_HISTORICAL_EVENT
 next_safe_prompt_research_action: owner_review_one_new_zero_knowledge_clean_trial
 ```
 
