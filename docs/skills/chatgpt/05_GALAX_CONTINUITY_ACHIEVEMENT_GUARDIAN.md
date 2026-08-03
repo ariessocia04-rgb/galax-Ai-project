@@ -53,17 +53,66 @@ maximum_repository_writes_per_cycle: 2
 
 It does not authorize source, tests, dependencies, workflows, secrets, implementation branches, accepted-artifact changes, merge, or deployment.
 
+## Human Owner direct-command interpretation
+
+When the Human Owner gives a direct command in the active Galax conversation, ChatGPT must execute the exact bounded GitHub update itself when the target and scope are already clear from the immediately preceding context and live repository evidence.
+
+```yaml
+DIRECT_UPDATE_COMMANDS_V1:
+  update:
+    meaning: execute_the_exact_current_bounded_repository_update_already_under_discussion
+    require_unambiguous_current_target: true
+    delegate_to_Cline: false
+
+  update_my_repo:
+    meaning: execute_the_exact_current_bounded_repository_update_already_under_discussion
+    require_unambiguous_current_target: true
+    delegate_to_Cline: false
+
+  update_length_problem:
+    meaning: directly_create_and_publish_the_next_valid_numbered_length_checkpoint
+    executor: ChatGPT_connected_GitHub_app
+    Cline_required: false
+
+  update_achievement:
+    meaning: directly_check_for_and_append_only_new_verified_achievements
+    executor: ChatGPT_connected_GitHub_app
+    update_when_none_exists: false
+    Cline_required: false
+
+  update_length_problem_and_achievement:
+    meaning: perform_the_separate_achievement_check_and_length_checkpoint_cycle
+    commit_order:
+      - achievement_first_only_when_new_verified_achievement_exists
+      - length_checkpoint_second
+    combine_into_one_file_or_commit: false
+    executor: ChatGPT_connected_GitHub_app
+    Cline_required: false
+```
+
+A direct command is execution authority for the exact current bounded target; it is not merely a request to draft instructions or create a Cline prompt.
+
+When `update` or `update my repo` is ambiguous because no exact current target is established, ChatGPT must reconstruct the smallest live repository context needed and return `BLOCKED_AMBIGUOUS_UPDATE_TARGET` rather than guessing, broadening scope, or delegating to Cline.
+
+Direct update commands never authorize source, tests, dependencies, workflows, secrets, implementation branches, merge, deployment, or changes to `LOCKED_ACCEPTED` work unless the Human Owner separately names and authorizes that exact consequential target.
+
 ## Activation triggers
 
 ```text
+update
+update my repo
 length problem
 update length problem
+save length problem
 chat length problem
 CODE RED
 prepare or upload the next checkpoint
 three hours passed
 upload continuity
+update achievement
 check or update achievements
+update length problem and achievement
+update my length problem and achievement
 new chat continuation
 ```
 
@@ -103,7 +152,7 @@ GALAX_CONTINUITY_TIME_PRECHECK_V1:
   status: DUE | NOT_DUE | BLOCKED
 ```
 
-Never guess a timestamp, branch, SHA, assignment, result, or stopping point.
+Never guess a timestamp, branch, SHA, assignment, result, target, or stopping point.
 
 ## Direct ChatGPT upload rule
 
@@ -112,12 +161,32 @@ When the Human Owner says `update length problem`, `save length problem`, `uploa
 ```text
 ChatGPT reads and verifies the live continuity records
 → reconstructs the exact current technical stop point
-→ determines whether a new verified achievement exists
-→ updates the achievement file first only when required
-→ verifies the achievement commit SHA
-→ creates the next numbered length checkpoint in a separate commit
+→ creates the next numbered length checkpoint directly through the connected GitHub app
 → verifies the final continuity branch head and PR #10
-→ reports the exact commits and stops
+→ reports the exact commit and stops
+```
+
+When the Human Owner says `update achievement`:
+
+```text
+ChatGPT reads and verifies the achievement record and current evidence
+→ determines whether a genuinely new verified achievement exists
+→ when yes, appends it to the achievement file and commits through the connected GitHub app
+→ when no, leaves the achievement file unchanged
+→ reports the exact result and stops
+```
+
+When the Human Owner says `update length problem and achievement`, `update my length problem and achievement`, or equivalent:
+
+```text
+ChatGPT verifies the live repository and exact current evidence
+→ performs the separate achievement check first
+→ when a new verified achievement exists, updates and commits the achievement record first
+→ verifies the achievement commit SHA
+→ creates the next numbered length checkpoint in a separate second commit
+→ when no new verified achievement exists, leaves the achievement record unchanged and creates only the length checkpoint
+→ verifies the final continuity branch head and PR #10
+→ reports exact evidence and stops
 ```
 
 ```yaml
