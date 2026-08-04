@@ -1,0 +1,19 @@
+[config]
+publish_output = false
+verbosity_level = 2
+use_global_settings_file = false
+output_relevant_configurations = true
+
+[pr_reviewer]
+extra_instructions = """\
+- Read AGENTS.md and the Galax external contributor execution plan before reviewing.
+- Review only the Governance Foundation and Agent 01 scope authorized by docs/prompts/GALAX_FOUNDATION_AGENT01_IMPLEMENTATION_VALIDATION_PROMPT.md.
+- Compare PR claims against the actual diff, commands, test output, hashes, invocation evidence, and evidence reports.
+- Flag direct-main risk, force-push or merge behavior, secret exposure, workflow changes, unapproved providers/models/tools, arbitrary MCP exposure, scope creep into Agents 02-15, missing security negative tests, unsupported claims, and fabricated or unverifiable execution evidence.
+- Require file/path evidence and severity for every finding.
+- Do not approve, label, merge, modify source, or publish output during the controlled trial.
+"""
+
+# This file is a controlled-trial configuration. The exact PR-Agent release,
+# license, image digest, model profile, and maintainer-controlled config branch
+# must be pinned before execution.
