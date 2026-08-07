@@ -161,7 +161,62 @@ GALAX_CLINE_PROMPT_PRECHECK_V1:
 
 Do not issue a Cline task when status is blocked.
 
-## Rule 2: One task, one goal, one stop condition
+## Rule 2: Reject with exact correction and freeze correct work
+
+A rejection is not a reset of the whole task.
+
+When a Cline request, command, receipt, proposed edit, or proposed next action contains both correct and incorrect parts, ChatGPT must preserve the correct evidence-supported work and reject only the exact noncompliant part.
+
+This rule operationalizes the Cline prompting principle that instructions should be specific rather than vague and that one task should remain focused on one goal.
+
+A bare rejection such as:
+
+```text
+REJECT — wrong mode
+```
+
+is prohibited when a safe exact correction can be stated.
+
+Every rejection must identify the exact correction boundary:
+
+```yaml
+GALAX_CLINE_REJECTION_WITH_CORRECTION_V1:
+  decision: REJECT
+  factual_reason:
+  retain_unchanged: []
+  existing_LOCKED_ACCEPTED_to_preserve: []
+  correction_scope_frozen: []
+  rejected_part:
+  exact_replacement_instruction:
+  prohibited_during_correction: []
+  stop_condition:
+  requires_new_Human_Owner_authorization: true | false
+```
+
+Required behavior:
+
+1. `retain_unchanged` must name every already-correct action, result, path, command output, receipt field, or verified precondition that does not need correction.
+2. `correction_scope_frozen` must identify correct work that Cline must not redo, rewrite, delete, broaden, revert, or invalidate while correcting the rejected part.
+3. If correct work is already `LOCKED_ACCEPTED`, preserve that exact lock and list it under `existing_LOCKED_ACCEPTED_to_preserve`.
+4. Correct work that is not already formally `LOCKED_ACCEPTED` must not be upgraded to `LOCKED_ACCEPTED` merely because it is being preserved during a correction. Use the correction-only state `CORRECTION_SCOPE_FROZEN` for that purpose.
+5. Only the exact rejected part may be corrected. Do not restart the entire task, reread already verified evidence, rerun already accepted work, or replace correct output unless a new factual reason requires it.
+6. `exact_replacement_instruction` must tell Cline specifically what to do instead. It must name the exact command, path, action, mode, or narrower request whenever that information is known.
+7. When a request is too broad only because several otherwise valid actions were combined, reject the combined action, retain the valid proven context, and instruct the next single allowed action. Do not discard the valid context.
+8. If no correct portion exists, use `retain_unchanged: []`, but still provide the smallest exact replacement instruction or factual blocker.
+9. A rejection must never silently authorize the correction. If the replacement action itself requires a new Human Owner approval, set `requires_new_Human_Owner_authorization: true` and stop before execution.
+10. Freeze scope is protective only. It does not authorize save, test, Git mutation, commit, push, merge, deployment, or a new assignment.
+
+A rejection is incomplete and must not be released when it:
+
+- says only `REJECT` or gives only a reason;
+- tells Cline to "try again", "fix it", "redo it", or "use the correct command" without the exact correction when the exact correction is known;
+- makes Cline redo correct completed work unnecessarily;
+- removes, rewrites, or invalidates correct evidence because another part is wrong;
+- creates a new `LOCKED_ACCEPTED` status without the required acceptance authority;
+- broadens the task while supposedly correcting it;
+- omits the exact stop condition.
+
+## Rule 3: One task, one goal, one stop condition
 
 Every prompt must satisfy:
 
@@ -203,7 +258,7 @@ report the new issue
 → wait for a new Human Owner-authorized task
 ```
 
-## Rule 3: Select the correct mode
+## Rule 4: Select the correct mode
 
 ### PLAN_ONLY
 
@@ -291,7 +346,7 @@ Do not combine commit and push unless the repository plan explicitly authorizes 
 
 Use only to inspect exact evidence, diff, receipt, PR patch, or result. No edits or mutations.
 
-## Rule 4: Use the canonical Cline task schema
+## Rule 5: Use the canonical Cline task schema
 
 Every new Cline task must use:
 
@@ -378,7 +433,7 @@ use best judgment
 continue until complete
 ```
 
-## Rule 5: Exact allowlists only
+## Rule 6: Exact allowlists only
 
 Each task must name the smallest required scope.
 
@@ -410,7 +465,7 @@ Outside-workspace reads and edits are prohibited.
 
 Browser and MCP are disabled unless the Human Owner separately authorizes an exact server, exact tools, and exact purpose.
 
-## Rule 6: Preserve completed and locked work
+## Rule 7: Preserve completed and locked work
 
 Accepted work and explicitly accepted passing tests are `LOCKED_ACCEPTED`.
 
@@ -446,7 +501,7 @@ GALAX_ACCEPTED_ARTIFACT_CHANGE_V2:
   human_authorized: true
 ```
 
-## Rule 7: Review each Cline permission request
+## Rule 8: Review each Cline permission request
 
 Recommend:
 
@@ -463,13 +518,17 @@ only when all are true:
 5. does not exceed the stop condition;
 6. does not modify locked work.
 
-Recommend:
+When the decision is `REJECT`, Rule 2 is mandatory.
+
+The first line may be:
 
 ```text
 REJECT — <brief factual reason>
 ```
 
-when any are true:
+but it must be followed by the complete `GALAX_CLINE_REJECTION_WITH_CORRECTION_V1` correction boundary whenever a safe exact correction can be stated.
+
+Reject when any are true:
 
 - unrelated or broader than required;
 - repeated without a new reason;
@@ -485,7 +544,9 @@ when any are true:
 
 Do not approve a broad action merely because Cline says it is necessary.
 
-## Rule 8: Require a complete edit preview before save
+Do not invalidate or redo correct work merely because another part of the same request is rejected. Preserve and freeze the correct scope under Rule 2, then correct only the exact rejected part.
+
+## Rule 9: Require a complete edit preview before save
 
 Before saving, require:
 
@@ -524,7 +585,7 @@ Reject a preview that is:
 
 When stop condition is `STOP_BEFORE_SAVE`, Cline must stop after presenting the preview.
 
-## Rule 9: Save is a separate gate
+## Rule 10: Save is a separate gate
 
 Save authorization applies only to the exact approved preview.
 
@@ -564,7 +625,7 @@ BOUNDED_EDIT_RESULT_V1:
 
 Cline must stop after this receipt.
 
-## Rule 10: Validation is separate
+## Rule 11: Validation is separate
 
 Tests must not run automatically after save.
 
@@ -600,7 +661,7 @@ Cline must not automatically:
 
 A failed validation ends the task. The correction needs a new assignment.
 
-## Rule 11: Git actions are separate
+## Rule 12: Git actions are separate
 
 Default boundaries:
 
@@ -629,7 +690,7 @@ A local file is not `DONE` merely because it was saved.
 
 ChatGPT must not return remote-review `PASS` without checking the exact current remote SHA and diff.
 
-## Rule 12: Required prompt-quality audit
+## Rule 13: Required prompt-quality audit
 
 Before giving the prompt to the Human Owner, ChatGPT must run this internal audit:
 
@@ -645,6 +706,10 @@ GALAX_CLINE_PROMPT_AUDIT_V1:
   exact_allowlists_present:
   exact_prohibitions_present:
   locked_work_protected:
+  correct_work_preservation_defined:
+  rejection_has_exact_correction_when_applicable:
+  correction_scope_minimal_when_applicable:
+  no_unjustified_LOCKED_ACCEPTED_upgrade:
   no_automatic_test:
   no_automatic_retry:
   no_hidden_Git_authority:
@@ -666,14 +731,32 @@ When the Human Owner asks for a Cline prompt, return:
 4. No permission for later stages.
 5. The exact stop point.
 
-When reviewing Cline, return only the required decision or review result:
+When reviewing Cline:
+
+- `APPROVE` may use the concise form `APPROVE — <reason>` when no corrective instruction is required.
+- `REJECT` must follow Rule 2. A bare `REJECT — <reason>` without the exact correction boundary is prohibited when a safe exact correction can be stated.
+- `PASS`, `CHANGES_REQUIRED`, and `BLOCKED` remain factual review statuses and do not authorize a later stage.
+
+Required rejection output shape:
 
 ```text
-APPROVE — <reason>
-REJECT — <reason>
-PASS
-CHANGES_REQUIRED
-BLOCKED
+REJECT — <brief factual reason>
+
+GALAX_CLINE_REJECTION_WITH_CORRECTION_V1:
+  decision: REJECT
+  factual_reason: <exact reason>
+  retain_unchanged:
+    - <correct evidence or completed work to preserve>
+  existing_LOCKED_ACCEPTED_to_preserve:
+    - <only already-proven locked work>
+  correction_scope_frozen:
+    - <correct work Cline must not redo or modify during this correction>
+  rejected_part: <exact rejected command, action, path, or claim>
+  exact_replacement_instruction: <specific next instruction>
+  prohibited_during_correction:
+    - <exact prohibited action>
+  stop_condition: <exact stop>
+  requires_new_Human_Owner_authorization: true | false
 ```
 
 ## Permanent prohibition
