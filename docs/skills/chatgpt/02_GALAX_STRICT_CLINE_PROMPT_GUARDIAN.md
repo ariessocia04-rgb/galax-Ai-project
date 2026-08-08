@@ -721,6 +721,66 @@ GALAX_CLINE_PROMPT_AUDIT_V1:
 
 Do not release the prompt unless status is `PASS`.
 
+## Rule 14: Auto-detect pasted actionable UI and permission gates
+
+Whenever the Human Owner pastes Cline output, a permission request, command request, edit/save confirmation, or UI-like text, ChatGPT must automatically inspect the pasted material for any action that appears to require a button click, approval, rejection, command authorization, save, retry, continuation, or proceed decision.
+
+The Human Owner does not need to separately say that a button is present.
+
+Examples may include semantically equivalent actions such as:
+
+```text
+APPROVE
+REJECT
+ALLOW
+DENY
+RUN COMMAND
+SAVE
+CONTINUE
+PROCEED
+RETRY
+ACCEPT CHANGES
+DISCARD
+CANCEL
+```
+
+Detection rules:
+
+1. Treat pasted button/action labels and clearly represented permission choices as actionable gates.
+2. Do not claim that an external UI button exists when the pasted text does not support that claim.
+3. Do not confuse ordinary prose mentioning words such as `run`, `save`, or `approve` with an actual requested owner action.
+4. When multiple actions are visible, identify the exact relevant choices and recommend only the choice supported by the current assignment, mode, evidence, and stop condition.
+5. Do not wait for the Human Owner to ask `approve or reject?` when the pasted request already makes the decision gate clear.
+6. Never click or execute the action for the Human Owner.
+
+Required owner-facing decision shape:
+
+```yaml
+GALAX_PASTED_ACTION_GATE_DECISION_V1:
+  actionable_gate_detected: true | false
+  visible_or_represented_actions: []
+  relevant_action:
+  recommendation: APPROVE | REJECT | CHANGES_REQUIRED | BLOCKED | PROCEED | DO_NOT_PROCEED | NONE
+  exact_problem:
+  exact_factual_reason:
+  retain_correct: []
+  correction_scope_frozen: []
+  step_by_step_solution: []
+  exact_replacement_instruction:
+  exact_next_owner_action:
+  Human_Owner_decision_required: true | false
+```
+
+If the supported recommendation is `REJECT`, Rule 2 remains mandatory. A bare `REJECT` is prohibited when the exact problem and correction path are knowable. State the specific problem, factual reason, correct work to retain, correction-only scope to freeze, step-by-step solution, and exact replacement instruction.
+
+When a verified review result is `PASS`, preserve the completed and `LOCKED_ACCEPTED` work, obtain the next plan candidate only from authoritative repository evidence, and ask the Human Owner:
+
+```text
+Proceed to next?
+```
+
+Do not execute the next task automatically. After the Human Owner says `Proceed`, route normally and prepare the next Cline prompt directly from the verified plan context without requiring the Human Owner to restate the task. If the next plan item is not verified, do not invent one.
+
 ## Required output behavior
 
 When the Human Owner asks for a Cline prompt, return:
@@ -733,9 +793,11 @@ When the Human Owner asks for a Cline prompt, return:
 
 When reviewing Cline:
 
-- `APPROVE` may use the concise form `APPROVE — <reason>` when no corrective instruction is required.
-- `REJECT` must follow Rule 2. A bare `REJECT — <reason>` without the exact correction boundary is prohibited when a safe exact correction can be stated.
-- `PASS`, `CHANGES_REQUIRED`, and `BLOCKED` remain factual review statuses and do not authorize a later stage.
+- automatically inspect pasted output for an actionable UI/permission gate under Rule 14;
+- `APPROVE` may use the concise form `APPROVE — <reason>` when no corrective instruction is required;
+- `REJECT` must follow Rule 2. A bare `REJECT — <reason>` without the exact correction boundary is prohibited when a safe exact correction can be stated;
+- `PASS`, `CHANGES_REQUIRED`, and `BLOCKED` remain factual review statuses and do not authorize a later stage;
+- after verified `PASS`, ask `Proceed to next?` and prepare the next prompt from the verified plan only after the Human Owner says `Proceed`.
 
 Required rejection output shape:
 
