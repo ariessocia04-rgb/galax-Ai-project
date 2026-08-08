@@ -4,7 +4,7 @@
 **Repository:** `ariessocia04-rgb/galax-Ai-project`  
 **Canonical router ref:** `docs/chatgpt-skill-router-2026-08-02`  
 **Canonical router path:** `docs/skills/chatgpt/00_GALAX_SKILL_ROUTER_MANAGER.md`  
-**Scope:** ChatGPT skill selection and selective repository reading only  
+**Scope:** ChatGPT skill selection, context-engineering support, and selective repository reading only  
 **Runtime effect:** none  
 **CrewAI Flow routing changed:** false  
 **Galax source or tests changed:** false  
@@ -14,7 +14,7 @@
 
 This document defines the ChatGPT routing layer for Galax AI.
 
-For every Galax request, it classifies the current task, selects exactly one primary repository-backed Galax skill document, loads no more than two genuinely required dependency skill documents, ignores unrelated skills, and completes only the current bounded task.
+For every Galax request, it classifies the current task, selects exactly one primary repository-backed Galax skill document, loads no more than two genuinely required dependency skill documents, uses the canonical non-skill ChatGPT Context Engineer support contract to prepare the minimum verified context required by the already-selected skill, ignores unrelated skills and context, and completes only the current bounded task.
 
 This router does not implement or modify:
 
@@ -58,6 +58,23 @@ Return `BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE` only when:
 - this router cannot be fetched from the canonical repository/ref/path; or
 - the exact mapped primary skill file cannot be fetched; or
 - an exact mapped required dependency file cannot be fetched.
+
+The Context Engineer is **not a skill alias**. It is one fixed ChatGPT supervisory support contract:
+
+```yaml
+context_engineer_support_contract:
+  path: docs/skills/chatgpt/context/00_GALAX_CHATGPT_CONTEXT_ENGINEER.md
+  ref: docs/chatgpt-skill-router-2026-08-02
+  registered_skill: false
+  primary_skill: false
+  dependency_skill: false
+  counts_toward_primary_skill_limit: false
+  counts_toward_dependency_skill_limit: false
+  CrewAI_agent: false
+  runtime_effect: none
+```
+
+The Context Engineer may prepare context only after the router has selected the skill. It cannot select, replace, or activate a skill.
 
 ## 3. Canonical repository-backed skill registry
 
@@ -105,7 +122,9 @@ The router must not:
 - infer a different filename;
 - search the repository by alias before using the mapped path;
 - require native plugin installation when the mapped repository file is accessible;
-- load all seven skill documents by default.
+- load all seven skill documents by default;
+- register the Context Engineer as Skill 8 or any other skill;
+- count the Context Engineer against the primary or dependency skill limits.
 
 ## 4. Router-first policy
 
@@ -119,8 +138,10 @@ fetch this router from the canonical repository/ref/path
 → fetch the exact primary skill document
 → select zero to two genuinely required dependency aliases
 → resolve and fetch only those exact dependency documents
-→ ignore all unrelated skill documents
-→ let the selected skill determine the minimum repository evidence required
+→ fetch the canonical Context Engineer support contract
+→ use the Context Engineer to prepare only the minimum verified context required by the already-selected skill
+→ ignore all unrelated skill documents and unrelated context
+→ let the selected skill perform its own bounded job and any mandatory reads it still requires
 → complete only the current bounded task
 → stop
 ```
@@ -131,8 +152,38 @@ dependency_skill_limit: 2
 read_all_skills: false
 copy_skill_contents_into_router: false
 automatic_next_skill: false
+context_engineer_required_support_contract: true
+context_engineer_registered_skill: false
+context_engineer_counts_as_dependency: false
+context_engineer_runtime_effect: none
 Human_Owner_final_authority: true
 ```
+
+### 4A. Context Engineer support rule
+
+The Context Engineer is allowed to retrieve, filter, label, and package context only within the authority and reading boundaries of the selected skill and higher-authority repository records.
+
+It must not weaken a selected skill's mandatory reading rule. It may prevent unrelated extra reads, duplicate history, stale context, or already-completed work from being loaded without a current factual reason.
+
+Required relationship:
+
+```text
+router chooses WHO owns the current ChatGPT workflow
+→ Context Engineer prepares WHAT verified context that owner needs
+→ selected Skill decides HOW to perform its own authorized workflow
+```
+
+The Context Engineer cannot:
+
+- determine repository truth instead of Skill 1;
+- create Cline policy instead of Skill 2;
+- accept evidence instead of Skill 3;
+- review remote diffs instead of Skill 4;
+- persist continuity instead of Skill 5;
+- unlock accepted work instead of Skill 6;
+- classify/delete cleanup targets instead of Skill 7.
+
+If the Context Engineer support contract cannot be fetched from its exact canonical path and ref, stop with `BLOCKED_CONTEXT_ENGINEER_UNAVAILABLE`. Do not silently bypass it after this integration is active.
 
 ## 5. Routing categories
 
@@ -197,6 +248,30 @@ search_repository_by_alias_only: prohibited
 
 A successful exact file fetch is sufficient to load the selected skill for this ChatGPT workflow.
 
+### 7A. Exact Context Engineer resolution
+
+After the primary and any required dependency skills are selected and fetched:
+
+```text
+fetch docs/skills/chatgpt/context/00_GALAX_CHATGPT_CONTEXT_ENGINEER.md
+from ariessocia04-rgb/galax-Ai-project
+using ref docs/chatgpt-skill-router-2026-08-02
+→ verify Status is ACTIVE_CHATGPT_CONTEXT_SUPPORT_CONTRACT
+→ verify Registered ChatGPT skill is false
+→ verify CrewAI agent is false
+→ use it only to prepare minimum verified context for the selected skill
+```
+
+Required behavior:
+
+```yaml
+context_contract_fetched_and_identity_valid: continue
+context_contract_fetch_failed: BLOCKED_CONTEXT_ENGINEER_UNAVAILABLE
+context_contract_claims_registered_skill_or_runtime_agent: BLOCKED_CONTEXT_ENGINEER_IDENTITY_MISMATCH
+context_engineer_added_to_skill_registry: prohibited
+context_engineer_added_to_dependency_list: prohibited
+```
+
 ## 8. Conditional dependency rules
 
 ### Repository-state dependency
@@ -225,16 +300,19 @@ third_dependency_needed: BLOCKED_SCOPE_TOO_BROAD
 required_action: split_into_separate_bounded_task
 ```
 
+The Context Engineer is not a dependency skill and must not consume a dependency slot.
+
 ## 9. Selective repository reading policy
 
 The router does not authorize a full-repository read.
 
-After routing, the selected skill must use the smallest evidence path sufficient for the current task:
+After routing, the selected skill and Context Engineer must use the smallest evidence path sufficient for the current task:
 
 ```text
 read the current authoritative entry point required by the selected skill
 → read the exact active plan, assignment, checkpoint, test, file, issue, or PR required
 → follow only mandatory references from a higher-authority record
+→ package only the minimum complete verified context
 → stop when the current task can be decided safely
 ```
 
@@ -245,7 +323,9 @@ Do not:
 - scan all source and tests when one exact file or test is named;
 - search the entire repository when an exact path is known;
 - reread completed evidence without a new factual reason;
-- rely on filename similarity when exact content or authority is required.
+- rely on filename similarity when exact content or authority is required;
+- load historical context merely because it exists;
+- copy full conversation or repository history into every selected skill.
 
 Expand reading only when:
 
@@ -253,17 +333,19 @@ Expand reading only when:
 - a higher-authority file explicitly requires another record;
 - required evidence is missing or contradictory;
 - the current assignment cannot be verified safely;
-- a reference or dependency must be proven.
+- a reference or dependency must be proven;
+- the selected skill explicitly requires the additional evidence.
 
 Missing evidence produces a factual blocker. It never authorizes guessing or a broad repository scan.
 
 ## 10. Action ownership and authorization
 
-The router itself does not search broadly, save, edit, test, commit, push, merge, or deploy. It identifies the skill that owns the current decision.
+The router and Context Engineer do not search broadly, save, edit, test, commit, push, merge, or deploy. The router identifies the skill that owns the current decision; the Context Engineer only prepares that skill's verified context.
 
 ```yaml
 where_to_search:
   owner: selected_primary_skill
+  context_engineer_role: package_only_within_selected_skill_boundaries
   rule: exact_file_or_narrow_scope_only
 
 where_to_save_or_edit:
@@ -286,7 +368,7 @@ how_to_plan_cleanup:
   owner: $galax-repository-cleanup-auditor
 ```
 
-A routing decision does not grant permission for a later consequential action.
+A routing decision or context packet does not grant permission for a later consequential action.
 
 ## 11. Routing and load receipt
 
@@ -309,13 +391,26 @@ GALAX_CHATGPT_SKILL_ROUTE_V2:
   dependency_load_statuses: []
   dependency_reasons: []
 
+  context_engineer_path: docs/skills/chatgpt/context/00_GALAX_CHATGPT_CONTEXT_ENGINEER.md
+  context_engineer_load_status: LOADED_SUPPORT_CONTRACT | BLOCKED
+  context_engineer_registered_skill: false
+  context_engineer_runtime_effect: none
+
   unrelated_skills_ignored: []
   exact_current_output_required:
   repository_state_already_verified:
-  route_status: SELECTED | BLOCKED_AMBIGUOUS | BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE | BLOCKED_SCOPE_TOO_BROAD
+  route_status:
+    SELECTED |
+    BLOCKED_AMBIGUOUS |
+    BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE |
+    BLOCKED_CONTEXT_ENGINEER_UNAVAILABLE |
+    BLOCKED_CONTEXT_ENGINEER_IDENTITY_MISMATCH |
+    BLOCKED_SCOPE_TOO_BROAD
 ```
 
-When the route is selected, load only the exact mapped primary and dependency files.
+When the route is selected, load only the exact mapped primary/dependency skill files plus the one canonical Context Engineer support contract.
+
+The selected skill may use `GALAX_CHATGPT_CONTEXT_PACKET_V1` from the Context Engineer when useful. Producing the full packet verbatim is not mandatory for trivial tasks if all required context and evidence boundaries are already explicit, but the Context Engineer's selection/protection rules still apply.
 
 ## 12. Multi-stage request handling
 
@@ -339,6 +434,8 @@ Examples:
 
 Do not activate multiple primary skills to satisfy one broad request.
 
+The Context Engineer must not combine multiple workflow stages merely because their context is related.
+
 ## 13. Stop and handoff behavior
 
 After the selected skill returns the current bounded result, stop.
@@ -359,16 +456,33 @@ Skill 7 identifies deletion candidates
 
 A new Human Owner instruction is required before routing the next stage, except for an exact active standing authorization already present in the live repository.
 
+A Context Engineer packet never creates continuation authority.
+
 ## 14. Relationship to Galax runtime routing
 
 ```text
 ChatGPT repository-backed skill routing
+≠ ChatGPT Context Engineer support layer
 ≠ CrewAI Flow @router execution
 ≠ Cline tool permission flow
 ≠ GitHub branch or pull-request routing
 ```
 
-This router must not change the active runtime invariant that every conditional Foundation stage uses explicit named CrewAI routes and that blocked, failed, unavailable, pending, rejected, or evidence-missing outcomes do not enter a success path.
+The Context Engineer exists only in the ChatGPT supervisory layer.
+
+It must not be inserted into:
+
+- `GalaxFoundationFlow`;
+- Agent 01;
+- Agents 02–15;
+- CrewAI tasks;
+- CrewAI tools;
+- CrewAI runtime context;
+- runtime memory;
+- runtime knowledge;
+- runtime prompts.
+
+This router and Context Engineer must not change the active runtime invariant that every conditional Foundation stage uses explicit named CrewAI routes and that blocked, failed, unavailable, pending, rejected, or evidence-missing outcomes do not enter a success path.
 
 ## 15. Strict prohibitions
 
@@ -391,6 +505,14 @@ direct_test_execution_by_router: prohibited
 merge_or_deployment_by_router: prohibited
 approve_for_Human_Owner: prohibited
 self_authorization: prohibited
+
+register_Context_Engineer_as_skill: prohibited
+create_Skill_8_for_Context_Engineer: prohibited
+count_Context_Engineer_as_dependency: prohibited
+create_Agent_16_for_Context_Engineer: prohibited
+insert_Context_Engineer_into_CrewAI_runtime: prohibited
+use_Context_Engineer_to_override_selected_skill: prohibited
+use_Context_Engineer_to_skip_mandatory_selected_skill_evidence: prohibited
 ```
 
 ## 16. Failure behavior
@@ -402,11 +524,24 @@ BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE:
   use_only_when:
     - canonical_router_fetch_failed
     - exact_mapped_primary_skill_fetch_failed
-    - exact_mapped_required_dependency_fetch_failed
+    - exact_mapped_required_dependency_file_fetch_failed
   required_details:
     - repository
     - ref
     - exact_failed_path
+
+BLOCKED_CONTEXT_ENGINEER_UNAVAILABLE:
+  use_when:
+    - canonical_context_engineer_support_contract_fetch_failed
+  required_details:
+    - repository
+    - ref
+    - exact_failed_path
+
+BLOCKED_CONTEXT_ENGINEER_IDENTITY_MISMATCH:
+  use_when:
+    - context_contract_claims_to_be_registered_skill
+    - context_contract_claims_to_be_CrewAI_agent_or_runtime_component
 
 BLOCKED_MISSING_REGISTERED_SKILL_MAPPING:
   use_when: selected_alias_is_not_present_in_the_exact_registry
@@ -420,7 +555,9 @@ BLOCKED_MISSING_EVIDENCE:
   use_when: selected_skill_loaded_but_required_task_evidence_is_missing
 ```
 
-Do not use `BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE` when the exact mapped Markdown file was successfully fetched.
+Do not use `BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE` when the exact mapped Markdown skill file was successfully fetched.
+
+Do not bypass a missing Context Engineer contract by registering it as a skill or by inventing another path.
 
 ## 17. Final routing contract
 
@@ -432,9 +569,18 @@ Human Owner request
 → resolve the alias to its exact repository path
 → fetch the mapped primary skill document
 → resolve and fetch no more than two required dependency documents
-→ ignore unrelated skill documents
-→ selected skill reads only minimum authoritative evidence
-→ selected skill returns the exact bounded result
+→ fetch the one canonical non-skill Context Engineer support contract
+→ Context Engineer prepares the minimum verified context required by the already-selected skill
+→ ignore unrelated skills and unrelated context
+→ selected skill performs only its own bounded job
 → Human Owner decides any consequential next action
 → stop
+```
+
+```yaml
+CrewAI_runtime_changed_by_this_router: false
+GalaxFoundationFlow_changed_by_this_router: false
+Agents_01_to_15_changed_by_this_router: false
+CrewAI_remediation_plan_changed_by_this_router: false
+Context_Engineer_runtime_effect: none
 ```
