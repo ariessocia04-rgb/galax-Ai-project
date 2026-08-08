@@ -1250,7 +1250,6 @@ commands_run: []
 tests_run: []
 Git_operations: []
 unauthorized_actions: []
-next_file_requested: false
 final_status: CLASSIFIED_AND_STOPPED
 evidence_review_status: PASS
 assignment_status: COMPLETED_AND_STOPPED
