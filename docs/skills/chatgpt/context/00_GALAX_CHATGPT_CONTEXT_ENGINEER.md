@@ -28,6 +28,8 @@ selected ChatGPT skill
 → retrieve only the permitted evidence required by the selected skill
 → classify and label that evidence without changing its meaning
 → exclude unrelated, duplicate, stale, or superseded context when safe
+→ detect when the Human Owner is being asked for an actionable decision or UI action
+→ package the exact problem, retained-correct work, solution path, and next-plan candidate when applicable
 → produce one bounded GALAX_CHATGPT_CONTEXT_PACKET_V1
 → hand the packet to the already-selected skill
 ```
@@ -119,8 +121,8 @@ The Context Engineer is a coworker support layer, not a replacement for any skil
 |---|---|---|
 | Skill 0 / Router | Select exactly one primary skill and up to two dependencies | Supplies no routing decision |
 | Skill 1 | Reconstruct repository truth, scope, current stage, and one next safe action | Supplies minimum labeled evidence; never decides repository truth |
-| Skill 2 | Create/review exact bounded Cline tasks and permissions | Supplies current assignment, evidence, locks, authority, and do-not-repeat context |
-| Skill 3 | Review edit/test/commit/push evidence and return PASS/CHANGES_REQUIRED/BLOCKED | Supplies exact evidence set without upgrading evidence class |
+| Skill 2 | Create/review exact bounded Cline tasks and permissions | Supplies current assignment, evidence, locks, authority, do-not-repeat context, and exact correction-handoff context |
+| Skill 3 | Review edit/test/commit/push evidence and return PASS/CHANGES_REQUIRED/BLOCKED | Supplies exact evidence set without upgrading evidence class, plus next-plan candidate context after a verified PASS |
 | Skill 4 | Review exact remote PR/diff evidence | Supplies exact PR/ref/path context only |
 | Skill 5 | Persist continuity and achievement records under its own rules | May retrieve relevant continuity context; never writes, replaces, or reinterprets Skill 5 records |
 | Skill 6 | Protect and review `LOCKED_ACCEPTED` artifacts | Must surface applicable locks exactly; never grants unlock authority |
@@ -146,6 +148,10 @@ responsibilities:
   - identify_stale_superseded_duplicate_or_unrelated_material
   - retain_exact_source_references_for_material_claims
   - record_missing_or_conflicting_context
+  - detect_Human_Owner_actionable_decision_or_UI_gate
+  - package_exact_problem_and_step_by_step_solution_context_without_deciding_for_the_selected_skill
+  - preserve_correct_work_during_rejection_or_correction_handoff
+  - surface_next_plan_candidate_after_selected_skill_PASS_without_auto_advancing
   - produce_bounded_context_packet
 ```
 
@@ -203,6 +209,9 @@ T1_REQUIRED:
     - required_source_or_test_section
     - current_PR_or_diff_metadata
     - applicable_continuity_checkpoint_fields
+    - actionable_Human_Owner_decision_gate
+    - exact_problem_and_solution_handoff
+    - next_plan_candidate_after_selected_skill_PASS
 
 T2_JUST_IN_TIME:
   include_full_content_by_default: false
@@ -266,6 +275,9 @@ exact_fields:
   - exact_stop_condition
   - prohibited_next_actions
   - evidence_class
+  - actionable_UI_or_permission_label_when_visible
+  - exact_rejected_or_blocked_part_when_applicable
+  - exact_next_plan_item_when_verified
 ```
 
 Do not paraphrase an exact identifier into a different identifier.
@@ -317,12 +329,16 @@ optimize_for:
   - lower_stale_context_risk
   - faster_new_chat_reconstruction
   - exact_do_not_repeat_preservation
+  - fewer_ambiguous_Human_Owner_decision_prompts
+  - faster_transition_from_verified_PASS_to_owner_next_step_decision
 
 avoid:
   - loading_context_just_because_it_exists
   - copying_full_history_into_every_task
   - expanding_context_without_a_selected_skill_reason
   - rereading_completed_material_without_new_factual_need
+  - bare_reject_context_without_exact_problem_and_correction_path
+  - guessing_which_button_or_command_the_Human_Owner_should_authorize
 ```
 
 No fixed token number is imposed by this documentation contract. The packet should be the smallest complete evidence set that lets the selected skill act safely.
@@ -367,6 +383,23 @@ GALAX_CHATGPT_CONTEXT_PACKET_V1:
   unresolved_conflicts: []
   missing_required_evidence: []
 
+  actionable_handoff:
+    detected: true | false
+    visible_action_or_button_label:
+    action_kind: APPROVE | REJECT | CHANGES_REQUIRED | RUN_COMMAND | PROCEED | OTHER | NONE
+    Human_Owner_action_required: true | false
+    exact_problem:
+    exact_factual_reason:
+    retain_correct: []
+    correction_scope_frozen: []
+    step_by_step_solution: []
+    exact_replacement_instruction:
+    selected_skill_decision_still_required: true | false
+    next_plan_candidate:
+    next_plan_source:
+    ask_Human_Owner_to_proceed_after_PASS: true | false
+    generate_new_Cline_prompt_before_owner_proceeds: false
+
   required_context_items: []
   just_in_time_context_refs: []
   excluded_context:
@@ -385,6 +418,74 @@ GALAX_CHATGPT_CONTEXT_PACKET_V1:
 ```
 
 A selected skill may use a smaller internal representation when all required facts remain preserved. It must not claim this exact receipt was produced if it was not actually produced.
+
+### 13A. Actionable decision, rejection-quality, and PASS continuation handoff
+
+When the current evidence or selected-skill workflow visibly requires the Human Owner to choose or click an action such as `APPROVE`, `REJECT`, `CHANGES_REQUIRED`, `RUN COMMAND`, `PROCEED`, or another explicit UI/permission action, the Context Engineer must detect that decision gate and include the exact context needed for the selected skill to present a useful decision.
+
+Detection is support only. The Context Engineer must not click, authorize, approve, reject, run, or execute the action for the Human Owner.
+
+```yaml
+GALAX_ACTIONABLE_HANDOFF_CONTEXT_V1:
+  actionable_gate_detected: true | false
+  visible_action_or_button_label:
+  action_kind:
+  exact_current_stage:
+  exact_problem:
+  exact_factual_reason:
+  retain_correct: []
+  correction_scope_frozen: []
+  step_by_step_solution: []
+  exact_replacement_instruction:
+  exact_stop_condition:
+  Human_Owner_action_required: true | false
+  selected_skill_decision_required: true | false
+```
+
+For a rejection, correction, blocked action, or changes-required path, the packet must never reduce the handoff to only the word `REJECT`, `BLOCKED`, or `CHANGES_REQUIRED` when the exact problem and safe correction path are knowable from verified evidence.
+
+The packet must preserve and surface:
+
+1. the specific problem;
+2. the specific factual reason;
+3. every correct evidence-supported part that must be retained unchanged;
+4. the exact correction-only scope that must remain frozen;
+5. a step-by-step safe solution when the steps are knowable;
+6. the exact replacement instruction or next bounded action;
+7. the exact stop condition;
+8. whether the Human Owner must click, approve, reject, run, or otherwise authorize the next action.
+
+This supports Skill 2's existing rejection-with-correction rule and Skill 3's evidence-review authority. It does not replace either skill and does not itself return the final `APPROVE`, `REJECT`, `PASS`, `CHANGES_REQUIRED`, or `BLOCKED` decision.
+
+When the already-selected skill returns a verified `PASS`, the Context Engineer may retrieve and package the exact next plan item when that plan item is already identifiable from authoritative repository context.
+
+Required PASS handoff behavior:
+
+```text
+selected skill returns verified PASS
+→ preserve completed and LOCKED_ACCEPTED work
+→ identify the exact next plan candidate only when repository evidence proves it
+→ mark Human_Owner_proceed_required: true
+→ present/enable the owner-facing question: Proceed to next?
+→ do not activate the next skill automatically
+→ do not generate or execute a new Cline task before the Human Owner says Proceed
+→ after the Human Owner says Proceed, the next router cycle may select Skill 2 to prepare the new prompt from the verified plan context
+```
+
+```yaml
+PASS_CONTINUATION_HANDOFF_V1:
+  selected_skill_result: PASS
+  next_plan_candidate:
+  next_plan_source:
+  next_plan_candidate_verified: true | false
+  Human_Owner_proceed_required: true
+  owner_facing_question: "Proceed to next?"
+  automatic_next_skill: false
+  new_prompt_before_owner_proceeds: prohibited
+  after_owner_proceeds: route_normally_and_allow_Skill_2_to_prepare_prompt_from_verified_plan
+```
+
+If the next plan item is not verified, use `next_plan_candidate_verified: false` and do not invent a prompt.
 
 ## 14. Failure behavior
 
