@@ -143,6 +143,7 @@ fetch this router from the canonical repository/ref/path
 → ignore all unrelated skill documents and unrelated context
 → let the selected skill perform its own bounded job and any mandatory reads it still requires
 → complete only the current bounded task
+→ when the bounded result is a new qualifying terminal PASS, perform the mandatory separate Skill 5 achievement-persistence routing cycle defined in Section 12A
 → stop
 ```
 
@@ -152,12 +153,18 @@ dependency_skill_limit: 2
 read_all_skills: false
 copy_skill_contents_into_router: false
 automatic_next_skill: false
+mandatory_post_PASS_achievement_persistence_cycle: true
+mandatory_post_PASS_cycle_is_separate_routing_cycle: true
+mandatory_post_PASS_primary_skill: $galax-continuity-achievement-guardian
+post_PASS_technical_continuation_before_persistence: prohibited
 context_engineer_required_support_contract: true
 context_engineer_registered_skill: false
 context_engineer_counts_as_dependency: false
 context_engineer_runtime_effect: none
 Human_Owner_final_authority: true
 ```
+
+`automatic_next_skill: false` continues to prohibit automatic movement into the next technical workflow stage. The mandatory post-PASS achievement-persistence cycle is a documentation-preservation exception backed by the live continuity standing authorization. It begins a new routing cycle with exactly one primary skill and does not authorize implementation, validation, Git mutation on an implementation branch, merge, or deployment.
 
 ### 4A. Context Engineer support rule
 
@@ -201,7 +208,7 @@ DRAFT_PR_REVIEW:
   purpose: inspect_current_remote_PR_SHA_changed_files_and_patches
 
 CONTINUITY_OR_ACHIEVEMENT:
-  purpose: handle_three_hour_continuity_or_separate_achievement_check
+  purpose: handle_three_hour_continuity_or_separate_achievement_check_or_mandatory_new_terminal_PASS_persistence
 
 LOCKED_ARTIFACT:
   purpose: protect_or_review_a_change_to_LOCKED_ACCEPTED_work
@@ -221,7 +228,7 @@ UNKNOWN_OR_MULTI_TASK:
 | Make the next Cline prompt or review a Cline permission request | `$galax-strict-cline-prompt-guardian` | `docs/skills/chatgpt/02_GALAX_STRICT_CLINE_PROMPT_GUARDIAN.md` |
 | Review a proposed edit, saved receipt, focused test, commit, or push evidence | `$galax-evidence-validation-acceptance-guardian` | `docs/skills/chatgpt/03_GALAX_EVIDENCE_VALIDATION_ACCEPTANCE_GUARDIAN.md` |
 | Review a current remote Draft PR or exact pushed diff | `$galax-draft-pr-exact-diff-reviewer` | `docs/skills/chatgpt/04_GALAX_DRAFT_PR_EXACT_DIFF_REVIEWER.md` |
-| Handle length problem, three-hour checkpoint, or separate achievement check | `$galax-continuity-achievement-guardian` | `docs/skills/chatgpt/05_GALAX_CONTINUITY_ACHIEVEMENT_GUARDIAN.md` |
+| Handle length problem, three-hour checkpoint, separate achievement check, or mandatory persistence of a new terminal PASS | `$galax-continuity-achievement-guardian` | `docs/skills/chatgpt/05_GALAX_CONTINUITY_ACHIEVEMENT_GUARDIAN.md` |
 | Determine whether accepted work is locked or review an unlock request | `$galax-locked-artifact-guardian` | `docs/skills/chatgpt/06_GALAX_LOCKED_ARTIFACT_GUARDIAN.md` |
 | Audit duplicates, stale conflicts, references, or deletion candidates | `$galax-repository-cleanup-auditor` | `docs/skills/chatgpt/07_GALAX_REPOSITORY_CLEANUP_AUDITOR.md` |
 
@@ -436,27 +443,100 @@ Do not activate multiple primary skills to satisfy one broad request.
 
 The Context Engineer must not combine multiple workflow stages merely because their context is related.
 
+## 12A. Mandatory terminal-PASS achievement persistence
+
+Every new terminal `PASS` from a completed bounded Galax repository-supervision task is a mandatory achievement-persistence trigger before another technical task may begin.
+
+This rule exists specifically to prevent completed PASS work from being forgotten, re-investigated, or restarted after conversation/context loss.
+
+A qualifying event must satisfy all of:
+
+```yaml
+GALAX_TERMINAL_PASS_PERSISTENCE_TRIGGER_V1:
+  source_primary_skill_is_repository_backed: true
+  source_primary_skill_is_Skill_5: false
+  terminal_status: PASS
+  bounded_objective_completed: true
+  new_material_result: true
+  exact_evidence_available: true
+  already_present_in_achievement_record: false
+```
+
+The following do **not** qualify as terminal PASS achievements:
+
+- router `SELECTED` status;
+- Cline permission `APPROVE` recommendations;
+- pending approvals;
+- plans or prompts merely prepared;
+- unsaved previews;
+- proposed diffs that have not reached their assigned completion boundary;
+- `BLOCKED`, `FAIL`, `CHANGES_REQUIRED`, or equivalent non-PASS results;
+- an identical PASS already persisted in the achievement record;
+- Skill 5's own persistence result, which must never recursively create another achievement event.
+
+Required routing sequence:
+
+```text
+current primary skill returns qualifying terminal PASS
+→ freeze the exact completed result as DO_NOT_REPEAT evidence
+→ stop that primary-skill routing cycle
+→ start one new routing cycle with task_category CONTINUITY_OR_ACHIEVEMENT
+→ select exactly one primary skill: $galax-continuity-achievement-guardian
+→ load the Context Engineer support contract
+→ verify the live achievement record, continuity branch, PR, exact PASS evidence, and duplicate status
+→ append the new PASS achievement through Skill 5's authorized connected-GitHub path
+→ verify the achievement commit remotely
+→ stop the persistence cycle
+→ only then may a later Human Owner instruction route the next technical stage
+```
+
+This mandatory persistence cycle is synchronous repository documentation in the active conversation. It is not background work and does not create a scheduler.
+
+If a qualifying PASS cannot be persisted because repository access, branch/PR identity, evidence, timestamp, or duplicate verification cannot be established, return:
+
+```text
+BLOCKED_PASS_ACHIEVEMENT_PERSISTENCE
+```
+
+and do not automatically proceed to another technical workflow stage.
+
+The achievement persistence cycle never authorizes:
+
+- implementation edits;
+- source or test changes;
+- validation;
+- Ruff or formatting;
+- dependency changes;
+- implementation Git actions;
+- accepted-artifact unlock;
+- merge;
+- deployment;
+- Agents 02–15.
+
 ## 13. Stop and handoff behavior
 
-After the selected skill returns the current bounded result, stop.
+After the selected skill returns the current bounded result, stop except for the mandatory Section 12A achievement-persistence cycle when that result is a new qualifying terminal PASS.
 
 ```text
 Skill 3 returns PASS
+→ persist that new PASS through the mandatory separate Skill 5 cycle
 → do not automatically prepare a commit task
 
 Skill 4 returns PASS
+→ persist that new PASS through the mandatory separate Skill 5 cycle
 → do not automatically approve or merge the PR
 
-Skill 5 prepares a checkpoint
-→ do not automatically save, commit, or push unless exact live continuity authority permits it
+Skill 5 prepares or persists continuity/achievement documentation
+→ do not recursively create another achievement from Skill 5's own result
+→ do not automatically enter a technical stage
 
 Skill 7 identifies deletion candidates
 → do not automatically delete or create cleanup commits
 ```
 
-A new Human Owner instruction is required before routing the next stage, except for an exact active standing authorization already present in the live repository.
+A new Human Owner instruction is required before routing the next **technical** stage, except for an exact active standing authorization already present in the live repository. Section 12A is the mandatory documentation-persistence exception and does not count as automatic technical continuation.
 
-A Context Engineer packet never creates continuation authority.
+A Context Engineer packet never creates technical continuation authority.
 
 ## 14. Relationship to Galax runtime routing
 
@@ -493,6 +573,7 @@ load_unrelated_skills: prohibited
 multiple_primary_skills_for_one_task: prohibited
 more_than_two_dependencies: prohibited
 automatic_next_skill: prohibited
+automatic_next_technical_skill_after_PASS_before_achievement_persistence: prohibited
 full_repository_scan_by_default: prohibited
 infer_unmapped_path: prohibited
 search_by_alias_before_using_registry: prohibited
@@ -514,6 +595,8 @@ insert_Context_Engineer_into_CrewAI_runtime: prohibited
 use_Context_Engineer_to_override_selected_skill: prohibited
 use_Context_Engineer_to_skip_mandatory_selected_skill_evidence: prohibited
 ```
+
+`automatic_next_skill: prohibited` refers to automatic continuation into another technical workflow stage. It does not cancel the mandatory Section 12A documentation-only Skill 5 persistence cycle because that cycle is a separate one-primary-skill routing cycle under the live achievement standing authorization.
 
 ## 16. Failure behavior
 
@@ -553,6 +636,11 @@ BLOCKED_SCOPE_TOO_BROAD:
 
 BLOCKED_MISSING_EVIDENCE:
   use_when: selected_skill_loaded_but_required_task_evidence_is_missing
+
+BLOCKED_PASS_ACHIEVEMENT_PERSISTENCE:
+  use_when:
+    - a_new_qualifying_terminal_PASS_exists
+    - mandatory_Skill_5_persistence_cannot_be_verified_or_completed
 ```
 
 Do not use `BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE` when the exact mapped Markdown skill file was successfully fetched.
@@ -573,7 +661,8 @@ Human Owner request
 → Context Engineer prepares the minimum verified context required by the already-selected skill
 → ignore unrelated skills and unrelated context
 → selected skill performs only its own bounded job
-→ Human Owner decides any consequential next action
+→ if the result is a new qualifying terminal PASS, complete the separate mandatory Skill 5 achievement-persistence routing cycle
+→ Human Owner decides any consequential next technical action
 → stop
 ```
 
