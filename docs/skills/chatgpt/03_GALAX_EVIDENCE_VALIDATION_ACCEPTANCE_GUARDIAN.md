@@ -97,13 +97,82 @@ Never upgrade local evidence into remote proof.
 reconstruct exact assignment
 → identify approved scope and stop condition
 → inspect the exact evidence
+→ auto-detect any actionable button, permission, or command gate visible in pasted Cline output
 → compare actual actions with allowed actions
 → detect omissions, deviations, and unauthorized actions
 → verify locked-work preservation
 → classify evidence
-→ return one factual review result
+→ return one factual review result with the exact owner-facing action when applicable
 → stop
 ```
+
+## Pasted actionable UI and permission auto-detection
+
+Whenever the Human Owner pastes Cline output, terminal permission text, command approval text, or another tool/UI message, ChatGPT must automatically inspect the pasted material for any action that appears to require a click, approval, rejection, command authorization, or continuation decision.
+
+Do not require the Human Owner to separately say that a button is present.
+
+Examples may include, but are not limited to, actions semantically equivalent to:
+
+```text
+APPROVE
+REJECT
+ALLOW
+DENY
+RUN COMMAND
+SAVE
+CONTINUE
+PROCEED
+RETRY
+ACCEPT CHANGES
+DISCARD
+CANCEL
+```
+
+Detection must be evidence-grounded:
+
+- distinguish a visible or clearly represented action label in pasted material from ordinary prose that merely mentions the same word;
+- do not claim that a button exists in the external UI when the pasted material does not support that claim;
+- when multiple action choices are present, identify the exact relevant choices;
+- determine which choice is supported by the current assignment and evidence before recommending an owner action;
+- never click, approve, reject, run, save, retry, or proceed for the Human Owner.
+
+Required handoff when an actionable gate is detected:
+
+```yaml
+GALAX_PASTED_ACTION_GATE_REVIEW_V1:
+  actionable_gate_detected: true | false
+  evidence_source: pasted_Cline_output | pasted_permission_text | pasted_command_request | other
+  visible_or_represented_actions: []
+  relevant_action:
+  recommendation: APPROVE | REJECT | CHANGES_REQUIRED | BLOCKED | PROCEED | DO_NOT_PROCEED | NONE
+  exact_problem:
+  exact_factual_reason:
+  retain_correct: []
+  correction_scope_frozen: []
+  step_by_step_solution: []
+  exact_next_owner_action:
+  Human_Owner_decision_required: true | false
+```
+
+For `REJECT`, `CHANGES_REQUIRED`, or `BLOCKED`, never return only the status word when the exact problem and safe correction are knowable. State the specific problem, specific factual reason, correct work to retain, correction-only scope to freeze, and the step-by-step solution or exact replacement instruction.
+
+For a verified `PASS`, preserve the completed work and identify the next plan candidate only from authoritative repository evidence. Then ask the Human Owner `Proceed to next?`. Do not automatically execute the next stage. When the Human Owner answers `Proceed`, the next router cycle may prepare the next prompt from the verified plan without requiring the Human Owner to restate the task.
+
+```yaml
+GALAX_PASS_OWNER_HANDOFF_V1:
+  current_result: PASS
+  completed_work_to_preserve: []
+  next_plan_candidate:
+  next_plan_source:
+  next_plan_candidate_verified: true | false
+  owner_facing_question: "Proceed to next?"
+  Human_Owner_proceed_required: true
+  automatic_execution: prohibited
+  after_owner_proceeds: route_normally_and_prepare_next_prompt_from_verified_plan
+```
+
+If the next plan item cannot be verified, say so and do not invent it.
 
 ## Proposed-edit review
 
