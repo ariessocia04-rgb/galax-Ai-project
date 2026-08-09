@@ -1844,3 +1844,59 @@ DO_NOT_REPEAT:
 - `wsl.exe --list --quiet`
 
 This achievement does not authorize pressing the install prompt, running `wsl.exe --install`, installing or configuring WSL, launching a distribution, executing Linux commands, using WSL as the Assignment 060 writer, saving the R5 correction, tests, Ruff, formatting, implementation Git actions, merge, or deployment.
+
+## Achievement append — 2026-08-09 10:04 Asia/Manila
+
+```yaml
+append_id: GALAX_ACHIEVEMENT_APPEND_2026_08_09_1004
+updated_local_time: 2026-08-09T10:04:00+08:00
+previous_highest_achievement_number: 58
+new_highest_achievement_number: 59
+duplicate_check:
+  exact_assignment_id_already_present: false
+  prior_boundary: Achievement_58
+  duplicate_entries_skipped: true
+```
+
+### Achievement 59 — Assignment 060 Perl PATH capability check completed PASS with no Perl path visible
+
+```yaml
+evidence_classification: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+source_primary_skill: $galax-evidence-validation-acceptance-guardian
+assignment_id: PHASE_2B_ZERO_OPEN_BLOCKERS_PERL_CAPABILITY_CHECK_060_P2G_R6C8
+mode: VALIDATION_ONLY
+workspace: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime
+branch: implementation/phase-2b-agent01-runtime-2026-07-28
+expected_head_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
+authorized_command: where.exe perl
+executed_command: where.exe perl
+visible_terminal_output: "INFO: Could not find files for the given pattern(s)."
+command_completion_observed: false
+shell_integration_capture_warning_present: true
+reported_exit_code: 1
+telemetry_conflict_present: true
+result_classification: PERL_PATH_NOT_FOUND
+visible_perl_paths: []
+perl_executed: false
+repository_files_read: []
+repository_files_modified: []
+files_created: []
+replacements_performed: []
+tests_run: []
+Ruff_run: false
+formatting_run: false
+Git_operations: []
+unauthorized_actions: []
+safe_narrow_conclusion: perl.exe_not_visible_via_where.exe_perl_on_PATH
+writer_viability_proven: false
+terminal_review_status: PASS
+bounded_objective_completed: true
+remote_publication_of_local_implementation_proven: false
+```
+
+The completed achievement is only the bounded capability determination from the exact visible Cline terminal evidence: `where.exe perl` returned `INFO: Could not find files for the given pattern(s).`, so no Perl executable path is visible through that PATH lookup. The shell-integration warning and reported exit code `1` remain preserved; this is not upgraded into proof that Perl is absent from the entire system by every possible method.
+
+DO_NOT_REPEAT:
+- `where.exe perl`
+
+This achievement does not authorize executing Perl, installing Perl, designing or running a Perl writer, saving the R5 correction, creating helper/temp files, tests, Ruff, formatting, implementation Git actions, merge, or deployment.
