@@ -1733,3 +1733,55 @@ DO_NOT_REPEAT:
 - `where.exe cscript`
 
 This achievement does not authorize execution of `cscript.exe`, creation of a script, the Assignment 060 save, tests, Ruff, formatting, implementation Git actions, merge, or deployment.
+
+## Achievement append — 2026-08-09 09:25 Asia/Manila
+
+```yaml
+append_id: GALAX_ACHIEVEMENT_APPEND_2026_08_09_0925
+updated_local_time: 2026-08-09T09:25:00+08:00
+previous_highest_achievement_number: 56
+new_highest_achievement_number: 57
+duplicate_check:
+  exact_assignment_id_already_present: false
+  prior_boundary: Achievement_56
+  duplicate_entries_skipped: true
+```
+
+### Achievement 57 — Assignment 060 `wsl.exe` capability check completed PASS
+
+```yaml
+evidence_classification: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+source_primary_skill: $galax-evidence-validation-acceptance-guardian
+assignment_id: PHASE_2B_ZERO_OPEN_BLOCKERS_WRITE_CAPABILITY_CHECK_060_P2G_R6C6
+mode: VALIDATION_ONLY
+workspace: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime
+branch: implementation/phase-2b-agent01-runtime-2026-07-28
+expected_head_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
+authorized_command: where.exe wsl
+executed_command: where.exe wsl
+visible_terminal_output: C:\Windows\System32\wsl.exe
+shell_integration_capture_warning_present: true
+reported_exit_code: 1
+exit_code_conflict_preserved: true
+safe_capability_conclusion: wsl.exe_path_is_visibly_available_on_PATH
+wsl_executed: false
+WSL_distribution_launched: false
+repository_files_read: []
+repository_files_modified: []
+replacement_performed: false
+tests_run: []
+Ruff_run: false
+formatting_run: false
+Git_operations: []
+unauthorized_actions: []
+terminal_review_status: PASS
+bounded_objective_completed: true
+remote_publication_of_local_implementation_proven: false
+```
+
+The completed achievement is only the bounded capability determination that `wsl.exe` is visibly available at `C:\Windows\System32\wsl.exe`. The shell-integration capture warning and reported exit code `1` remain preserved as conflicting/incomplete telemetry and are not treated as generic command-success proof. No WSL distribution was launched, no repository file was modified, and no replacement, test, Ruff, formatting, or implementation Git operation occurred.
+
+DO_NOT_REPEAT:
+- `where.exe wsl`
+
+This achievement does not prove that WSL is operational, that a Linux distribution is installed, or that WSL is suitable as the Assignment 060 writer mechanism. It does not authorize WSL execution, target save, tests, Ruff, formatting, implementation Git actions, merge, or deployment.
