@@ -75,7 +75,7 @@ Agent_01_output: AgentTaskResult
 result_as_answer_for_this_path: prohibited
 hidden_second_agent_call: prohibited
 HumanReviewRequest_builder: pure_Python_Pydantic
-explicit_router_for_every_branch: required
+explicit_routers_for_every_branch: required
 LLM_profiles_enabled: false
 ```
 
@@ -1683,3 +1683,53 @@ final_status: ANALYSIS_COMPLETE_AND_STOPPED
 ```
 
 The completed achievement is the bounded diagnostic result: Assignment 060 identified that the zero-open-blockers validator already exists but is unreachable under the current fixture because the earlier completion preflight guard fails first, and it isolated the smallest future correction as one test-fixture value change. It does not claim that the later `FAIL` to `PASS` correction was saved, tested, committed, pushed, remotely published, or accepted; the later edit attempt remains a separate blocked/incomplete stage.
+
+## Achievement append — 2026-08-09 08:42 Asia/Manila
+
+```yaml
+append_id: GALAX_ACHIEVEMENT_APPEND_2026_08_09_0842
+updated_local_time: 2026-08-09T08:42:00+08:00
+previous_highest_achievement_number: 55
+new_highest_achievement_number: 56
+duplicate_check:
+  exact_assignment_id_already_present: false
+  prior_boundary: Achievement_55
+  duplicate_entries_skipped: true
+```
+
+### Achievement 56 — Assignment 060 `cscript.exe` capability check completed PASS
+
+```yaml
+evidence_classification: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+source_primary_skill: $galax-evidence-validation-acceptance-guardian
+assignment_id: PHASE_2B_ZERO_OPEN_BLOCKERS_WRITE_CAPABILITY_CHECK_060_P2G_R6C4
+mode: VALIDATION_ONLY
+workspace: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime
+branch: implementation/phase-2b-agent01-runtime-2026-07-28
+expected_head_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
+authorized_command: where.exe cscript
+executed_command: where.exe cscript
+visible_terminal_output: C:\Windows\System32\cscript.exe
+reported_exit_code: 1
+exit_code_conflict_preserved: true
+safe_capability_conclusion: cscript.exe_path_is_visibly_available_on_PATH
+cscript_executed: false
+repository_files_read: []
+repository_files_modified: []
+replacement_performed: false
+tests_run: []
+Ruff_run: false
+formatting_run: false
+Git_operations: []
+unauthorized_actions: []
+terminal_review_status: PASS
+bounded_objective_completed: true
+remote_publication_of_local_implementation_proven: false
+```
+
+The completed achievement is only the bounded capability determination that `cscript.exe` is visibly available at `C:\Windows\System32\cscript.exe`. The reported exit code `1` remains conflicting telemetry and is not treated as generic command-success proof. No repository file was modified and `cscript.exe` was not executed.
+
+DO_NOT_REPEAT:
+- `where.exe cscript`
+
+This achievement does not authorize execution of `cscript.exe`, creation of a script, the Assignment 060 save, tests, Ruff, formatting, implementation Git actions, merge, or deployment.
