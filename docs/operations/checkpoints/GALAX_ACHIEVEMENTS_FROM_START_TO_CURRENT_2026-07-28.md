@@ -2244,3 +2244,120 @@ DO_NOT_REPEAT:
 - `where.exe bun`
 
 This achievement does not authorize executing Bun, running `bun -e`, installing Bun, designing or running a Bun writer, saving the R5 correction, creating helper/temp files, tests, Ruff, formatting, implementation Git actions, merge, deployment, or another capability check.
+
+## Achievement append — 2026-08-09 18:27 Asia/Manila
+
+```yaml
+append_id: GALAX_ACHIEVEMENT_APPEND_2026_08_09_1827
+updated_local_time: 2026-08-09T18:27:00+08:00
+previous_highest_achievement_number: 65
+new_highest_achievement_number: 67
+achievements_appended:
+  - 66
+  - 67
+duplicate_check:
+  GALAX_CREWAI_REMEDIATION_060_R7_SAVE_001_already_present: false
+  GALAX_CREWAI_REMEDIATION_060_R7_SAVE_SUPPORTED_CLAIMS_002_already_present: false
+  prior_boundary: Achievement_65
+  proposed_edit_PASSes_excluded: true
+  failed_validation_results_excluded: true
+  duplicate_entries_skipped: true
+```
+
+### Achievement 66 — Assignment 060 R7 four-field preflight fixture save completed and its bounded saved-edit evidence review passed
+
+```yaml
+evidence_classification: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+source_primary_skill: $galax-evidence-validation-acceptance-guardian
+source_terminal_status: PASS
+bounded_objective_completed: true
+new_material_result: true
+assignment_id: GALAX_CREWAI_REMEDIATION_060_R7_SAVE_001
+parent_assignment_id: PHASE_2B_ZERO_OPEN_BLOCKERS_TARGET_ANALYSIS_060
+workspace: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime
+branch: implementation/phase-2b-agent01-runtime-2026-07-28
+expected_head_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
+target_file: tests/test_foundation_contracts.py
+target_test: TestFoundationFlowState::test_completion_requires_zero_open_blockers
+operation_class: BOUNDED_SAVED_EDIT_EVIDENCE_REVIEW
+exact_saved_fixture_changes:
+  - preflight_result.overall_status: '"FAIL" -> "PASS"'
+  - RepositoryPreflightCheck.status: '"FAIL" -> "PASS"'
+  - RepositoryPreflightCheck.evidence_id: 'None -> "evt"'
+  - RepositoryPreflightCheck.exact_remedy: '"fix" -> None'
+preserved_fixture_value:
+  RepositoryPreflightCheck.redacted_summary: '"failed"'
+files_created: []
+files_modified:
+  - tests/test_foundation_contracts.py
+files_deleted: []
+files_renamed: []
+commands_run: []
+tests_run: []
+Git_operations: []
+approved_preview_followed_exactly: true
+LOCKED_ACCEPTED_test_preserved: true
+production_models_preserved: true
+unauthorized_changes_detected: []
+Cline_final_status: SAVED_AND_STOPPED
+saved_edit_review_status: PASS
+remote_publication_of_local_implementation_proven: false
+```
+
+The completed achievement is the bounded proof that the exact already-approved four-field test-fixture correction was saved locally without commands, tests, Git operations, production-model changes, or modification of the `LOCKED_ACCEPTED` `test_completion_requires_pass_preflight` test. It is not a validation PASS: the later separately authorized focused validation failed on a new `AgentTaskResult.supported_claims` prerequisite.
+
+DO_NOT_REPEAT:
+- `GALAX_CREWAI_REMEDIATION_060_R7_SAVE_001`
+- the exact four-field preflight fixture save
+- any rollback of the saved four preflight fixture values without separate factual authorization
+
+This achievement does not authorize validation retry, another edit, Ruff, formatting, implementation commit/push, merge, deployment, or remote-publication claims.
+
+### Achievement 67 — Assignment 060 R7 supported_claims fixture save completed and its bounded saved-edit evidence review passed
+
+```yaml
+evidence_classification: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+source_primary_skill: $galax-evidence-validation-acceptance-guardian
+source_terminal_status: PASS
+bounded_objective_completed: true
+new_material_result: true
+assignment_id: GALAX_CREWAI_REMEDIATION_060_R7_SAVE_SUPPORTED_CLAIMS_002
+parent_assignment_id: PHASE_2B_ZERO_OPEN_BLOCKERS_TARGET_ANALYSIS_060
+workspace: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime
+branch: implementation/phase-2b-agent01-runtime-2026-07-28
+expected_head_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
+target_file: tests/test_foundation_contracts.py
+target_test: TestFoundationFlowState::test_completion_requires_zero_open_blockers
+operation_class: BOUNDED_SAVED_EDIT_EVIDENCE_REVIEW
+exact_field_modified:
+  - AgentTaskResult.supported_claims
+exact_saved_value: 'SupportedClaim(statement="x", evidence_id="evt")'
+initial_ambiguous_edit_gate_rejected: true
+corrected_unique_AgentTaskResult_anchor_used: true
+files_created: []
+files_modified:
+  - tests/test_foundation_contracts.py
+files_deleted: []
+files_renamed: []
+commands_run: []
+tests_run: []
+Git_operations: []
+approved_preview_followed_exactly: true
+previously_saved_preflight_fix_preserved: true
+LOCKED_ACCEPTED_test_preserved: true
+production_models_preserved: true
+unauthorized_changes_detected: []
+Cline_final_status: SAVED_AND_STOPPED
+saved_edit_review_status: PASS
+remote_publication_of_local_implementation_proven: false
+```
+
+The completed achievement is the bounded proof that only `AgentTaskResult.supported_claims` in the target fixture was saved locally using the corrected unique edit anchor, while the prior four-field preflight save, production models, and the `LOCKED_ACCEPTED` test were preserved. It is not a focused-validation PASS: the subsequent exact target pytest invocation factually failed with `route_history must begin from initial`.
+
+DO_NOT_REPEAT:
+- `GALAX_CREWAI_REMEDIATION_060_R7_SAVE_SUPPORTED_CLAIMS_002`
+- the exact `supported_claims` save
+- the rejected ambiguous one-line `supported_claims=[]` edit anchor
+- any rollback of the supported-claim fixture without separate factual authorization
+
+This achievement does not authorize another save, validation retry, route-history edit, Ruff, formatting, implementation commit/push, merge, deployment, or remote-publication claims.
