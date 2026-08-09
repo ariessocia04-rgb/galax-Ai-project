@@ -466,3 +466,46 @@ git status --short
 ```
 
 Do not pull, sync, merge, rebase, reset, clean, push, restore rejected models code, or continue Phase 2A until the exact local state and safe synchronization plan are verified.
+
+## 15. Mandatory Cline handoff mode header
+
+Every ChatGPT response that prepares a Cline task, reviews a Cline permission/action gate, tells the Human Owner whether to continue the current Cline task, or hands off the next Cline action must begin the Cline-specific handoff with exactly these three labels:
+
+```text
+Cline UI: <ACT | PLAN | exact currently verified Cline UI mode>
+Galax mode: <PLAN_ONLY | ACT_BOUNDED | VALIDATION_ONLY | GIT_ONLY | REVIEW_ONLY>
+Mode: <STAY | NEW>
+```
+
+Definitions:
+
+```yaml
+Cline_UI:
+  meaning: the actual Cline product/UI mode required for the action
+  rule: do_not_replace_with_the_Galax_governance_mode
+
+Galax_mode:
+  meaning: the repository-governance execution mode controlling the bounded task
+  allowed_values:
+    - PLAN_ONLY
+    - ACT_BOUNDED
+    - VALIDATION_ONLY
+    - GIT_ONLY
+    - REVIEW_ONLY
+
+Mode_STAY:
+  meaning: continue the currently active Cline task or assignment without creating a separate new Cline task
+
+Mode_NEW:
+  meaning: create or start a separate new Cline task or assignment, even when it remains under the same parent technical assignment or CrewAI remediation track
+```
+
+Required classification rules:
+
+- `Mode: STAY` when the Human Owner is handling a permission, command, save, validation, review, or other next action inside the already-active Cline task/assignment.
+- `Mode: NEW` when ChatGPT issues a new Cline task/assignment identity or the Human Owner must start a separate Cline task.
+- Remaining under the same parent technical assignment does not by itself mean `STAY`; a new Cline task/assignment ID means `NEW`.
+- A permission or command gate belonging to the current active task remains `STAY`.
+- Do not omit the three-line header merely because the rest of the task is obvious from context.
+- Do not guess `STAY` or `NEW`. When current task identity cannot be verified, stop and reconstruct the exact Cline task state before presenting the header.
+- This header is owner-facing control metadata only. It does not grant permission, change the CrewAI blueprint, alter Galax runtime behavior, authorize a later workflow stage, or replace the exact Human Owner approval gates.
