@@ -1785,3 +1785,62 @@ DO_NOT_REPEAT:
 - `where.exe wsl`
 
 This achievement does not prove that WSL is operational, that a Linux distribution is installed, or that WSL is suitable as the Assignment 060 writer mechanism. It does not authorize WSL execution, target save, tests, Ruff, formatting, implementation Git actions, merge, or deployment.
+
+## Achievement append — 2026-08-09 09:43 Asia/Manila
+
+```yaml
+append_id: GALAX_ACHIEVEMENT_APPEND_2026_08_09_0943
+updated_local_time: 2026-08-09T09:43:00+08:00
+previous_highest_achievement_number: 57
+new_highest_achievement_number: 58
+duplicate_check:
+  exact_assignment_id_already_present: false
+  prior_boundary: Achievement_57
+  duplicate_entries_skipped: true
+```
+
+### Achievement 58 — Assignment 060 WSL distribution capability check completed PASS with WSL not installed
+
+```yaml
+evidence_classification: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+source_primary_skill: $galax-evidence-validation-acceptance-guardian
+assignment_id: PHASE_2B_ZERO_OPEN_BLOCKERS_WSL_DISTRO_CAPABILITY_CHECK_060_P2G_R6C7
+mode: VALIDATION_ONLY
+workspace: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime
+branch: implementation/phase-2b-agent01-runtime-2026-07-28
+expected_head_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
+authorized_command: wsl.exe --list --quiet
+executed_command: wsl.exe --list --quiet
+visible_result: The Windows Subsystem for Linux is not installed.
+installation_offer_visible: true
+interactive_install_prompt_visible: true
+command_completion_observed: false
+shell_integration_capture_warning_present: true
+reported_exit_code: 1
+telemetry_conflict_present: true
+result_classification: COMMAND_ERROR_VISIBLE
+registered_distro_names_visible: []
+wsl_distro_launched: false
+Linux_commands_executed: []
+repository_files_read: []
+repository_files_modified: []
+files_created: []
+replacements_performed: []
+tests_run: []
+Ruff_run: false
+formatting_run: false
+Git_operations: []
+unauthorized_actions: []
+safe_narrow_conclusion: WSL_is_not_installed_and_no_registered_distribution_name_is_visible
+writer_viability_proven: false
+terminal_review_status: PASS
+bounded_objective_completed: true
+remote_publication_of_local_implementation_proven: false
+```
+
+The completed achievement is only the bounded capability determination from the exact visible Cline terminal evidence: Windows reported that WSL is not installed and no registered distribution name was visible. The shell-integration warning and reported exit code `1` remain preserved as incomplete/conflicting telemetry, so command completion is not upgraded beyond the visible result.
+
+DO_NOT_REPEAT:
+- `wsl.exe --list --quiet`
+
+This achievement does not authorize pressing the install prompt, running `wsl.exe --install`, installing or configuring WSL, launching a distribution, executing Linux commands, using WSL as the Assignment 060 writer, saving the R5 correction, tests, Ruff, formatting, implementation Git actions, merge, or deployment.
