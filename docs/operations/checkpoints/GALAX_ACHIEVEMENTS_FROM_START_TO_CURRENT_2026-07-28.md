@@ -2184,3 +2184,63 @@ DO_NOT_REPEAT:
 - `where.exe patch`
 
 This achievement does not authorize executing patch/patch.exe, applying R5 `COMPLETE_VISIBLE_DIFF_V1`, creating `.patch`/helper/temp files, validating patch stdin/input mechanisms, designing or running a patch writer, saving the R5 correction, tests, Ruff, formatting, implementation Git actions, merge, or deployment.
+
+## Achievement append — 2026-08-09 13:38 Asia/Manila
+
+```yaml
+append_id: GALAX_ACHIEVEMENT_APPEND_2026_08_09_1338
+updated_local_time: 2026-08-09T13:38:00+08:00
+previous_highest_achievement_number: 64
+new_highest_achievement_number: 65
+duplicate_check:
+  exact_assignment_id_already_present: false
+  prior_boundary: Achievement_64
+  repeated_terminal_paste_not_second_achievement: true
+  duplicate_entries_skipped: true
+```
+
+### Achievement 65 — Assignment 060 Bun PATH capability check completed PASS with no Bun path visible
+
+```yaml
+evidence_classification: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+source_primary_skill: $galax-evidence-validation-acceptance-guardian
+assignment_id: PHASE_2B_ZERO_OPEN_BLOCKERS_BUN_CAPABILITY_CHECK_060_P2G_R6C14
+mode: VALIDATION_ONLY
+workspace: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime
+branch: implementation/phase-2b-agent01-runtime-2026-07-28
+expected_head_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
+authorized_command: where.exe bun
+executed_command: where.exe bun
+visible_terminal_output: "INFO: Could not find files for the given pattern(s)."
+command_completion_observed: false
+shell_integration_capture_warning_present: true
+reported_exit_code: NOT_OBSERVED
+telemetry_conflict_present: true
+result_classification: BUN_PATH_NOT_FOUND
+visible_bun_paths: []
+bun_executed: false
+repository_files_read: []
+repository_files_modified: []
+files_created: []
+replacements_performed: []
+tests_run: []
+Ruff_run: false
+formatting_run: false
+Git_operations: []
+unauthorized_actions: []
+initial_stale_receipt_detected: true
+initial_stale_receipt_identity: PATCH_PATH_CAPABILITY_RESULT_V1_R6C13
+corrected_receipt_provided_without_command_rerun: true
+safe_narrow_conclusion: bun.exe_not_visible_via_where.exe_bun_on_PATH
+writer_viability_proven: false
+terminal_review_status: PASS
+bounded_objective_completed: true
+remote_publication_of_local_implementation_proven: false
+```
+
+The completed achievement is only the bounded capability determination from the exact Human Owner-provided Cline terminal evidence: `where.exe bun` visibly returned `INFO: Could not find files for the given pattern(s).`, so no Bun executable path is visible through that PATH lookup. The shell-integration completion warning remains preserved and no Bun-specific exit code was observed. The initially emitted stale Patch/R6C13 receipt was corrected to the exact Bun/R6C14 receipt without rerunning the command. The repeated paste of the same terminal block is duplicate evidence of the same execution, not a second execution or second achievement.
+
+DO_NOT_REPEAT:
+- `where.exe bun`
+
+This achievement does not authorize executing Bun, running `bun -e`, installing Bun, designing or running a Bun writer, saving the R5 correction, creating helper/temp files, tests, Ruff, formatting, implementation Git actions, merge, deployment, or another capability check.
