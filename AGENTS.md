@@ -74,17 +74,17 @@ read docs/operations/CODE_RED.md completely
 
 Do not ask the owner what the previous work was when repository access exists. Do not use remembered conversation fragments as authority.
 
-### 3A. Human Owner standing authorization for bounded three-hour continuity uploads
+### 3A. Human Owner standing authorization for bounded one-hour continuity uploads
 
 The Human Owner authorizes a narrow automatic continuity-upload exception. This exception applies only to the Galax continuity records identified below and does not authorize implementation, validation, merge, deployment, or changes to accepted runtime artifacts.
 
 ```yaml
-standing_authorization_id: GALAX_THREE_HOUR_CONTINUITY_AUTO_UPLOAD_V1
+standing_authorization_id: GALAX_ONE_HOUR_CONTINUITY_AUTO_UPLOAD_V1
 human_authorized: true
 timezone_name: Asia/Manila
 timezone_offset: "+08:00"
-check_interval: 3_hours
-maximum_delay_after_new_material_event: 3_hours
+check_interval: 1_hour
+maximum_delay_after_new_material_event: 1_hour
 actual_GitHub_write_commit_and_branch_publication: required
 draft_only_or_notification_only_behavior: prohibited
 upload_when_no_new_verified_event: false
@@ -98,7 +98,7 @@ merge_authorized: false
 length_checkpoint:
   automatic_create_or_update: authorized
   automatic_upload_required: true
-  upload_deadline: within_3_hours_after_new_verified_material_event
+  upload_deadline: within_1_hour_after_new_verified_material_event
   directory: docs/operations/checkpoints
   naming_rule: GALAX_LENGTH_PROBLEM_*_VOLUME_<NEXT_NUMBER>_<YYYY-MM-DD>.md
   append_only_after_previous_stop_boundary: true
@@ -108,7 +108,7 @@ achievement_record:
   path: docs/operations/checkpoints/GALAX_ACHIEVEMENTS_FROM_START_TO_CURRENT_2026-07-28.md
   automatic_update: authorized_only_when_new_verified_achievement_exists
   automatic_upload_required_when_triggered: true
-  upload_deadline: within_3_hours_after_new_verified_achievement
+  upload_deadline: within_1_hour_after_new_verified_achievement
   update_when_no_new_verified_achievement: prohibited
 
 maximum_repository_writes_per_cycle: 2
