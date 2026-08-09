@@ -75,7 +75,7 @@ Agent_01_output: AgentTaskResult
 result_as_answer_for_this_path: prohibited
 hidden_second_agent_call: prohibited
 HumanReviewRequest_builder: pure_Python_Pydantic
-explicit_routers_for_every_branch: required
+explicit_router_for_every_branch: required
 LLM_profiles_enabled: false
 ```
 
