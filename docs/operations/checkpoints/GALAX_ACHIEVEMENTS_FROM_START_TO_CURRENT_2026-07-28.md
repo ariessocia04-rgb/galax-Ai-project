@@ -2589,3 +2589,90 @@ DO_NOT_REPEAT:
 - treating the shell-integration wrapper exit-code claim as the factual result of all three Git subcommands
 
 This achievement does not authorize `git add`, staging, commit, push, full test file, full suite, Ruff, formatter, another edit, cleanup, merge, deployment, or automatic continuation to another technical stage.
+
+## Achievement append — 2026-08-10 07:12 Asia/Manila
+
+```yaml
+append_id: GALAX_ACHIEVEMENT_APPEND_2026_08_10_0712
+updated_local_time: 2026-08-10T07:12:42+08:00
+previous_highest_achievement_number: 70
+new_highest_achievement_number: 71
+duplicate_check:
+  GALAX_CREWAI_REMEDIATION_060_R7_UNTRACKED_PATH_SCOPE_005_already_present: false
+  prior_boundary: Achievement_70
+  similar_prior_entries_reviewed:
+    - Achievement_39
+    - Achievement_70
+  duplicate_of_prior_achievement: false
+  reason_distinct: post_R7_current_recursive_status_expands_the_previously_collapsed_src_and_tests_entries_into_the_exact_current_nine_path_set
+  duplicate_entries_skipped: true
+```
+
+### Achievement 71 — Assignment 060 R7 exact recursive untracked-path scope completed PASS with nine current paths
+
+```yaml
+evidence_classification: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+source_primary_skill: $galax-evidence-validation-acceptance-guardian
+source_terminal_status: PASS
+bounded_objective_completed: true
+new_material_result: true
+assignment_id: GALAX_CREWAI_REMEDIATION_060_R7_UNTRACKED_PATH_SCOPE_005
+parent_assignment_id: PHASE_2B_ZERO_OPEN_BLOCKERS_TARGET_ANALYSIS_060
+workspace: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime
+branch: implementation/phase-2b-agent01-runtime-2026-07-28
+expected_head_sha_from_prior_verified_preflight: c55f131fa4455877fafa4a259be7ba7879ebbe65
+mode: GIT_ONLY
+authorized_command: git status --short --untracked-files=all
+executed_command: git status --short --untracked-files=all
+command_match: true
+command_run_count: 1
+shell_integration_completion_observed: false
+shell_integration_capture_warning_present: true
+same_terminal_command_line_visible: true
+exact_status_lines:
+  - "?? .clinerules/00-galax-router-and-execution.md"
+  - "?? pyproject.toml"
+  - "?? src/galax/__init__.py"
+  - "?? src/galax/__pycache__/__init__.cpython-312.pyc"
+  - "?? src/galax/foundation/__pycache__/models.cpython-312.pyc"
+  - "?? src/galax/foundation/models.py"
+  - "?? tests/__pycache__/test_foundation_contracts.cpython-312-pytest-9.0.3.pyc"
+  - "?? tests/test_foundation_contracts.py"
+  - "?? uv.lock"
+exact_untracked_paths:
+  - .clinerules/00-galax-router-and-execution.md
+  - pyproject.toml
+  - src/galax/__init__.py
+  - src/galax/__pycache__/__init__.cpython-312.pyc
+  - src/galax/foundation/__pycache__/models.cpython-312.pyc
+  - src/galax/foundation/models.py
+  - tests/__pycache__/test_foundation_contracts.cpython-312-pytest-9.0.3.pyc
+  - tests/test_foundation_contracts.py
+  - uv.lock
+exact_untracked_path_count: 9
+all_visible_status_codes: "??"
+tracked_change_status_entries: []
+staged_entries_visible: []
+exact_recursive_untracked_path_set_proven: true
+files_modified_by_task: []
+files_deleted_by_task: []
+tests_run: []
+Git_mutations: []
+unauthorized_actions: []
+blockers: []
+evidence_review_status: PASS
+remote_publication_of_local_implementation_proven: false
+staging_scope_approved: false
+commit_readiness_proven: false
+```
+
+The completed achievement is the bounded factual recursive inventory produced by the exact single authorized `git status --short --untracked-files=all` invocation. It resolves the prior directory-collapse uncertainty by enumerating nine current untracked paths and no tracked-change or staged status entries. The shell-integration warning remains preserved; it is not converted into a directly observed numeric exit code or a broader claim about command telemetry.
+
+The three `.pyc` paths appearing in this current status are recorded only as current untracked paths. Their appearance does not by itself authorize deletion, imply that earlier cleanup evidence was false, or establish why they exist now.
+
+DO_NOT_REPEAT:
+- `GALAX_CREWAI_REMEDIATION_060_R7_UNTRACKED_PATH_SCOPE_005` without a new factual worktree change
+- `git status --short --untracked-files=all` solely to re-prove this already-recorded nine-path state
+- treating the nine-path inventory as approved staging or commit scope
+
+This achievement does not authorize file classification, deletion, cleanup, `git add`, staging, commit, push, full test file, full suite, Ruff, formatter, source/test edits, merge, deployment, or automatic continuation to another technical stage.
