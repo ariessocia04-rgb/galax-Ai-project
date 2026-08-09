@@ -208,7 +208,7 @@ DRAFT_PR_REVIEW:
   purpose: inspect_current_remote_PR_SHA_changed_files_and_patches
 
 CONTINUITY_OR_ACHIEVEMENT:
-  purpose: handle_three_hour_continuity_or_separate_achievement_check_or_mandatory_new_terminal_PASS_persistence
+  purpose: handle_one_hour_continuity_or_separate_achievement_check_or_mandatory_new_terminal_PASS_persistence
 
 LOCKED_ARTIFACT:
   purpose: protect_or_review_a_change_to_LOCKED_ACCEPTED_work
@@ -228,7 +228,7 @@ UNKNOWN_OR_MULTI_TASK:
 | Make the next Cline prompt or review a Cline permission request | `$galax-strict-cline-prompt-guardian` | `docs/skills/chatgpt/02_GALAX_STRICT_CLINE_PROMPT_GUARDIAN.md` |
 | Review a proposed edit, saved receipt, focused test, commit, or push evidence | `$galax-evidence-validation-acceptance-guardian` | `docs/skills/chatgpt/03_GALAX_EVIDENCE_VALIDATION_ACCEPTANCE_GUARDIAN.md` |
 | Review a current remote Draft PR or exact pushed diff | `$galax-draft-pr-exact-diff-reviewer` | `docs/skills/chatgpt/04_GALAX_DRAFT_PR_EXACT_DIFF_REVIEWER.md` |
-| Handle length problem, three-hour checkpoint, separate achievement check, or mandatory persistence of a new terminal PASS | `$galax-continuity-achievement-guardian` | `docs/skills/chatgpt/05_GALAX_CONTINUITY_ACHIEVEMENT_GUARDIAN.md` |
+| Handle length problem, one-hour checkpoint, separate achievement check, or mandatory persistence of a new terminal PASS | `$galax-continuity-achievement-guardian` | `docs/skills/chatgpt/05_GALAX_CONTINUITY_ACHIEVEMENT_GUARDIAN.md` |
 | Determine whether accepted work is locked or review an unlock request | `$galax-locked-artifact-guardian` | `docs/skills/chatgpt/06_GALAX_LOCKED_ARTIFACT_GUARDIAN.md` |
 | Audit duplicates, stale conflicts, references, or deletion candidates | `$galax-repository-cleanup-auditor` | `docs/skills/chatgpt/07_GALAX_REPOSITORY_CLEANUP_AUDITOR.md` |
 
