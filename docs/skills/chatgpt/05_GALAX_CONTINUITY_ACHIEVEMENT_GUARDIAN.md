@@ -30,7 +30,7 @@ approval_authority: false
 continuity_upload_executor: ChatGPT_connected_GitHub_app
 Cline_dependency_for_length_or_achievement_upload: false
 timezone: Asia/Manila
-cadence: event_driven_terminal_PASS_persistence_plus_every_3_hours_during_active_Galax_work
+cadence: event_driven_terminal_PASS_persistence_plus_every_1_hour_during_active_Galax_work
 final_authority: Human_Owner
 ```
 
@@ -110,7 +110,7 @@ save length problem
 chat length problem
 CODE RED
 prepare or upload the next checkpoint
-three hours passed
+one hour passed
 upload continuity
 update achievement
 check or update achievements
@@ -121,7 +121,7 @@ new qualifying terminal PASS from another repository-backed Galax skill
 mandatory post-PASS achievement persistence routing cycle
 ```
 
-Also activate during active Galax work when the latest verified checkpoint is at least three hours old.
+Also activate during active Galax work when the latest verified checkpoint is at least one hour old.
 
 ## Mandatory terminal-PASS achievement persistence
 
@@ -220,7 +220,7 @@ README.md
 → exact current technical assignment and evidence
 ```
 
-For a terminal-PASS-only persistence event, a new length checkpoint is not required merely to save the PASS. Read the latest checkpoint only when needed to disambiguate the task/result identity or when the three-hour continuity cycle is independently due.
+For a terminal-PASS-only persistence event, a new length checkpoint is not required merely to save the PASS. Read the latest checkpoint only when needed to disambiguate the task/result identity or when the one-hour continuity cycle is independently due.
 
 Verify:
 
@@ -232,7 +232,7 @@ GALAX_CONTINUITY_TIME_PRECHECK_V1:
   previous_checkpoint_stop_local_datetime:
   current_local_datetime:
   elapsed_time:
-  three_hour_boundary_reached:
+  one_hour_boundary_reached:
   repository_access_verified:
   continuity_branch:
   continuity_head_sha:
@@ -507,7 +507,7 @@ The achievement update must append only the new verified completion, preserve ev
 
 ## Exact direct-upload sequence
 
-For the three-hour or direct continuity cycle:
+For the one-hour or direct continuity cycle:
 
 ```text
 verify live repository, AGENTS.md, CODE_RED.md, latest checkpoint, achievement record, continuity branch, and PR #10
