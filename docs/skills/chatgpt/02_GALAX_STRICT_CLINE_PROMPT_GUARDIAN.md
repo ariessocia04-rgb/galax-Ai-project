@@ -836,3 +836,62 @@ improve this
 as permission for a broader audit, implementation, test run, Git action, cleanup, merge, or deployment.
 
 The repository plan and exact Human Owner-authorized bounded task control every Cline prompt.
+
+## Rule 15: Mandatory Cline handoff mode header
+
+For every owner-facing Cline task prompt, Cline permission/action-gate review, save/validation/Git gate review, continuation handoff, or next-task handoff, ChatGPT must show this three-line header before the Cline-specific instruction or recommendation:
+
+```text
+Cline UI: <ACT | PLAN | exact currently verified Cline UI mode>
+Galax mode: <PLAN_ONLY | ACT_BOUNDED | VALIDATION_ONLY | GIT_ONLY | REVIEW_ONLY>
+Mode: <STAY | NEW>
+```
+
+The three labels represent different control layers and must not be collapsed or substituted for one another.
+
+```yaml
+Cline_UI:
+  meaning: actual Cline product/UI mode needed for the current action
+  examples:
+    - ACT
+    - PLAN
+  rule: use_the_exact_verified_UI_mode_do_not_infer_from_Galax_mode_alone
+
+Galax_mode:
+  meaning: exact Galax governance mode controlling the bounded Cline task
+  allowed_values:
+    - PLAN_ONLY
+    - ACT_BOUNDED
+    - VALIDATION_ONLY
+    - GIT_ONLY
+    - REVIEW_ONLY
+
+Mode_STAY:
+  meaning: continue the currently active Cline task/assignment; do not create a separate new Cline task
+
+Mode_NEW:
+  meaning: create/start a separate new Cline task/assignment; the parent technical assignment may remain unchanged
+```
+
+Mandatory `STAY` versus `NEW` classification:
+
+1. Use `Mode: STAY` for a permission popup, command gate, save gate, validation gate, review gate, or other action that belongs to the already-active Cline task/assignment.
+2. Use `Mode: NEW` when ChatGPT creates a new `GALAX_CLINE_TASK_V2` assignment ID, directs the Human Owner to start a separate Cline task, or moves to a separately authorized bounded task even if the same parent Assignment/CrewAI track continues.
+3. Same parent Assignment does not equal `STAY`. A new Cline assignment/task identity is `NEW`.
+4. A new technical track is not required for `NEW`; `NEW` describes Cline task/session identity only.
+5. `STAY` does not authorize scope expansion. It only states that the next action remains inside the existing task boundary.
+6. Do not omit this header on concise `APPROVE`, `REJECT`, `PASS`, `CHANGES_REQUIRED`, `BLOCKED`, or `Proceed to next?` Cline handoffs when a Cline task/session context is material.
+7. Do not guess the header. If actual Cline UI mode or current task identity cannot be verified, reconstruct the smallest exact state needed and block rather than invent `STAY` or `NEW`.
+8. The header itself grants no permission. Human Owner authorization, exact allowlists, stop conditions, locked-artifact rules, and separate save/test/Git gates remain controlling.
+
+Required output behavior is therefore:
+
+```text
+Cline UI: <verified UI mode>
+Galax mode: <verified Galax governance mode>
+Mode: <STAY | NEW>
+
+<then the exact task, recommendation, permission decision, or handoff>
+```
+
+This rule is supervisory formatting/control only. It does not modify Cline software, CrewAI runtime, the CrewAI remediation blueprint, Galax source/tests, or implementation authorization boundaries.
