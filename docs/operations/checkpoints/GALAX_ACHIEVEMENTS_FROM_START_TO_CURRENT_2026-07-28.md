@@ -769,7 +769,7 @@ Track_C_new_chat_continuity:
   latest_length_checkpoint_commit_before_this_update: fc27110bf11e0e63bb8eaa1b11f663a52a72a4d3
 
 Track_D_foundation_agent01_untracked_and_live_evidence:
-  latest_completed_bounded_result: GALAX-P2B-LOCAL-REMOTE-ANCESTRY_SYNC_REVIEW_20260803_01_COMPLETE_WITH_RECEIPT_INACCURACIES
+  latest_completed_bounded_result: GALAX-P2B-LOCAL-REMOTE-ANCESTRY-SYNC-REVIEW-20260803-01_COMPLETE_WITH_RECEIPT_INACCURACIES
   verified_ancestry: LOCAL_BEHIND_REMOTE_LINEAR
   local_only_commit_count: 0
   remote_only_commit_count: 1
