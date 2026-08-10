@@ -27,9 +27,11 @@ This skill has one narrow responsibility:
 
 ```text
 before ChatGPT gives Cline any Galax task
-→ prove that the exact proposed Cline objective belongs to the active CrewAI remediation blueprint execution chain
-→ PASS only that exact blueprint work
+→ read and classify the exact Human Owner request
+→ prove whether the exact proposed Cline objective belongs to the active CrewAI remediation blueprint execution chain
+→ PASS only that exact blueprint work to Cline
 → BLOCK every non-blueprint delegation to Cline
+→ when the same Human Owner request is an authorized Class B non-blueprint repository update, automatically hand the exact same request back to the Router for Skill 9 and immediate ChatGPT connected-GitHub execution without creating a Cline prompt or asking the Human Owner to repeat the request
 ```
 
 This skill does not write repository files, create implementation, review evidence, persist continuity, or replace Skill 2 or Skill 9.
@@ -38,6 +40,8 @@ It exists to enforce the Human Owner rule:
 
 ```text
 Cline executes the CrewAI remediation blueprint — NO MORE, NO LESS.
+
+If the Human Owner asks ChatGPT for a repository update and Skill 10 proves it is not CrewAI-blueprint work but is an authorized Class B update, ChatGPT performs that exact request directly through GitHub. Do not give it to Cline and do not ask the Human Owner for the same instruction again.
 ```
 
 ## 2. Canonical boundaries to reference, not duplicate
@@ -70,6 +74,8 @@ This skill is a mandatory dependency gate whenever the router selects Skill 2 as
 It is not an additional bootstrap dependency when Skill 2 is loaded only as a dependency of Skill 8 for new-chat readiness, because bootstrap does not itself issue a Cline task.
 
 Before any `GALAX_CLINE_TASK_V2` is emitted, Skill 10 must return a current gate result.
+
+The gate must classify the Human Owner's exact request before any Cline prompt is produced. A request must not be converted into a Cline prompt first and classified afterward.
 
 ## 4. Exact blueprint-trace requirement
 
@@ -119,6 +125,9 @@ GALAX_CLINE_BLUEPRINT_SCOPE_GATE_V1:
   objective_is_adjacent_cleanup_or_housekeeping: true | false
   objective_is_unrelated_technical_work: true | false
 
+  current_Human_Owner_request_already_authorizes_exact_Class_B_update: true | false
+  same_request_can_continue_without_reasking_owner: true | false
+
   ChatGPT_blueprint_file_edit_required_for_consistency: true | false
   exact_blueprint_file_or_section_if_required:
   explicit_Human_Owner_authorization_for_ChatGPT_blueprint_edit: true | false
@@ -131,7 +140,7 @@ GALAX_CLINE_BLUEPRINT_SCOPE_GATE_V1:
 
   gate_result:
     PASS_CLINE_BLUEPRINT_ONLY |
-    BLOCK_CLINE_ROUTE_TO_CHATGPT |
+    BLOCK_CLINE_AUTO_EXECUTE_BY_CHATGPT |
     BLOCK_CLINE_ROUTE_TO_SKILL_5 |
     BLOCK_UNRELATED_TECHNICAL_SCOPE |
     BLOCK_CHATGPT_BLUEPRINT_EDIT_REQUIRES_HUMAN_AUTHORIZATION |
@@ -165,19 +174,41 @@ Cline then executes only the exact blueprint objective through Skill 2 controls.
 
 Cline must not receive nearby work just because it touches the same file, branch, package, feature, or repository area.
 
-## 7. Non-blueprint hard block
+## 7. Non-blueprint hard block and automatic ChatGPT execution
 
-When the proposed Cline objective is repository governance, ChatGPT rules, ChatGPT skills, router maintenance, supervisory documentation, owner-directed repository documentation, or another authorized Class B update outside the active blueprint:
+When the exact Human Owner request is repository governance, ChatGPT rules, ChatGPT skills, router maintenance, supervisory documentation, owner-directed repository documentation, or another authorized Class B update outside the active blueprint:
 
 ```yaml
-result: BLOCK_CLINE_ROUTE_TO_CHATGPT
+result: BLOCK_CLINE_AUTO_EXECUTE_BY_CHATGPT
 executor: ChatGPT_Skill_9
 Cline_task_created: false
+Cline_prompt_created: false
+preserve_exact_Human_Owner_request: true
+ask_Human_Owner_to_repeat_same_request: false
+additional_authorization_for_same_clear_Class_B_request: false
+automatic_same_request_router_handoff: required
+ChatGPT_connected_GitHub_execution_after_Skill_9_precheck: required
 ```
 
-Skill 10 must preserve the Human Owner's exact request and return it to the router for a separate Skill 9 routing cycle.
+Required behavior:
 
-It must not itself perform the Skill 9 update.
+```text
+Skill 10 detects exact requested work is not active CrewAI blueprint execution
+→ BLOCK Cline immediately
+→ do not draft, display, or prepare a Cline prompt for that work
+→ preserve the exact Human Owner request unchanged
+→ Router immediately starts the separate same-request Skill 9 cycle required by the one-primary-skill rule
+→ Skill 9 performs its normal live repository and Class B precheck
+→ when Skill 9 precheck passes, ChatGPT executes the exact requested update directly through the connected GitHub app
+→ verify the remote commit
+→ stop at the normal Skill 9 boundary
+```
+
+This automatic handoff is not invented work and is not automatic technical continuation. It is execution of the same explicit Human Owner request by the correct repository owner after Cline has been ruled out.
+
+Do not ask the Human Owner whether ChatGPT should do the same Class B update after Skill 10 has already classified it. The existing Human Owner request is the authority, subject to Skill 9's normal precheck and protection boundaries.
+
+Skill 10 itself remains read-only and does not perform the GitHub write; Skill 9 owns execution.
 
 Continuity or achievement work remains owned by Skill 5:
 
@@ -199,6 +230,8 @@ non_blueprint_consequential_technical_scope:
 ```
 
 This prevents `Cline only does blueprint` from being misread as `every technical task goes to Cline`.
+
+The automatic ChatGPT execution rule in Section 7 applies to authorized Class B repository governance/documentation/supervisory work. It does not silently authorize runtime/source/test/dependency/workflow/security/merge/deployment changes outside the active blueprint.
 
 ## 9. ChatGPT blueprint-edit exception requires explicit Human Owner authorization
 
@@ -242,6 +275,7 @@ This skill must not become a second copy of Skill 2 or Skill 9.
 Skill_10_owns:
   - predelegation_blueprint_scope_classification
   - hard_block_of_non_blueprint_Cline_work
+  - same_request_automatic_handoff_to_correct_ChatGPT_owner
   - blueprint_trace_evidence_gate
   - ChatGPT_blueprint_edit_authorization_blocker
 
@@ -265,6 +299,7 @@ Return exactly one current scope-gate receipt before Cline work:
 
 ```yaml
 GALAX_CLINE_BLUEPRINT_SCOPE_BLOCKER_RECEIPT_V1:
+  Human_Owner_request:
   proposed_Cline_objective:
   blueprint_trace_verified: true | false
   trace_sources: []
@@ -272,32 +307,51 @@ GALAX_CLINE_BLUEPRINT_SCOPE_BLOCKER_RECEIPT_V1:
   executor:
   gate_result:
   Cline_task_allowed: true | false
+  Cline_prompt_created: true | false
   ChatGPT_direct_update_allowed_under_existing_owner_request: true | false
+  same_request_automatic_router_handoff_required: true | false
+  ask_owner_to_repeat_same_request: false
   ChatGPT_blueprint_edit_requires_new_owner_authorization: true | false
   exact_blocker_if_any:
   next_router_action:
   assumptions: []
 ```
 
+For an authorized Class B result, the required receipt fields are:
+
+```yaml
+Cline_task_allowed: false
+Cline_prompt_created: false
+ChatGPT_direct_update_allowed_under_existing_owner_request: true
+same_request_automatic_router_handoff_required: true
+ask_owner_to_repeat_same_request: false
+next_router_action: START_SAME_REQUEST_SKILL_9_CYCLE_AND_EXECUTE_AFTER_PRECHECK
+```
+
 ## 12. Final strict contract
 
 ```text
-about to use Cline
-→ Skill 10 proves exact blueprint trace
+Human Owner asks ChatGPT to do Galax repository work
+→ before any Cline task, Skill 10 reads and classifies the exact request
 
-PASS_CLINE_BLUEPRINT_ONLY
+exact active CrewAI blueprint execution
+→ PASS_CLINE_BLUEPRINT_ONLY
 → Skill 2 may create/continue exactly one bounded Cline blueprint task
 → NO MORE, NO LESS
 
-non-blueprint governance/rules/skills/router/docs
+non-blueprint governance/rules/skills/router/docs and other authorized Class B repository updates
 → BLOCK Cline
-→ separate Router cycle to Skill 9 / ChatGPT connected GitHub
+→ NO Cline prompt
+→ preserve the same Human Owner request
+→ automatically start the separate same-request Skill 9 routing cycle
+→ ChatGPT executes the requested update through connected GitHub after Skill 9 precheck
+→ do not ask the Human Owner to repeat or reconfirm the same clear Class B request
 
 continuity/achievement
 → BLOCK Cline
 → Skill 5
 
-technical work outside active blueprint
+technical work outside active blueprint that is not an authorized Class B update
 → BLOCK Cline
 → wait for exact separate authority
 
