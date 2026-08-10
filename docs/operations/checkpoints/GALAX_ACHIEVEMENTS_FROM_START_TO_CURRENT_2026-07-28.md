@@ -2037,7 +2037,7 @@ workspace: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtim
 branch: implementation/phase-2b-agent01-runtime-2026-07-28
 expected_head_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
 authorized_command: where.exe lua
-executed_command: wsl.exe --list --quiet
+executed_command: where.exe lua
 visible_terminal_output: "INFO: Could not find files for the given pattern(s)."
 command_completion_observed: false
 shell_integration_capture_warning_present: true
@@ -2126,7 +2126,7 @@ The completed achievement is only the bounded capability determination from the 
 DO_NOT_REPEAT:
 - `where.exe deno`
 
-This achievement does not authorize executing Deno, installing Deno, running `deno eval`, designing or running a Deno writer, saving the R5 correction, creating helper/temp files, tests, Ruff, formatting, implementation Git actions, merge, deployment, or another capability check.
+This achievement does not authorize executing Deno, installing Deno, running `deno eval`, designing or running a Deno writer, saving the R5 correction, creating helper/temp files, tests, Ruff, formatting, implementation Git actions, merge, or deployment.
 
 ## Achievement append — 2026-08-09 11:45 Asia/Manila
 
