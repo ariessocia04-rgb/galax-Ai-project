@@ -17,7 +17,7 @@ Galax_Agent_01_to_15: false
 modifies_Cline: false
 local_writer: false
 approval_authority: false
-primary_local_writer: Cline
+primary_local_writer_for_active_CrewAI_blueprint_implementation: Cline
 final_authority: Human_Owner
 auto_approve: NONE
 YOLO: DISABLED
@@ -87,18 +87,21 @@ Human_Owner:
   approves_deployment: true
 
 ChatGPT:
-  role: repository_aware_architect_and_reviewer
-  local_writer: false
+  role: repository_aware_architect_reviewer_and_owner_direct_rule_updater
+  local_implementation_writer: false
+  direct_connected_GitHub_rule_writer_when_owner_requests_exact_Class_B_update: true
   approval_authority: false
   responsibility:
     - reconstruct_repository_truth
-    - create_exact_bounded_Cline_prompts
+    - create_exact_bounded_Cline_prompts_for_active_CrewAI_blueprint_work
     - review_each_Cline_permission_request
     - protect_completed_work
     - report_factual_blockers
+    - route_exact_owner_requested_rule_updates_to_Skill_9_and_execute_them_directly_through_connected_GitHub
 
 Cline:
-  role: sole_primary_local_writer
+  role: primary_local_writer_for_active_CrewAI_remediation_blueprint_implementation_only
+  repository_governance_or_rule_writer: false
   self_authorization: prohibited
   automatic_scope_expansion: prohibited
   automatic_next_task: prohibited
@@ -895,3 +898,103 @@ Mode: <STAY | NEW>
 ```
 
 This rule is supervisory formatting/control only. It does not modify Cline software, CrewAI runtime, the CrewAI remediation blueprint, Galax source/tests, or implementation authorization boundaries.
+
+## Rule 16: CrewAI-only development center and ChatGPT-owned repository-rule updates
+
+This rule is the mandatory scope interpretation for every Cline assignment and supersedes any broader historical reading of `primary_local_writer: Cline`, `sole_primary_local_writer`, or similar wording.
+
+The technical mission of Galax development is singular:
+
+```text
+implement, validate, secure, and complete the active CrewAI remediation blueprint into working reality
+→ no unrelated technical development track
+→ no competing roadmap
+→ no generic repository work assigned to Cline
+```
+
+Canonical technical center:
+
+```text
+docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
+```
+
+Existing narrow Foundation / Agent 01 supersession remains controlled only by:
+
+```text
+docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md
+```
+
+Before any Cline task is released, ChatGPT must establish:
+
+```yaml
+GALAX_CLINE_CREWAI_ONLY_GATE_V1:
+  exact_CrewAI_blueprint_requirement:
+  exact_current_remedy_or_gate:
+  task_directly_implements_validates_secures_or_unblocks_blueprint: true | false
+  Foundation_Agent01_narrow_supersession_applicable: true | false
+  unrelated_technical_scope_added: false
+  repository_rule_or_governance_update: true | false
+  executor:
+    Cline | ChatGPT_connected_GitHub_app | NONE_BLOCKED
+  status: PASS | BLOCKED
+```
+
+Required classification:
+
+```yaml
+active_CrewAI_blueprint_implementation_or_validation:
+  executor: Cline
+  Skill_2_may_create_Cline_task: true
+
+Human_Owner_requests_router_skill_rule_manual_governance_or_supervisory_repo_update:
+  executor: ChatGPT_connected_GitHub_app
+  route_to: $galax-owner-direct-repository-update-guardian
+  Cline_task: STRICTLY_PROHIBITED
+
+continuity_or_achievement_update:
+  executor: ChatGPT_connected_GitHub_app
+  route_to: $galax-continuity-achievement-guardian
+  Cline_task: STRICTLY_PROHIBITED
+
+technical_request_without_exact_blueprint_mapping:
+  executor: NONE_BLOCKED
+  result: BLOCKED_OUTSIDE_CREWAI_REMEDIATION_BLUEPRINT
+```
+
+Cline is strictly prohibited from being used to update, maintain, rewrite, or repair ChatGPT's repository-control system merely because those files live in the repository, including:
+
+```yaml
+Cline_STRICTLY_PROHIBITED_rule_targets:
+  - docs/skills/chatgpt/00_GALAX_SKILL_ROUTER_MANAGER.md
+  - docs/skills/chatgpt/*_GALAX_*_GUARDIAN.md when the requested change is supervisory_governance
+  - docs/skills/chatgpt/context/00_GALAX_CHATGPT_CONTEXT_ENGINEER.md
+  - docs/operations/GALAX_NEW_CHAT_OPERATING_MANUAL.md
+  - ChatGPT_or_Cline_governance_rules
+  - repository_supervision_rules
+  - owner_requested_non_blueprint_documentation_or_policy_updates
+```
+
+When the Human Owner explicitly asks to update such a rule:
+
+```text
+DO NOT create a Cline prompt
+→ Router selects Skill 9 when the change is Class B non-blueprint governance/documentation/supervisory work
+→ ChatGPT verifies the exact live target and minimum required scope
+→ ChatGPT performs the update directly through the connected GitHub app
+→ ChatGPT verifies the resulting remote commit
+→ stop
+```
+
+Governance work is an enforcement layer only. It may help the project execute the frozen CrewAI blueprint correctly, but it must never become a competing development goal or authorize unrelated technical work.
+
+Final Cline scope rule:
+
+```yaml
+Cline_core_and_only_development_scope: ACTIVE_CREWAI_REMEDIATION_BLUEPRINT
+Cline_generic_repository_updater: false
+Cline_rule_updater_for_Human_Owner_requests: false
+ChatGPT_mandatory_rule_updater_for_exact_owner_requested_Class_B_changes: true
+CrewAI_blueprint_is_the_technical_center: true
+unrelated_technical_development: PROHIBITED
+no_more_no_less: true
+```
