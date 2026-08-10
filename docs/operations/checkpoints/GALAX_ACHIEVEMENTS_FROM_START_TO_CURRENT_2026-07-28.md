@@ -2973,3 +2973,75 @@ DO_NOT_REPEAT:
 - treating the prior Assignment 008 failed `uv lock` invocation as a successful regeneration
 
 This achievement does not authorize another `uv lock`, dependency changes, `uv sync`, source/test edits, validation, `git add`, staging, commit, push, cleanup, merge, deployment, Agents 02–15, or automatic continuation to another technical stage.
+
+## Achievement append — 2026-08-10 16:39 Asia/Manila
+
+```yaml
+append_id: GALAX_ACHIEVEMENT_APPEND_2026_08_10_1639
+updated_local_time: 2026-08-10T16:39:00+08:00
+previous_highest_achievement_number: 75
+new_highest_achievement_number: 76
+duplicate_check:
+  GALAX_CREWAI_REMEDIATION_060_R7_PYPROJECT_METADATA_INSPECTION_011_already_present: false
+  prior_boundary: Achievement_75
+  duplicate_entries_skipped: true
+```
+
+### Achievement 76 — Assignment 060 R7 `pyproject.toml` metadata inspection completed PASS and proved the structural cause of the uv `requires-python` warning
+
+```yaml
+evidence_classification: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+source_primary_skill: $galax-evidence-validation-acceptance-guardian
+source_terminal_status: PASS
+bounded_objective_completed: true
+new_material_result: true
+assignment_id: GALAX_CREWAI_REMEDIATION_060_R7_PYPROJECT_METADATA_INSPECTION_011
+parent_assignment_id: PHASE_2B_ZERO_OPEN_BLOCKERS_TARGET_ANALYSIS_060
+receipt_identity: GALAX_CREWAI_REMEDIATION_060_R7_PYPROJECT_METADATA_INSPECTION_V1
+workspace: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime
+branch: implementation/phase-2b-agent01-runtime-2026-07-28
+expected_head_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
+mode: PLAN_ONLY
+target_file: pyproject.toml
+complete_visible_file_coverage: true
+reported_file_line_count: 21
+exact_project_table_present: false
+visible_first_line: 'rsion = "0.1.0"'
+project_name_observable: false
+project_version_cleanly_observable: false
+requires_python_literal_present: true
+requires_python_effective_table: root_table
+requires_python_exact_value: ">=3.10,<3.14"
+runtime_dependencies:
+  - crewai==1.15.4
+  - pydantic==2.12.5
+build_system_requires:
+  - uv_build==0.11.29
+build_backend: uv_build
+tool_uv_build_backend_present: true
+workspace_configuration_present: false
+latest_uv_warning: "No `requires-python` value found in the workspace. Defaulting to `>=3.12`."
+factual_relationship_to_uv_warning: MATCHES_CURRENT_PYPROJECT
+factual_root_cause_proven: true
+factual_root_cause: missing_project_table_header_causes_requires_python_description_and_dependencies_to_be_root_scoped_instead_of_project_scoped_so_uv_does_not_recognize_project_requires_python
+files_modified: []
+files_created: []
+files_deleted: []
+commands_run: []
+tests_run: []
+Git_operations: []
+LOCKED_ACCEPTED_changed: false
+unauthorized_actions: []
+Skill_3_evidence_review_status: PASS
+remote_publication_of_local_implementation_proven: false
+```
+
+The completed achievement is the bounded read-only proof of the current local `pyproject.toml` structure. Complete visible coverage showed no `[project]` table header and a malformed first line `rsion = "0.1.0"`; the literal `requires-python = ">=3.10,<3.14"` therefore sits at TOML root rather than under `[project]`. This structurally explains the immediately preceding `uv lock` warning that no project `requires-python` value was found and that uv defaulted to `>=3.12`. No file was edited, no command or test was run, `uv.lock` was not read by Assignment 011, no Git operation occurred, and the existing `LOCKED_ACCEPTED` test boundary was not changed.
+
+DO_NOT_REPEAT:
+- `GALAX_CREWAI_REMEDIATION_060_R7_PYPROJECT_METADATA_INSPECTION_011`
+- rereading the same 21-line `pyproject.toml` solely to re-prove this already-recorded structural root cause
+- repeating `uv lock` before a separately authorized correction and later validation require it
+- treating the malformed first line or missing `[project]` header as authorization to edit `pyproject.toml`
+
+This achievement does not authorize a `pyproject.toml` edit, dependency change, another `uv lock`, `uv sync`, test, Ruff, formatter, `git add`, staging, commit, push, cleanup, merge, deployment, Agents 02–15, or automatic continuation to another technical stage.
