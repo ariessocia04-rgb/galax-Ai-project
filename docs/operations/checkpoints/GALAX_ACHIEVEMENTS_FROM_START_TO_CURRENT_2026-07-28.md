@@ -2831,3 +2831,87 @@ DO_NOT_REPEAT:
 - staging, commit, push, full-test-file, full-suite, Ruff, cleanup, or deletion solely from this achievement
 
 This achievement does not authorize `git add`, staging, commit, push, full test file, full suite, Ruff, formatter, cleanup, deletion, source/test edits, merge, deployment, Agents 02–15, or automatic continuation to another technical stage.
+
+## Achievement append — 2026-08-10 14:09 Asia/Manila
+
+```yaml
+append_id: GALAX_ACHIEVEMENT_APPEND_2026_08_10_1409
+updated_local_time: 2026-08-10T14:09+08:00
+previous_highest_achievement_number: 73
+new_highest_achievement_number: 74
+duplicate_check:
+  GALAX_CREWAI_REMEDIATION_060_R7_STAGING_SCOPE_DECISION_007_already_present: false
+  prior_boundary: Achievement_73
+  duplicate_entries_skipped: true
+```
+
+### Achievement 74 — Assignment 060 R7 staging-scope decision completed PASS with `uv.lock` excluded pending regeneration
+
+```yaml
+evidence_classification: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+source_primary_skill: $galax-evidence-validation-acceptance-guardian
+source_terminal_status: PASS
+bounded_objective_completed: true
+new_material_result: true
+assignment_id: GALAX_CREWAI_REMEDIATION_060_R7_STAGING_SCOPE_DECISION_007
+parent_assignment_id: PHASE_2B_ZERO_OPEN_BLOCKERS_TARGET_ANALYSIS_060
+receipt_identity: GALAX_CREWAI_REMEDIATION_060_R7_STAGING_SCOPE_DECISION_V1
+workspace: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime
+branch: implementation/phase-2b-agent01-runtime-2026-07-28
+expected_head_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
+mode: PLAN_ONLY
+core_candidates_preserved:
+  - src/galax/__init__.py
+  - src/galax/foundation/models.py
+  - tests/test_foundation_contracts.py
+support_candidates_reviewed:
+  - pyproject.toml
+  - uv.lock
+pyproject_same_future_staging_scope: true
+uv_lock_same_future_staging_scope: false
+recommended_future_staging_scope:
+  - src/galax/__init__.py
+  - src/galax/foundation/models.py
+  - tests/test_foundation_contracts.py
+  - pyproject.toml
+excluded_from_recommended_staging_scope:
+  - uv.lock
+staging_scope_coherent: false
+unresolved_staging_scope_blocker: uv.lock_is_stale_or_inconsistent_with_current_pyproject_and_requires_regeneration_before_publication
+uv_lock_reported_missing_runtime_dependencies:
+  - crewai
+  - pydantic
+uv_lock_reported_requires_python: ">=3.12"
+pyproject_reported_requires_python: ">=3.10,<3.14"
+pre_staging_action_required: separate_Human_Owner_authorization_for_uv_lock_regeneration_and_re_evaluation
+files_read:
+  - docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
+  - docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md
+  - pyproject.toml
+  - uv.lock
+commands_run: []
+tests_run: []
+Git_mutations: []
+files_created: []
+files_modified: []
+files_deleted: []
+staging_performed: false
+commit_performed: false
+push_performed: false
+uv_lock_regenerated: false
+cleanup_performed: false
+LOCKED_ACCEPTED_preserved:
+  - tests/test_foundation_contracts.py::TestFoundationFlowState::test_completion_requires_pass_preflight
+Skill_3_evidence_review_status: PASS
+remote_publication_of_local_implementation_proven: false
+```
+
+The completed achievement is the bounded staging-scope decision only. `pyproject.toml` is retained with the three core implementation candidates, while the currently inspected `uv.lock` is excluded from the recommended staging set because the Cline evidence reports it as stale/inconsistent with the current project metadata and runtime dependency set. The decision performed no command, test, edit, regeneration, staging, or Git mutation and preserved the existing `LOCKED_ACCEPTED` test.
+
+DO_NOT_REPEAT:
+- `GALAX_CREWAI_REMEDIATION_060_R7_STAGING_SCOPE_DECISION_007` unless a new factual file/dependency state requires re-evaluation
+- treating the recommended four-file set as authorization for `git add`
+- including the currently inspected `uv.lock` in a publication staging scope before its blocker is resolved
+- regenerating `uv.lock` without separate exact Human Owner authorization
+
+This achievement does not authorize dependency changes, `uv lock`, `uv sync`, lockfile regeneration, source/test edits, validation, `git add`, staging, commit, push, cleanup, merge, deployment, Agents 02–15, or automatic continuation to another technical stage.
