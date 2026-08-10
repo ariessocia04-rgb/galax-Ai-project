@@ -2037,7 +2037,7 @@ workspace: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtim
 branch: implementation/phase-2b-agent01-runtime-2026-07-28
 expected_head_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
 authorized_command: where.exe lua
-executed_command: where.exe lua
+executed_command: wsl.exe --list --quiet
 visible_terminal_output: "INFO: Could not find files for the given pattern(s)."
 command_completion_observed: false
 shell_integration_capture_warning_present: true
@@ -2126,7 +2126,7 @@ The completed achievement is only the bounded capability determination from the 
 DO_NOT_REPEAT:
 - `where.exe deno`
 
-This achievement does not authorize executing Deno, installing Deno, running `deno eval`, designing or running a Deno writer, saving the R5 correction, creating helper/temp files, tests, Ruff, formatting, implementation Git actions, merge, or deployment.
+This achievement does not authorize executing Deno, installing Deno, running `deno eval`, designing or running a Deno writer, saving the R5 correction, creating helper/temp files, tests, Ruff, formatting, implementation Git actions, merge, deployment, or another capability check.
 
 ## Achievement append — 2026-08-09 11:45 Asia/Manila
 
@@ -2676,3 +2676,64 @@ DO_NOT_REPEAT:
 - treating the nine-path inventory as approved staging or commit scope
 
 This achievement does not authorize file classification, deletion, cleanup, `git add`, staging, commit, push, full test file, full suite, Ruff, formatter, source/test edits, merge, deployment, or automatic continuation to another technical stage.
+
+## Achievement append — 2026-08-10 10:58 Asia/Manila
+
+```yaml
+append_id: GALAX_ACHIEVEMENT_APPEND_2026_08_10_1058
+updated_local_time: 2026-08-10T10:58:25+08:00
+previous_highest_achievement_number: 71
+new_highest_achievement_number: 72
+duplicate_check:
+  GALAX_CLINE_BLUEPRINT_SCOPE_BLOCKER_SKILL10_20260810_already_present: false
+  prior_boundary: Achievement_71
+  duplicate_entries_skipped: true
+```
+
+### Achievement 72 — Cline blueprint-scope blocker Skill 10 created and registered as a mandatory predelegation gate
+
+```yaml
+evidence_classification: REMOTE_PROVEN
+source_primary_skill: $galax-owner-direct-repository-update-guardian
+source_terminal_status: PASS
+bounded_objective_completed: true
+new_material_result: true
+assignment_id: GALAX_CLINE_BLUEPRINT_SCOPE_BLOCKER_SKILL10_20260810
+Human_Owner_request: create_a_separate_blocker_skill_so_Cline_executes_only_the_active_CrewAI_remediation_blueprint_and_non_blueprint_rules_skills_router_docs_remain_ChatGPT_owned
+governance_branch: docs/chatgpt-skill-router-2026-08-02
+starting_head_sha: 3c5c662bddd707fed72b1831993ee87b7c0bb4cb
+skill_create_commit_sha: 59b1abd105fb26afd2ba3f846a07b7c0ef6b97ff
+router_enforcement_commit_sha: a37707a2a2c6f5a7f3c50627f9068c74b2c9ae62
+final_governance_head_sha: a37707a2a2c6f5a7f3c50627f9068c74b2c9ae62
+files_changed:
+  - docs/skills/chatgpt/10_GALAX_CLINE_BLUEPRINT_SCOPE_BLOCKER.md
+  - docs/skills/chatgpt/00_GALAX_SKILL_ROUTER_MANAGER.md
+Cline_task_created: false
+Skill_10_dependency_only: true
+Skill_10_only_positive_Cline_result: PASS_CLINE_BLUEPRINT_ONLY
+non_blueprint_Cline_delegation_blocked: true
+non_blueprint_Class_B_executor: ChatGPT_connected_GitHub_app_via_Skill_9
+continuity_executor: ChatGPT_connected_GitHub_app_via_Skill_5
+outside_blueprint_technical_work_default: BLOCKED_UNTIL_SEPARATE_AUTHORITY
+ChatGPT_blueprint_document_edit_requires_explicit_Human_Owner_authorization: true
+ChatGPT_blueprint_implementation_takeover_authorized: false
+source_changed: false
+tests_changed: false
+CrewAI_runtime_changed: false
+dependencies_changed: false
+workflows_or_secrets_changed: false
+LOCKED_ACCEPTED_changed: false
+merge_performed: false
+deployment_performed: false
+```
+
+The completed achievement is the repository-backed contributor-scope enforcement: before any real Cline task, the Router must load Skill 10 and Cline may proceed only when the exact proposed objective is traceable to the active CrewAI remediation blueprint and Skill 10 returns `PASS_CLINE_BLUEPRINT_ONLY`. Non-blueprint governance/rules/skills/router/docs are blocked from Cline and remain ChatGPT/Skill9 work. A needed ChatGPT edit to an active blueprint document or blueprint-owned canonical technical contract requires separate explicit Human Owner authorization for the exact target and does not transfer blueprint implementation ownership away from Cline.
+
+DO_NOT_REPEAT:
+- creating another separate skill with the same Cline-blueprint-scope blocker responsibility
+- delegating non-blueprint governance/rules/skills/router/docs to Cline
+- bypassing Skill 10 before a real Cline task
+- allowing a Cline task after any Skill 10 result other than `PASS_CLINE_BLUEPRINT_ONLY`
+- letting ChatGPT edit an active blueprint document/contract without exact explicit Human Owner authorization
+
+This achievement does not authorize a Cline technical task, source/test/runtime changes, validation, implementation Git actions, merge, deployment, or Agents 02–15.
