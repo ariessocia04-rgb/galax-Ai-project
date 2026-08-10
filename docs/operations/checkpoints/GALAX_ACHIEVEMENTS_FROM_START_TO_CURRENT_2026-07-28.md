@@ -2915,3 +2915,61 @@ DO_NOT_REPEAT:
 - regenerating `uv.lock` without separate exact Human Owner authorization
 
 This achievement does not authorize dependency changes, `uv lock`, `uv sync`, lockfile regeneration, source/test edits, validation, `git add`, staging, commit, push, cleanup, merge, deployment, Agents 02–15, or automatic continuation to another technical stage.
+
+## Achievement append — 2026-08-10 15:54 Asia/Manila
+
+```yaml
+append_id: GALAX_ACHIEVEMENT_APPEND_2026_08_10_1554
+updated_local_time: 2026-08-10T15:54:00+08:00
+previous_highest_achievement_number: 74
+new_highest_achievement_number: 75
+duplicate_check:
+  GALAX_CREWAI_REMEDIATION_060_R7_WORKSPACE_ROOT_VERIFICATION_009_already_present: false
+  prior_boundary: Achievement_74
+  duplicate_entries_skipped: true
+```
+
+### Achievement 75 — Assignment 060 R7 corrected workspace root verification completed PASS
+
+```yaml
+evidence_classification: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+source_primary_skill: $galax-evidence-validation-acceptance-guardian
+source_terminal_status: PASS
+bounded_objective_completed: true
+new_material_result: true
+assignment_id: GALAX_CREWAI_REMEDIATION_060_R7_WORKSPACE_ROOT_VERIFICATION_009
+parent_assignment_id: PHASE_2B_ZERO_OPEN_BLOCKERS_TARGET_ANALYSIS_060
+receipt_identity: GALAX_CREWAI_REMEDIATION_060_R7_WORKSPACE_ROOT_VERIFICATION_V1
+workspace: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime
+expected_branch: implementation/phase-2b-agent01-runtime-2026-07-28
+expected_head_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
+mode: VALIDATION_ONLY
+authorized_command: Get-Location
+executed_command: Get-Location
+command_match: true
+command_run_count: 1
+terminal_prompt_full_workspace_path_visible: true
+terminal_prompt_path: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime
+Get_Location_table_path_row_truncated_by_capture_width: true
+shell_integration_completion_observed: false
+shell_integration_capture_warning_present: true
+workspace_exact_match: true
+workspace_root_verification_result: PASS
+uv_lock_run: false
+files_changed: []
+tests_run: []
+Git_operations: []
+unauthorized_actions: []
+LOCKED_ACCEPTED_preserved:
+  - tests/test_foundation_contracts.py::TestFoundationFlowState::test_completion_requires_pass_preflight
+remote_publication_of_local_implementation_proven: false
+```
+
+The completed achievement is the bounded factual workspace-root verification after the prior Assignment 008 `uv lock` attempt failed from the wrong repository root. The complete PowerShell prompt visibly shows the current terminal rooted at `C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime`; the `Get-Location` table row is truncated only by capture width. The shell-integration completion warning remains preserved and is not upgraded into generic command-success telemetry. No `uv lock`, file edit, test, or Git action occurred during this verification.
+
+DO_NOT_REPEAT:
+- `GALAX_CREWAI_REMEDIATION_060_R7_WORKSPACE_ROOT_VERIFICATION_009`
+- `Get-Location` solely to re-prove this already-verified workspace root
+- treating the prior Assignment 008 failed `uv lock` invocation as a successful regeneration
+
+This achievement does not authorize another `uv lock`, dependency changes, `uv sync`, source/test edits, validation, `git add`, staging, commit, push, cleanup, merge, deployment, Agents 02–15, or automatic continuation to another technical stage.
