@@ -530,7 +530,7 @@ git_mutations: []
 execution_result: COMPLETED_WITH_NONCOMPLIANCE
 noncompliance:
   - initial_unsupported_PowerShell_&&_chain_failed_before_git_execution
-  - explanatory_summary_added_after_exact output despite stop instruction
+  - explanatory_summary_added_after_exact_output_despite_stop_instruction
 remote_publication_proven: false
 ```
 
