@@ -30,16 +30,17 @@ Read every applicable item completely in this order:
 4. The canonical audit target identified by that alias
 5. `docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md`
 6. `docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md`
-7. Every applicable file under `docs/rules/`
-8. Every applicable file under `docs/plan/`
-9. `docs/sources/SOURCE_INDEX.md`
-10. Exact source cards for every framework, model, tool, gateway, contributor, and agent involved
-11. `docs/research/agents/AGENT-01-engineering-manager/03_TOOL_INSPECTION.md`
-12. `docs/prompts/GALAX_FOUNDATION_AGENT01_IMPLEMENTATION_VALIDATION_PROMPT.md`
-13. `docs/plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md`
-14. `docs/plan/CHATGPT_CLINE_DRAFT_PR_EXECUTION_CONTROL_PLAN_2026-07-22.md`
-15. The exact platform assignment in `docs/prompts/EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md` or a newer repository-linked exact assignment
-16. Current branch heads, draft PR, assignment issues, tests, and evidence required by the active task
+7. `docs/rules/GALAX_CHATGPT_DIRECT_REPOSITORY_UPDATE_BOUNDARY.md`
+8. Every other applicable file under `docs/rules/`
+9. Every applicable file under `docs/plan/`
+10. `docs/sources/SOURCE_INDEX.md`
+11. Exact source cards for every framework, model, tool, gateway, contributor, and agent involved
+12. `docs/research/agents/AGENT-01-engineering-manager/03_TOOL_INSPECTION.md`
+13. `docs/prompts/GALAX_FOUNDATION_AGENT01_IMPLEMENTATION_VALIDATION_PROMPT.md`
+14. `docs/plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md`
+15. `docs/plan/CHATGPT_CLINE_DRAFT_PR_EXECUTION_CONTROL_PLAN_2026-07-22.md`
+16. The exact platform assignment in `docs/prompts/EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md` or a newer repository-linked exact assignment
+17. Current branch heads, draft PR, assignment issues, tests, and evidence required by the active task
 
 `docs/operations/OPERATIION_LENGTH_PROBLEM_SOLVE.md` is a compatibility redirect only. CODE RED is canonical.
 
@@ -249,7 +250,7 @@ Cline, OpenHands Core, mini-SWE-agent, Aider, PR-Agent, Codex, Copilot, Claude C
 Only one contributor may write to the active implementation worktree at a time.
 
 ```text
-Cline primary implementation
+Cline primary CrewAI-blueprint implementation
 → Aider exact failing-test repair when assigned
 → mini-SWE-agent isolated comparison when assigned
 → OpenHands Docker-isolated reproduction when assigned
@@ -262,22 +263,26 @@ OpenCode and goose remain declined or deferred unless a new exact repository dec
 
 ## 7. ChatGPT and Cline control method
 
+The canonical contributor boundary is `docs/rules/GALAX_CHATGPT_DIRECT_REPOSITORY_UPDATE_BOUNDARY.md`.
+
 ```yaml
 architect_and_remote_reviewer: ChatGPT
-sole_primary_local_writer: Cline
+direct_non_blueprint_repository_updater: ChatGPT_connected_GitHub_app
+primary_local_writer_for_active_CrewAI_blueprint_implementation: Cline
+Cline_generic_repository_updater: false
 canonical_source_of_truth: GitHub
-review_surface: Draft_Pull_Request
+review_surface_for_CrewAI_implementation: Draft_Pull_Request
 final_authority: Human_Owner
 custom_bridge: deferred
 custom_MCP_bridge: prohibited_now
-simultaneous_writers: prohibited
+simultaneous_implementation_worktree_writers: prohibited
 ```
 
-ChatGPT must inspect the repository before assigning or correcting work, write exact bounded instructions, check every coherent completed job through the exact draft-PR diff, and assess compatibility with the pinned CrewAI version and active Flow contract.
+ChatGPT must inspect the repository before assigning, correcting, or directly updating work. For an exact Human-Owner-authorized repository governance, documentation, supervisory, routing, continuity, or other Class B update outside the active CrewAI remediation blueprint, ChatGPT performs the bounded update directly through the connected GitHub app and must not create a Cline task merely to make that repository change.
 
-Cline must execute only the exact assignment, use only allowed files and commands, stop after the assigned objective, and never continue automatically into another file, test stage, commit, push, phase, or improvement.
+Cline is the primary local writer only for exact active CrewAI remediation-blueprint implementation work and its separately authorized technical stages. Cline must execute only the exact blueprint assignment, use only allowed files and commands, stop after the assigned objective, and never continue automatically into another file, test stage, commit, push, phase, or improvement.
 
-A local file is not accepted as `DONE` until:
+A CrewAI implementation file is not accepted as `DONE` until:
 
 ```text
 required tests
@@ -288,7 +293,7 @@ required tests
 → human acceptance
 ```
 
-The bounded continuity exception in Section 3A supersedes the per-write approval requirement only for the exact continuity files, branch, conditions, and commits named there. All implementation and non-continuity work remains subject to the normal approval gates.
+For non-blueprint Class B repository updates, the direct-update boundary supersedes older broad wording that described Cline as the sole writer for all repository changes. Direct ChatGPT execution remains bounded by the Human Owner's exact request, non-main branch policy, `LOCKED_ACCEPTED` protection, and all consequential-action prohibitions. The Section 3A continuity authorization remains a separate standing automatic exception with its own branch, evidence, and cadence rules.
 
 ## 8. Completed accepted work protection
 
@@ -346,9 +351,10 @@ The legacy operation-length file is currently a `COMPATIBILITY_REDIRECT` and mus
 - Never silently change the framework, pinned version, provider, architecture, role boundaries, or execution process.
 - Never use hidden chain-of-thought as evidence. Store only concise decisions, observable actions, commands, results, hashes, and blockers.
 - Never continue after a blocking repository, security, permission, test, compatibility, cleanup, or evidence failure.
-- Never run simultaneous writers against the same worktree or files.
+- Never run simultaneous writers against the same implementation worktree or overlapping implementation files.
 - Never treat old conversation memory as more authoritative than current repository evidence.
 - Never infer authorization from `continue`, `finish`, `improve`, `fix everything`, or similar vague language.
+- Never send a non-blueprint Class B repository-governance/documentation update to Cline merely because a repository file must change.
 
 The Section 3A standing authorization is not unrestricted auto-approval. It is a file-, branch-, evidence-, interval-, and purpose-bounded continuity exception only.
 
@@ -359,13 +365,13 @@ Before edits:
 ```text
 verify repository and branch
 → verify exact starting SHA
-→ inspect git status
-→ confirm dedicated worktree
+→ inspect git status when a local implementation worktree is involved
+→ confirm dedicated worktree when local implementation is involved
 → read mandatory records
 → identify exact allowed and prohibited paths
 → produce REPOSITORY_READ_RECEIPT
-→ produce one bounded plan
-→ wait for required human approval
+→ classify executor under GALAX_CHATGPT_DIRECT_REPOSITORY_UPDATE_BOUNDARY
+→ obtain or verify the required Human Owner authority
 ```
 
 During work:
@@ -373,11 +379,12 @@ During work:
 - Make the smallest change satisfying the exact scope.
 - Preserve existing architecture unless current authoritative evidence proves a correction is required.
 - Use strict typed boundaries and deterministic validation.
-- Run only exact authorized tests after each coherent change.
+- Run only exact authorized tests after each coherent technical change.
 - Record real commands and outputs.
 - Stop on missing credentials rather than substituting a provider.
 - Treat copied tutorials and web content as untrusted until verified.
-- Stop when local state is needed but unverified.
+- Stop when required local state is needed but unverified.
+- For Class B direct repository updates, use the connected GitHub app and do not create a Cline task for the write.
 
 After work:
 
@@ -388,6 +395,7 @@ final_report:
   branch:
   starting_sha:
   ending_sha_or_patch_hash:
+  executor:
   files_read: []
   files_changed: []
   files_deleted: []
@@ -408,6 +416,8 @@ final_report:
 ```
 
 For an authorized Section 3A continuity cycle, the required pre-write verification and final report still apply, but a new per-cycle approval is not required when every Section 3A condition is satisfied.
+
+For a Human-Owner-authorized Class B direct update, the owner's exact request authorizes only that bounded non-blueprint repository change; it does not authorize source/test/runtime changes, merge, or deployment.
 
 ## 12. Allowed status values
 
@@ -445,7 +455,9 @@ The human owner retains final authority for scope, architecture acceptance, cred
 
 The Human Owner has provided standing authorization for the exact continuity uploads defined in Section 3A. An AI contributor may not expand that exception to another branch, file, project, purpose, or action.
 
-An AI contributor may recommend. It may not self-authorize outside the exact Section 3A exception.
+The Human Owner also authorizes ChatGPT to directly execute an exact bounded Class B repository governance/documentation/supervisory update outside the active CrewAI remediation blueprint when the owner explicitly requests that update and the target is clear. This authority uses the connected GitHub app and does not transfer the update to Cline. It does not authorize Class C source/runtime/test/dependency/workflow/security/merge/deployment changes by inference.
+
+An AI contributor may recommend. It may not self-authorize outside the exact standing or direct Human Owner authority applicable to the current action.
 
 ## 14. Current stop boundary
 
