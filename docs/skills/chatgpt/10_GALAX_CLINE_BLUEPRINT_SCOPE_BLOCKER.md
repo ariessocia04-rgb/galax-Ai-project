@@ -140,7 +140,7 @@ GALAX_CLINE_BLUEPRINT_SCOPE_GATE_V1:
 
   gate_result:
     PASS_CLINE_BLUEPRINT_ONLY |
-    BLOCK_CLINE_AUTO_EXECUTE_BY_CHATGPT |
+    BLOCK_CLINE_ROUTE_TO_CHATGPT |
     BLOCK_CLINE_ROUTE_TO_SKILL_5 |
     BLOCK_UNRELATED_TECHNICAL_SCOPE |
     BLOCK_CHATGPT_BLUEPRINT_EDIT_REQUIRES_HUMAN_AUTHORIZATION |
@@ -179,7 +179,7 @@ Cline must not receive nearby work just because it touches the same file, branch
 When the exact Human Owner request is repository governance, ChatGPT rules, ChatGPT skills, router maintenance, supervisory documentation, owner-directed repository documentation, or another authorized Class B update outside the active blueprint:
 
 ```yaml
-result: BLOCK_CLINE_AUTO_EXECUTE_BY_CHATGPT
+result: BLOCK_CLINE_ROUTE_TO_CHATGPT
 executor: ChatGPT_Skill_9
 Cline_task_created: false
 Cline_prompt_created: false
@@ -320,6 +320,7 @@ GALAX_CLINE_BLUEPRINT_SCOPE_BLOCKER_RECEIPT_V1:
 For an authorized Class B result, the required receipt fields are:
 
 ```yaml
+gate_result: BLOCK_CLINE_ROUTE_TO_CHATGPT
 Cline_task_allowed: false
 Cline_prompt_created: false
 ChatGPT_direct_update_allowed_under_existing_owner_request: true
@@ -340,6 +341,7 @@ exact active CrewAI blueprint execution
 → NO MORE, NO LESS
 
 non-blueprint governance/rules/skills/router/docs and other authorized Class B repository updates
+→ BLOCK_CLINE_ROUTE_TO_CHATGPT
 → BLOCK Cline
 → NO Cline prompt
 → preserve the same Human Owner request
