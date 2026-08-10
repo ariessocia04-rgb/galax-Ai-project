@@ -314,6 +314,202 @@ When materially required, verify:
 
 A stale but historically useful record may be included only as historical context with an explicit label.
 
+### 11A. Verified context reuse fast path
+
+The Context Engineer may reuse previously verified repository evidence only to avoid unnecessary rereading when the exact material identity of that evidence is still proven unchanged.
+
+This is a ChatGPT supervisory performance optimization only. It does not create a CrewAI cache, CrewAI memory layer, runtime context builder, runtime prompt compressor, new agent, new tool, new Flow stage, or new source/test behavior.
+
+Required model:
+
+```text
+previously verified exact evidence
+→ verify current material identity
+→ unchanged and still applicable?
+   YES → WARM_VERIFIED_REUSE
+   NO / unknown / conflicting → COLD_REQUIRED_REVERIFY
+→ selected skill still controls every mandatory read and decision
+```
+
+A warm path is permitted only when all material identities required for the current bounded task are verified and unchanged.
+
+```yaml
+GALAX_VERIFIED_CONTEXT_REUSE_GATE_V1:
+  repository_identity_verified: true | false
+  canonical_router_ref_verified: true | false
+  selected_skill_identity_verified: true | false
+  selected_dependency_identities_verified: true | false
+  task_or_assignment_identity_verified: true | false
+  relevant_branch_or_ref_verified: true | false
+  relevant_HEAD_SHA_verified: true | false
+  relevant_authority_file_identities_verified: true | false
+  relevant_PR_or_issue_identity_verified_when_required: true | false
+  LOCKED_ACCEPTED_identity_verified_when_required: true | false
+  Human_Owner_authority_still_applies: true | false
+  unresolved_conflict_present: true | false
+  selected_skill_requires_fresh_content_read: true | false
+  reuse_result: WARM_VERIFIED_REUSE | COLD_REQUIRED_REVERIFY | BLOCKED
+```
+
+`WARM_VERIFIED_REUSE` means only that unchanged evidence may be reused instead of reading the same unchanged content again. It does not mean a repository fact may be assumed from time elapsed, chat memory, an old summary, or an earlier prompt.
+
+### 11B. Identity-based reuse; time-only caching prohibited
+
+Reuse must be based on repository and task identity, never age alone.
+
+```yaml
+reuse_identity_inputs:
+  - exact_repository
+  - exact_ref_or_branch
+  - exact_HEAD_SHA_when_material
+  - exact_blob_or_commit_SHA_for_material_authority_files_when_available
+  - exact_assignment_id
+  - exact_target
+  - exact_selected_skill_and_dependency_identity
+  - exact_PR_or_issue_identity_when_material
+  - exact_LOCKED_ACCEPTED_identity_when_material
+  - exact_Human_Owner_authorization_boundary
+```
+
+The following are prohibited as sufficient reasons for reuse:
+
+```yaml
+prohibited_reuse_reasons:
+  - read_a_few_minutes_ago
+  - same_chat_so_probably_unchanged
+  - same_topic
+  - same_filename_without_identity_check
+  - same_branch_name_without_HEAD_check_when_HEAD_is_material
+  - prior_chat_summary_only
+  - model_memory_only
+  - previous_Cline_prompt_only
+```
+
+There is no fixed time-to-live that can convert stale evidence into current evidence.
+
+### 11C. Mandatory invalidation and cold-path fallback
+
+The warm path must fail closed.
+
+Any material change, mismatch, missing identity, or unresolved conflict invalidates the affected reusable context and forces the smallest required fresh verification.
+
+```yaml
+warm_path_invalidation_triggers:
+  - repository_identity_change_or_mismatch
+  - router_ref_or_router_identity_change
+  - selected_skill_or_dependency_identity_change
+  - task_or_assignment_change
+  - target_change
+  - relevant_branch_or_HEAD_change
+  - material_authority_blob_or_commit_change
+  - relevant_PR_or_issue_change
+  - new_Human_Owner_instruction_that_changes_authority_or_scope
+  - new_Cline_evidence_that_changes_current_state
+  - LOCKED_ACCEPTED_change_or_unlock_request
+  - evidence_class_change
+  - unresolved_conflict
+  - missing_required_identity
+  - selected_skill_explicitly_requires_fresh_content_read
+```
+
+Required fallback:
+
+```text
+invalidate only the affected reusable context
+→ fetch the exact current evidence required by the selected skill
+→ preserve all still-valid unchanged exact evidence
+→ rebuild the minimum complete packet
+→ do not broaden into a full repository scan unless an existing authority requires it
+```
+
+A changed branch HEAD does not automatically require rereading the entire repository. It requires fresh verification of the exact authority, assignment, target, diff, evidence, or other records whose validity may have changed.
+
+### 11D. Mandatory-read preservation and Cline-scope gate protection
+
+Performance optimization must never weaken an existing mandatory read or mandatory gate.
+
+```yaml
+never_bypass_for_speed:
+  - canonical_router_fetch_required_by_current_router_contract
+  - mandatory_new_chat_bootstrap_when_current_router_requires_it
+  - selected_primary_skill_mandatory_reads
+  - required_dependency_skill_mandatory_reads
+  - Skill_10_current_blueprint_scope_gate_before_real_Cline_task
+  - exact_Human_Owner_authorization_gate
+  - LOCKED_ACCEPTED_protection
+  - evidence_classification
+  - exact_stop_condition
+```
+
+When Skill 2 is selected for a real Cline task, verified context reuse may reduce duplicate supporting reads only where Skill 2 and higher-authority records permit it. It must never be interpreted as permission to skip Skill 2's required current-state precheck or Skill 10's current `PASS_CLINE_BLUEPRINT_ONLY` gate.
+
+If a selected skill explicitly requires fresh content rather than identity verification, the Context Engineer must perform or preserve that fresh read. The optimization cannot redefine "mandatory" into "optional."
+
+### 11E. Lossless structural compression only
+
+The Context Engineer may reduce context by exclusion, reference reuse, deduplication, exact-field extraction, and just-in-time retrieval. It must not use lossy compression on safety-critical facts.
+
+Never lossy-compress or approximate when material:
+
+```yaml
+never_lossy_compress:
+  - repository_identity
+  - branch_or_ref
+  - commit_SHA
+  - blob_SHA
+  - assignment_id
+  - exact_file_path
+  - exact_test_or_symbol
+  - exact_error_or_status
+  - Human_Owner_authorization_boundary
+  - LOCKED_ACCEPTED_identifier_or_boundary
+  - evidence_class
+  - prohibited_actions
+  - exact_stop_condition
+  - exact_blueprint_trace_required_by_Skill_10
+```
+
+General historical explanation, duplicate narrative, and unrelated completed context may be summarized or excluded only when the exact current bounded task does not depend on that wording.
+
+### 11F. Read-until-sufficient rule
+
+After mandatory entry points and identities are satisfied, retrieve evidence incrementally instead of preloading every possibly related record.
+
+```text
+T0 immutable/current authority
++ T1 exact current need/evidence
+→ sufficient for selected skill's bounded task?
+   YES → STOP READING
+   NO → fetch one exact T2 just-in-time reference required to close the gap
+→ repeat only while a specific required gap remains
+```
+
+Do not fetch another record merely because it might be useful. Every additional read after the mandatory entry point must have a current selected-skill reason.
+
+The performance target is lower total latency, fewer repository reads, and smaller bounded packets without lowering any safety or evidence requirement. No numeric speedup is guaranteed by this contract; measured improvement must never be purchased by weakening verification.
+
+### 11G. Reuse receipt
+
+When the warm path materially changes what would otherwise be reread, record a compact supplemental receipt:
+
+```yaml
+GALAX_VERIFIED_CONTEXT_REUSE_RECEIPT_V1:
+  built_for_request:
+  selected_primary_skill_alias:
+  selected_dependency_skill_aliases: []
+  reuse_result: WARM_VERIFIED_REUSE | COLD_REQUIRED_REVERIFY | BLOCKED
+  identities_checked: []
+  reused_exact_evidence_refs: []
+  freshly_read_evidence_refs: []
+  invalidated_evidence_refs: []
+  mandatory_reads_preserved: []
+  exact_fields_preserved: []
+  unresolved_conflicts: []
+  assumptions_used: []
+```
+
+This receipt is performance evidence only. It cannot upgrade an evidence class, approve a task, authorize Cline, replace a selected skill receipt, or prove a CrewAI runtime action.
+
 ## 12. Performance policy
 
 The purpose of Context Engineering is lower total project latency and lower rework, even if one small verification step is added before a skill executes.
