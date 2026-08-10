@@ -111,6 +111,10 @@ GALAX_REPOSITORY_SKILL_REGISTRY_V1:
     $galax-repository-cleanup-auditor:
       skill_id: GALAX-SKILL-07
       path: docs/skills/chatgpt/07_GALAX_REPOSITORY_CLEANUP_AUDITOR.md
+
+    $galax-new-chat-bootstrap-guardian:
+      skill_id: GALAX-SKILL-08
+      path: docs/skills/chatgpt/08_GALAX_NEW_CHAT_BOOTSTRAP_GUARDIAN.md
 ```
 
 The exact registry above is authoritative for ChatGPT routing on this branch.
@@ -122,7 +126,7 @@ The router must not:
 - infer a different filename;
 - search the repository by alias before using the mapped path;
 - require native plugin installation when the mapped repository file is accessible;
-- load all seven skill documents by default;
+- load all registered skill documents by default;
 - register the Context Engineer as Skill 8 or any other skill;
 - count the Context Engineer against the primary or dependency skill limits.
 
@@ -132,7 +136,14 @@ For every Galax request:
 
 ```text
 fetch this router from the canonical repository/ref/path
-→ classify the current request
+→ determine whether the current conversation has a valid GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1
+→ when the receipt is missing or materially invalid, start one separate mandatory NEW_CHAT_BOOTSTRAP routing cycle
+→ select exactly one primary skill for that bootstrap cycle: $galax-new-chat-bootstrap-guardian
+→ load exactly the two bootstrap dependencies: $galax-repository-state-scope-guardian and $galax-strict-cline-prompt-guardian
+→ fetch the canonical Context Engineer support contract
+→ let Skill 8 follow docs/operations/GALAX_NEW_CHAT_OPERATING_MANUAL.md and produce a bootstrap receipt
+→ when bootstrap PASS is established, preserve the exact original Human Owner request and start a new routing cycle for that same original request only
+→ otherwise, or when a valid bootstrap receipt already exists, classify the current request normally
 → select exactly one primary skill alias
 → resolve the alias to its exact registry path
 → fetch the exact primary skill document
@@ -153,6 +164,13 @@ dependency_skill_limit: 2
 read_all_skills: false
 copy_skill_contents_into_router: false
 automatic_next_skill: false
+mandatory_new_chat_bootstrap_cycle: true
+mandatory_new_chat_primary_skill: $galax-new-chat-bootstrap-guardian
+mandatory_new_chat_dependency_skills:
+  - $galax-repository-state-scope-guardian
+  - $galax-strict-cline-prompt-guardian
+post_bootstrap_same_original_request_only: true
+post_bootstrap_invented_task: prohibited
 mandatory_post_PASS_achievement_persistence_cycle: true
 mandatory_post_PASS_cycle_is_separate_routing_cycle: true
 mandatory_post_PASS_primary_skill: $galax-continuity-achievement-guardian
@@ -164,7 +182,9 @@ context_engineer_runtime_effect: none
 Human_Owner_final_authority: true
 ```
 
-`automatic_next_skill: false` continues to prohibit automatic movement into the next technical workflow stage. The mandatory post-PASS achievement-persistence cycle is a documentation-preservation exception backed by the live continuity standing authorization. It begins a new routing cycle with exactly one primary skill and does not authorize implementation, validation, Git mutation on an implementation branch, merge, or deployment.
+`automatic_next_skill: false` continues to prohibit automatic movement into the next technical workflow stage. The mandatory new-chat bootstrap is a prerequisite cycle, not a technical continuation: after Skill 8 `PASS`, the router may only return to the exact original Human Owner request that triggered bootstrap. It must not invent or auto-start another task, phase, implementation, validation, Git action, merge, or deployment.
+
+The mandatory post-PASS achievement-persistence cycle is a documentation-preservation exception backed by the live continuity standing authorization. It begins a new routing cycle with exactly one primary skill and does not authorize implementation, validation, Git mutation on an implementation branch, merge, or deployment.
 
 ### 4A. Context Engineer support rule
 
@@ -188,13 +208,47 @@ The Context Engineer cannot:
 - review remote diffs instead of Skill 4;
 - persist continuity instead of Skill 5;
 - unlock accepted work instead of Skill 6;
-- classify/delete cleanup targets instead of Skill 7.
+- classify/delete cleanup targets instead of Skill 7;
+- perform new-chat readiness authority instead of Skill 8.
 
 If the Context Engineer support contract cannot be fetched from its exact canonical path and ref, stop with `BLOCKED_CONTEXT_ENGINEER_UNAVAILABLE`. Do not silently bypass it after this integration is active.
+
+### 4B. Mandatory new-chat bootstrap rule
+
+A Galax conversation is `NEW_OR_UNVERIFIED_CHAT` when the current conversation contains no valid current `GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1` for the canonical repository/ref, or when that receipt is materially invalidated under Skill 8.
+
+Required bootstrap cycle:
+
+```text
+NEW_OR_UNVERIFIED_CHAT
+→ primary Skill 8: $galax-new-chat-bootstrap-guardian
+→ dependency Skill 1: $galax-repository-state-scope-guardian
+→ dependency Skill 2: $galax-strict-cline-prompt-guardian
+→ Context Engineer as non-skill support
+→ read docs/operations/GALAX_NEW_CHAT_OPERATING_MANUAL.md
+→ reconstruct repository-backed goal, exact stop point, completed setup/work, locks, rejected/superseded work, and do-not-repeat state
+→ verify mandatory Cline prompting, approve/reject, correction, mode, visible-button, No-button, no-visible-button, unknown-UI, save, validation, and Git behavior
+→ produce GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1
+→ PASS only when safe_to_continue=true
+```
+
+After bootstrap `PASS`:
+
+```text
+preserve the exact original Human Owner request
+→ start a separate normal routing cycle
+→ select the one primary skill that owns that original request
+→ do not invent a new goal or technical stage
+```
+
+Skill 8 must never be interpreted as a CrewAI runtime agent, Agent 16, runtime context builder, runtime memory component, or source/test implementation authority.
 
 ## 5. Routing categories
 
 ```yaml
+NEW_CHAT_BOOTSTRAP:
+  purpose: establish_repository_backed_new_chat_readiness_before_processing_the_original_Galax_request
+
 REPOSITORY_STATE:
   purpose: reconstruct_current_Galax_state_and_next_safe_action
 
@@ -224,6 +278,7 @@ UNKNOWN_OR_MULTI_TASK:
 
 | Human Owner request | Primary skill alias | Exact repository path |
 |---|---|---|
+| First Galax request in a new/unverified conversation, missing valid bootstrap receipt, or required new-chat/context-loss reconstruction | `$galax-new-chat-bootstrap-guardian` | `docs/skills/chatgpt/08_GALAX_NEW_CHAT_BOOTSTRAP_GUARDIAN.md` |
 | Where did Galax stop, what is current, what is unfinished, or what is next? | `$galax-repository-state-scope-guardian` | `docs/skills/chatgpt/01_GALAX_REPOSITORY_STATE_SCOPE_GUARDIAN.md` |
 | Make the next Cline prompt or review a Cline permission request | `$galax-strict-cline-prompt-guardian` | `docs/skills/chatgpt/02_GALAX_STRICT_CLINE_PROMPT_GUARDIAN.md` |
 | Review a proposed edit, saved receipt, focused test, commit, or push evidence | `$galax-evidence-validation-acceptance-guardian` | `docs/skills/chatgpt/03_GALAX_EVIDENCE_VALIDATION_ACCEPTANCE_GUARDIAN.md` |
@@ -281,6 +336,18 @@ context_engineer_added_to_dependency_list: prohibited
 
 ## 8. Conditional dependency rules
 
+### New-chat bootstrap dependencies
+
+When the primary skill is `$galax-new-chat-bootstrap-guardian`, load exactly:
+
+```yaml
+bootstrap_dependencies:
+  - $galax-repository-state-scope-guardian
+  - $galax-strict-cline-prompt-guardian
+```
+
+These two dependencies are required so the new chat reconstructs repository truth through Skill 1 and learns current Cline prompt/permission/rejection behavior through Skill 2 instead of guessing or duplicating those authorities.
+
 ### Repository-state dependency
 
 Load `$galax-repository-state-scope-guardian` only when:
@@ -291,7 +358,7 @@ Load `$galax-repository-state-scope-guardian` only when:
 - repository evidence conflicts with chat memory;
 - the Human Owner invokes `CODE RED`, `length problem`, or equivalent continuation language.
 
-Do not load it when the exact current state was already verified for the present bounded task.
+Do not load it when the exact current state was already verified for the present bounded task, except when it is the mandatory Skill 8 bootstrap dependency.
 
 ### Locked-artifact dependency
 
@@ -350,6 +417,10 @@ Missing evidence produces a factual blocker. It never authorizes guessing or a b
 The router and Context Engineer do not search broadly, save, edit, test, commit, push, merge, or deploy. The router identifies the skill that owns the current decision; the Context Engineer only prepares that skill's verified context.
 
 ```yaml
+how_to_handle_new_chat_bootstrap:
+  owner: $galax-new-chat-bootstrap-guardian
+  rule: readiness_and_continuation_only_no_runtime_or_technical_implementation_authority
+
 where_to_search:
   owner: selected_primary_skill
   context_engineer_role: package_only_within_selected_skill_boundaries
@@ -443,6 +514,8 @@ Do not activate multiple primary skills to satisfy one broad request.
 
 The Context Engineer must not combine multiple workflow stages merely because their context is related.
 
+The mandatory Skill 8 bootstrap prerequisite does not count as satisfying or advancing the original request. It only establishes safe new-chat readiness before the same original request is routed normally.
+
 ## 12A. Mandatory terminal-PASS achievement persistence
 
 Every new terminal `PASS` from a completed bounded Galax repository-supervision task is a mandatory achievement-persistence trigger before another technical task may begin.
@@ -465,6 +538,7 @@ GALAX_TERMINAL_PASS_PERSISTENCE_TRIGGER_V1:
 The following do **not** qualify as terminal PASS achievements:
 
 - router `SELECTED` status;
+- Skill 8 bootstrap readiness `PASS` when it only reconstructs existing state and produces no new material repository result;
 - Cline permission `APPROVE` recommendations;
 - pending approvals;
 - plans or prompts merely prepared;
@@ -518,6 +592,11 @@ The achievement persistence cycle never authorizes:
 After the selected skill returns the current bounded result, stop except for the mandatory Section 12A achievement-persistence cycle when that result is a new qualifying terminal PASS.
 
 ```text
+Skill 8 returns bootstrap PASS
+→ preserve the exact original Human Owner request
+→ begin one separate routing cycle for that same original request only
+→ do not invent or auto-start a new technical stage
+
 Skill 3 returns PASS
 → persist that new PASS through the mandatory separate Skill 5 cycle
 → do not automatically prepare a commit task
@@ -534,7 +613,7 @@ Skill 7 identifies deletion candidates
 → do not automatically delete or create cleanup commits
 ```
 
-A new Human Owner instruction is required before routing the next **technical** stage, except for an exact active standing authorization already present in the live repository. Section 12A is the mandatory documentation-persistence exception and does not count as automatic technical continuation.
+A new Human Owner instruction is required before routing the next **technical** stage, except for an exact active standing authorization already present in the live repository. The new-chat bootstrap exception only returns to the same original Human Owner request; Section 12A is the mandatory documentation-persistence exception. Neither exception authorizes an invented technical continuation.
 
 A Context Engineer packet never creates technical continuation authority.
 
@@ -548,9 +627,9 @@ ChatGPT repository-backed skill routing
 ≠ GitHub branch or pull-request routing
 ```
 
-The Context Engineer exists only in the ChatGPT supervisory layer.
+Skill 8 and the Context Engineer exist only in the ChatGPT supervisory layer.
 
-It must not be inserted into:
+They must not be inserted into:
 
 - `GalaxFoundationFlow`;
 - Agent 01;
@@ -562,12 +641,12 @@ It must not be inserted into:
 - runtime knowledge;
 - runtime prompts.
 
-This router and Context Engineer must not change the active runtime invariant that every conditional Foundation stage uses explicit named CrewAI routes and that blocked, failed, unavailable, pending, rejected, or evidence-missing outcomes do not enter a success path.
+This router, Skill 8, and Context Engineer must not change the active runtime invariant that every conditional Foundation stage uses explicit named CrewAI routes and that blocked, failed, unavailable, pending, rejected, or evidence-missing outcomes do not enter a success path.
 
 ## 15. Strict prohibitions
 
 ```yaml
-copy_or_embed_full_Skills_1_to_7_into_router: prohibited
+copy_or_embed_full_Skills_1_to_8_into_router: prohibited
 read_all_skills_by_default: prohibited
 load_unrelated_skills: prohibited
 multiple_primary_skills_for_one_task: prohibited
@@ -594,9 +673,16 @@ create_Agent_16_for_Context_Engineer: prohibited
 insert_Context_Engineer_into_CrewAI_runtime: prohibited
 use_Context_Engineer_to_override_selected_skill: prohibited
 use_Context_Engineer_to_skip_mandatory_selected_skill_evidence: prohibited
+
+use_Skill_8_as_CrewAI_agent: prohibited
+use_Skill_8_as_Agent_16: prohibited
+use_Skill_8_as_runtime_context_builder: prohibited
+use_Skill_8_as_runtime_memory_or_knowledge: prohibited
+use_Skill_8_to_restart_completed_setup_without_new_evidence: prohibited
+use_Skill_8_to_invent_next_technical_task: prohibited
 ```
 
-`automatic_next_skill: prohibited` refers to automatic continuation into another technical workflow stage. It does not cancel the mandatory Section 12A documentation-only Skill 5 persistence cycle because that cycle is a separate one-primary-skill routing cycle under the live achievement standing authorization.
+`automatic_next_skill: prohibited` refers to automatic continuation into another technical workflow stage. It does not prohibit the mandatory Skill 8 prerequisite from returning to the exact original Human Owner request after bootstrap `PASS`, and it does not cancel the mandatory Section 12A documentation-only Skill 5 persistence cycle.
 
 ## 16. Failure behavior
 
@@ -641,6 +727,13 @@ BLOCKED_PASS_ACHIEVEMENT_PERSISTENCE:
   use_when:
     - a_new_qualifying_terminal_PASS_exists
     - mandatory_Skill_5_persistence_cannot_be_verified_or_completed
+
+BLOCKED_NEW_CHAT_BOOTSTRAP:
+  use_when:
+    - Skill_8_or_operating_manual_cannot_establish_safe_new_chat_readiness
+  required_details:
+    - exact_failed_bootstrap_requirement
+    - exact_missing_or_conflicting_evidence
 ```
 
 Do not use `BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE` when the exact mapped Markdown skill file was successfully fetched.
@@ -650,8 +743,11 @@ Do not bypass a missing Context Engineer contract by registering it as a skill o
 ## 17. Final routing contract
 
 ```text
-Human Owner request
+Human Owner Galax request
 → fetch this exact router
+→ if current conversation is new/unverified, run one mandatory Skill 8 bootstrap cycle with Skill 1 + Skill 2 dependencies and Context Engineer support
+→ Skill 8 follows docs/operations/GALAX_NEW_CHAT_OPERATING_MANUAL.md and produces GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1
+→ after bootstrap PASS, preserve and return only to the same original Human Owner request
 → classify one current task
 → select one primary skill alias
 → resolve the alias to its exact repository path
@@ -667,6 +763,7 @@ Human Owner request
 ```
 
 ```yaml
+Skill_8_runtime_effect: none
 CrewAI_runtime_changed_by_this_router: false
 GalaxFoundationFlow_changed_by_this_router: false
 Agents_01_to_15_changed_by_this_router: false
