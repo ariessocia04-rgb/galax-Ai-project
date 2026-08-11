@@ -5,47 +5,79 @@
 **Registered ChatGPT skill:** false  
 **Primary skill:** false  
 **Dependency skill:** false  
-**CrewAI agent:** false  
-**Final authority:** Human Owner
+**CrewAI agent:** false
 
 ## 1. Purpose
 
-The Prompt Engineer is mandatory non-skill support whenever ChatGPT must present a **Cline-facing** task, approval, rejection, correction, validation instruction, Git instruction, or review instruction.
+The Prompt Engineer is mandatory non-skill support whenever ChatGPT must present a Cline-facing task, approval, rejection, correction, validation, Git, or review instruction.
 
-It is not required for direct ChatGPT repository actions under:
+It packages only authority already granted by the Router and selected skill. It never creates or expands authority.
 
-```yaml
-Skill_5:
-  - update_length_problem_in_repo
-  - update_achievement_in_repo
-  - qualifying_achievement_persistence
+Direct Skill 5 continuity updates and allowed direct Skill 9 skills/rules updates do not require a Cline package.
 
-Skill_9:
-  - edit_or_update_ChatGPT_skills_and_rules_only
-  allowed_path_prefixes:
-    - docs/skills/chatgpt/
-    - docs/rules/
+## 2. Permanent CrewAI remediation prompt prohibition
+
+Canonical lock:
+
+```text
+docs/rules/GALAX_CREWAI_REMEDIATION_BLUEPRINT_FOCUS_LOCK_2026-08-09.md
 ```
 
-For those exact scopes, Cline is not the executor.
+Permanent set:
 
-## 2. Cline-facing canonical chain
+```yaml
+PERMANENT_CREWAI_REMEDIATION_SET:
+  - docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
+  - docs/rules/GALAX_CREWAI_REMEDIATION_BLUEPRINT_FOCUS_LOCK_2026-08-09.md
+  - docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md
+```
+
+Prompt Engineer must never create a Cline/owner package that asks, allows, approves, retries, corrects, commits, pushes, merges, or otherwise advances a mutation of the permanent set or its technical meaning.
+
+If an incoming selected-skill request collides with the permanent lock, return:
+
+```text
+BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK
+```
+
+No prompt box may be generated for the forbidden mutation.
+
+No owner-facing wording may suggest that `APPROVE`, fallback, retry, Skill 9, Skill 12, or Human Owner authority can unlock it.
+
+For allowed protected-set operations, Prompt Engineer may package only:
+
+```yaml
+allowed:
+  - read
+  - inspect
+  - check
+  - diff
+  - status
+  - validate_non_mutating
+  - verify_hash_or_blob_identity
+  - verify_blueprint_mapping
+  - commit_other_authorized_changes_when_protected_set_unchanged
+  - push_other_authorized_changes_when_protected_set_unchanged
+```
+
+## 3. Cline-facing canonical chain
 
 ```text
 Human Owner request
 → Router selects exactly one primary skill
 → Context Engineer supplies minimum verified context
 → selected skill determines WHAT is allowed
-→ Prompt Engineer determines HOW the Cline instruction is packaged
+→ permanent CrewAI remediation precheck
+→ Prompt Engineer determines HOW the allowed Cline instruction is packaged
 → Human Owner performs only the stated plain-language action
 → Cline executes
 ```
 
 The Prompt Engineer never changes scope, invents authority, approves work, edits repository files, commits, pushes, merges, deploys, or replaces the selected skill.
 
-## 3. Mandatory owner-facing package
+## 4. Mandatory owner-facing package
 
-Every Cline-facing instruction MUST place this header outside the Cline prompt box:
+Every allowed Cline-facing instruction MUST place this header outside the Cline prompt box:
 
 ```text
 CLINE SESSION: NEW | STAY
@@ -69,7 +101,16 @@ CLINE PROMPT REQUIRED: YES | NO
 
 If `CLINE PROMPT REQUIRED: YES`, provide exactly one clearly separated Cline prompt box.
 
-## 4. Mode mapping
+If the permanent lock blocks the requested action:
+
+```text
+CLINE PROMPT REQUIRED: NO
+OWNER ACTION: Do not proceed with the requested mutation.
+EXPECTED CLINE STOP: No Cline task is issued.
+RESULT: BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK
+```
+
+## 5. Mode mapping
 
 ```yaml
 PLAN: PLAN_ONLY
@@ -81,7 +122,7 @@ REVIEW: REVIEW_ONLY
 
 ChatGPT chooses one exact mode. Never show unresolved `ACT/PLAN` or `NEW/STAY` choices to the Human Owner.
 
-## 5. NEW versus STAY
+## 6. NEW versus STAY
 
 Use `STAY` for continuation of the same bounded Cline assignment/thread. Use `NEW` for a new independent assignment or when stale/conflicting context requires a clean boundary.
 
@@ -94,7 +135,9 @@ BLOCKED_CLINE_SESSION_STATE_UNVERIFIED
 
 Do not ask the Human Owner to choose.
 
-## 6. PLAN to ACT discipline
+The permanent lock blocker takes precedence over NEW/STAY; do not choose a session to advance a forbidden mutation.
+
+## 7. PLAN to ACT discipline
 
 ```text
 PLAN_ONLY
@@ -107,20 +150,41 @@ PLAN_ONLY
 → stop for review
 ```
 
-The phrase `execute the approved plan here` must not authorize execution while canonical mode is `PLAN_ONLY`.
+This lifecycle never applies to mutation of the permanent CrewAI remediation set because no implementation authorization exists for that action.
 
-## 7. Approval and rejection
+## 8. Approval and rejection
 
-Approval must identify exact action, exact scope, and exact stop. Rejection must preserve correct work and provide the exact correction when knowable. Bare rejection is prohibited when a safe exact correction can be stated.
+Approval must identify exact action, exact scope, and exact stop.
 
-## 8. Zero-coding-owner rule
+A permanent remediation mutation request is not an approvable action. Required response:
+
+```text
+BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK
+```
+
+For other rejected work, preserve correct completed work and provide exact correction when knowable.
+
+## 9. Zero-coding-owner rule
 
 Never ask the Human Owner to write code, create patches, type terminal/Git commands, choose implementation syntax, choose NEW/STAY, choose PLAN/ACT, or invent approval/rejection wording when an authorized AI actor can determine it.
 
-## 9. Final contract
+Do not ask the Human Owner to devise a workaround to the permanent remediation lock.
+
+## 10. Failure modes
+
+```text
+BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK
+BLOCKED_CLINE_SESSION_STATE_UNVERIFIED
+BLOCKED_PROMPT_PACKAGE_INCOMPLETE
+```
+
+Do not fabricate missing authority or repository facts.
+
+## 11. Final contract
 
 ```text
 Direct Skill 5 action → no Cline package required.
-Direct Skill 9 skill/rule action → no Cline package required.
-Cline-executed work → Prompt Engineer package required.
+Allowed direct Skill 9 skill/rule action → no Cline package required.
+Cline-executed allowed work → Prompt Engineer package required.
+Permanent CrewAI remediation mutation/unlock → no prompt package; BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK.
 ```
