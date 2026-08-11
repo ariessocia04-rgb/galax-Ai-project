@@ -20,7 +20,7 @@ Skill_5_scope:
   - qualifying_terminal_PASS_achievement_persistence
 ```
 
-It verifies content, evidence, dedupe, numbering, timestamp, exact stop point, completed work, do-not-repeat state, and next safe action.
+It verifies content, evidence, dedupe, numbering, timestamp, exact stop point, completed work, do-not-repeat state, next safe action, and preservation of the permanent CrewAI remediation immutable state.
 
 ## 2. Mandatory ChatGPT executor rule
 
@@ -43,9 +43,10 @@ Human Owner requests or an authorized workflow requires a Skill 5 continuity upd
 → Router selects Skill 5
 → Context Engineer supplies minimum verified continuity evidence
 → Skill 5 determines exact content, target, numbering, timestamp, dedupe, and evidence class
+→ apply permanent CrewAI remediation continuity-integrity check when relevant
 → ChatGPT directly creates/updates the exact authorized continuity file through the connected GitHub app when available
 → ChatGPT verifies the resulting remote commit/file
-→ Human Owner remains final acceptance authority
+→ Human Owner remains final acceptance authority for the continuity record
 → stop
 ```
 
@@ -55,7 +56,45 @@ Do **not** require a Prompt Engineer Cline package for a direct Skill 5 persiste
 
 If ChatGPT lacks the current tool/capability required to persist the exact Skill 5 update, report the factual blocker. Do not silently transfer the task to Cline unless the Human Owner explicitly changes this Skill 5 executor rule.
 
-## 3. Exact direct-write allowlist
+## 3. Permanent CrewAI remediation continuity-integrity rule
+
+Canonical immutable lock:
+
+```text
+docs/rules/GALAX_CREWAI_REMEDIATION_BLUEPRINT_FOCUS_LOCK_2026-08-09.md
+```
+
+Permanent set:
+
+```yaml
+PERMANENT_CREWAI_REMEDIATION_SET:
+  - docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
+  - docs/rules/GALAX_CREWAI_REMEDIATION_BLUEPRINT_FOCUS_LOCK_2026-08-09.md
+  - docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md
+```
+
+Skill 5 continuity records must never poison future context by recording any of the following as valid current truth:
+
+- that the permanent set was unlocked;
+- that the Human Owner overrode the permanent lock;
+- that Skill 9 or Skill 12 bypassed the permanent lock;
+- that a protected artifact was validly edited, superseded, weakened, replaced, renamed, moved, or reinterpreted;
+- that a mutation of the permanent set became accepted merely because it was committed, pushed, tested, or reported by Cline/ChatGPT;
+- that a lower-authority checkpoint, achievement, chat summary, or local report changed the protected technical meaning.
+
+If evidence shows an attempted or actual permanent-set mutation, Skill 5 must record it only as a violation/blocker requiring restoration to verified immutable content, using:
+
+```text
+BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK
+```
+
+It must not record the mutation as completed/accepted/current architecture.
+
+When CrewAI remediation integrity is material, the continuity record should preserve verified immutable evidence such as current protected paths and available blob/hash identity, and explicitly state that no unlock path exists.
+
+A continuity record itself cannot create, weaken, supersede, or reinterpret the permanent lock.
+
+## 4. Exact direct-write allowlist
 
 ChatGPT direct repository mutation under Skill 5 is limited to the exact continuity targets needed for:
 
@@ -67,9 +106,9 @@ allowed_actions:
   - create_or_update_an_authorized_sharded_achievement_record_when_required_by_current_continuity_rules
 ```
 
-This Skill 5 exception does not authorize unrelated governance, source, tests, dependencies, router changes, workflows, merge, deployment, or general documentation edits.
+This Skill 5 exception does not authorize unrelated governance, source, tests, dependencies, router changes, workflows, merge, deployment, general documentation edits, or mutation of the permanent CrewAI remediation set.
 
-## 4. Continuity targets
+## 5. Continuity targets
 
 ```yaml
 continuity_branch: docs/new-chat-continuity-2026-07-27
@@ -82,7 +121,7 @@ merge_authorized: false
 
 When repository history requires a different currently canonical continuity target, verify it before acting rather than assuming from chat memory.
 
-## 5. Length-problem update requirements
+## 6. Length-problem update requirements
 
 A valid length-problem update must preserve:
 
@@ -96,19 +135,24 @@ A valid length-problem update must preserve:
 - do-not-repeat state;
 - blockers;
 - Asia/Manila timestamp;
-- evidence class.
+- evidence class;
+- permanent CrewAI remediation integrity state when relevant.
+
+If a reported next action would mutate the permanent set, it cannot be saved as the next safe action; save the permanent-lock blocker instead.
 
 Do not repeat already persisted checkpoints or invent local work as remote proof.
 
-## 6. Achievement requirements
+## 7. Achievement requirements
 
 A new achievement must be based on a new material verified result and must not duplicate an existing achievement.
 
 Qualifying evidence can include current remote GitHub proof or exact Human Owner-provided Cline evidence, but evidence class must remain explicit.
 
-A routing decision, prompt, approval alone, pending work, `BLOCKED`, `FAIL`, or duplicate PASS is not a new achievement.
+A routing decision, prompt, approval alone, pending work, `BLOCKED`, `FAIL`, duplicate PASS, or permanent-remediation mutation is not a new achievement.
 
-## 7. Connected GitHub publication semantics
+A restoration that re-establishes the exact verified immutable protected content may qualify only if it is a new material verified repair result and the record clearly says the permanent lock was preserved/restored, not changed.
+
+## 8. Connected GitHub publication semantics
 
 When ChatGPT uses the connected GitHub contents API for a Skill 5 update:
 
@@ -120,11 +164,18 @@ separate_push_step: false
 
 ChatGPT must report the actual resulting remote commit SHA and must not claim that Cline committed or pushed the continuity update.
 
-## 8. Hard boundaries
+## 9. Hard boundaries
 
-Skill 5 does not authorize unrelated source, tests, dependencies, workflows, merge, deployment, CrewAI architecture changes, router changes, supervisory-rule changes, or unrelated documentation changes.
+Skill 5 does not authorize unrelated source, tests, dependencies, workflows, merge, deployment, CrewAI architecture changes, router changes, supervisory-rule changes, unrelated documentation changes, or any mutation/unlock of the permanent CrewAI remediation set.
 
-## 9. Final contract
+```yaml
+permanent_CrewAI_remediation_mutation: prohibited
+record_false_unlock_as_current_truth: prohibited
+record_protected_mutation_as_accepted: prohibited
+lower_authority_continuity_override_of_permanent_lock: prohibited
+```
+
+## 10. Final contract
 
 ```text
 General repository work:
@@ -135,5 +186,9 @@ Exact Skill 5 length-problem / achievement persistence:
 → Cline is not required.
 → Prompt Engineer Cline packaging is not required.
 → ChatGPT verifies the exact remote result.
-→ Human Owner remains final authority.
+→ Human Owner remains final authority for continuity acceptance.
+
+Permanent CrewAI remediation state:
+→ continuity may record/verify it but can never unlock, supersede, or mutate it.
+→ any mutation is recorded only as BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK, never as valid current truth.
 ```
