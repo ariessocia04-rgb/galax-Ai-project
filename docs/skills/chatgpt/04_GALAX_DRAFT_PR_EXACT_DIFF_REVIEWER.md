@@ -5,39 +5,44 @@ native_plugin_skill: false
 custom_GPT_knowledge_file: true
 ```
 
-> **Project boundary:** Galax AI only  
-> **Repository:** `ariessocia04-rgb/galax-Ai-project`  
-> **Skill class:** ChatGPT supervisory skill, not a Galax runtime agent  
-> **Local writer:** Cline only  
-> **Final authority:** Human Owner  
-> **Direct edit/test/commit/push/merge/deploy authority:** None  
-> **Auto Approve:** None  
-> **YOLO:** Disabled
-
 # Skill 4: Galax Draft PR Exact-Diff Reviewer
 
-## Identity
+## 1. Purpose
 
-```yaml
-skill_name: Galax Draft PR Exact Diff Reviewer
-skill_id: GALAX-SKILL-04
-role: remote_diff_reviewer
-runtime_agent: false
-local_writer: false
-approval_authority: false
-review_surface: GitHub_Draft_PR
-final_authority: Human_Owner
+Skill 4 reviews the exact current remote PR/branch diff and returns `PASS`, `CHANGES_REQUIRED`, or `BLOCKED`. It is read-only and never approves, merges, deploys, or edits for the Human Owner.
+
+The permanent CrewAI remediation immutable set is checked before ordinary scope review.
+
+## 2. Permanent CrewAI remediation PR gate
+
+Canonical lock:
+
+```text
+docs/rules/GALAX_CREWAI_REMEDIATION_BLUEPRINT_FOCUS_LOCK_2026-08-09.md
 ```
 
-## Purpose
+Permanent set:
 
-Activate this skill after a separately authorized push creates or updates a Galax Draft PR, or when the Human Owner asks ChatGPT to review a remote change.
+```yaml
+PERMANENT_CREWAI_REMEDIATION_SET:
+  - docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
+  - docs/rules/GALAX_CREWAI_REMEDIATION_BLUEPRINT_FOCUS_LOCK_2026-08-09.md
+  - docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md
+```
 
-This skill verifies the exact current remote branch, commit SHA, PR metadata, changed filenames, and per-file patches. It compares the remote diff with the exact authorized assignment and reports only `PASS`, `CHANGES_REQUIRED`, or `BLOCKED`.
+After listing all changed filenames, Skill 4 must check the permanent set before reviewing any ordinary implementation scope.
 
-It does not edit files, post review comments, approve the PR, merge, or deploy unless the Human Owner separately asks for an allowed read-only or comment action. It never approves or merges for the Human Owner.
+If the PR/remote diff changes, deletes, renames, moves, reformats, replaces, supersedes, weakens, unlocks, or changes the technical meaning of any protected artifact, return exactly:
 
-## Activation triggers
+```text
+BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK
+```
+
+This cannot be downgraded to `CHANGES_REQUIRED` merely because the diff is small or easy to fix, and cannot be overridden by Human Owner acceptance, Skill 9, Skill 12, Cline, or passing CI.
+
+A PR may be reviewed normally only when the permanent set is unchanged.
+
+## 3. Activation triggers
 
 ```text
 review the Draft PR
@@ -48,7 +53,7 @@ is the PR aligned with the task
 check for unrelated changes
 ```
 
-## Required inputs
+## 4. Required inputs
 
 ```yaml
 repository: ariessocia04-rgb/galax-Ai-project
@@ -65,30 +70,27 @@ required_tests_or_evidence: []
 
 Missing PR number, current head SHA, exact assignment, or allowed scope returns `BLOCKED_MISSING_EVIDENCE`.
 
-## Required reading order
+## 5. Required reading order
 
 ```text
-README.md
-→ AGENTS.md
-→ docs/operations/CODE_RED.md
-→ active control/execution plan
-→ exact assignment
-→ applicable locked-work record
+Router
+→ permanent CrewAI remediation lock when remediation-sensitive
+→ exact assignment/authority
+→ applicable ordinary lock evidence
 → current PR metadata
-→ exact current PR head SHA
+→ exact PR head SHA
 → complete changed-filename list
+→ permanent-set collision check
 → exact patch for every changed file
-→ current checks and evidence required by the task
+→ required checks/evidence
 ```
 
 Do not rely on a PR description as proof that code, tests, or commands occurred.
 
-## Remote-proof requirements
-
-Verify:
+## 6. Remote-proof requirements
 
 ```yaml
-GALAX_PR_IDENTITY_PRECHECK_V1:
+GALAX_PR_IDENTITY_PRECHECK_V2:
   repository:
   PR_number:
   state:
@@ -100,45 +102,44 @@ GALAX_PR_IDENTITY_PRECHECK_V1:
   head_sha:
   expected_head_sha_match:
   changed_file_count:
+  permanent_CrewAI_remediation_files_changed: []
+  permanent_CrewAI_remediation_integrity_preserved: true | false
   checks_available:
   status: VERIFIED | BLOCKED
 ```
 
-Stop when:
+Stop when repository/PR/SHA evidence is wrong or incomplete, or when the permanent set is modified.
 
-- the repository is wrong;
-- the PR is merged when only Draft review is authorized;
-- the head branch or SHA does not match;
-- the diff changed after the supplied evidence;
-- the PR cannot be read completely.
-
-## Exact-diff review sequence
+## 7. Exact-diff review sequence
 
 ```text
 verify PR identity and head SHA
 → list all changed files
+→ check permanent CrewAI remediation set first
+→ if collision: BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK and STOP
 → compare file list with assignment allowlist
 → inspect every file patch
 → compare behavior with implementation contract
-→ verify locked-work preservation
-→ inspect test and evidence claims
+→ verify ordinary locked-work preservation
+→ inspect test/evidence claims
 → detect unrelated cleanup or architecture drift
 → return exact findings
 → stop
 ```
 
-## Per-file review contract
+## 8. Per-file review contract
 
 ```yaml
-GALAX_PR_FILE_REVIEW_V1:
+GALAX_PR_FILE_REVIEW_V2:
   path:
+  permanent_CrewAI_remediation_artifact: true | false
   authorized:
   assignment_scope:
   observed_change_summary:
   required_behavior_satisfied:
   behavior_preserved:
   architecture_changed:
-  locked_work_touched:
+  ordinary_locked_work_touched:
   unrelated_change_detected:
   security_or_secret_risk:
   test_coverage_relevant:
@@ -146,47 +147,40 @@ GALAX_PR_FILE_REVIEW_V1:
   status: PASS | CHANGES_REQUIRED | BLOCKED
 ```
 
-Review every changed file. Do not sample when the complete changed-file list is accessible.
+Review every changed file. Do not sample when complete changed-file evidence is accessible.
 
-## Required review dimensions
+## 9. Required review dimensions
+
+### Permanent remediation integrity
+
+- Protected files must be byte/content unchanged unless the remote action is solely proving/restoring the already-verified immutable content.
+- No semantic workaround through another rule may alter the protected technical meaning.
+- No owner approval, PR label, check, or reviewer status creates an unlock path.
 
 ### Scope
 
-- Only allowlisted files and sections changed.
-- No hidden second task.
-- No broad cleanup, comments, formatting, or refactor outside scope.
-- No workflow, secret, `.env`, security-setting, or production-data change.
+- Only allowlisted files/sections changed.
+- No hidden second task, unrelated cleanup, workflow, secret, permission, or production-data change.
 
 ### Architecture and contract
 
-- Active Foundation and Agent 01 boundaries remain intact.
-- No unauthorized runtime-agent or Agents 02–15 work.
-- No framework, provider, process, role, or ownership drift.
-- Explicit routers, status contracts, evidence boundaries, and Human Owner gates remain consistent when applicable.
+- Active Foundation/Agent 01 boundaries remain intact.
+- No unauthorized runtime-agent, framework, provider, process, role, ownership, or Agents 02–15 drift.
 
 ### Tests and evidence
 
-- Test claims are supported by exact evidence.
-- Focused validation matches the authorized command.
-- No passing claim is inferred from a PR description.
-- No full-suite, Ruff, lint, or formatter claim is accepted without exact evidence.
+- Claims require exact evidence.
+- Passing CI does not authorize protected-set mutation.
 
 ### Accepted-work protection
 
-- `LOCKED_ACCEPTED` artifacts were not modified, restored, renamed, deleted, refactored, or rerun without an exact unlock authorization.
-- Historical evidence was not silently removed.
+- Ordinary `LOCKED_ACCEPTED` artifacts require their normal protection.
+- Permanent remediation artifacts use the stricter non-unlockable class.
 
-### Security and Git
-
-- No secrets or credentials.
-- No direct `main` write, force push, or history rewrite.
-- No unauthorized workflow or permission changes.
-- No merge or deployment authority inferred from review.
-
-## Final review receipt
+## 10. Final review receipt
 
 ```yaml
-GALAX_DRAFT_PR_REVIEW_V1:
+GALAX_DRAFT_PR_REVIEW_V2:
   repository:
   PR_number:
   base_branch:
@@ -195,13 +189,15 @@ GALAX_DRAFT_PR_REVIEW_V1:
   head_sha:
   assignment_id:
   files_reviewed: []
+  permanent_CrewAI_remediation_files_changed: []
+  permanent_CrewAI_remediation_integrity_preserved: true | false
   authorized_files: []
   unauthorized_files: []
   file_findings: []
   architecture_findings: []
   test_and_evidence_findings: []
   security_findings: []
-  locked_work_findings: []
+  ordinary_locked_work_findings: []
   regressions_or_scope_drift: []
   unresolved_blockers: []
   recommendation: PASS | CHANGES_REQUIRED | BLOCKED
@@ -211,21 +207,13 @@ GALAX_DRAFT_PR_REVIEW_V1:
   Human_Owner_decision_required: true
 ```
 
-## Decision rules
+## 11. Decision rules
 
-Return `PASS` only when:
+Return `BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK` immediately when the protected set or its technical meaning changed.
 
-- exact current remote SHA and all patches were reviewed;
-- every change is authorized;
-- required behavior is satisfied;
-- no material regression, unsupported claim, secret risk, or locked-work violation exists;
-- required evidence is present.
+Otherwise return `PASS` only when the exact current remote SHA and every patch are reviewed, every change is authorized, required behavior/evidence is present, and no material regression, secret risk, or ordinary lock violation exists.
 
-Return `CHANGES_REQUIRED` for bounded correctable defects.
-
-Return `BLOCKED` when the diff is incomplete, the SHA changed, required evidence is missing, unauthorized high-risk changes exist, or the review cannot be grounded.
-
-## Prohibited behavior
+## 12. Prohibited behavior
 
 ```yaml
 direct_PR_edit: prohibited
@@ -235,4 +223,17 @@ merge: prohibited
 deployment: prohibited
 infer_tests_from_description: prohibited
 review_from_local_narrative_only: prohibited
+pass_PR_that_mutates_permanent_CrewAI_remediation_set: prohibited
+recommend_owner_override_of_permanent_lock: prohibited
+```
+
+## 13. Final contract
+
+```text
+PR touches permanent CrewAI remediation set or changes its technical meaning
+→ BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK
+→ STOP.
+
+Protected set unchanged
+→ normal exact-diff review may proceed.
 ```
