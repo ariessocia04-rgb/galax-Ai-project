@@ -21,7 +21,33 @@ Human Owner
 → use the executor required by that selected skill
 ```
 
-Normal repository execution rule:
+### Standing ChatGPT direct repository jobs
+
+These are the only standing non-fallback direct ChatGPT repository-write responsibilities:
+
+```yaml
+CHATGPT_STANDING_DIRECT_REPOSITORY_JOBS:
+  update_length_problem_in_repo:
+    primary_skill: GALAX-SKILL-05
+    executor: ChatGPT
+
+  edit_or_update_ChatGPT_skills_and_rules_only:
+    primary_skill: GALAX-SKILL-09
+    executor: ChatGPT
+    allowed_path_prefixes:
+      - docs/skills/chatgpt/
+      - docs/rules/
+
+  update_achievement_in_repo:
+    primary_skill: GALAX-SKILL-05
+    executor: ChatGPT
+```
+
+Skill 5 and Skill 9 are standing direct ChatGPT exceptions and do not require Cline for their exact scopes.
+
+### General repository execution
+
+For repository work outside those exact standing ChatGPT scopes:
 
 ```text
 Cline executes whenever capable
@@ -35,19 +61,13 @@ Cline executes whenever capable
 → Human Owner final acceptance
 ```
 
-**Mandatory Skill 5 exception:** exact `update_length_problem`, `update_achievement`, and qualifying Skill 5 achievement persistence are executed and published directly by ChatGPT through Skill 5. Cline is not required for that exact continuity scope.
-
-For all other repository work, Cline remains the default executor whenever factually capable, including governance, skills, router, documentation, and CrewAI implementation.
-
-ChatGPT must not directly execute general repository work merely because it authored the content or has GitHub access.
-
-If Cline is capable for a non-Skill-5 task:
+If Cline is capable for work outside Skill 5/Skill 9 standing scopes:
 
 ```text
 BLOCKED_CHATGPT_TAKEOVER_CLINE_CAPABLE
 ```
 
-Only Skill 12 may permit ChatGPT technical/repository execution outside the exact Skill 5 continuity exception after its full fallback gate passes and the Human Owner explicitly authorizes the exact stages.
+Only Skill 12 may permit other ChatGPT repository execution after its full fallback gate passes and the Human Owner explicitly authorizes the exact stages.
 
 ## 3. Skill registry
 
@@ -109,16 +129,11 @@ Prompt_Engineer:
   counts_toward_limits: false
 ```
 
-Context Engineer is required for minimum verified context. Prompt Engineer is mandatory whenever ChatGPT must issue or package a Cline task, approval, rejection, correction, validation, Git, or review instruction.
+Context Engineer is required for minimum verified context.
 
-Prompt Engineer is **not required** for direct Skill 5 continuity persistence because that exact path does not use Cline.
+Prompt Engineer is mandatory only when ChatGPT must issue or package a Cline task, approval, rejection, correction, validation, Git, or review instruction.
 
-Unavailable results:
-
-```text
-BLOCKED_CONTEXT_ENGINEER_UNAVAILABLE
-BLOCKED_PROMPT_ENGINEER_UNAVAILABLE
-```
+Prompt Engineer is not required for direct Skill 5 or direct Skill 9 repository actions because Cline is not the executor for those exact scopes.
 
 ## 5. Routing categories
 
@@ -139,7 +154,7 @@ LOCKED_ARTIFACT:
   primary: $galax-locked-artifact-guardian
 CLEANUP_AUDIT:
   primary: $galax-repository-cleanup-auditor
-CHATGPT_SUPERVISORY_CONTROL_UPDATE:
+CHATGPT_SKILL_OR_RULE_UPDATE:
   primary: $galax-owner-direct-repository-update-guardian
 OWNER_RULE_SKILL_REQUIREMENTS_OR_FEASIBILITY:
   primary: $galax-owner-rule-skill-requirements-feasibility-guardian
@@ -151,22 +166,18 @@ UNKNOWN_OR_MULTI_TASK:
 
 ## 6. Skill 2 and Skill 10 relationship
 
-Skill 2 controls Cline prompt/execution packaging for repository work generally.
+Skill 2 controls Cline prompt/execution packaging only when Cline is the executor.
 
-Skill 10 is mandatory only when the Cline task is active CrewAI remediation-blueprint implementation. Governance, documentation, router, and ChatGPT-support-file edits executed by Cline do not become CrewAI blueprint work merely because Cline performs them.
+Skill 10 is mandatory only for active CrewAI remediation-blueprint implementation.
 
-Skill 5 continuity/achievement direct persistence does not use Skill 2 because Cline is not the executor for that exact scope.
+Direct Skill 5 and direct Skill 9 work do not use Skill 2 because Cline is not the executor for those exact standing scopes.
 
-## 7. Skill 5 and Skill 9 executor rules
+## 7. Skill 5 and Skill 9 direct execution rules
 
-Skill 5 controls continuity/achievement content, evidence, dedupe, numbering, correctness, **and direct ChatGPT persistence** for its exact scope.
-
-Skill 9 controls exact supervisory/router/skill/context/prompt governance specifications. Skill 9 does not make ChatGPT the normal governance publisher; Cline executes Skill 9 work when capable unless Skill 12 fallback is separately proven and authorized.
-
-Exact Skill 5 path:
+### Skill 5
 
 ```text
-Skill 5 selected
+Skill 5 selected for length problem / achievement
 → Context Engineer supplies verified continuity evidence
 → Skill 5 determines exact content/target
 → ChatGPT directly creates/updates the exact continuity record using the connected GitHub app when available
@@ -175,27 +186,23 @@ Skill 5 selected
 → stop
 ```
 
-General non-Skill-5 path when Cline can perform the action:
+### Skill 9
 
 ```text
-selected skill defines exact change
-→ Context Engineer supplies verified context
-→ Prompt Engineer creates exact Cline package
-→ Cline edits/saves
-→ ChatGPT reviews
-→ Human Owner COMMIT authorization
-→ Cline commit
-→ STOP
-→ Human Owner PUSH authorization
-→ Cline push
-→ STOP
-→ ChatGPT remote review
+Skill 9 selected for edit/update of ChatGPT skills or rules
+→ Context Engineer supplies verified repository evidence
+→ Skill 9 verifies target is under docs/skills/chatgpt/** or docs/rules/**
+→ ChatGPT directly edits/updates the exact skill/rule file using the connected GitHub app when available
+→ ChatGPT verifies the resulting remote commit/file
 → Human Owner final acceptance
+→ stop
 ```
 
-## 8. Prompt package requirement
+Skill 9 does not authorize direct ChatGPT writes outside those path classes.
 
-Every **Cline-facing** instruction must state outside the prompt box:
+## 8. Prompt package requirement for Cline work
+
+Every Cline-facing instruction must state outside the prompt box:
 
 ```text
 CLINE SESSION: NEW | STAY
@@ -208,9 +215,7 @@ AFTER CLINE STOPS: <exact return evidence>
 CLINE PROMPT REQUIRED: YES | NO
 ```
 
-ChatGPT chooses exactly one session and one mode. Do not ask the Human Owner to choose.
-
-Exact mapping:
+ChatGPT chooses exactly one session and one mode.
 
 ```yaml
 PLAN: PLAN_ONLY
@@ -235,24 +240,20 @@ PUSH ≠ REMOTE REVIEW
 REMOTE REVIEW ≠ HUMAN ACCEPTANCE
 ```
 
-No automatic next stage.
-
-For direct Skill 5 connected-GitHub persistence, the GitHub write itself creates the remote commit; do not invent a separate local commit or push step.
+For connected-GitHub direct Skill 5 or Skill 9 writes, the write creates the remote commit directly; do not invent a separate local commit or push.
 
 ## 10. Mandatory new-chat recovery
 
-New/unverified chats must recover and understand:
+New/unverified chats must recover:
 
-- this Router;
-- the execution role separator;
-- Context Engineer;
-- Prompt Engineer;
 - Cline-default execution for general repository work;
-- **Skill 5 direct ChatGPT continuity/achievement persistence exception**;
-- Skill 12 fallback for other ChatGPT execution;
+- Skill 5 direct ChatGPT length-problem/achievement persistence;
+- Skill 9 direct ChatGPT edit/update authority for `docs/skills/chatgpt/**` and `docs/rules/**` only;
+- Skill 12 fallback for other direct ChatGPT execution;
+- Context Engineer;
+- Prompt Engineer for Cline work;
 - zero-coding-owner rule;
-- NEW/STAY rules;
-- mode mappings;
+- NEW/STAY and mode mappings;
 - approval/rejection packaging;
 - commit/push separation for Cline work;
 - LOCKED_ACCEPTED and do-not-repeat state.
@@ -260,14 +261,14 @@ New/unverified chats must recover and understand:
 ## 11. Final rule
 
 ```text
-Exact Skill 5 length-problem / achievement persistence
-→ ChatGPT executes and publishes directly under Skill 5.
+ChatGPT standing jobs:
+1. Update length problem in repo → Skill 5.
+2. Edit/update ChatGPT skills and rules only → Skill 9.
+3. Update achievement in repo → Skill 5.
 
-Other repository work and Cline capable
+Everything else and Cline capable
 → Cline executes.
-→ ChatGPT authors/specifies/reviews.
-→ Human Owner authorizes consequential stages.
 
-Other ChatGPT execution
-→ only through a separately proven and owner-authorized Skill 12 fallback.
+Other direct ChatGPT execution
+→ Skill 12 only after verified gate + explicit Human Owner authorization.
 ```
