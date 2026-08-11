@@ -1,14 +1,62 @@
 # Galax ChatGPT / Cline Execution Role Separator
 
 **Status:** `ACTIVE_CANONICAL_HUMAN_OWNER_CONTRIBUTOR_BOUNDARY`  
-**Repository:** `ariessocia04-rgb/galax-Ai-project`  
-**Final authority:** Human Owner
+**Repository:** `ariessocia04-rgb/galax-Ai-project`
 
-## 1. Canonical rule
+## 1. Highest-priority permanent CrewAI remediation boundary
 
-Galax uses Cline-default execution for general repository work, with exactly two standing non-fallback direct ChatGPT repository scopes that implement three Human Owner jobs.
+The Human Owner has established a permanent immutable CrewAI remediation set with no unlock path.
 
-## 2. Exact standing ChatGPT repository jobs
+Canonical lock:
+
+```text
+docs/rules/GALAX_CREWAI_REMEDIATION_BLUEPRINT_FOCUS_LOCK_2026-08-09.md
+```
+
+Protected set:
+
+```yaml
+PERMANENT_CREWAI_REMEDIATION_SET:
+  - docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
+  - docs/rules/GALAX_CREWAI_REMEDIATION_BLUEPRINT_FOCUS_LOCK_2026-08-09.md
+  - docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md
+```
+
+No actor may edit, rewrite, delete, rename, reformat, replace, supersede, reinterpret, weaken, unlock, or indirectly change the technical meaning of this set.
+
+This includes the Human Owner, ChatGPT, Cline, Skill 9, Skill 12, other assistants, contributors, and automated workflows.
+
+Required result for any mutation/unlock attempt:
+
+```text
+BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK
+```
+
+No later Human Owner instruction constitutes an unlock.
+
+## 2. Allowed operations on permanent set
+
+Only:
+
+```yaml
+allowed:
+  - read
+  - inspect
+  - check
+  - diff
+  - status
+  - validate_non_mutating
+  - verify_hash_or_blob_identity
+  - verify_blueprint_mapping
+  - commit_other_authorized_changes_when_protected_set_unchanged
+  - push_other_authorized_changes_when_protected_set_unchanged
+```
+
+Commit/push may proceed only when the protected set and its technical meaning remain unchanged.
+
+Validation must not format, fix, regenerate, normalize, or rewrite protected files.
+
+## 3. Exact standing ChatGPT repository jobs outside permanent lock
 
 ```yaml
 CHATGPT_STANDING_REPOSITORY_JOBS:
@@ -24,6 +72,7 @@ CHATGPT_STANDING_REPOSITORY_JOBS:
     allowed_path_prefixes:
       - docs/skills/chatgpt/
       - docs/rules/
+    permanent_CrewAI_remediation_lock_override: prohibited
 
   job_3:
     name: update_achievement_in_repo
@@ -31,52 +80,43 @@ CHATGPT_STANDING_REPOSITORY_JOBS:
     executor: ChatGPT
 ```
 
-These are standing direct ChatGPT responsibilities. Cline is not required for these exact scopes.
+These are standing direct ChatGPT responsibilities only when they do not violate the permanent remediation lock.
 
-## 3. Skill 5 continuity exception
+## 4. Skill 5 continuity exception
 
-Skill 5 directly authorizes ChatGPT to create/update exact length-problem and achievement continuity records within Skill 5's continuity boundaries.
+Skill 5 directly authorizes ChatGPT to create/update exact length-problem and achievement continuity records within Skill 5 boundaries.
 
 ```text
 Router selects Skill 5
 → Context Engineer supplies verified evidence
 → Skill 5 determines exact content/target/dedupe/numbering/timestamp/evidence class
-→ ChatGPT directly persists the exact continuity record
+→ ChatGPT directly persists exact continuity record
 → ChatGPT verifies resulting remote evidence
-→ Human Owner final acceptance
 → stop
 ```
 
-When the connected GitHub contents API is used, the write creates a remote commit directly. Do not invent a separate local commit or push.
+## 5. Skill 9 skill/rule exception
 
-## 4. Skill 9 skill/rule exception
-
-Skill 9 directly authorizes ChatGPT to edit/update rule content only under:
+Skill 9 directly authorizes ChatGPT to edit/update allowed rule content under:
 
 ```text
 docs/skills/chatgpt/**
 docs/rules/**
 ```
 
-This includes the canonical ChatGPT Router because it lives under `docs/skills/chatgpt/`.
+But Skill 9 must first apply the permanent remediation lock.
 
-Required path:
+It may not edit the permanent focus lock or create/edit another rule that changes the protected remediation technical meaning.
+
+Required blocker on collision:
 
 ```text
-Router selects Skill 9
-→ Context Engineer supplies verified repository evidence
-→ Skill 9 verifies target path is allowed
-→ ChatGPT directly edits/updates the exact skill/rule file
-→ ChatGPT verifies resulting remote evidence
-→ Human Owner final acceptance
-→ stop
+BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK
 ```
 
-Skill 9 does not authorize direct ChatGPT writes to README, AGENTS, operations docs, plans, research, prompts, source, tests, dependencies, workflows, secrets, runtime data, merge, or deployment.
+## 6. General repository execution
 
-## 5. General repository execution
-
-Outside exact Skill 5 continuity and exact Skill 9 skill/rule scopes:
+Outside exact Skill 5 continuity, allowed Skill 9 skill/rule scope, and permanent-lock blocked work:
 
 ```text
 Human Owner
@@ -95,27 +135,23 @@ Human Owner
 → Human Owner final acceptance
 ```
 
-If Cline is capable outside the standing Skill 5/Skill 9 scopes:
+If Cline is capable outside standing Skill 5/Skill 9 scopes:
 
 ```text
 BLOCKED_CHATGPT_TAKEOVER_CLINE_CAPABLE
 ```
 
-## 6. Skill 12 fallback for other direct ChatGPT execution
+## 7. Skill 12 fallback
 
-Outside the standing Skill 5 and Skill 9 scopes, ChatGPT may directly execute repository work only through a separately passing Skill 12 fallback gate with explicit Human Owner authorization.
+Outside standing Skill 5/Skill 9 scopes, ChatGPT may directly execute other repository work only through a separately passing Skill 12 fallback gate with explicit Human Owner authorization.
 
-A single Cline mistake is not enough.
+Skill 12 cannot override the permanent remediation lock.
 
-## 7. Human Owner zero-coding rule
+## 8. Human Owner zero-coding rule
 
 Never require the Human Owner to write code, patch files, type terminal/Git commands, resolve syntax, choose NEW/STAY, choose PLAN/ACT, or invent technical approval/rejection wording when an authorized AI actor can perform the task.
 
-## 8. Prompt and Context Engineer support
-
-Context Engineer supplies verified minimum context for all routes.
-
-Prompt Engineer is mandatory only for Cline-facing instructions. It is not required for direct Skill 5 or Skill 9 repository actions because Cline is not the executor for those exact scopes.
+For permanent remediation mutation/unlock requests, the system blocks the request instead of asking the owner to perform it manually.
 
 ## 9. Consequential-stage separation for Cline work
 
@@ -133,14 +169,22 @@ MERGE ≠ DEPLOY
 ## 10. Final strict rule
 
 ```text
-ChatGPT standing jobs:
+Permanent CrewAI remediation blueprint / focus-lock rule / Foundation narrow supersession
+→ READ / CHECK / NON-MUTATING VALIDATION ONLY.
+→ NO EDIT.
+→ NO UNLOCK.
+→ NO EXCEPTION, INCLUDING HUMAN OWNER.
+→ COMMIT/PUSH only when protected set remains unchanged.
+→ mutation attempt = BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK.
+
+ChatGPT standing jobs outside that permanent lock:
 1. Update length problem in repo → Skill 5.
-2. Edit/update ChatGPT skills and rules only → Skill 9.
+2. Edit/update allowed ChatGPT skills and rules only → Skill 9.
 3. Update achievement in repo → Skill 5.
 
 Everything else and Cline capable
 → Cline executes.
 
 Other direct ChatGPT execution
-→ Skill 12 only after verified gate + explicit Human Owner authorization.
+→ Skill 12 only after verified gate + explicit Human Owner authorization, never to override permanent remediation lock.
 ```
