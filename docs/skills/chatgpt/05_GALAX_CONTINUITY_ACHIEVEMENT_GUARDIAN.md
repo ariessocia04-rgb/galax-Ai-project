@@ -495,3 +495,280 @@ CrewAI blueprint/source/tests/implementation/Git
 anything else
 → BLOCK_NOT_SKILL_5_CONTINUITY_SCOPE
 ```
+
+## 20. Large achievement record — immutable shard/index fallback
+
+This section is a narrow superseding exception for **achievement persistence only** when the connected GitHub capability cannot safely append to or replace the existing monolithic achievement record without risking truncation, history loss, or unrelated historical rewrite.
+
+It does not change the evidence standard, qualifying-PASS rules, continuity branch, Human Owner authority, CrewAI executor boundary, or any source/test/implementation rule above.
+
+### 20.1 Activation gate
+
+Use this fallback only when every field below is proven:
+
+```yaml
+GALAX_ACHIEVEMENT_SHARD_FALLBACK_GATE_V1:
+  qualifying_terminal_PASS_verified: true
+  duplicate_event_not_already_persisted: true
+  legacy_monolithic_achievement_file_verified: true
+  legacy_highest_achievement_number_verified: true
+  safe_monolithic_append_or_full_replacement_available: false
+  current_connector_can_create_new_UTF8_file: true
+  current_connector_can_safely_create_or_replace_small_index_with_SHA_guard: true
+  continuity_branch_verified: true
+  continuity_PR_open_and_draft: true
+  source_test_dependency_workflow_implementation_write_required: false
+  result: PASS_SHARDED_ACHIEVEMENT_FALLBACK | BLOCKED
+```
+
+A large file by itself is not enough. The fallback is justified only when the actual available write mechanism would require an unsafe monolithic replacement or otherwise cannot preserve the entire existing record with confidence.
+
+### 20.2 Legacy baseline preservation
+
+When the fallback first activates:
+
+```yaml
+legacy_achievement_baseline:
+  file: docs/operations/checkpoints/GALAX_ACHIEVEMENTS_FROM_START_TO_CURRENT_2026-07-28.md
+  behavior: IMMUTABLE_PRESERVED_BASELINE
+  rewrite_for_sharding: prohibited
+  split_or_move_existing_history: prohibited
+  renumber_existing_achievements: prohibited
+  delete_or_archive_existing_file: prohibited
+  preserve_existing_achievements_exactly: true
+```
+
+The highest verified achievement already present in the legacy file becomes the immutable baseline boundary. New sharded achievements begin at exactly `legacy_highest_achievement_number + 1`.
+
+Existing achievements — including Achievements 1 through 78 when 78 is the verified legacy boundary — must never be copied out, rewritten, renumbered, or removed merely to initialize sharding.
+
+### 20.3 Exact sharded targets
+
+```yaml
+achievement_shard_directory: docs/operations/checkpoints/achievements
+achievement_shard_naming_rule: GALAX_ACHIEVEMENT_<FOUR_DIGIT_NUMBER>_<YYYY-MM-DD>.md
+achievement_shard_cardinality: exactly_one_achievement_per_file
+achievement_shard_mutability_after_verified_indexing: immutable
+achievement_index_file: docs/operations/checkpoints/GALAX_ACHIEVEMENT_SHARD_INDEX.md
+```
+
+Example only:
+
+```text
+docs/operations/checkpoints/achievements/GALAX_ACHIEVEMENT_0079_2026-08-11.md
+```
+
+The shard is the canonical fact record for that new achievement. The index is a small manifest and navigation layer only; it must not become a second full copy of achievement prose.
+
+### 20.4 Shard content contract
+
+Every immutable achievement shard must contain:
+
+```yaml
+GALAX_ACHIEVEMENT_SHARD_V1:
+  achievement_number:
+  recorded_local_datetime:
+  timezone_name: Asia/Manila
+  source_primary_skill_alias:
+  source_task_or_assignment_id:
+  source_terminal_status: PASS
+  bounded_objective_completed: true
+  new_material_result: true
+  evidence_class:
+  exact_completed_result:
+  exact_evidence_reference:
+  legacy_baseline_file:
+  legacy_baseline_highest_achievement_number:
+  prior_sharded_achievement_number_or_NONE:
+  DO_NOT_REPEAT: []
+  does_not_authorize_next_technical_stage: true
+```
+
+The shard must preserve the same evidence-class discipline as the legacy achievement file. Local Cline evidence remains `HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE`; creating the shard does not upgrade the implementation itself to remote proof.
+
+### 20.5 Index contract
+
+The index must remain compact and contain only manifest metadata required for ordering, dedupe, and discovery:
+
+```yaml
+GALAX_ACHIEVEMENT_SHARD_INDEX_V1:
+  legacy_baseline_file:
+  legacy_baseline_highest_achievement_number:
+  sharding_started_after_achievement_number:
+  highest_sharded_achievement_number:
+  entries:
+    - achievement_number:
+      shard_path:
+      source_primary_skill_alias:
+      source_task_or_assignment_id:
+      evidence_class:
+      shard_create_commit_sha:
+```
+
+The index must not duplicate the full prose or full YAML evidence body stored in each shard.
+
+### 20.6 Crash-safe write order
+
+For one terminal-PASS achievement in sharded mode:
+
+```text
+verify legacy baseline + index + dedupe
+→ verify exact next achievement number
+→ create exactly one new immutable shard file
+→ verify shard commit remotely
+→ create or update the small index using the exact current index blob SHA when replacing it
+→ verify index commit remotely
+→ verify continuity PR remains open and draft
+→ return PASS_ACHIEVEMENT_PERSISTED
+→ stop
+```
+
+The shard is created **before** the index update. This prevents the index from pointing to a shard that does not exist.
+
+If the shard commit succeeds but the index write fails:
+
+```yaml
+status: BLOCKED_SHARD_INDEX_RECONCILIATION_REQUIRED
+new_shard_must_not_be_created_again: true
+next_retry_scope: index_reconciliation_only
+technical_continuation_before_reconciliation: prohibited
+```
+
+On the retry, verify the existing shard by exact path, achievement number, source assignment, and remote commit; then update only the index. Never create a duplicate shard for the same event.
+
+### 20.7 Dedupe across legacy and sharded history
+
+Before creating any new achievement shard, dedupe against:
+
+```text
+legacy monolithic achievement file
++ current shard index when present
++ exact existing shard path for the proposed achievement number
+```
+
+Use the same canonical dedupe key:
+
+```text
+source_primary_skill_alias
++ source_task_or_assignment_id
++ terminal_status_PASS
++ exact_completed_result_or_receipt_identity
+```
+
+An event found in either the legacy file or any indexed shard is already persisted and must not be written again.
+
+### 20.8 Write-count supersession for sharded mode
+
+Only while `PASS_SHARDED_ACHIEVEMENT_FALLBACK` is active, the earlier single-file/single-write terminal-PASS limits are superseded as follows:
+
+```yaml
+sharded_terminal_PASS_limits:
+  maximum_achievement_files_changed: 2
+  maximum_achievement_repository_writes: 2
+  allowed_changes:
+    - one_new_immutable_achievement_shard
+    - one_small_achievement_index_create_or_update
+  all_other_files: prohibited
+```
+
+If a length checkpoint is independently due or directly requested in the same cycle, the combined-cycle maximum becomes `3` sequential writes only in this order:
+
+```text
+achievement shard
+→ achievement index
+→ length checkpoint
+```
+
+A length checkpoint remains prohibited as a side effect when it is not independently due or requested.
+
+### 20.9 Safe index replacement rule
+
+Whole-file replacement is allowed for the **small shard index only** when all are true:
+
+```yaml
+safe_index_replacement:
+  index_is_compact_manifest_only: true
+  current_complete_index_content_visible: true
+  current_index_blob_sha_verified: true
+  replacement_preserves_all_prior_index_entries_exactly: true
+  replacement_adds_only_the_new_manifest_entry_or_reconciliation: true
+  optimistic_SHA_guard_used: true
+```
+
+If any prior index content is missing, truncated, ambiguous, or too large to preserve safely, do not replace it. Return:
+
+```text
+BLOCKED_CONTINUITY_INDEX_APPEND_SAFETY
+```
+
+and require a separate Skill 9 supervisory redesign rather than risking index history.
+
+### 20.10 Expanded Skill 5 continuity ownership under this fallback
+
+When this section is active, the following are all Skill 5 continuity artifacts and remain prohibited for Cline:
+
+```yaml
+Skill_5_sharded_achievement_direct_write_scope:
+  - legacy_achievement_baseline_read_only
+  - immutable_numbered_achievement_shard_create
+  - compact_achievement_shard_index_create_or_update
+```
+
+This does not authorize Skill 5 to edit ChatGPT skills, router, source, tests, dependencies, workflows, technical contracts, implementation branches, merge, or deployment.
+
+### 20.11 Required sharded persistence receipt
+
+```yaml
+GALAX_ACHIEVEMENT_PERSISTENCE_RECEIPT_V3:
+  persistence_mode: LEGACY_MONOLITH | SHARDED_FALLBACK
+  source_skill:
+  source_task_or_assignment:
+  exact_PASS_result:
+  evidence_class:
+  dedupe_verified:
+  legacy_baseline_file:
+  legacy_baseline_highest_achievement_number:
+  achievement_number:
+  shard_path:
+  shard_starting_state: NOT_PRESENT
+  shard_commit_sha:
+  index_path:
+  index_starting_blob_sha_or_NONE:
+  index_commit_sha:
+  final_index_blob_sha:
+  branch:
+  PR_open_and_draft:
+  legacy_monolith_modified: false
+  unrelated_history_changed: false
+  status:
+    PASS_ACHIEVEMENT_PERSISTED |
+    BLOCKED_SHARD_INDEX_RECONCILIATION_REQUIRED |
+    BLOCKED
+```
+
+For legacy-monolith mode, the existing V2 receipt remains valid. For sharded fallback, V3 is required.
+
+### 20.12 Final sharding rule
+
+```text
+safe legacy append available
+→ use the existing legacy achievement persistence path
+
+safe legacy append/replacement unavailable
++ sharded fallback gate PASS
+→ preserve the legacy file unchanged
+→ create one immutable numbered achievement shard
+→ update the compact manifest index
+→ verify both commits
+→ PASS_ACHIEVEMENT_PERSISTED
+→ stop
+
+shard exists but index is missing/stale from an interrupted persistence cycle
+→ do not duplicate the shard
+→ reconcile the index only
+→ verify
+→ stop
+
+neither legacy append nor safe shard/index persistence can be guaranteed
+→ BLOCKED_PASS_ACHIEVEMENT_PERSISTENCE
+```
