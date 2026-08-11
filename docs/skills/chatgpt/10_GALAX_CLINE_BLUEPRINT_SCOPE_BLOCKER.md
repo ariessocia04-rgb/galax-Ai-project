@@ -23,9 +23,9 @@ final_authority: Human_Owner
 
 ## 1. One job only
 
-Skill 10 enforces the Human Owner's execution separation before a real Cline task is created and whenever a proposed executor may be crossing roles.
+Skill 10 enforces the Human Owner's normal Cline-first execution separation before a real Cline task is created and whenever a proposed normal-lane executor may be crossing roles.
 
-Canonical rule:
+Canonical normal rule:
 
 ```text
 CrewAI remediation-blueprint execution
@@ -47,6 +47,8 @@ Length problem / achievement
 ```
 
 Skill 10 never writes repository files itself.
+
+The separate Skill 12 technical fallback exception may supersede the normal ChatGPT implementation blocker only when the Router selects Skill 12 and `PASS_CHATGPT_TECHNICAL_FALLBACK` is produced from proven Cline failure/mismatch, proven ChatGPT capability, and explicit Human Owner authorization.
 
 ## 2. Canonical authorities
 
@@ -71,21 +73,29 @@ ChatGPT_supervisory_direct_updates:
 
 continuity_and_achievement:
   path: docs/skills/chatgpt/05_GALAX_CONTINUITY_ACHIEVEMENT_GUARDIAN.md
+
+owner_requirements_and_feasibility:
+  path: docs/skills/chatgpt/11_GALAX_OWNER_RULE_SKILL_REQUIREMENTS_FEASIBILITY_GUARDIAN.md
+
+ChatGPT_technical_fallback:
+  path: docs/skills/chatgpt/12_GALAX_CHATGPT_TECHNICAL_FALLBACK_EXECUTOR_GUARDIAN.md
 ```
 
-The current technical contract/assignment may narrow the blueprint. It may never expand the executor beyond this separator.
+The current technical contract/assignment may narrow the blueprint. It may never expand the executor beyond this separator without the exact Skill 12 fallback gate.
 
 ## 3. Mandatory activation
 
-Skill 10 is a mandatory dependency whenever Skill 2 is selected as primary for a real Cline task.
+Skill 10 is a mandatory dependency whenever Skill 2 is selected as primary for a real normal Cline task.
 
 Before any `GALAX_CLINE_TASK_V2` is emitted, Skill 10 must classify the exact objective and return a current gate result.
 
-Skill 10 also provides the canonical hard blocker when current routing would make ChatGPT itself write CrewAI implementation or make Cline write ChatGPT supervisory/continuity records.
+Skill 10 also provides the canonical normal-lane blocker when routing would make ChatGPT write CrewAI implementation or make Cline write ChatGPT supervisory/continuity records.
+
+Skill 10 is not the fallback executor. When the verified fallback conditions are present, the Router must stop the Skill 2/Skill 10 normal lane and start a separate Skill 12 routing cycle.
 
 ## 4. Exact blueprint trace requirement for Cline
 
-Cline may receive a task only when the proposed objective has an evidence-backed trace:
+Cline may receive a normal task only when the proposed objective has an evidence-backed trace:
 
 ```text
 active CrewAI remediation blueprint
@@ -109,15 +119,13 @@ insufficient_reasons_to_use_Cline:
   - length_problem_or_achievement_needs_change
 ```
 
-## 5. Two-way hard classification gate
-
-Before executor handoff, establish:
+## 5. Two-way normal-lane classification gate
 
 ```yaml
-GALAX_EXECUTOR_SCOPE_GATE_V2:
+GALAX_EXECUTOR_SCOPE_GATE_V3:
   Human_Owner_request:
   proposed_action:
-  proposed_executor: ChatGPT | Cline | Skill_5 | NONE
+  proposed_executor: ChatGPT | Cline | Skill_5 | Skill_12 | NONE
 
   active_blueprint_path: docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
   active_blueprint_verified: true | false
@@ -138,16 +146,20 @@ GALAX_EXECUTOR_SCOPE_GATE_V2:
   Cline_would_edit_supervisory_role_separator: true | false
   Cline_would_edit_length_problem_or_achievement: true | false
 
+  verified_Skill_12_fallback_cycle_selected: true | false
+
   executor:
     Cline |
     ChatGPT_Skill_9 |
     ChatGPT_Skill_5 |
+    ChatGPT_Skill_12 |
     NONE_BLOCKED
 
   gate_result:
     PASS_CLINE_BLUEPRINT_ONLY |
     PASS_CHATGPT_SUPERVISORY_ONLY |
     PASS_SKILL_5_CONTINUITY_ONLY |
+    HANDOFF_TO_SKILL_12_FALLBACK |
     BLOCK_CHATGPT_CREWAI_IMPLEMENTATION_WRITE |
     BLOCK_CLINE_SUPERVISORY_SCOPE |
     BLOCK_UNRELATED_OR_AMBIGUOUS_SCOPE |
@@ -156,7 +168,7 @@ GALAX_EXECUTOR_SCOPE_GATE_V2:
   factual_reason:
 ```
 
-No real Cline task may be emitted unless:
+No real normal Cline task may be emitted unless:
 
 ```text
 gate_result == PASS_CLINE_BLUEPRINT_ONLY
@@ -181,13 +193,11 @@ cline_pass_requirements:
 
 Then Skill 2 may create one exact bounded Cline task.
 
-Cline remains responsible for the local execution stage, including implementation edits/saves and, only when separately authorized, exact validation, commit, and push stages.
+Cline remains responsible for the normal local execution stage, including implementation edits/saves and, only when separately authorized, exact validation, commit, and push stages.
 
 ## 7. Cline Git stage rule
 
-For active CrewAI implementation, Cline — not ChatGPT — is the executor for implementation Git commands.
-
-Required stage separation:
+For normal active CrewAI implementation, Cline is the executor for implementation Git commands.
 
 ```text
 local edit/save complete
@@ -212,18 +222,18 @@ GitHub remote evidence available
 
 A ChatGPT PASS does not automatically grant commit or push authority.
 
-## 8. Hard block: ChatGPT may not execute CrewAI implementation
+## 8. Normal hard block: ChatGPT may not execute CrewAI implementation
 
-If ChatGPT would edit, save, commit, push, or otherwise publish any active CrewAI implementation or blueprint-owned technical target, return:
+When the current cycle is the normal Skill 2/Skill 10 Cline lane and no Skill 12 fallback cycle has been selected, if ChatGPT would edit, save, validate, commit, push, or otherwise publish active CrewAI implementation or blueprint-owned technical work, return:
 
 ```text
-BLOCK_CHATGPT_CREWAI_IMPLEMENTATION_WRITE
+BLOCKED_CHATGPT_CREWAI_IMPLEMENTATION_WRITE
 ```
 
 This includes:
 
 ```yaml
-blocked_ChatGPT_targets_or_actions:
+blocked_ChatGPT_targets_or_actions_normal_lane:
   - active_CrewAI_remediation_blueprint_file
   - blueprint_owned_technical_contract_or_execution_plan
   - src_or_runtime_code
@@ -237,18 +247,43 @@ blocked_ChatGPT_targets_or_actions:
   - deployment
 ```
 
-There is **no ChatGPT blueprint-edit exception** in this skill.
+If the Human Owner authorizes an exact normal CrewAI technical stage, preserve that request and route execution to Cline under Skill 2.
 
-If the Human Owner authorizes an exact CrewAI technical stage, preserve that request and route the execution to Cline under Skill 2 after the required blueprint trace and stage gate pass.
+Do not reinterpret normal Human Owner technical authorization as permission for ChatGPT to become implementation writer.
 
-Do not reinterpret Human Owner technical authorization as permission for ChatGPT to become the implementation writer.
+## 9. Skill 12 exception handoff
 
-## 9. Hard block: Cline may not maintain ChatGPT supervisory controls
+The normal blocker in Section 8 does not prevent a separate Skill 12 cycle when all fallback prerequisites are proven.
+
+Qualifying reasons are limited to:
+
+```yaml
+Skill_12_handoff_reasons:
+  - Cline_current_capability_limit_factually_proven
+  - Cline_materially_mismatched_same_bounded_goal_again_after_one_exact_corrected_retry
+```
+
+Required handoff:
+
+```text
+normal Cline task cannot be completed reliably
+→ preserve correct completed Cline work
+→ stop/freeze overlapping Cline action
+→ verify current ChatGPT tool can perform the exact action
+→ explain limitation/mismatch to Human Owner in plain Tagalog
+→ obtain explicit Human Owner fallback authorization
+→ Router selects Skill 12 in a separate cycle
+→ Skill 12 independently produces PASS_CHATGPT_TECHNICAL_FALLBACK or blocks
+```
+
+Skill 10 must not itself convert `BLOCKED_CHATGPT_CREWAI_IMPLEMENTATION_WRITE` into fallback authority.
+
+## 10. Hard block: Cline may not maintain ChatGPT supervisory controls
 
 If Cline would edit, save, commit, or push any ChatGPT-owned supervisory target, return:
 
 ```text
-BLOCK_CLINE_SUPERVISORY_SCOPE
+BLOCKED_CLINE_SUPERVISORY_SCOPE
 ```
 
 Examples:
@@ -276,23 +311,11 @@ length problem / achievement
 
 Do not restart, rewrite, or invalidate correct Cline implementation work when removing a supervisory target from an overbroad request.
 
-## 10. Skill 9 PASS rule
+## 11. Skill 9 PASS rule
 
 Return `PASS_CHATGPT_SUPERVISORY_ONLY` only when the requested repository change is exactly within Skill 9's supervisory allowlist and changes no CrewAI blueprint/runtime/source/tests/dependencies/workflows/implementation Git state.
 
-```yaml
-Skill_9_pass_requirements:
-  exact_Human_Owner_supervisory_request: true
-  exact_supervisory_target_known: true
-  CrewAI_blueprint_change: false
-  blueprint_owned_technical_contract_change: false
-  source_or_test_change: false
-  dependency_or_workflow_change: false
-  implementation_commit_or_push: false
-  continuity_or_achievement_target: false
-```
-
-## 11. Skill 5 PASS rule
+## 12. Skill 5 PASS rule
 
 Length-problem and achievement work is classified separately:
 
@@ -303,9 +326,7 @@ Cline_task_created: false
 Skill_9_write: false
 ```
 
-Skill 5's exact branch/PR/timestamp/dedupe/write limits remain unchanged.
-
-## 12. Other or ambiguous work
+## 13. Other or ambiguous work
 
 A technical task outside the current blueprint is not automatically Cline work, and a non-blueprint repository task is not automatically ChatGPT direct-write work.
 
@@ -318,11 +339,12 @@ other_or_ambiguous_scope:
 
 Do not broaden Skill 9 into generic documentation maintenance.
 Do not broaden Cline into generic repository maintenance.
+Do not broaden Skill 12 into a permanent ChatGPT implementation role.
 
-## 13. Required receipt
+## 14. Required receipt
 
 ```yaml
-GALAX_EXECUTOR_SCOPE_BLOCKER_RECEIPT_V2:
+GALAX_EXECUTOR_SCOPE_BLOCKER_RECEIPT_V3:
   Human_Owner_request:
   proposed_action:
   proposed_executor:
@@ -335,8 +357,9 @@ GALAX_EXECUTOR_SCOPE_BLOCKER_RECEIPT_V2:
   Cline_task_allowed: true | false
   ChatGPT_supervisory_direct_update_allowed: true | false
   Skill_5_continuity_direct_update_allowed: true | false
+  Skill_12_fallback_handoff_allowed: true | false
 
-  ChatGPT_CrewAI_write_blocked: true | false
+  ChatGPT_CrewAI_write_blocked_in_normal_lane: true | false
   Cline_supervisory_write_blocked: true | false
 
   exact_blocker_if_any:
@@ -344,32 +367,37 @@ GALAX_EXECUTOR_SCOPE_BLOCKER_RECEIPT_V2:
   assumptions: []
 ```
 
-## 14. Final strict contract
+## 15. Final strict contract
 
 ```text
-exact active CrewAI remediation-blueprint execution
+exact active CrewAI remediation-blueprint execution in normal lane
 → PASS_CLINE_BLUEPRINT_ONLY
 → ChatGPT prepares one exact bounded command
 → Cline executes
-→ Cline validation / commit / push only at separately authorized stages
+→ Cline validation / commit / push only at authorized stages
 → ChatGPT reviews evidence and remote diff
 → Human Owner final acceptance
+
+Cline cannot perform exact action OR materially mismatches it again after one corrected retry
+→ stop normal lane
+→ verify ChatGPT exact capability
+→ obtain Human Owner explicit fallback authorization
+→ separate Skill 12 cycle
 
 ChatGPT skill/router/context/supervisory rule maintenance
 → BLOCK Cline
 → PASS_CHATGPT_SUPERVISORY_ONLY
 → Skill 9
-→ ChatGPT may write only that exact supervisory target
 
 length problem / achievement
 → BLOCK Cline
 → PASS_SKILL_5_CONTINUITY_ONLY
 → Skill 5
 
-ChatGPT tries to write CrewAI blueprint/source/tests/implementation Git
+ChatGPT tries CrewAI implementation write in normal lane without Skill 12
 → BLOCK_CHATGPT_CREWAI_IMPLEMENTATION_WRITE
 
-Cline tries to write ChatGPT rules/skills/router/continuity
+Cline tries ChatGPT rules/skills/router/continuity
 → BLOCK_CLINE_SUPERVISORY_SCOPE
 
 anything else or ambiguous
