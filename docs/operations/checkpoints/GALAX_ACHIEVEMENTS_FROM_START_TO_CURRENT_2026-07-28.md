@@ -3123,3 +3123,91 @@ DO_NOT_REPEAT:
 - treating this PLAN_ONLY PASS as authorization to edit `pyproject.toml`
 
 This achievement does not authorize a `pyproject.toml` edit, another `uv lock`, `uv sync`, dependency changes, tests, Ruff, formatter, staging, commit, push, merge, deployment, Agents 02–15, or automatic technical continuation.
+
+## Achievement append — 2026-08-11 08:10 Asia/Manila
+
+```yaml
+append_id: GALAX_ACHIEVEMENT_APPEND_2026_08_11_081023
+updated_local_time: 2026-08-11T08:10:23+08:00
+previous_highest_achievement_number: 77
+new_highest_achievement_number: 78
+duplicate_check:
+  GALAX_CREWAI_REMEDIATION_060_R7_PYPROJECT_CORRECTION_SAVE_014_already_present: false
+  prior_boundary: Achievement_77
+  Assignment_013_unsaved_preview_excluded_as_nonqualifying: true
+  duplicate_entries_skipped: true
+```
+
+### Achievement 78 — Assignment 060 R7 `pyproject.toml` correction save completed PASS with the execution deviation preserved
+
+```yaml
+evidence_classification: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+source_primary_skill: $galax-evidence-validation-acceptance-guardian
+source_terminal_status: PASS
+bounded_objective_completed: true
+new_material_result: true
+assignment_id: GALAX_CREWAI_REMEDIATION_060_R7_PYPROJECT_CORRECTION_SAVE_014
+parent_assignment_id: PHASE_2B_ZERO_OPEN_BLOCKERS_TARGET_ANALYSIS_060
+workspace: C:\Users\socia\Desktop\repo clone GALAX\galax-phase-2b-agent01-runtime
+branch: implementation/phase-2b-agent01-runtime-2026-07-28
+expected_head_sha: c55f131fa4455877fafa4a259be7ba7879ebbe65
+target_file: pyproject.toml
+operation_class: BOUNDED_SAVED_EDIT_EVIDENCE_REVIEW
+approved_preview_assignment: GALAX_CREWAI_REMEDIATION_060_R7_PYPROJECT_CORRECTION_PREVIEW_013
+approved_preview_followed_exactly: true
+saved_project_metadata:
+  project_table_header: '[project]'
+  name: galax-ai
+  version: 0.1.0
+  description: Governed CrewAI Foundation for the Galax AI project.
+  requires_python: ">=3.10,<3.14"
+  dependencies:
+    - crewai==1.15.4
+    - pydantic==2.12.5
+preserved_surrounding_sections:
+  - dependency-groups
+  - build-system
+  - tool.uv.build-backend
+preserved_configuration:
+  pytest: 9.0.3
+  ruff: 0.15.1
+  uv_build: 0.11.29
+  build_backend: uv_build
+  module_name: galax
+  module_root: src
+files_created: []
+files_modified:
+  - pyproject.toml
+files_deleted: []
+files_renamed: []
+commands_run: []
+tests_run: []
+Git_operations: []
+execution_deviations:
+  - unallowlisted_pre_save_pyproject_read
+pre_save_confirmation_read:
+  path: pyproject.toml
+  allowlisted_by_Assignment_014: false
+  executed: true
+post_save_verification_read:
+  requested: true
+  approved: false
+  executed: false
+  result: REJECTED_BY_HUMAN_OWNER
+file_change_deviations: []
+unauthorized_mutations_detected: []
+LOCKED_ACCEPTED_changed: false
+saved_edit_validity: PRESERVE_CORRECT_SAVE
+Skill_3_evidence_review_status: PASS
+remote_publication_of_local_implementation_proven: false
+```
+
+The completed achievement is the bounded saved-edit PASS for the exact Assignment 013-approved `pyproject.toml` project-metadata correction. The saved file now has the canonical `[project]` metadata block while the dependency-group and uv build configuration were preserved. The corrected execution receipt explicitly records one unallowlisted pre-save read of `pyproject.toml`; that deviation did not modify repository content. The requested post-save verification read was rejected by the Human Owner and was not executed. No command, test, Ruff, formatter, `uv lock`, or Git operation was performed by Assignment 014.
+
+DO_NOT_REPEAT:
+- `GALAX_CREWAI_REMEDIATION_060_R7_PYPROJECT_CORRECTION_SAVE_014`
+- the exact Assignment 013-approved `pyproject.toml` metadata save
+- rereading `pyproject.toml` solely to re-prove the already-saved correction without a new factual need
+- treating the unallowlisted pre-save read as an authorized read
+
+This achievement does not authorize `uv lock`, `uv sync`, tests, Ruff, formatter, staging, `git add`, implementation commit, push, merge, deployment, Agents 02–15, or automatic technical continuation.
