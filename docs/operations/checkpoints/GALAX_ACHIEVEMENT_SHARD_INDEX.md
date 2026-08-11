@@ -1,0 +1,30 @@
+# Galax Achievement Shard Index
+
+```yaml
+GALAX_ACHIEVEMENT_SHARD_INDEX_V1:
+  repository: ariessocia04-rgb/galax-Ai-project
+  continuity_branch: docs/new-chat-continuity-2026-07-27
+  continuity_PR: 10
+  legacy_baseline_file: docs/operations/checkpoints/GALAX_ACHIEVEMENTS_FROM_START_TO_CURRENT_2026-07-28.md
+  legacy_baseline_highest_achievement_number: 78
+  sharding_started_after_achievement_number: 78
+  highest_sharded_achievement_number: 79
+  updated_local_datetime: 2026-08-11T11:04+08:00
+  timezone_name: Asia/Manila
+  entries:
+    - achievement_number: 79
+      shard_path: docs/operations/checkpoints/achievements/GALAX_ACHIEVEMENT_0079_2026-08-11.md
+      source_primary_skill_alias: $galax-evidence-validation-acceptance-guardian
+      source_task_or_assignment_id: GALAX_CREWAI_REMEDIATION_060_R7_PHASE1_LOCKFILE_PIN_EVIDENCE_017
+      evidence_class: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+      shard_create_commit_sha: 9bd81abc8f073a455be19055fcdbc5eec8a9fc3e
+```
+
+## Contract
+
+- Achievements 1–78 remain exactly in the immutable legacy baseline file and are not copied, renumbered, moved, or rewritten by sharding.
+- Every entry after 78 points to exactly one immutable numbered achievement shard.
+- This index is a compact manifest only; full achievement evidence remains in the shard.
+- Dedupe must check the legacy baseline, this index, and the proposed exact shard path before any new shard is created.
+- An indexed shard must not be modified. Corrections require a separately authorized continuity correction record rather than silent history rewrite.
+- This index does not authorize any CrewAI technical stage, Cline task, source/test/dependency change, Git action on the implementation branch, merge, or deployment.
