@@ -11,9 +11,60 @@ custom_GPT_knowledge_file: true
 
 Skill 2 controls bounded work given to Cline **only when Cline is the authorized executor**.
 
-It does not apply to direct Skill 5 continuity updates or direct Skill 9 skill/rule updates because those exact standing scopes use ChatGPT as executor.
+It does not apply to direct Skill 5 continuity updates or allowed direct Skill 9 skill/rule updates because those exact standing scopes use ChatGPT as executor.
 
-## 2. Executor rule
+It can never authorize Cline to mutate the permanent CrewAI remediation immutable set.
+
+## 2. Highest-priority permanent remediation precheck
+
+Before any Cline task is planned, approved, corrected, validated, committed, or pushed, check:
+
+```text
+docs/rules/GALAX_CREWAI_REMEDIATION_BLUEPRINT_FOCUS_LOCK_2026-08-09.md
+```
+
+Protected set:
+
+```yaml
+PERMANENT_CREWAI_REMEDIATION_SET:
+  - docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
+  - docs/rules/GALAX_CREWAI_REMEDIATION_BLUEPRINT_FOCUS_LOCK_2026-08-09.md
+  - docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md
+```
+
+If the proposed Cline task would directly or indirectly edit, rewrite, delete, rename, reformat, replace, supersede, reinterpret, weaken, unlock, or alter the technical meaning of this set:
+
+```text
+BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK
+```
+
+and do not emit a Cline task.
+
+This blocker applies even when the Human Owner asks for the mutation.
+
+## 3. Allowed Cline interaction with permanent set
+
+Only:
+
+```yaml
+allowed:
+  - read
+  - inspect
+  - check
+  - diff
+  - status
+  - validate_non_mutating
+  - verify_hash_or_blob_identity
+  - verify_blueprint_mapping
+  - commit_other_authorized_changes_when_protected_set_unchanged
+  - push_other_authorized_changes_when_protected_set_unchanged
+```
+
+Validation must not auto-fix, format, regenerate, normalize, or rewrite protected artifacts.
+
+Commit/push tasks must prove the protected set remains unchanged before proceeding.
+
+## 4. Executor rule outside permanent lock
 
 ```yaml
 standing_ChatGPT_direct_scopes:
@@ -28,6 +79,7 @@ standing_ChatGPT_direct_scopes:
     actions:
       - edit_rule_content
       - update_rule_content
+    permanent_CrewAI_remediation_lock_override: prohibited
 
 Cline:
   default_repository_executor_when_capable_outside_standing_ChatGPT_scopes: true
@@ -40,31 +92,29 @@ Cline:
   automatic_next_stage: prohibited
 ```
 
-If Cline is capable for work outside Skill 5/Skill 9 standing scopes and ChatGPT attempts takeover:
+If Cline is capable for non-protected work outside Skill 5/Skill 9 standing scopes and ChatGPT attempts takeover:
 
 ```text
 BLOCKED_CHATGPT_TAKEOVER_CLINE_CAPABLE
 ```
 
-Skill 12 is the fallback for other direct ChatGPT execution.
+## 5. Mandatory Cline package chain
 
-## 3. Mandatory Cline package chain
-
-When Cline is executor:
+When Cline is executor and the permanent-lock precheck passes:
 
 ```text
 Human Owner request
 → Context Engineer supplies verified context
 → Skill 2 fixes exact scope/mode/permissions/stop
-→ Prompt Engineer packages the Human Owner + Cline instruction
+→ Prompt Engineer packages Human Owner + Cline instruction
 → Cline executes
 → ChatGPT reviews evidence
 → Human Owner controls next consequential stage
 ```
 
-Skill 10 remains mandatory only for active CrewAI remediation-blueprint implementation tasks.
+Skill 10 remains mandatory for active CrewAI remediation-blueprint implementation tasks.
 
-## 4. Mandatory owner-facing format
+## 6. Mandatory owner-facing format
 
 Every Cline instruction must state outside the prompt box:
 
@@ -89,7 +139,7 @@ GIT: GIT_ONLY
 REVIEW: REVIEW_ONLY
 ```
 
-## 5. NEW/STAY rule
+## 7. NEW/STAY and PLAN/ACT
 
 Use `STAY` for the same bounded Cline assignment/thread. Use `NEW` for a new independent assignment or when stale/conflicting context requires a clean boundary.
 
@@ -100,9 +150,7 @@ CLINE SESSION: UNKNOWN
 BLOCKED_CLINE_SESSION_STATE_UNVERIFIED
 ```
 
-Do not ask the Human Owner to decide.
-
-## 6. PLAN to ACT rule
+Planning sequence:
 
 ```text
 PLAN_ONLY
@@ -111,13 +159,13 @@ PLAN_ONLY
 → Human Owner authorizes implementation
 → ACT_BOUNDED
 → execute the approved plan here
-→ Cline edits/saves exact scope
+→ Cline edits/saves exact non-protected scope
 → stop for review
 ```
 
 Never use `execute the approved plan here` during PLAN_ONLY.
 
-## 7. Consequential stages
+## 8. Consequential stages
 
 ```text
 PLAN ≠ ACT
@@ -129,15 +177,27 @@ PUSH ≠ REMOTE REVIEW
 
 No automatic next stage.
 
-## 8. Zero-coding-owner rule
+## 9. Zero-coding-owner rule
 
 Never ask the Human Owner to write code, manually edit files, type terminal/Git commands, choose NEW/STAY, choose PLAN/ACT, or invent technical approval/rejection wording.
 
-## 9. Final contract
+For the permanent remediation set, a Human Owner edit/unlock request is blocked rather than converted into a Cline task.
+
+## 10. Final contract
 
 ```text
+Permanent CrewAI remediation mutation/unlock request
+→ BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK
+→ no Cline prompt.
+
+Permanent set read/check/non-mutating validation
+→ allowed when narrowly required.
+
+Commit/push
+→ allowed only when protected set remains unchanged.
+
 Skill 5 direct scope → ChatGPT executes.
-Skill 9 direct skill/rule scope → ChatGPT executes.
-Other work and Cline capable → Skill 2 packages Cline execution.
-Other ChatGPT execution → Skill 12 only after verified gate and owner authorization.
+Allowed non-protected Skill 9 direct scope → ChatGPT executes.
+Other non-protected work and Cline capable → Skill 2 packages Cline execution.
+Other direct ChatGPT execution → Skill 12 only after verified gate and owner authorization, never to override permanent lock.
 ```
