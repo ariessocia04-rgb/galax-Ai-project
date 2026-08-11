@@ -31,12 +31,13 @@ Read these first as applicable:
 1. `AGENTS.md`
 2. `docs/operations/CODE_RED.md`
 3. `docs/rules/GALAX_CHATGPT_DIRECT_REPOSITORY_UPDATE_BOUNDARY.md`
-4. `docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md`
-5. `docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md`
-6. `docs/plan/CHATGPT_CLINE_DRAFT_PR_EXECUTION_CONTROL_PLAN_2026-07-22.md`
-7. `docs/plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md`
-8. `docs/prompts/EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md`
-9. `docs/sources/SOURCE_INDEX.md`
+4. `docs/skills/chatgpt/00_GALAX_SKILL_ROUTER_MANAGER.md`
+5. `docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md`
+6. `docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md`
+7. `docs/plan/CHATGPT_CLINE_DRAFT_PR_EXECUTION_CONTROL_PLAN_2026-07-22.md`
+8. `docs/plan/EXTERNAL_AI_CONTRIBUTOR_EXECUTION_PLAN_DRAFT.md`
+9. `docs/prompts/EXTERNAL_AI_CONTRIBUTOR_COMMAND_PACK.md`
+10. `docs/sources/SOURCE_INDEX.md`
 
 The legacy file:
 
@@ -68,6 +69,8 @@ Do not ask what the previous work was when repository access exists. Do not rely
 README current readiness
 → AGENTS.md
 → CODE RED
+→ canonical contributor role separator
+→ canonical ChatGPT skill router
 → canonical conflict audit and alias target
 → Foundation and Agent 01 Flow execution contract
 → CrewAI 1.15.4 remediation blueprint
@@ -83,7 +86,7 @@ A lower-priority record cannot reactivate a superseded architecture or contribut
 
 ## Human Owner's canonical implementation workflow
 
-For active CrewAI remediation-blueprint implementation, the repository uses this separation of duties:
+The default active CrewAI remediation-blueprint workflow is:
 
 ```text
 Human Owner
@@ -117,8 +120,7 @@ Human Owner
 → final acceptance
 ```
 
-This is the canonical meaning of the ChatGPT + Cline development-control architecture.
-
+This remains the normal ChatGPT + Cline development-control architecture.
 A ChatGPT PASS does not itself authorize commit or push.
 
 ## Contributor responsibility boundary
@@ -126,12 +128,14 @@ A ChatGPT PASS does not itself authorize commit or push.
 ```yaml
 Human_Owner:
   final_authority: true
+  coding_knowledge_required: false
 
 ChatGPT:
   role: repository_aware_architect_supervisor_and_remote_reviewer
-  CrewAI_implementation_writer: false
-  CrewAI_implementation_commit_executor: false
-  CrewAI_implementation_push_executor: false
+  CrewAI_implementation_writer_by_default: false
+  CrewAI_implementation_commit_executor_by_default: false
+  CrewAI_implementation_push_executor_by_default: false
+  technical_fallback_executor: true_only_after_Skill_12_PASS_and_explicit_Human_Owner_authorization
 
 Cline:
   role: primary_local_executor_for_active_CrewAI_remediation_blueprint
@@ -150,29 +154,53 @@ Canonical separator:
 docs/rules/GALAX_CHATGPT_DIRECT_REPOSITORY_UPDATE_BOUNDARY.md
 ```
 
-### Hard blocker — ChatGPT crossing into CrewAI implementation
+## Normal hard blocker — ChatGPT crossing into CrewAI implementation
 
-If ChatGPT attempts to edit, save, commit, push, or publish:
-
-- the active CrewAI remediation blueprint;
-- a blueprint-owned technical contract/execution plan;
-- `src/**` or runtime implementation;
-- executable tests;
-- dependencies or lockfiles;
-- implementation branch Git state;
-- implementation commit or push;
-
-return:
+Without a valid Skill 12 fallback gate, if ChatGPT attempts to edit, save, validate, commit, push, or publish active CrewAI blueprint-owned technical work, source, tests, dependencies, or implementation branch state:
 
 ```text
 BLOCKED_CHATGPT_CREWAI_IMPLEMENTATION_WRITE
 ```
 
-The execution must remain with Cline under the normal Skill 2 + Skill 10 controls and separate Human Owner action gates.
+The normal execution remains with Cline under Skill 2 + Skill 10 and the exact Human Owner action gates.
 
-There is no ChatGPT blueprint-edit exception.
+## Verified technical fallback — Skill 12
 
-### Hard blocker — Cline crossing into ChatGPT supervisory work
+ChatGPT may perform an exact CrewAI technical action only as a temporary fallback when all of these are proven:
+
+```yaml
+Skill_12_gate:
+  exact_current_action_known: true
+  one_of:
+    - Cline_capability_limit_factually_proven
+    - Cline_repeated_material_command_mismatch_after_one_exact_corrected_retry_proven
+  ChatGPT_current_tool_can_perform_exact_action: true
+  Human_Owner_explicit_fallback_authorization: true
+  exact_authorized_stages_known: true
+  LOCKED_ACCEPTED_conflict: false
+  unrelated_scope_expansion: false
+  simultaneous_overlapping_writer: false
+  gate_result: PASS_CHATGPT_TECHNICAL_FALLBACK
+```
+
+A single Cline mistake does not authorize takeover.
+
+Skill 12 can authorize only the exact stages the Human Owner approved, such as edit/save, validation, commit, or remote publication when the current ChatGPT tools actually support them.
+
+When ChatGPT uses a connected GitHub direct-write action, it must report truthfully that the action created a remote commit directly rather than claiming a separate local commit and push.
+
+After a successful fallback:
+
+```text
+verify exact remote commit/diff
+→ preserve ChatGPT-created work as current repository truth
+→ Cline must not redo, overwrite, revert, or recreate it without new Human Owner authority
+→ Cline continues from the new verified state
+```
+
+If the local Cline workspace needs alignment, ChatGPT prepares the exact safe Cline reconciliation task and asks the Human Owner only for authorization.
+
+## Hard blocker — Cline crossing into ChatGPT supervisory work
 
 Cline must not edit/save/commit/push:
 
@@ -191,7 +219,7 @@ BLOCKED_CLINE_SUPERVISORY_SCOPE
 
 ## Narrow ChatGPT direct repository exceptions
 
-ChatGPT may directly update only its exact supervisory-control layer when the Human Owner requests it:
+ChatGPT may directly update its exact supervisory-control layer when the Human Owner requests it:
 
 ```yaml
 Skill_9_direct_scope:
@@ -203,7 +231,7 @@ Skill_9_direct_scope:
   - update_canonical_new_chat_supervisory_operating_instruction
 ```
 
-And Skill 5 may directly maintain only:
+Skill 5 may directly maintain only:
 
 ```yaml
 Skill_5_direct_scope:
@@ -212,7 +240,54 @@ Skill_5_direct_scope:
   - qualifying_terminal_PASS_achievement_persistence
 ```
 
-These exceptions do **not** mean ChatGPT is the generic writer for all non-blueprint documentation or repository changes.
+These exceptions do not mean ChatGPT is the generic writer for all non-blueprint documentation or repository changes.
+
+## Owner rule / skill design — Skill 11
+
+When the Human Owner wants to add or modify a skill/rule but the exact behavior, restriction, feasibility, or save location is unclear:
+
+```text
+Skill 11
+→ ask only necessary questions in simple Tagalog
+→ do not ask the Human Owner to code, patch files, write YAML/JSON, or run Git/terminal commands
+→ verify current repository constraints
+→ perform a bounded current web fact-check before concluding whether the request is possible
+→ prefer official or primary sources for external capability claims
+→ classify POSSIBLE / POSSIBLE_WITH_CONSTRAINTS / NOT_POSSIBLE_AS_REQUESTED
+→ if not possible, identify the factual reason and recommend the smallest practical remedy/alternative
+→ recommend whether the result belongs in a ChatGPT skill, router, supervisory rule, Context Engineer rule, new-chat instruction, or Skill-5 continuity area
+→ produce the approved repository-ready rule/skill specification in English
+→ separate Skill 9 write cycle after Human Owner approval
+```
+
+Questions to the Human Owner are in Tagalog. Repository rules and skills are saved in English unless the Human Owner explicitly requires otherwise.
+
+## Zero-coding-owner operating rule
+
+The Human Owner is the final authority but is not expected to manually perform coding or Git work.
+
+```yaml
+prohibited:
+  - ask_owner_to_write_or_patch_code
+  - ask_owner_to_edit_repository_files_manually
+  - ask_owner_to_type_terminal_or_Git_commands_when_an_available_authorized_AI_or_tool_can_do_it
+  - ask_owner_to_resolve_technical_merge_or_patch_details_manually
+```
+
+Required behavior:
+
+```text
+if an available authorized actor/tool can do the job
+→ explain the exact action in plain language
+→ ask Human Owner for authorization
+→ actor/tool performs the work
+
+if no available actor/tool can do the job
+→ verify the factual blocker
+→ research the remedy/alternative
+→ recommend the smallest feasible option
+→ ask Human Owner only for the decision/authorization
+```
 
 ## Required reading and action behavior for technical work
 
@@ -222,16 +297,15 @@ Before changing or implementing any agent, LLM, tool, prompt, knowledge source, 
 verify repository and branch
 → verify exact HEAD SHA
 → inspect Git status when local implementation state is required
-→ read README, AGENTS, and CODE RED
+→ read README, AGENTS, CODE RED, and contributor role separator
 → follow the exact applicable canonical authority chain
 → inspect the active assignment and current evidence
 → verify current external facts from authoritative sources when required
 → define one bounded assignment
 → execute only after Human Owner authorization
-→ run only exact separately authorized validation
-→ commit only after separate Human Owner commit authorization
-→ push only after separate Human Owner push authorization
-→ ChatGPT reviews the exact remote diff/evidence
+→ run only exact authorized validation
+→ commit/publish only under the exact current executor gate
+→ ChatGPT reviews exact resulting evidence
 → Human Owner accepts or authorizes one exact correction
 ```
 
@@ -337,21 +411,22 @@ isolated_patch_comparator: mini-SWE-agent_when_assigned
 Docker_fallback_reproducer: OpenHands_Core_when_assigned
 read_only_PR_reviewer: PR-Agent_when_assigned
 remote_architect_and_exact_diff_reviewer: ChatGPT
+owner_authorized_technical_fallback_executor: ChatGPT_via_Skill_12_only
 final_authority: Human_Owner
 simultaneous_writers: prohibited
 ```
 
 These contributors are not Galax Agents 01–15.
 
-The selected development-control workflow is:
+The selected normal development-control workflow remains:
 
 ```text
 ChatGPT issues one exact bounded assignment
-→ Cline works locally with manual approvals and checkpoints
-→ exact separately authorized tests
-→ Human Owner separately authorizes commit
+→ Cline works locally with approvals and checkpoints
+→ exact authorized tests
+→ Human Owner authorizes commit
 → Cline commits
-→ Human Owner separately authorizes push
+→ Human Owner authorizes push
 → Cline pushes to the implementation branch
 → Draft PR exposes the exact diff
 → ChatGPT reviews plan alignment, CrewAI compatibility, architecture, tests, security, regressions, and accepted-work preservation
@@ -381,7 +456,7 @@ No file is useless merely because it is old, verbose, declined, or superseded.
 
 ## Current technical status preservation
 
-This contributor-boundary restoration does not itself change the current Foundation implementation stage, source, tests, dependencies, active assignments, runtime readiness, or CrewAI architecture.
+These contributor-boundary rules do not themselves change the current Foundation implementation stage, source, tests, dependencies, active assignments, runtime readiness, or CrewAI architecture.
 
 Those facts must be reconstructed from current GitHub evidence, CODE RED, the latest valid continuity checkpoint, current assignments, and active branch/PR evidence rather than inferred from this README.
 
@@ -396,6 +471,7 @@ deployment: prohibited_without_separate_Human_Owner_authorization
 workflow_or_secret_change: prohibited
 Agents_02_to_15: prohibited_without_exact_live_authority
 production_ready_claim: prohibited
-ChatGPT_CrewAI_implementation_write: prohibited
+ChatGPT_CrewAI_implementation_write_without_Skill_12_PASS_and_owner_authorization: prohibited
 Cline_ChatGPT_supervisory_or_continuity_write: prohibited
+Human_Owner_manual_coding_as_default_fallback: prohibited
 ```
