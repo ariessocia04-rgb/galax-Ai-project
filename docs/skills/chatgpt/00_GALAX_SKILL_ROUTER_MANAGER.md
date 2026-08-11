@@ -13,6 +13,8 @@ Repository evidence overrides chat memory.
 
 Before normal routing, apply the permanent CrewAI remediation mutation precheck in Section 2.
 
+For material factual claims, also apply the lightweight factual-claim gate in Section 13 without creating a new primary skill or forcing duplicate reads.
+
 ## 2. Highest-priority permanent CrewAI remediation immutable gate
 
 Canonical permanent lock:
@@ -243,12 +245,13 @@ Skill 5 selected for length problem / achievement
 ### Skill 9
 
 ```text
-Skill 9 selected for edit/update of ChatGPT skills or rules
+Skill 9 selected for create/edit/update of an eligible ChatGPT skill or rule
 → Context Engineer supplies verified repository evidence
 → apply permanent CrewAI remediation immutable precheck
 → if permanent lock collision: BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK
 → otherwise verify target is under docs/skills/chatgpt/** or docs/rules/**
-→ ChatGPT directly edits/updates exact allowed skill/rule
+→ for new supervisory rules, require explicit Human Owner approval of the bounded purpose/scope
+→ ChatGPT directly creates/edits/updates the exact allowed skill/rule
 → ChatGPT verifies resulting remote evidence
 → Human Owner final acceptance
 → stop
@@ -308,7 +311,7 @@ New/unverified chats must recover:
 - commit/push allowed only when protected set remains unchanged;
 - Cline-default execution for general repository work;
 - Skill 5 direct ChatGPT length-problem/achievement persistence;
-- Skill 9 direct ChatGPT edit/update authority for allowed `docs/skills/chatgpt/**` and `docs/rules/**`, excluding permanent remediation artifacts;
+- Skill 9 direct ChatGPT create/edit/update authority for eligible `docs/skills/chatgpt/**` and `docs/rules/**`, excluding permanent remediation artifacts;
 - Skill 12 fallback for other direct ChatGPT execution, never for the permanent remediation set;
 - Context Engineer;
 - Prompt Engineer for Cline work;
@@ -316,7 +319,8 @@ New/unverified chats must recover:
 - NEW/STAY and mode mappings;
 - approval/rejection packaging;
 - commit/push separation for Cline work;
-- ordinary LOCKED_ACCEPTED and do-not-repeat state.
+- ordinary LOCKED_ACCEPTED and do-not-repeat state;
+- factual claim gate: `docs/rules/GALAX_CHATGPT_FACTUAL_CLAIM_GATE.md`.
 
 ## 12. Final rule
 
@@ -332,7 +336,7 @@ Allowed protected-set operations
 
 ChatGPT standing jobs outside permanent lock:
 1. Update length problem in repo → Skill 5.
-2. Edit/update ChatGPT skills and rules only → Skill 9.
+2. Create owner-approved supervisory rules and edit/update ChatGPT skills/rules only → Skill 9.
 3. Update achievement in repo → Skill 5.
 
 Everything else and Cline capable
@@ -341,3 +345,33 @@ Everything else and Cline capable
 Other direct ChatGPT execution
 → Skill 12 only after verified gate + explicit Human Owner authorization, but never to override the permanent remediation lock.
 ```
+
+## 13. Global factual claim gate
+
+Canonical rule:
+
+```text
+docs/rules/GALAX_CHATGPT_FACTUAL_CLAIM_GATE.md
+```
+
+This is supervisory support, not a registered skill and not a routing destination.
+
+For a material factual claim:
+
+```text
+fresh verified evidence already exists
+→ reuse it; do not re-fetch merely to repeat the same proof.
+
+current verification is materially required and the required source/tool is available
+→ verify only the missing/current fact.
+
+required evidence is missing or conflicting
+→ UNKNOWN / UNVERIFIED / applicable existing blocker.
+
+unsupported guessing
+→ prohibited.
+```
+
+This gate must not trigger a full repository scan, full skill load, automatic web search, or duplicate reads. The Context Engineer applies the evidence classification and fast-path rules.
+
+The permanent CrewAI remediation immutable gate in Section 2 remains higher authority than this factual-claim gate.
