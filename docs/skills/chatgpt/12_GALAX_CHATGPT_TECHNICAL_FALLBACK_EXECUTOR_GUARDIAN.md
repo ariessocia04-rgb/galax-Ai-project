@@ -9,9 +9,26 @@ custom_GPT_knowledge_file: true
 
 ## 1. Purpose
 
-Skill 12 is the only exception that may temporarily make ChatGPT the repository executor.
+Skill 12 is the fallback for **direct ChatGPT repository execution outside the standing Skill 5 and Skill 9 scopes**.
 
-Normal rule:
+Standing direct ChatGPT scopes that do not require Skill 12:
+
+```yaml
+standing_non_fallback_ChatGPT_scopes:
+  Skill_5:
+    - update_length_problem_in_repo
+    - update_achievement_in_repo
+    - qualifying_achievement_persistence
+  Skill_9:
+    allowed_path_prefixes:
+      - docs/skills/chatgpt/
+      - docs/rules/
+    actions:
+      - edit_skill_rule_content
+      - update_skill_rule_content
+```
+
+For all other repository work:
 
 ```text
 Cline capable → Cline executes.
@@ -19,7 +36,7 @@ ChatGPT authors/specifies/supervises/reviews.
 Human Owner controls consequential stages.
 ```
 
-If Cline is capable of the exact bounded action, Skill 12 must return:
+If Cline is capable outside the standing Skill 5/Skill 9 scopes:
 
 ```text
 BLOCKED_CHATGPT_TAKEOVER_CLINE_CAPABLE
@@ -27,7 +44,7 @@ BLOCKED_CHATGPT_TAKEOVER_CLINE_CAPABLE
 
 ## 2. Activation evidence
 
-A fallback candidate exists only when at least one is factually proven:
+A Skill 12 fallback candidate exists only when at least one is factually proven:
 
 ```yaml
 fallback_reason:
@@ -36,23 +53,12 @@ fallback_reason:
   - OTHER_OWNER_APPROVED_VERIFIED_BLOCKER
 ```
 
-`CLINE_REPEATED_COMMAND_MISMATCH` requires:
-
-```text
-first material mismatch
-→ ChatGPT gives exact corrected command
-→ Human Owner authorizes corrected retry
-→ Cline materially mismatches the same bounded goal again
-```
-
-One mistake is not enough.
+Repeated mismatch requires one exact corrected retry to have also failed materially on the same bounded goal.
 
 ## 3. Mandatory gate
 
-Before any ChatGPT repository execution:
-
 ```yaml
-GALAX_CHATGPT_TECHNICAL_FALLBACK_GATE_V2:
+GALAX_CHATGPT_TECHNICAL_FALLBACK_GATE_V3:
   Human_Owner_request:
   repository:
   target_branch:
@@ -60,7 +66,10 @@ GALAX_CHATGPT_TECHNICAL_FALLBACK_GATE_V2:
   exact_bounded_action:
   exact_target_files: []
 
-  normal_executor: Cline
+  action_inside_standing_Skill_5_scope: true | false
+  action_inside_standing_Skill_9_scope: true | false
+
+  normal_executor_outside_standing_scopes: Cline
   Cline_capable_of_exact_action: true | false
   fallback_reason:
   Cline_failure_or_blocker_evidence: []
@@ -88,13 +97,9 @@ GALAX_CHATGPT_TECHNICAL_FALLBACK_GATE_V2:
     BLOCKED_SIMULTANEOUS_WRITER_RISK
 ```
 
-ChatGPT may execute only when `gate_result == PASS_CHATGPT_TECHNICAL_FALLBACK`.
+Skill 12 is not needed when the action is already authorized directly by Skill 5 or Skill 9.
 
-## 4. Owner authorization
-
-The Human Owner approves the exact fallback action/stages in plain language. The Human Owner is never required to code or perform Git commands manually.
-
-## 5. Stage authority
+## 4. Stage authority
 
 Possible fallback stages:
 
@@ -115,71 +120,35 @@ VALIDATION ≠ COMMIT
 COMMIT ≠ PUSH_OR_REMOTE_PUBLICATION
 ```
 
-The Human Owner may explicitly combine exact bounded stages. Do not infer combined authority from vague language.
-
-## 6. GitHub direct-write truthfulness
+## 5. GitHub direct-write truthfulness
 
 ```yaml
 CONNECTED_GITHUB_DIRECT_WRITE:
   creates_remote_commit_directly: true
   separate_local_commit: false
   separate_push: false
-  required_owner_authority: exact_remote_write_or_publication_authorization
 ```
 
-Do not falsely report a separate push when the connected GitHub write created the remote commit directly.
+Do not falsely report a separate push when a connected GitHub write created the remote commit directly.
 
-## 7. Scope limits
+## 6. Scope limits
 
-Fallback must touch only the exact owner-authorized target.
+Fallback must touch only the exact owner-authorized target. No unrelated scope expansion, LOCKED_ACCEPTED changes, main direct write, force push, history rewrite, secret changes by inference, merge, deploy, or overlapping Cline + ChatGPT writers without separate authority.
 
-Prohibited without separate authority:
-
-- unrelated scope expansion;
-- LOCKED_ACCEPTED modification;
-- main direct write;
-- force push/history rewrite;
-- secrets/security changes by inference;
-- merge;
-- deploy;
-- simultaneous overlapping Cline + ChatGPT writers.
-
-## 8. Result and resume
-
-After execution, verify exact remote evidence and return:
-
-```yaml
-GALAX_CHATGPT_TECHNICAL_FALLBACK_RESULT_V2:
-  repository:
-  fallback_gate_result: PASS_CHATGPT_TECHNICAL_FALLBACK
-  Human_Owner_authorized_stages: []
-  execution_mechanism:
-  target_branch:
-  starting_HEAD_SHA:
-  files_created: []
-  files_modified: []
-  files_deleted: []
-  resulting_commit_or_remote_SHA:
-  remote_diff_verified: true | false
-  unrelated_changes_detected: []
-  LOCKED_ACCEPTED_preserved: true | false
-  status: PASS | CHANGES_REQUIRED | BLOCKED
-```
-
-Successful fallback work becomes current repository truth. Cline resumes from it and must not redo/revert/overwrite it without new Human Owner authority.
-
-## 9. Final contract
+## 7. Final contract
 
 ```text
-Cline can perform exact action
-→ BLOCKED_CHATGPT_TAKEOVER_CLINE_CAPABLE
+Skill 5 length/achievement work
+→ ChatGPT executes directly under Skill 5.
 
-Cline cannot perform exact action / qualifying repeated mismatch / verified blocker
-+ ChatGPT exact capability proven
-+ Human Owner explicitly authorizes exact fallback stages
-+ no lock/scope/writer conflict
-→ PASS_CHATGPT_TECHNICAL_FALLBACK
-→ ChatGPT performs only authorized action
-→ verify result
-→ Cline resumes from new repository truth
+Skill 9 ChatGPT skill/rule edit/update work
+→ ChatGPT executes directly under Skill 9.
+
+Other work and Cline capable
+→ Cline executes.
+
+Other work where fallback is factually justified
++ ChatGPT capability proven
++ Human Owner explicitly authorizes exact stages
+→ Skill 12 may authorize only those stages.
 ```
