@@ -4,7 +4,6 @@
 **Repository:** `ariessocia04-rgb/galax-Ai-project`  
 **Canonical router ref:** `docs/chatgpt-skill-router-2026-08-02`  
 **Canonical router path:** `docs/skills/chatgpt/00_GALAX_SKILL_ROUTER_MANAGER.md`  
-**Scope:** ChatGPT skill selection, context-engineering support, selective repository reading, exact owner-direct non-blueprint repository-update routing, and mandatory Cline blueprint-scope blocking  
 **Runtime effect:** none  
 **CrewAI Flow routing changed:** false  
 **Galax source or tests changed:** false  
@@ -12,27 +11,33 @@
 
 ## 1. Purpose
 
-This document defines the ChatGPT routing layer for Galax AI.
+This router selects exactly one repository-backed Galax ChatGPT skill for the current bounded request, plus no more than two genuinely required dependency skills.
 
-For every Galax request, it classifies the current task, selects exactly one primary repository-backed Galax skill document, loads no more than two genuinely required dependency skill documents, uses the canonical non-skill ChatGPT Context Engineer support contract to prepare the minimum verified context required by the already-selected skill, ignores unrelated skills and context, and completes only the current bounded task.
+It also enforces the Human Owner's execution separation:
 
-For exact Human-Owner-authorized repository governance/documentation/supervisory updates outside the active CrewAI remediation blueprint, the router must select `$galax-owner-direct-repository-update-guardian`. Those Class B updates are performed directly by ChatGPT through the connected GitHub app and must not be delegated to Cline merely because repository files need to change.
+```text
+CrewAI remediation-blueprint implementation
+→ ChatGPT decides / commands / supervises / reviews
+→ Cline executes locally
+→ Cline edits/saves only authorized implementation
+→ Cline runs only authorized validation
+→ after separate Human Owner Git authorization, Cline commits and pushes
+→ ChatGPT reviews exact remote GitHub evidence
+→ Human Owner final acceptance
 
-Before any normal routing cycle allows Skill 2 to create, continue, correct, or authorize a real Cline task, the router must load `$galax-cline-blueprint-scope-blocker` as a mandatory dependency. Cline may proceed only when Skill 10 returns `PASS_CLINE_BLUEPRINT_ONLY`. Non-blueprint work must never be converted into a Cline task merely because Cline is available.
+ChatGPT supervisory controls
+→ ChatGPT may directly maintain only its exact supervisory allowlist through Skill 9
 
-This router does not implement or modify:
+Length problem / achievement
+→ ChatGPT may directly maintain only the exact Skill 5 continuity records
+```
 
-- the CrewAI `@router` architecture;
-- `GalaxFoundationFlow`;
-- Agent 01 or Agents 02–15;
-- Galax source code or tests;
-- Cline software;
-- GitHub workflows, secrets, permissions, merge, or deployment;
-- the authority of the Human Owner.
+ChatGPT must never silently become the CrewAI implementation writer or implementation Git executor.
+Cline must never silently become the ChatGPT supervisory/continuity writer.
 
-## 2. Critical terminology and loading contract
+## 2. Repository-backed skill loading contract
 
-The `$galax-*` names in this router are **routing aliases**. They are not required to be native ChatGPT plugins, native tool names, MCP tools, or separately installed runtime skills.
+The `$galax-*` names are routing aliases backed by exact Markdown files in this repository/ref.
 
 ```yaml
 skill_representation: repository_backed_markdown_document
@@ -45,45 +50,20 @@ registry_ref: docs/chatgpt-skill-router-2026-08-02
 same_ref_as_router_required: true
 ```
 
-In this contract, **load a skill** means:
+To load a skill:
 
 ```text
-resolve the selected $galax-* alias using the exact registry below
-→ fetch the mapped Markdown file from the same repository and ref as this router
-→ use that file as the selected skill instruction
+resolve the exact alias below
+→ fetch the mapped file from this same repository/ref
+→ follow that file as the selected skill instruction
 ```
 
-Do not search for a native registered skill by alias when an exact repository mapping exists.
+Return `BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE` only when this router or an exact mapped required skill cannot be fetched.
 
-Do not return `BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE` merely because the `$galax-*` alias is not registered as a native plugin or tool.
-
-Return `BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE` only when:
-
-- this router cannot be fetched from the canonical repository/ref/path; or
-- the exact mapped primary skill file cannot be fetched; or
-- an exact mapped required dependency file cannot be fetched.
-
-The Context Engineer is **not a skill alias**. It is one fixed ChatGPT supervisory support contract:
+## 3. Canonical skill registry
 
 ```yaml
-context_engineer_support_contract:
-  path: docs/skills/chatgpt/context/00_GALAX_CHATGPT_CONTEXT_ENGINEER.md
-  ref: docs/chatgpt-skill-router-2026-08-02
-  registered_skill: false
-  primary_skill: false
-  dependency_skill: false
-  counts_toward_primary_skill_limit: false
-  counts_toward_dependency_skill_limit: false
-  CrewAI_agent: false
-  runtime_effect: none
-```
-
-The Context Engineer may prepare context only after the router has selected the skill. It cannot select, replace, or activate a skill.
-
-## 3. Canonical repository-backed skill registry
-
-```yaml
-GALAX_REPOSITORY_SKILL_REGISTRY_V1:
+GALAX_REPOSITORY_SKILL_REGISTRY_V2:
   repository: ariessocia04-rgb/galax-Ai-project
   ref: docs/chatgpt-skill-router-2026-08-02
 
@@ -129,45 +109,165 @@ GALAX_REPOSITORY_SKILL_REGISTRY_V1:
       path: docs/skills/chatgpt/10_GALAX_CLINE_BLUEPRINT_SCOPE_BLOCKER.md
 ```
 
-The exact registry above is authoritative for ChatGPT routing on this branch.
+The router must not invent another skill, silently substitute a general skill, infer a different path, or load all skills by default.
 
-The router must not:
+## 4. Context Engineer support contract
 
-- invent another Galax skill;
-- silently substitute a general skill;
-- infer a different filename;
-- search the repository by alias before using the mapped path;
-- require native plugin installation when the mapped repository file is accessible;
-- load all registered skill documents by default;
-- register the Context Engineer as Skill 8, Skill 9, Skill 10, or any other skill;
-- count the Context Engineer against the primary or dependency skill limits.
+The Context Engineer remains non-skill support:
 
-## 4. Router-first policy
+```yaml
+context_engineer_support_contract:
+  path: docs/skills/chatgpt/context/00_GALAX_CHATGPT_CONTEXT_ENGINEER.md
+  ref: docs/chatgpt-skill-router-2026-08-02
+  registered_skill: false
+  primary_skill: false
+  dependency_skill: false
+  counts_toward_primary_skill_limit: false
+  counts_toward_dependency_skill_limit: false
+  CrewAI_agent: false
+  runtime_effect: none
+```
 
-For every Galax request:
+Required relationship:
 
 ```text
-fetch this router from the canonical repository/ref/path
-→ determine whether the current conversation has a valid GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1
-→ when the receipt is missing or materially invalid, start one separate mandatory NEW_CHAT_BOOTSTRAP routing cycle
-→ select exactly one primary skill for that bootstrap cycle: $galax-new-chat-bootstrap-guardian
-→ load exactly the two bootstrap dependencies: $galax-repository-state-scope-guardian and $galax-strict-cline-prompt-guardian
-→ fetch the canonical Context Engineer support contract
-→ let Skill 8 follow docs/operations/GALAX_NEW_CHAT_OPERATING_MANUAL.md and produce a bootstrap receipt
-→ when bootstrap PASS is established, preserve the exact original Human Owner request and start a new routing cycle for that same original request only
-→ otherwise, or when a valid bootstrap receipt already exists, classify the current request normally
-→ select exactly one primary skill alias
-→ resolve the alias to its exact registry path
-→ fetch the exact primary skill document
-→ select zero to two genuinely required dependency aliases
-→ when the normal-cycle primary skill is $galax-strict-cline-prompt-guardian for a real Cline task, include $galax-cline-blueprint-scope-blocker as a mandatory dependency
-→ resolve and fetch only those exact dependency documents
-→ fetch the canonical Context Engineer support contract
-→ use the Context Engineer to prepare only the minimum verified context required by the already-selected skill
-→ ignore all unrelated skill documents and unrelated context
-→ let the selected skill perform its own bounded job and any mandatory reads it still requires
-→ complete only the current bounded task
-→ when the bounded result is a new qualifying terminal PASS, perform the mandatory separate Skill 5 achievement-persistence routing cycle defined in Section 12A
+Router chooses WHO owns the current ChatGPT workflow
+→ Context Engineer prepares the minimum verified context
+→ selected skill performs the bounded job
+```
+
+The Context Engineer may reduce duplicate/stale reads through its verified identity-based reuse rules, but may not skip a selected skill's mandatory read or authorization gate.
+
+If the Context Engineer cannot be fetched, return `BLOCKED_CONTEXT_ENGINEER_UNAVAILABLE`.
+
+## 5. Mandatory new-chat bootstrap
+
+A Galax conversation is `NEW_OR_UNVERIFIED_CHAT` when no valid current `GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1` exists or a material bootstrap invalidation occurred.
+
+Required bootstrap cycle:
+
+```text
+fetch Router
+→ primary Skill 8
+→ dependency Skill 1
+→ dependency Skill 2
+→ Context Engineer support
+→ Skill 8 reads docs/operations/GALAX_NEW_CHAT_OPERATING_MANUAL.md
+→ reconstruct repository-backed goal, exact stop point, completed work, locks, rejected/superseded work, do-not-repeat state, Cline control method, and current contributor boundary
+→ produce GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1
+→ PASS only when safe_to_continue=true
+→ preserve the exact original Human Owner request
+→ start a separate normal routing cycle for that same request only
+```
+
+Skill 10 is not a third bootstrap dependency because bootstrap does not itself issue a real Cline task. Skill 10 becomes mandatory when the normal cycle actually selects Skill 2 for Cline execution.
+
+## 6. Canonical execution separator
+
+Always fetch/follow when executor ownership is material:
+
+```text
+docs/rules/GALAX_CHATGPT_DIRECT_REPOSITORY_UPDATE_BOUNDARY.md
+```
+
+### 6A. CrewAI lane — Cline execution
+
+For exact active CrewAI remediation-blueprint implementation:
+
+```yaml
+ChatGPT:
+  decide_and_command: true
+  supervise_and_review: true
+  direct_implementation_write: prohibited
+  direct_implementation_commit: prohibited
+  direct_implementation_push: prohibited
+
+Cline:
+  primary_local_executor: true
+  implementation_edit_save: only_when_authorized
+  validation: only_when_separately_authorized
+  commit: only_when_separately_authorized
+  push: only_when_separately_authorized
+
+Human_Owner:
+  final_authority: true
+```
+
+Required chain:
+
+```text
+Human Owner
+→ ChatGPT exact bounded command
+→ Cline execution/edit/save
+→ ChatGPT evidence review
+→ PASS / CHANGES_REQUIRED
+→ Human Owner exact Git authorization
+→ Cline commit
+→ separate Human Owner push authorization
+→ Cline push
+→ GitHub remote evidence
+→ ChatGPT exact remote diff review
+→ Human Owner final acceptance
+```
+
+ChatGPT attempting to write, commit, or push CrewAI implementation must return:
+
+```text
+BLOCKED_CHATGPT_CREWAI_IMPLEMENTATION_WRITE
+```
+
+### 6B. ChatGPT supervisory lane — Skill 9
+
+Skill 9 is **not** a generic non-blueprint writer.
+
+It applies only to exact Human-Owner-requested ChatGPT supervisory control maintenance:
+
+```yaml
+Skill_9_scope:
+  - edit_or_update_ChatGPT_skill
+  - add_or_update_ChatGPT_skill
+  - add_or_update_ChatGPT_router
+  - update_Context_Engineer_support_contract
+  - update_ChatGPT_Cline_supervisory_rule_or_role_separator
+  - update_canonical_new_chat_supervisory_operating_instruction
+```
+
+Cline must be blocked from those targets:
+
+```text
+BLOCKED_CLINE_SUPERVISORY_SCOPE
+```
+
+Generic docs, plans, research, technical contracts, blueprint files, source, tests, dependencies, workflows, and implementation Git actions are not automatically Skill 9 work.
+
+### 6C. Continuity lane — Skill 5
+
+Skill 5 owns the Human Owner's narrow direct ChatGPT continuity exceptions:
+
+```yaml
+Skill_5_scope:
+  - update_length_problem
+  - update_achievement
+  - qualifying_terminal_PASS_achievement_persistence
+```
+
+Cline must not be used for those exact continuity writes.
+
+## 7. Router-first normal cycle
+
+After any required bootstrap:
+
+```text
+classify the exact Human Owner request
+→ select exactly one primary skill
+→ fetch that exact skill
+→ select zero to two genuinely required dependencies
+→ fetch only those dependencies
+→ fetch Context Engineer support
+→ prepare only minimum verified context
+→ selected skill performs only its bounded job
+→ do not automatically continue to another technical stage
+→ if a new qualifying terminal PASS occurs, run the mandatory separate Skill 5 achievement-persistence cycle
 → stop
 ```
 
@@ -175,758 +275,163 @@ fetch this router from the canonical repository/ref/path
 primary_skill_limit: 1
 dependency_skill_limit: 2
 read_all_skills: false
-copy_skill_contents_into_router: false
 automatic_next_skill: false
-mandatory_new_chat_bootstrap_cycle: true
-mandatory_new_chat_primary_skill: $galax-new-chat-bootstrap-guardian
-mandatory_new_chat_dependency_skills:
-  - $galax-repository-state-scope-guardian
-  - $galax-strict-cline-prompt-guardian
-post_bootstrap_same_original_request_only: true
-post_bootstrap_invented_task: prohibited
-mandatory_post_PASS_achievement_persistence_cycle: true
-mandatory_post_PASS_cycle_is_separate_routing_cycle: true
-mandatory_post_PASS_primary_skill: $galax-continuity-achievement-guardian
-post_PASS_technical_continuation_before_persistence: prohibited
-owner_direct_Class_B_primary_skill: $galax-owner-direct-repository-update-guardian
-owner_direct_Class_B_executor: ChatGPT_connected_GitHub_app
-owner_direct_Class_B_Cline_handoff: prohibited
-normal_Cline_task_scope_blocker_dependency: $galax-cline-blueprint-scope-blocker
-Cline_task_allowed_only_after_scope_blocker_result: PASS_CLINE_BLUEPRINT_ONLY
-context_engineer_required_support_contract: true
-context_engineer_registered_skill: false
-context_engineer_counts_as_dependency: false
-context_engineer_runtime_effect: none
 Human_Owner_final_authority: true
 ```
 
-`automatic_next_skill: false` continues to prohibit automatic movement into the next technical workflow stage. The mandatory new-chat bootstrap is a prerequisite cycle, not a technical continuation: after Skill 8 `PASS`, the router may only return to the exact original Human Owner request that triggered bootstrap. It must not invent or auto-start another task, phase, implementation, validation, Git action, merge, or deployment.
-
-The mandatory post-PASS achievement-persistence cycle is a documentation-preservation exception backed by the live continuity standing authorization. It begins a new routing cycle with exactly one primary skill and does not authorize implementation, validation, Git mutation on an implementation branch, merge, or deployment.
-
-The Skill 9 owner-direct Class B path is not automatic technical continuation. It applies only when the Human Owner explicitly requested the exact non-blueprint repository update being executed.
-
-Skill 10 is a dependency-only predelegation gate in the normal Cline-task cycle. It does not become another primary implementation skill and does not execute work itself.
-
-### 4A. Context Engineer support rule
-
-The Context Engineer is allowed to retrieve, filter, label, and package context only within the authority and reading boundaries of the selected skill and higher-authority repository records.
-
-It must not weaken a selected skill's mandatory reading rule. It may prevent unrelated extra reads, duplicate history, stale context, or already-completed work from being loaded without a current factual reason.
-
-Required relationship:
-
-```text
-router chooses WHO owns the current ChatGPT workflow
-→ Context Engineer prepares WHAT verified context that owner needs
-→ selected Skill decides HOW to perform its own authorized workflow
-```
-
-The Context Engineer cannot:
-
-- determine repository truth instead of Skill 1;
-- create Cline policy instead of Skill 2;
-- accept evidence instead of Skill 3;
-- review remote diffs instead of Skill 4;
-- persist continuity instead of Skill 5;
-- unlock accepted work instead of Skill 6;
-- classify/delete cleanup targets instead of Skill 7;
-- perform new-chat readiness authority instead of Skill 8;
-- execute owner-direct repository updates instead of Skill 9;
-- decide the Cline blueprint-scope blocker result instead of Skill 10.
-
-If the Context Engineer support contract cannot be fetched from its exact canonical path and ref, stop with `BLOCKED_CONTEXT_ENGINEER_UNAVAILABLE`. Do not silently bypass it after this integration is active.
-
-### 4B. Mandatory new-chat bootstrap rule
-
-A Galax conversation is `NEW_OR_UNVERIFIED_CHAT` when the current conversation contains no valid current `GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1` for the canonical repository/ref, or when that receipt is materially invalidated under Skill 8.
-
-Required bootstrap cycle:
-
-```text
-NEW_OR_UNVERIFIED_CHAT
-→ primary Skill 8: $galax-new-chat-bootstrap-guardian
-→ dependency Skill 1: $galax-repository-state-scope-guardian
-→ dependency Skill 2: $galax-strict-cline-prompt-guardian
-→ Context Engineer as non-skill support
-→ read docs/operations/GALAX_NEW_CHAT_OPERATING_MANUAL.md
-→ reconstruct repository-backed goal, exact stop point, completed setup/work, locks, rejected/superseded work, and do-not-repeat state
-→ verify mandatory Cline prompting, approve/reject, correction, mode, visible-button, No-button, no-visible-button, unknown-UI, save, validation, Git behavior, and current contributor-responsibility boundary
-→ produce GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1
-→ PASS only when safe_to_continue=true
-```
-
-Skill 10 is not added as a third bootstrap dependency because the bootstrap cycle itself does not issue a real Cline task. When the original request later routes to Skill 2 as the normal-cycle primary skill for actual Cline work, Skill 10 becomes mandatory at that point.
-
-After bootstrap `PASS`:
-
-```text
-preserve the exact original Human Owner request
-→ start a separate normal routing cycle
-→ select the one primary skill that owns that original request
-→ do not invent a new goal or technical stage
-```
-
-Skill 8 must never be interpreted as a CrewAI runtime agent, Agent 16, runtime context builder, runtime memory component, source/test implementation authority, or owner-direct repository writer.
-
-## 5. Routing categories
+## 8. Routing categories
 
 ```yaml
 NEW_CHAT_BOOTSTRAP:
-  purpose: establish_repository_backed_new_chat_readiness_before_processing_the_original_Galax_request
+  primary: $galax-new-chat-bootstrap-guardian
 
 REPOSITORY_STATE:
-  purpose: reconstruct_current_Galax_state_and_next_safe_action
+  primary: $galax-repository-state-scope-guardian
 
-CLINE_PROMPT:
-  purpose: create_or_review_one_exact_bounded_Cline_task_for_active_CrewAI_blueprint_work_after_mandatory_Skill_10_scope_PASS
+CLINE_BLUEPRINT_EXECUTION_COMMAND_OR_PERMISSION:
+  primary: $galax-strict-cline-prompt-guardian
+  mandatory_dependency: $galax-cline-blueprint-scope-blocker
 
 EVIDENCE_REVIEW:
-  purpose: review_Cline_edit_validation_commit_or_push_evidence
+  primary: $galax-evidence-validation-acceptance-guardian
 
 DRAFT_PR_REVIEW:
-  purpose: inspect_current_remote_PR_SHA_changed_files_and_patches
+  primary: $galax-draft-pr-exact-diff-reviewer
 
 CONTINUITY_OR_ACHIEVEMENT:
-  purpose: handle_one_hour_continuity_or_separate_achievement_check_or_mandatory_new_terminal_PASS_persistence
+  primary: $galax-continuity-achievement-guardian
 
 LOCKED_ARTIFACT:
-  purpose: protect_or_review_a_change_to_LOCKED_ACCEPTED_work
+  primary: $galax-locked-artifact-guardian
 
 CLEANUP_AUDIT:
-  purpose: classify_duplicates_conflicts_references_and_cleanup_candidates
+  primary: $galax-repository-cleanup-auditor
 
-OWNER_DIRECT_REPOSITORY_UPDATE:
-  purpose: execute_one_exact_Human_Owner_authorized_Class_B_non_blueprint_repository_update_directly_through_ChatGPT_connected_GitHub
+CHATGPT_SUPERVISORY_CONTROL_UPDATE:
+  primary: $galax-owner-direct-repository-update-guardian
 
 UNKNOWN_OR_MULTI_TASK:
-  purpose: stop_when_no_single_safe_primary_skill_can_be_selected
+  result: BLOCKED_UNTIL_ONE_SAFE_PRIMARY_SCOPE_IS_PROVEN
 ```
 
-## 6. Primary routing table
+## 9. Primary routing table
 
-| Human Owner request | Primary skill alias | Exact repository path |
+| Human Owner request | Primary skill | Important executor rule |
 |---|---|---|
-| First Galax request in a new/unverified conversation, missing valid bootstrap receipt, or required new-chat/context-loss reconstruction | `$galax-new-chat-bootstrap-guardian` | `docs/skills/chatgpt/08_GALAX_NEW_CHAT_BOOTSTRAP_GUARDIAN.md` |
-| Where did Galax stop, what is current, what is unfinished, or what is next? | `$galax-repository-state-scope-guardian` | `docs/skills/chatgpt/01_GALAX_REPOSITORY_STATE_SCOPE_GUARDIAN.md` |
-| Make the next Cline prompt or review a Cline permission request for active CrewAI blueprint work | `$galax-strict-cline-prompt-guardian` | `docs/skills/chatgpt/02_GALAX_STRICT_CLINE_PROMPT_GUARDIAN.md` |
-| Review a proposed edit, saved receipt, focused test, commit, or push evidence | `$galax-evidence-validation-acceptance-guardian` | `docs/skills/chatgpt/03_GALAX_EVIDENCE_VALIDATION_ACCEPTANCE_GUARDIAN.md` |
-| Review a current remote Draft PR or exact pushed diff | `$galax-draft-pr-exact-diff-reviewer` | `docs/skills/chatgpt/04_GALAX_DRAFT_PR_EXACT_DIFF_REVIEWER.md` |
-| Handle length problem, one-hour checkpoint, separate achievement check, or mandatory persistence of a new terminal PASS | `$galax-continuity-achievement-guardian` | `docs/skills/chatgpt/05_GALAX_CONTINUITY_ACHIEVEMENT_GUARDIAN.md` |
-| Determine whether accepted work is locked or review an unlock request | `$galax-locked-artifact-guardian` | `docs/skills/chatgpt/06_GALAX_LOCKED_ARTIFACT_GUARDIAN.md` |
-| Audit duplicates, stale conflicts, references, or deletion candidates | `$galax-repository-cleanup-auditor` | `docs/skills/chatgpt/07_GALAX_REPOSITORY_CLEANUP_AUDITOR.md` |
-| Execute an exact Human-Owner-requested repository governance/documentation/supervisory update outside the active CrewAI blueprint | `$galax-owner-direct-repository-update-guardian` | `docs/skills/chatgpt/09_GALAX_OWNER_DIRECT_REPOSITORY_UPDATE_GUARDIAN.md` |
+| First Galax request in new/unverified chat | Skill 8 | Bootstrap only; no technical execution |
+| Where did Galax stop / current status / exact next safe action | Skill 1 | Read-only state reconstruction |
+| Give Cline the next CrewAI task / review Cline permission | Skill 2 + mandatory Skill 10 | ChatGPT commands; Cline executes |
+| Review local edit/test/commit/push evidence | Skill 3 | Review only; Human Owner decides next gate |
+| Review exact remote Draft PR/diff | Skill 4 | ChatGPT independent remote review |
+| Length problem / achievement / post-PASS persistence | Skill 5 | ChatGPT bounded continuity write only |
+| Review `LOCKED_ACCEPTED` change/unlock | Skill 6 | No implicit unlock |
+| Cleanup audit | Skill 7 | Audit only unless separately authorized |
+| Edit/update/add ChatGPT skill/router/context/supervisory rule | Skill 9 | ChatGPT may write only exact supervisory allowlist |
+| Cline scope classification for a real Cline task | Skill 10 dependency | PASS only exact active blueprint execution |
 
-Skill 10 is dependency-only by default. It is not selected as a primary merely because Cline is mentioned; it gates Skill 2 before an actual Cline task can proceed.
+## 10. Mandatory Skill 10 gate for real Cline work
 
-## 7. Exact skill-resolution algorithm
-
-```text
-selected alias
-→ look up exact path in GALAX_REPOSITORY_SKILL_REGISTRY_V1
-→ fetch that exact path from ariessocia04-rgb/galax-Ai-project
-→ use ref docs/chatgpt-skill-router-2026-08-02
-→ verify returned file exists and its declared skill_reference matches the selected alias
-→ mark skill_load_status: LOADED_FROM_REPOSITORY
-```
-
-Required behavior:
-
-```yaml
-alias_found_and_file_fetched: continue
-alias_found_but_file_fetch_failed: BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE
-alias_not_in_registry: BLOCKED_MISSING_REGISTERED_SKILL_MAPPING
-native_plugin_missing_but_repository_file_fetched: continue
-search_repository_by_alias_only: prohibited
-```
-
-A successful exact file fetch is sufficient to load the selected skill for this ChatGPT workflow.
-
-### 7A. Exact Context Engineer resolution
-
-After the primary and any required dependency skills are selected and fetched:
+Before Skill 2 creates, continues, corrects, or authorizes a real Cline task:
 
 ```text
-fetch docs/skills/chatgpt/context/00_GALAX_CHATGPT_CONTEXT_ENGINEER.md
-from ariessocia04-rgb/galax-Ai-project
-using ref docs/chatgpt-skill-router-2026-08-02
-→ verify Status is ACTIVE_CHATGPT_CONTEXT_SUPPORT_CONTRACT
-→ verify Registered ChatGPT skill is false
-→ verify CrewAI agent is false
-→ use it only to prepare minimum verified context for the selected skill
+load Skill 10
+→ prove exact blueprint trace
+→ classify executor
+→ require PASS_CLINE_BLUEPRINT_ONLY
+→ only then allow Skill 2 to emit GALAX_CLINE_TASK_V2
 ```
 
-Required behavior:
-
-```yaml
-context_contract_fetched_and_identity_valid: continue
-context_contract_fetch_failed: BLOCKED_CONTEXT_ENGINEER_UNAVAILABLE
-context_contract_claims_registered_skill_or_runtime_agent: BLOCKED_CONTEXT_ENGINEER_IDENTITY_MISMATCH
-context_engineer_added_to_skill_registry: prohibited
-context_engineer_added_to_dependency_list: prohibited
-```
-
-## 8. Conditional dependency rules
-
-### New-chat bootstrap dependencies
-
-When the primary skill is `$galax-new-chat-bootstrap-guardian`, load exactly:
-
-```yaml
-bootstrap_dependencies:
-  - $galax-repository-state-scope-guardian
-  - $galax-strict-cline-prompt-guardian
-```
-
-These two dependencies are required so the new chat reconstructs repository truth through Skill 1 and learns current Cline prompt/permission/rejection behavior through Skill 2 instead of guessing or duplicating those authorities.
-
-Do not add Skill 10 to the bootstrap dependency list. The dependency limit remains two, and bootstrap does not itself authorize or emit a real Cline task.
-
-### Cline blueprint-scope blocker dependency
-
-When the **normal-cycle primary skill** is `$galax-strict-cline-prompt-guardian` and the current objective is to create, continue, correct, approve, reject, or authorize an actual Cline task:
-
-```yaml
-mandatory_dependency:
-  - $galax-cline-blueprint-scope-blocker
-
-optional_second_dependency_when_current_state_is_not_already_verified:
-  - $galax-repository-state-scope-guardian
-```
-
-Required sequence:
+Skill 10 must also block:
 
 ```text
-Skill 2 selected as normal-cycle primary for real Cline work
-→ load Skill 10
-→ establish exact active blueprint → technical contract/assignment → proposed Cline objective trace
-→ Skill 10 returns one gate result
+ChatGPT tries to write/commit/push CrewAI blueprint implementation
+→ BLOCKED_CHATGPT_CREWAI_IMPLEMENTATION_WRITE
 
-PASS_CLINE_BLUEPRINT_ONLY
-→ Skill 2 may continue its normal bounded Cline prompt/permission workflow
-
-BLOCK_CLINE_ROUTE_TO_CHATGPT
-→ Skill 2 must not emit GALAX_CLINE_TASK_V2
-→ preserve the exact Human Owner request
-→ stop this routing cycle
-→ separate Router cycle may select Skill 9 when the Human Owner request already authorizes that exact Class B update
-
-BLOCK_CLINE_ROUTE_TO_SKILL_5
-→ Skill 2 must not emit GALAX_CLINE_TASK_V2
-→ stop this routing cycle
-→ separate Router cycle uses Skill 5
-
-BLOCK_UNRELATED_TECHNICAL_SCOPE | BLOCK_MISSING_BLUEPRINT_TRACE | BLOCK_CHATGPT_BLUEPRINT_EDIT_REQUIRES_HUMAN_AUTHORIZATION
-→ no Cline task
-→ return the exact blocker and required Human Owner action when applicable
-→ stop
+Cline tries to write ChatGPT skills/router/supervisory rules/continuity
+→ BLOCKED_CLINE_SUPERVISORY_SCOPE
 ```
 
-Skill 10 must not be used to broaden the Cline task. It exists only to prove or deny exact blueprint scope.
+There is no ChatGPT blueprint-edit exception.
 
-### Repository-state dependency
+## 11. Consequential-action separation
 
-Load `$galax-repository-state-scope-guardian` only when:
-
-- the conversation is new or resumed after context loss;
-- the active branch, exact HEAD SHA, assignment, stop point, or evidence is unclear;
-- the primary skill requires live state reconstruction;
-- repository evidence conflicts with chat memory;
-- the Human Owner invokes `CODE RED`, `length problem`, or equivalent continuation language;
-- Skill 9 requires current target branch/head or active-blueprint classification that has not already been verified;
-- Skill 10 requires a blueprint/assignment identity that is not already verified in the current routing context.
-
-Do not load it when the exact current state was already verified for the present bounded task, except when it is the mandatory Skill 8 bootstrap dependency.
-
-### Locked-artifact dependency
-
-Load `$galax-locked-artifact-guardian` only when:
-
-- a proposed task, PR, cleanup candidate, test, command, or direct repository update may touch accepted work;
-- an unlock request is being reviewed;
-- exact lock status is materially relevant.
-
-```yaml
-maximum_dependencies: 2
-third_dependency_needed: BLOCKED_SCOPE_TOO_BROAD
-required_action: split_into_separate_bounded_task
-```
-
-The Context Engineer is not a dependency skill and must not consume a dependency slot.
-
-## 9. Selective repository reading policy
-
-The router does not authorize a full-repository read.
-
-After routing, the selected skill and Context Engineer must use the smallest evidence path sufficient for the current task:
+For Cline/CrewAI implementation:
 
 ```text
-read the current authoritative entry point required by the selected skill
-→ read the exact active plan, assignment, checkpoint, test, file, issue, PR, or direct-update target required
-→ follow only mandatory references from a higher-authority record
-→ package only the minimum complete verified context
-→ stop when the current task can be decided safely
+PLAN ≠ ACT
+ACT ≠ SAVE
+SAVE ≠ VALIDATION
+VALIDATION ≠ FIX
+FIX ≠ COMMIT
+COMMIT ≠ PUSH
+PUSH ≠ REMOTE_REVIEW
+REMOTE_REVIEW ≠ HUMAN_ACCEPTANCE
+HUMAN_ACCEPTANCE ≠ MERGE
+MERGE ≠ DEPLOY
 ```
 
-Do not:
+Each consequential stage requires its own current authority unless an exact higher-authority rule explicitly combines it.
 
-- read every file under `docs/`;
-- read all plans, rules, checkpoints, skills, or history by default;
-- scan all source and tests when one exact file or test is named;
-- search the entire repository when an exact path is known;
-- reread completed evidence without a new factual reason;
-- rely on filename similarity when exact content or authority is required;
-- load historical context merely because it exists;
-- copy full conversation or repository history into every selected skill.
+A ChatGPT `PASS` after evidence review does not itself authorize Cline commit or push.
 
-Expand reading only when:
+## 12. Mandatory post-PASS achievement persistence
 
-- an exact required file cannot be located;
-- a higher-authority file explicitly requires another record;
-- required evidence is missing or contradictory;
-- the current assignment cannot be verified safely;
-- a reference or dependency must be proven;
-- the selected skill explicitly requires the additional evidence.
-
-Missing evidence produces a factual blocker. It never authorizes guessing or a broad repository scan.
-
-## 10. Action ownership and authorization
-
-The router and Context Engineer do not themselves search broadly, save, edit, test, commit, push, merge, or deploy. The router identifies the skill that owns the current decision; the Context Engineer only prepares that skill's verified context.
+When a bounded routing cycle returns a genuinely new qualifying terminal `PASS`, start a **separate routing cycle** with Skill 5 before any later technical stage.
 
 ```yaml
-how_to_handle_new_chat_bootstrap:
-  owner: $galax-new-chat-bootstrap-guardian
-  rule: readiness_and_continuation_only_no_runtime_or_technical_implementation_authority
-
-where_to_search:
-  owner: selected_primary_skill
-  context_engineer_role: package_only_within_selected_skill_boundaries
-  rule: exact_file_or_narrow_scope_only
-
-where_to_prepare_or_control_active_CrewAI_blueprint_local_edits:
-  owner: $galax-strict-cline-prompt-guardian
-  executor: Cline
-  mandatory_scope_dependency: $galax-cline-blueprint-scope-blocker
-  required_scope_result: PASS_CLINE_BLUEPRINT_ONLY
-  rule: exact_allowlisted_blueprint_task_and_separate_Human_Owner_authorization
-
-where_to_execute_owner_authorized_non_blueprint_Class_B_repository_update:
-  owner: $galax-owner-direct-repository-update-guardian
-  executor: ChatGPT_connected_GitHub_app
-  Cline_handoff: prohibited
-  boundary: docs/rules/GALAX_CHATGPT_DIRECT_REPOSITORY_UPDATE_BOUNDARY.md
-
-where_to_decide_if_Cline_may_receive_the_task:
-  owner: $galax-cline-blueprint-scope-blocker
-  rule: dependency_gate_only_no_write_no_prompt_construction
-
-how_to_review_edit_or_test:
-  owner: $galax-evidence-validation-acceptance-guardian
-
-how_to_review_remote_diff:
-  owner: $galax-draft-pr-exact-diff-reviewer
-
-how_to_handle_continuity:
-  owner: $galax-continuity-achievement-guardian
-
-how_to_protect_accepted_work:
-  owner: $galax-locked-artifact-guardian
-
-how_to_plan_cleanup:
-  owner: $galax-repository-cleanup-auditor
+mandatory_post_PASS_achievement_persistence_cycle: true
+mandatory_post_PASS_primary_skill: $galax-continuity-achievement-guardian
+post_PASS_technical_continuation_before_persistence: prohibited
+recursive_Skill_5_achievement: prohibited
 ```
 
-A routing decision or context packet does not grant permission for a later consequential action.
+This is a documentation-memory exception only. It does not authorize implementation, validation, implementation Git mutation, merge, or deployment.
 
-Skill 9 may write only because the Human Owner's exact Class B request supplies the required bounded execution authority and Skill 9's live precheck passes. It does not authorize source/tests/runtime/dependencies/workflows/security/merge/deploy outside the active plan.
-
-Skill 10 never grants ChatGPT authority to edit blueprint documents. Its exact blueprint-edit exception requires an explicit Human Owner authorization for the named file, section, and minimal change before ChatGPT may touch that blueprint document through GitHub. Cline remains the blueprint implementation executor.
-
-## 11. Routing and load receipt
-
-Before handing off, return or internally establish:
+## 13. Hard prohibitions
 
 ```yaml
-GALAX_CHATGPT_SKILL_ROUTE_V2:
-  request_summary:
-  repository: ariessocia04-rgb/galax-Ai-project
-  router_ref: docs/chatgpt-skill-router-2026-08-02
-  router_path: docs/skills/chatgpt/00_GALAX_SKILL_ROUTER_MANAGER.md
-  task_category:
-
-  primary_skill_alias:
-  primary_skill_path:
-  primary_skill_load_status: LOADED_FROM_REPOSITORY | BLOCKED
-
-  dependency_skill_aliases: []
-  dependency_skill_paths: []
-  dependency_load_statuses: []
-  dependency_reasons: []
-
-  context_engineer_path: docs/skills/chatgpt/context/00_GALAX_CHATGPT_CONTEXT_ENGINEER.md
-  context_engineer_load_status: LOADED_SUPPORT_CONTRACT | BLOCKED
-  context_engineer_registered_skill: false
-  context_engineer_runtime_effect: none
-
-  unrelated_skills_ignored: []
-  exact_current_output_required:
-  repository_state_already_verified:
-  route_status:
-    SELECTED |
-    BLOCKED_AMBIGUOUS |
-    BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE |
-    BLOCKED_CONTEXT_ENGINEER_UNAVAILABLE |
-    BLOCKED_CONTEXT_ENGINEER_IDENTITY_MISMATCH |
-    BLOCKED_SCOPE_TOO_BROAD
+prohibited:
+  - full_repository_scan_by_default
+  - read_all_skills_by_default
+  - automatic_next_technical_stage
+  - invent_branch_SHA_assignment_or_test_result
+  - repeat_completed_or_LOCKED_ACCEPTED_work_without_new_reason
+  - ChatGPT_direct_CrewAI_blueprint_or_implementation_write
+  - ChatGPT_direct_implementation_commit_or_push
+  - Cline_ChatGPT_skill_router_rule_or_continuity_write
+  - Cline_self_authorization
+  - implicit_commit_after_PASS
+  - implicit_push_after_commit
+  - direct_main_write
+  - force_push
+  - history_rewrite
+  - merge_without_separate_Human_Owner_authorization
+  - deployment_without_separate_Human_Owner_authorization
 ```
 
-When the route is selected, load only the exact mapped primary/dependency skill files plus the one canonical Context Engineer support contract.
-
-The selected skill may use `GALAX_CHATGPT_CONTEXT_PACKET_V1` from the Context Engineer when useful. Producing the full packet verbatim is not mandatory for trivial tasks if all required context and evidence boundaries are already explicit, but the Context Engineer's selection/protection rules still apply.
-
-## 12. Multi-stage request handling
-
-When one request includes several stages, route only the first repository-authorized stage.
-
-Examples:
+## 14. Final routing contract
 
 ```text
-"Review the edit, test it, commit, and push"
-→ review current edit evidence only
-→ test, commit, and push remain separate tasks
-
-"Make the prompt, let Cline edit, run tests, and publish"
-→ Skill 10 must first prove the proposed Cline objective is exact active CrewAI blueprint work
-→ only after PASS_CLINE_BLUEPRINT_ONLY may Skill 2 create one exact current Cline task
-→ no automatic Act, validation, commit, or push
-
-"Update this ChatGPT governance rule in my repo"
-→ route to Skill 9
-→ execute only the exact bounded Class B repository update directly through connected GitHub
-→ no Cline task
-→ no unrelated technical continuation
-
-"Audit duplicates and delete them"
-→ produce cleanup evidence and candidates only
-→ deletion requires a separate bounded task and Human Owner authorization
-```
-
-Do not activate multiple primary skills to satisfy one broad request.
-
-The Context Engineer must not combine multiple workflow stages merely because their context is related.
-
-The mandatory Skill 8 bootstrap prerequisite does not count as satisfying or advancing the original request. It only establishes safe new-chat readiness before the same original request is routed normally.
-
-## 12A. Mandatory terminal-PASS achievement persistence
-
-Every new terminal `PASS` from a completed bounded Galax repository-supervision task is a mandatory achievement-persistence trigger before another technical task may begin.
-
-This rule exists specifically to prevent completed PASS work from being forgotten, re-investigated, or restarted after conversation/context loss.
-
-A qualifying event must satisfy all of:
-
-```yaml
-GALAX_TERMINAL_PASS_PERSISTENCE_TRIGGER_V1:
-  source_primary_skill_is_repository_backed: true
-  source_primary_skill_is_Skill_5: false
-  terminal_status: PASS
-  bounded_objective_completed: true
-  new_material_result: true
-  exact_evidence_available: true
-  already_present_in_achievement_record: false
-```
-
-The following do **not** qualify as terminal PASS achievements:
-
-- router `SELECTED` status;
-- Skill 8 bootstrap readiness `PASS` when it only reconstructs existing state and produces no new material repository result;
-- Cline permission `APPROVE` recommendations;
-- pending approvals;
-- plans or prompts merely prepared;
-- unsaved previews;
-- proposed diffs that have not reached their assigned completion boundary;
-- `BLOCKED`, `FAIL`, `CHANGES_REQUIRED`, or equivalent non-PASS results;
-- an identical PASS already persisted in the achievement record;
-- Skill 5's own persistence result, which must never recursively create another achievement event.
-
-Required routing sequence:
-
-```text
-current primary skill returns qualifying terminal PASS
-→ freeze the exact completed result as DO_NOT_REPEAT evidence
-→ stop that primary-skill routing cycle
-→ start one new routing cycle with task_category CONTINUITY_OR_ACHIEVEMENT
-→ select exactly one primary skill: $galax-continuity-achievement-guardian
-→ load the Context Engineer support contract
-→ verify the live achievement record, continuity branch, PR, exact PASS evidence, and duplicate status
-→ append the new PASS achievement through Skill 5's authorized connected-GitHub path
-→ verify the achievement commit remotely
-→ stop the persistence cycle
-→ only then may a later Human Owner instruction route the next technical stage
-```
-
-This mandatory persistence cycle is synchronous repository documentation in the active conversation. It is not background work and does not create a scheduler.
-
-If a qualifying PASS cannot be persisted because repository access, branch/PR identity, evidence, timestamp, or duplicate verification cannot be established, return:
-
-```text
-BLOCKED_PASS_ACHIEVEMENT_PERSISTENCE
-```
-
-and do not automatically proceed to another technical workflow stage.
-
-The achievement persistence cycle never authorizes:
-
-- implementation edits;
-- source or test changes;
-- validation;
-- Ruff or formatting;
-- dependency changes;
-- implementation Git actions;
-- accepted-artifact unlock;
-- merge;
-- deployment;
-- Agents 02–15.
-
-## 13. Stop and handoff behavior
-
-After the selected skill returns the current bounded result, stop except for the mandatory Section 12A achievement-persistence cycle when that result is a new qualifying terminal PASS.
-
-```text
-Skill 8 returns bootstrap PASS
-→ preserve the exact original Human Owner request
-→ begin one separate routing cycle for that same original request only
-→ do not invent or auto-start a new technical stage
-
-Skill 2 prepares or reviews actual Cline work
-→ Skill 10 must already have returned PASS_CLINE_BLUEPRINT_ONLY for that proposed Cline objective
-→ otherwise no Cline task or permission continuation may be emitted
-
-Skill 3 returns PASS
-→ persist that new PASS through the mandatory separate Skill 5 cycle
-→ do not automatically prepare a commit task
-
-Skill 4 returns PASS
-→ persist that new PASS through the mandatory separate Skill 5 cycle
-→ do not automatically approve or merge the PR
-
-Skill 5 prepares or persists continuity/achievement documentation
-→ do not recursively create another achievement from Skill 5's own result
-→ do not automatically enter a technical stage
-
-Skill 7 identifies deletion candidates
-→ do not automatically delete or create cleanup commits
-
-Skill 9 completes a Human-Owner-authorized Class B repository update
-→ verify the exact remote commit and final branch head
-→ if the result is a new qualifying terminal PASS, persist it through the separate Skill 5 cycle
-→ do not create a Cline task or start another repository/technical update automatically
-
-Skill 10 returns a blocker
-→ do not convert the blocked work into a Cline task
-→ preserve the exact request and route only through the separately correct owner when the current Human Owner authority allows it
-```
-
-A new Human Owner instruction is required before routing the next **technical** stage, except for an exact active standing authorization already present in the live repository. The new-chat bootstrap exception only returns to the same original Human Owner request; Section 12A is the mandatory documentation-persistence exception. Neither exception authorizes an invented technical continuation.
-
-A Context Engineer packet never creates technical continuation authority.
-
-## 14. Relationship to Galax runtime routing
-
-```text
-ChatGPT repository-backed skill routing
-≠ ChatGPT Context Engineer support layer
-≠ CrewAI Flow @router execution
-≠ Cline tool permission flow
-≠ GitHub branch or pull-request routing
-```
-
-Skills 8, 9, and 10 and the Context Engineer exist only in the ChatGPT supervisory/repository-governance layer. Skill 9 may perform bounded connected-GitHub Class B writes; Skill 10 is a read-only/dependency blocker; neither has CrewAI runtime authority.
-
-They must not be inserted into:
-
-- `GalaxFoundationFlow`;
-- Agent 01;
-- Agents 02–15;
-- CrewAI tasks;
-- CrewAI tools;
-- CrewAI runtime context;
-- runtime memory;
-- runtime knowledge;
-- runtime prompts.
-
-This router, Skills 8/9/10, and Context Engineer must not change the active runtime invariant that every conditional Foundation stage uses explicit named CrewAI routes and that blocked, failed, unavailable, pending, rejected, or evidence-missing outcomes do not enter a success path.
-
-## 15. Strict prohibitions
-
-```yaml
-copy_or_embed_full_Skills_1_to_10_into_router: prohibited
-read_all_skills_by_default: prohibited
-load_unrelated_skills: prohibited
-multiple_primary_skills_for_one_task: prohibited
-more_than_two_dependencies: prohibited
-automatic_next_skill: prohibited
-automatic_next_technical_skill_after_PASS_before_achievement_persistence: prohibited
-full_repository_scan_by_default: prohibited
-infer_unmapped_path: prohibited
-search_by_alias_before_using_registry: prohibited
-require_native_plugin_when_repository_file_is_accessible: prohibited
-claim_repository_skill_file_is_missing_after_successful_fetch: prohibited
-invent_skill_mapping: prohibited
-modify_CrewAI_router: prohibited
-modify_Galax_source_or_tests: prohibited
-direct_test_execution_by_router: prohibited
-merge_or_deployment_by_router: prohibited
-approve_for_Human_Owner: prohibited
-self_authorization: prohibited
-send_Class_B_owner_direct_repository_update_to_Cline: prohibited
-use_Skill_9_for_active_CrewAI_blueprint_implementation: prohibited
-use_Skill_9_for_Class_C_consequential_technical_change_without_exact_authority: prohibited
-bypass_Skill_10_before_real_Cline_task: prohibited
-allow_Cline_task_after_non_PASS_Skill_10_result: prohibited
-use_Skill_10_as_writer_or_implementation_skill: prohibited
-
-register_Context_Engineer_as_skill: prohibited
-create_Skill_8_or_Skill_9_or_Skill_10_for_Context_Engineer: prohibited
-count_Context_Engineer_as_dependency: prohibited
-create_Agent_16_for_Context_Engineer: prohibited
-insert_Context_Engineer_into_CrewAI_runtime: prohibited
-use_Context_Engineer_to_override_selected_skill: prohibited
-use_Context_Engineer_to_skip_mandatory_selected_skill_evidence: prohibited
-
-use_Skill_8_as_CrewAI_agent: prohibited
-use_Skill_8_as_Agent_16: prohibited
-use_Skill_8_as_runtime_context_builder: prohibited
-use_Skill_8_as_runtime_memory_or_knowledge: prohibited
-use_Skill_8_to_restart_completed_setup_without_new_evidence: prohibited
-use_Skill_8_to_invent_next_technical_task: prohibited
-
-use_Skill_9_as_CrewAI_agent: prohibited
-use_Skill_9_as_local_CrewAI_implementation_writer: prohibited
-use_Skill_9_to_bypass_LOCKED_ACCEPTED: prohibited
-use_Skill_9_to_write_main: prohibited
-use_Skill_9_to_merge_or_deploy: prohibited
-
-use_Skill_10_to_expand_Cline_scope_beyond_blueprint: prohibited
-use_Skill_10_to_authorize_ChatGPT_blueprint_edit_without_explicit_Human_Owner_authorization: prohibited
-```
-
-`automatic_next_skill: prohibited` refers to automatic continuation into another technical workflow stage. It does not prohibit the mandatory Skill 8 prerequisite from returning to the exact original Human Owner request after bootstrap `PASS`, and it does not cancel the mandatory Section 12A documentation-only Skill 5 persistence cycle.
-
-Skill 9 is not an auto-write facility. It requires an exact current Human Owner Class B repository-update instruction plus its own live precheck.
-
-Skill 10 is not a generic technical-authority skill. Its only positive Cline result is `PASS_CLINE_BLUEPRINT_ONLY`; every other result blocks Cline.
-
-## 16. Failure behavior
-
-Use the smallest accurate blocker:
-
-```yaml
-BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE:
-  use_only_when:
-    - canonical_router_fetch_failed
-    - exact_mapped_primary_skill_fetch_failed
-    - exact_mapped_required_dependency_file_fetch_failed
-  required_details:
-    - repository
-    - ref
-    - exact_failed_path
-
-BLOCKED_CONTEXT_ENGINEER_UNAVAILABLE:
-  use_when:
-    - canonical_context_engineer_support_contract_fetch_failed
-  required_details:
-    - repository
-    - ref
-    - exact_failed_path
-
-BLOCKED_CONTEXT_ENGINEER_IDENTITY_MISMATCH:
-  use_when:
-    - context_contract_claims_to_be_registered_skill
-    - context_contract_claims_to_be_CrewAI_agent_or_runtime_component
-
-BLOCKED_MISSING_REGISTERED_SKILL_MAPPING:
-  use_when: selected_alias_is_not_present_in_the_exact_registry
-
-BLOCKED_SCOPE_TOO_BROAD:
-  use_when:
-    - more_than_one_independent_primary_task
-    - more_than_two_genuine_dependencies
-
-BLOCKED_MISSING_EVIDENCE:
-  use_when: selected_skill_loaded_but_required_task_evidence_is_missing
-
-BLOCKED_PASS_ACHIEVEMENT_PERSISTENCE:
-  use_when:
-    - a_new_qualifying_terminal_PASS_exists
-    - mandatory_Skill_5_persistence_cannot_be_verified_or_completed
-
-BLOCKED_NEW_CHAT_BOOTSTRAP:
-  use_when:
-    - Skill_8_or_operating_manual_cannot_establish_safe_new_chat_readiness
-  required_details:
-    - exact_failed_bootstrap_requirement
-    - exact_missing_or_conflicting_evidence
-
-BLOCKED_DIRECT_UPDATE_NOT_CLASS_B:
-  use_when:
-    - Skill_9_request_is_active_CrewAI_blueprint_implementation
-    - Skill_9_request_is_consequential_Class_C_without_separate_exact_authority
-
-BLOCKED_CLINE_NON_BLUEPRINT_SCOPE:
-  use_when:
-    - Skill_10_gate_result_is_not_PASS_CLINE_BLUEPRINT_ONLY
-    - proposed_Cline_objective_is_not_exact_active_blueprint_execution
-  required_details:
-    - proposed_Cline_objective
-    - Skill_10_gate_result
-    - exact_router_handoff_or_Human_Owner_action_required
-```
-
-Do not use `BLOCKED_ROUTER_OR_SKILL_UNAVAILABLE` when the exact mapped Markdown skill file was successfully fetched.
-
-Do not bypass a missing Context Engineer contract by registering it as a skill or by inventing another path.
-
-Do not route an owner-direct Class B governance/documentation update to Skill 2/Cline when Skill 9 is available and the direct-update boundary applies.
-
-Do not emit a Cline task when Skill 10 did not return `PASS_CLINE_BLUEPRINT_ONLY` for the exact proposed objective.
-
-## 17. Final routing contract
-
-```text
-Human Owner Galax request
-→ fetch this exact router
-→ if current conversation is new/unverified, run one mandatory Skill 8 bootstrap cycle with Skill 1 + Skill 2 dependencies and Context Engineer support
-→ Skill 8 follows docs/operations/GALAX_NEW_CHAT_OPERATING_MANUAL.md and produces GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1
-→ after bootstrap PASS, preserve and return only to the same original Human Owner request
-→ classify one current task
-→ when the exact request is a Human-Owner-authorized Class B non-blueprint repository update, select Skill 9 and do not hand it to Cline
-→ when the normal-cycle primary skill is Skill 2 for actual Cline work, load Skill 10 as mandatory dependency before any Cline task is emitted
-→ Skill 10 proves the exact blueprint → current technical contract/assignment → proposed Cline objective trace
-→ only PASS_CLINE_BLUEPRINT_ONLY permits Skill 2 to proceed
-→ every non-PASS Skill 10 result blocks Cline and routes/stops according to the exact result
-→ otherwise select the one normal primary skill alias
-→ resolve the alias to its exact repository path
-→ fetch the mapped primary skill document
-→ resolve and fetch no more than two required dependency documents
-→ fetch the one canonical non-skill Context Engineer support contract
-→ Context Engineer prepares the minimum verified context required by the already-selected skill
-→ ignore unrelated skills and unrelated context
-→ selected skill performs only its own bounded job
-→ if Skill 9 owns the task, ChatGPT executes only the exact Class B write through connected GitHub and verifies the remote commit
-→ if the result is a new qualifying terminal PASS, complete the separate mandatory Skill 5 achievement-persistence routing cycle
-→ Human Owner decides any consequential next technical action
-→ stop
-```
-
-```yaml
-Skill_8_runtime_effect: none
-Skill_9_runtime_effect: none
-Skill_10_runtime_effect: none
-CrewAI_runtime_changed_by_this_router: false
-GalaxFoundationFlow_changed_by_this_router: false
-Agents_01_to_15_changed_by_this_router: false
-CrewAI_remediation_plan_changed_by_this_router: false
-Context_Engineer_runtime_effect: none
+fetch live Router
+→ bootstrap if required
+→ preserve exact Human Owner request
+→ classify exactly one current task
+
+CrewAI blueprint execution?
+→ Skill 2 + mandatory Skill 10
+→ ChatGPT commands/reviews
+→ Cline executes/validates/commits/pushes only at separately authorized stages
+
+ChatGPT supervisory skill/router/context/rule maintenance?
+→ Skill 9
+→ ChatGPT may directly update only the exact supervisory target
+
+length problem / achievement?
+→ Skill 5
+→ ChatGPT may directly update only the exact continuity target
+
+anything else?
+→ route to its exact mapped skill when proven, otherwise BLOCK
+
+→ stop at the selected skill boundary
 ```
