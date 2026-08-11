@@ -22,18 +22,18 @@ Human Owner request
 → preserve branch/SHA/assignment/locks/do-not-repeat/stop boundary
 → exclude unrelated/stale/duplicate context when safe
 → produce one bounded context packet
-→ hand it to selected skill and Prompt Engineer
+→ hand it to selected skill and Prompt Engineer when Prompt Engineer is required
 ```
 
 ## 2. Absolute boundary
 
-The Context Engineer does not route, approve, reject, execute, edit files, validate, commit, push, merge, deploy, create authority, replace Skill 2, or replace Prompt Engineer.
+The Context Engineer does not route, approve, reject, execute, edit files, validate, commit, push, merge, deploy, create authority, replace Skill 2, replace Skill 5, or replace Prompt Engineer.
 
 It consumes zero primary/dependency skill slots.
 
-## 3. Cline-default executor context
+## 3. Executor context
 
-When executor ownership is material, preserve:
+When executor ownership is material, preserve this exact distinction:
 
 ```yaml
 Human_Owner:
@@ -43,26 +43,31 @@ Human_Owner:
 ChatGPT:
   default_role: architect_specification_supervisor_reviewer
   normal_repository_executor_when_Cline_capable: false
-  fallback_executor: true_only_after_valid_Skill_12_PASS_and_owner_authorization
+  Skill_5_direct_continuity_executor: true
+  Skill_5_direct_continuity_publisher: true_when_connected_GitHub_capability_available
+  fallback_executor_for_other_work: true_only_after_valid_Skill_12_PASS_and_owner_authorization
 
 Cline:
-  default_repository_executor_when_capable: true
+  default_repository_executor_when_capable: true_except_exact_Skill_5_continuity_scope
   edit_save: only_when_authorized
   validation: only_when_separately_authorized
   commit: only_when_separately_authorized
   push: only_when_separately_authorized
+  Skill_5_length_or_achievement_executor: false_by_default
 ```
 
-If Cline is capable, preserve blocker:
+For non-Skill-5 work, if Cline is capable, preserve blocker:
 
 ```text
 BLOCKED_CHATGPT_TAKEOVER_CLINE_CAPABLE
 ```
 
+For exact Skill 5 `update_length_problem`, `update_achievement`, or qualifying achievement persistence, preserve that ChatGPT is the direct executor/publisher and Cline is not required.
+
 ## 4. Minimum context packet
 
 ```yaml
-GALAX_CHATGPT_CONTEXT_PACKET_V4:
+GALAX_CHATGPT_CONTEXT_PACKET_V5:
   repository:
   ref_or_branch:
   verified_HEAD_SHA:
@@ -82,6 +87,7 @@ GALAX_CHATGPT_CONTEXT_PACKET_V4:
   allowed_scope: []
   prohibited_scope: []
   evidence_classes: []
+  Skill_5_direct_persistence_status_when_material:
   Skill_10_status_when_material:
   Skill_12_status_when_material:
   exact_stop_condition:
@@ -138,8 +144,10 @@ Context Engineer verified packet
 → final owner-facing + Cline-facing package
 ```
 
-If NEW/STAY cannot be safely established, Prompt Engineer must return `BLOCKED_CLINE_SESSION_STATE_UNVERIFIED`; Context Engineer must not invent it.
+For direct Skill 5 continuity persistence, Prompt Engineer is not required because no Cline prompt is needed.
+
+If NEW/STAY cannot be safely established for a Cline task, Prompt Engineer must return `BLOCKED_CLINE_SESSION_STATE_UNVERIFIED`; Context Engineer must not invent it.
 
 ## 8. Final rule
 
-Context Engineer optimizes context without weakening Router, selected skill, Skill 10, Skill 12, Human Owner authority, stage separation, LOCKED_ACCEPTED, or the Cline-default execution model.
+Context Engineer optimizes context without weakening Router, selected skill, the standing Skill 5 ChatGPT continuity exception, Skill 10, Skill 12, Human Owner authority, stage separation, LOCKED_ACCEPTED, or the general Cline-default execution model.
