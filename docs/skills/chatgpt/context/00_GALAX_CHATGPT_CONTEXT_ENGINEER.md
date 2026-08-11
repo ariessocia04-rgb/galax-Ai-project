@@ -5,18 +5,61 @@
 **Registered ChatGPT skill:** false  
 **Primary skill:** false  
 **Dependency skill:** false  
-**CrewAI agent:** false  
-**Final authority:** Human Owner
+**CrewAI agent:** false
 
 ## 1. Purpose
 
-The Context Engineer builds the minimum complete verified context needed by the already-selected skill and Prompt Engineer while preventing stale-history mistakes, duplicate work, unnecessary reads, and authority loss.
+The Context Engineer builds the minimum complete verified context needed by the already-selected skill and Prompt Engineer while preventing stale-history mistakes, duplicate work, unnecessary reads, authority loss, and permanent-lock violations.
 
-It does not route, approve, execute, edit files, validate, commit, push, merge, deploy, replace Skill 5, replace Skill 9, or replace Prompt Engineer.
+It does not route, approve, execute, edit files, validate, commit, push, merge, deploy, replace Skill 5, replace Skill 6, replace Skill 9, or replace Prompt Engineer.
 
-## 2. Exact executor context
+## 2. Permanent CrewAI remediation context must never be omitted
 
-When executor ownership is material, preserve these exact standing ChatGPT jobs:
+When the current request could directly or indirectly affect CrewAI remediation technical meaning, preserve:
+
+```yaml
+permanent_CrewAI_remediation_lock:
+  rule_path: docs/rules/GALAX_CREWAI_REMEDIATION_BLUEPRINT_FOCUS_LOCK_2026-08-09.md
+  lock_class: PERMANENT_IMMUTABLE_CREWAI_REMEDIATION
+  unlock_path: NONE
+  Human_Owner_unlock: prohibited
+  ChatGPT_unlock: prohibited
+  Cline_unlock: prohibited
+  Skill_9_override: prohibited
+  Skill_12_override: prohibited
+  mutation_result: BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK
+
+protected_set:
+  - docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
+  - docs/rules/GALAX_CREWAI_REMEDIATION_BLUEPRINT_FOCUS_LOCK_2026-08-09.md
+  - docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md
+```
+
+Do not compress, omit, reinterpret, or downgrade this permanent class into ordinary `LOCKED_ACCEPTED`.
+
+## 3. Allowed interaction context for permanent set
+
+Preserve that only the following are allowed:
+
+```yaml
+allowed:
+  - read
+  - inspect
+  - check
+  - diff
+  - status
+  - validate_non_mutating
+  - verify_hash_or_blob_identity
+  - verify_blueprint_mapping
+  - commit_other_authorized_changes_when_protected_set_unchanged
+  - push_other_authorized_changes_when_protected_set_unchanged
+```
+
+Any edit/unlock/supersession/semantic-change request must be represented as a blocker, not as available authorization.
+
+## 4. Exact executor context outside permanent lock
+
+Preserve these standing ChatGPT jobs:
 
 ```yaml
 ChatGPT_standing_repository_jobs:
@@ -29,11 +72,12 @@ ChatGPT_standing_repository_jobs:
     allowed_path_prefixes:
       - docs/skills/chatgpt/
       - docs/rules/
+    permanent_CrewAI_remediation_lock_override: prohibited
 ```
 
-For those exact scopes, ChatGPT is the direct executor/publisher and Cline is not required.
+For those exact allowed scopes, ChatGPT is direct executor/publisher and Cline is not required.
 
-For all other repository work:
+For all other non-protected repository work:
 
 ```yaml
 ChatGPT:
@@ -49,16 +93,10 @@ Cline:
   push: only_when_separately_authorized
 ```
 
-Outside the standing Skill 5/Skill 9 scopes, if Cline is capable, preserve:
-
-```text
-BLOCKED_CHATGPT_TAKEOVER_CLINE_CAPABLE
-```
-
-## 3. Minimum context packet
+## 5. Minimum context packet
 
 ```yaml
-GALAX_CHATGPT_CONTEXT_PACKET_V6:
+GALAX_CHATGPT_CONTEXT_PACKET_V7:
   repository:
   ref_or_branch:
   verified_HEAD_SHA:
@@ -70,6 +108,10 @@ GALAX_CHATGPT_CONTEXT_PACKET_V6:
   current_assignment:
   current_stage:
   exact_target:
+  permanent_CrewAI_remediation_lock_applicable: true | false
+  permanent_CrewAI_remediation_lock_class:
+  permanent_CrewAI_remediation_mutation_requested: true | false
+  permanent_CrewAI_remediation_result_when_applicable:
   completed_work: []
   LOCKED_ACCEPTED: []
   rejected_or_superseded_work: []
@@ -100,7 +142,7 @@ GALAX_CHATGPT_CONTEXT_PACKET_V6:
 
 Do not guess material fields.
 
-## 4. Evidence classes
+## 6. Evidence classes
 
 ```yaml
 REMOTE_PROVEN: verified_current_GitHub_evidence
@@ -113,25 +155,30 @@ UNKNOWN_OR_CONFLICTING: insufficient_or_conflicting_evidence
 
 Never upgrade evidence class without proof.
 
-## 5. Fast-path reuse
+## 7. Fast-path reuse
 
-The Context Engineer may reuse exact unchanged evidence only when repository, branch/ref, relevant HEAD/identity, assignment, authority, and target remain demonstrably unchanged.
+The Context Engineer may reuse exact unchanged evidence only when repository, branch/ref, relevant HEAD/identity, assignment, authority, target, and permanent-lock state remain demonstrably unchanged.
 
-It may never use the fast path to skip a mandatory selected-skill read or hide a material state change.
+It may never use the fast path to skip a mandatory selected-skill read or hide a permanent-lock collision.
 
-## 6. Prompt Engineer handoff
+## 8. Prompt Engineer handoff
 
 Prompt Engineer is required only for Cline-facing work.
 
-For direct Skill 5 or direct Skill 9 repository actions, no Cline prompt is required.
+For direct Skill 5 or allowed direct Skill 9 repository actions, no Cline prompt is required.
 
-## 7. Final rule
+For a permanent remediation mutation/unlock request, no Cline prompt is allowed; preserve `BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK`.
 
-Context Engineer must preserve exactly:
+## 9. Final rule
 
 ```text
+Permanent CrewAI remediation set
+→ no edit/unlock by anyone, including Human Owner.
+→ read/check/non-mutating validation only.
+→ commit/push only when protected set remains unchanged.
+
 Skill 5 → ChatGPT updates length problem and achievement in repo.
-Skill 9 → ChatGPT edits/updates ChatGPT skills and rules only.
+Skill 9 → ChatGPT edits/updates allowed ChatGPT skills and rules only, excluding permanent remediation set.
 Everything else and Cline capable → Cline executes.
-Other direct ChatGPT execution → Skill 12 fallback only.
+Other direct ChatGPT execution → Skill 12 fallback only, never to override permanent remediation lock.
 ```
