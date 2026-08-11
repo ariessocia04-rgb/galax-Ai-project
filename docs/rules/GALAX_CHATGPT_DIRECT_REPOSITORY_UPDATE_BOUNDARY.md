@@ -6,7 +6,9 @@
 
 ## 1. Canonical rule
 
-Galax uses a capability-first, Cline-default execution model.
+Galax uses a capability-first, Cline-default execution model **with one explicit Skill 5 continuity exception**.
+
+General repository work:
 
 ```text
 Human Owner
@@ -14,7 +16,7 @@ Human Owner
 → Router selects one primary skill
 → Context Engineer supplies minimum verified context
 → selected skill determines exact authority/scope/mode
-→ Prompt Engineer packages the instruction
+→ Prompt Engineer packages the instruction when Cline is the executor
 → Cline executes whenever Cline is capable
 → Cline edits/saves locally
 → Cline runs only separately authorized validation
@@ -31,7 +33,7 @@ Human Owner
 → Human Owner final acceptance
 ```
 
-This applies to repository work generally, including CrewAI implementation, documentation, ChatGPT skills, router, supervisory rules, Context Engineer, Prompt Engineer, new-chat rules, length-problem records, and achievement records whenever Cline can perform the exact bounded action.
+**Exact Skill 5 exception:** `update_length_problem`, `update_achievement`, and qualifying Skill 5 achievement persistence are executed and published directly by ChatGPT under Skill 5. Cline is not required for that exact continuity scope.
 
 ## 2. Responsibility split
 
@@ -53,32 +55,69 @@ ChatGPT:
   may_author_exact_change: true
   may_review_local_evidence: true
   may_review_remote_diff: true
-  technical_fallback_executor: true_only_after_Skill_12_PASS_and_explicit_Human_Owner_authorization
+  Skill_5_direct_continuity_executor: true
+  Skill_5_direct_continuity_publisher: true_when_connected_GitHub_capability_available
+  technical_fallback_executor_for_other_work: true_only_after_Skill_12_PASS_and_explicit_Human_Owner_authorization
 
 Cline:
-  role: default_repository_executor_when_capable
+  role: default_repository_executor_when_capable_except_exact_Skill_5_continuity_scope
   edit_save_executor: true_when_authorized
   validation_executor: true_when_separately_authorized
   commit_executor: true_when_separately_authorized
   push_executor: true_when_separately_authorized
   may_mechanically_apply_ChatGPT_authored_governance: true
   may_independently_change_governance_meaning: false
+  Skill_5_length_or_achievement_executor: false_by_default
   self_authorization: prohibited
 ```
 
-## 3. Global ChatGPT takeover blocker
+## 3. Skill 5 direct ChatGPT continuity exception
 
-If Cline is factually capable of the exact bounded task, ChatGPT must not take over repository execution merely because ChatGPT has GitHub access, authored the content, or would be faster.
+Skill 5 is the only standing non-fallback direct ChatGPT repository-write exception.
+
+```yaml
+SKILL_5_CHATGPT_DIRECT_CONTINUITY_EXCEPTION:
+  applies_to:
+    - update_length_problem
+    - update_achievement
+    - qualifying_terminal_PASS_achievement_persistence
+  executor: ChatGPT
+  normal_publisher: ChatGPT_connected_GitHub_app_when_available
+  Cline_required: false
+  Prompt_Engineer_Cline_package_required: false
+  main_write: prohibited
+  unrelated_scope_expansion: prohibited
+```
+
+Required path:
+
+```text
+Router selects Skill 5
+→ Context Engineer supplies verified continuity evidence
+→ Skill 5 determines exact content/target/dedupe/numbering/timestamp/evidence class
+→ ChatGPT directly persists the exact authorized continuity record
+→ ChatGPT verifies resulting remote evidence
+→ Human Owner final acceptance
+→ stop
+```
+
+Do not route exact Skill 5 continuity persistence to Cline merely because Cline can edit Markdown.
+
+When the connected GitHub contents API is used, it creates a remote commit directly. ChatGPT must report that exact mechanism and must not invent a separate local commit or push.
+
+## 4. Global ChatGPT takeover blocker for non-Skill-5 work
+
+If Cline is factually capable of an exact bounded task outside the standing Skill 5 continuity exception, ChatGPT must not take over repository execution merely because ChatGPT has GitHub access, authored the content, or would be faster.
 
 ```text
 BLOCKED_CHATGPT_TAKEOVER_CLINE_CAPABLE
 ```
 
-This blocker applies to edit/save, validation, commit, push/remote publication, governance, continuity, and implementation work.
+This blocker applies to general edit/save, validation, commit, push/remote publication, governance, documentation, and implementation work.
 
-## 4. Skill 12 fallback exception
+## 5. Skill 12 fallback exception for other work
 
-ChatGPT may directly execute only when all required conditions are proven:
+Outside the standing Skill 5 exception, ChatGPT may directly execute only when all required Skill 12 conditions are proven:
 
 ```yaml
 GALAX_CHATGPT_TECHNICAL_FALLBACK_GATE:
@@ -98,17 +137,15 @@ GALAX_CHATGPT_TECHNICAL_FALLBACK_GATE:
 
 A single Cline mistake does not authorize takeover.
 
-Connected GitHub direct-write actions create remote commits directly. When used under valid Skill 12 fallback, ChatGPT must report that mechanism truthfully and must not invent a separate local commit/push step.
+After a valid fallback, the verified remote result becomes current repository truth; Cline resumes from it and must not redo/revert/overwrite it without new Human Owner authority.
 
-After fallback, the verified remote result becomes current repository truth; Cline resumes from it and must not redo/revert/overwrite it without new Human Owner authority.
-
-## 5. Human Owner zero-coding rule
+## 6. Human Owner zero-coding rule
 
 Never require the Human Owner to write code, patch files, type terminal/Git commands, resolve syntax, choose NEW/STAY, choose PLAN/ACT, or invent technical approval/rejection wording when an authorized AI actor can do it.
 
-## 6. Consequential-stage separation
+## 7. Consequential-stage separation
 
-Default separation:
+For Cline-executed work:
 
 ```text
 PLAN ≠ ACT
@@ -123,7 +160,9 @@ MERGE ≠ DEPLOY
 
 No PASS automatically authorizes commit or push.
 
-## 7. Prompt and context support
+Direct Skill 5 connected-GitHub persistence is different: the repository write creates the remote commit directly, so no separate Cline commit/push stage exists for that exact action.
+
+## 8. Prompt and context support
 
 Canonical support files:
 
@@ -132,22 +171,30 @@ docs/skills/chatgpt/context/00_GALAX_CHATGPT_CONTEXT_ENGINEER.md
 docs/skills/chatgpt/prompt/00_GALAX_CHATGPT_PROMPT_ENGINEER.md
 ```
 
-Context Engineer supplies verified minimum context. Prompt Engineer supplies the mandatory owner-facing and Cline-facing package. Neither is a primary/dependency skill and neither changes authority.
+Context Engineer supplies verified minimum context.
 
-## 8. Supersession
+Prompt Engineer supplies mandatory owner-facing and Cline-facing packaging only when a Cline instruction is required. It is not required for direct Skill 5 continuity persistence.
 
-This file supersedes prior rules that:
+Neither support component changes authority.
 
-- made ChatGPT the normal direct Skill 9 supervisory writer;
-- made ChatGPT the normal direct Skill 5 continuity/achievement uploader;
-- prohibited Cline from mechanically applying ChatGPT-authored governance or continuity changes;
-- limited Cline-default execution only to CrewAI source implementation.
+## 9. Supersession
+
+This file supersedes prior interpretations that either:
+
+- made Cline the executor for exact Skill 5 length/achievement persistence; or
+- made ChatGPT a broad direct repository writer outside Skill 5 without a valid Skill 12 fallback.
 
 Current exact rule:
 
 ```text
-Cline capable → Cline executes.
-ChatGPT authors/specifies/reviews.
-Human Owner controls consequential gates.
-ChatGPT executes only through verified, explicitly authorized Skill 12 fallback.
+Exact Skill 5 continuity/achievement persistence
+→ ChatGPT executes and publishes directly.
+
+Other repository work and Cline capable
+→ Cline executes.
+→ ChatGPT authors/specifies/reviews.
+→ Human Owner controls consequential gates.
+
+Other direct ChatGPT execution
+→ Skill 12 only after verified gate + explicit Human Owner authorization.
 ```
