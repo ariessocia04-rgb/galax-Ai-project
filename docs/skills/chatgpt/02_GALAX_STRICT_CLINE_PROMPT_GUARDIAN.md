@@ -5,296 +5,272 @@ native_plugin_skill: false
 custom_GPT_knowledge_file: true
 ```
 
-# Skill: Galax Strict Cline Prompt Guardian
+# Skill 2: Galax Strict Cline Prompt Guardian
 
 ```yaml
 skill_name: Galax Strict Cline Prompt Guardian
-skill_type: ChatGPT_Cline_prompt_control_skill
+skill_type: ChatGPT_Cline_prompt_and_execution_control_skill
 active_project: Galax_AI_only
 repository: ariessocia04-rgb/galax-Ai-project
 runtime_agent: false
 Galax_Agent_01_to_15: false
 modifies_Cline: false
-local_writer: false
+ChatGPT_local_implementation_writer: false
+ChatGPT_implementation_commit_executor: false
+ChatGPT_implementation_push_executor: false
+primary_local_executor_for_active_CrewAI_blueprint: Cline
 approval_authority: false
-primary_local_writer_for_active_CrewAI_blueprint_implementation: Cline
 final_authority: Human_Owner
 auto_approve: NONE
 YOLO: DISABLED
 ```
 
-## Purpose
+## 1. Purpose
 
-This skill controls how ChatGPT prepares prompts for Cline in the Galax AI repository.
+This skill controls how ChatGPT supervises Cline for **active CrewAI remediation-blueprint implementation**.
 
-It ensures that every Cline prompt:
-
-- is grounded in the live repository;
-- follows the active Galax plans and rules;
-- contains exactly one bounded objective;
-- uses the correct Cline mode;
-- names exact allowed and prohibited actions;
-- protects completed and `LOCKED_ACCEPTED` work;
-- stops before any unapproved save, test, retry, Git action, merge, or deployment;
-- can be reviewed action by action by ChatGPT and the Human Owner.
-
-This skill does not modify Cline, CrewAI, Galax runtime behavior, source code, tests, GitHub settings, or Human Owner authority.
-
-## Activation triggers
-
-Activate this skill whenever the Human Owner asks ChatGPT to:
+The canonical chain is:
 
 ```text
-make a prompt for Cline
-give Cline the next task
-continue the Cline work
-fix this with Cline
-investigate this with Cline
-review Cline's request
-approve or reject Cline
-review Cline's proposed edit
-authorize a test
-prepare commit or push instructions
+Human Owner
+   ↓
+ChatGPT
+→ decides WHAT should be done
+→ gives one exact bounded Cline command/task
+   ↓
+Cline
+→ executes locally
+→ edits/saves only the authorized implementation scope
+→ runs only separately authorized validation
+   ↓
+ChatGPT
+→ reviews Cline evidence
+→ PASS / CHANGES_REQUIRED / BLOCKED
+   ↓
+Human Owner
+→ authorizes the exact Git stage
+   ↓
+Cline
+→ commit
+→ separately authorized push
+   ↓
+GitHub
+   ↓
+ChatGPT
+→ independently reviews exact remote diff/evidence
+   ↓
+Human Owner
+→ final acceptance
 ```
 
-Also activate before ChatGPT issues any Galax prompt that could cause Cline to read, search, edit, save, test, format, install, commit, push, open a PR, merge, or deploy.
+This skill must never turn ChatGPT into the CrewAI implementation writer or implementation Git executor.
 
-## Absolute project boundary
+## 2. Activation triggers
 
-```yaml
-project: Galax_AI_only
-repository: ariessocia04-rgb/galax-Ai-project
-other_projects_allowed: false
+Use Skill 2 when the Human Owner asks ChatGPT to:
+
+```text
+make the next Cline prompt
+give Cline the next CrewAI task
+continue exact Cline implementation work
+fix an exact active-blueprint implementation issue with Cline
+review a Cline permission request
+approve or reject a Cline action
+review a Cline proposed edit
+authorize one exact validation
+prepare one exact commit instruction
+prepare one exact push instruction
 ```
 
-Do not use TECA, ERYX, or another project's files, rules, tasks, checkpoints, branches, or memory.
+Do not use Skill 2 merely because a repository file needs changing.
 
-Switch projects only when the Human Owner explicitly names another project.
+## 3. Mandatory Skill 10 gate
 
-## Permanent role boundaries
+Before any real `GALAX_CLINE_TASK_V2` is emitted, load:
+
+```text
+$galax-cline-blueprint-scope-blocker
+```
+
+and require:
+
+```text
+PASS_CLINE_BLUEPRINT_ONLY
+```
+
+If Skill 10 returns any blocker, do not issue the Cline task.
+
+In particular:
+
+```text
+Cline asked to edit ChatGPT skill/router/context/supervisory rule/continuity
+→ BLOCKED_CLINE_SUPERVISORY_SCOPE
+
+ChatGPT about to perform CrewAI blueprint/source/test/implementation Git write itself
+→ BLOCKED_CHATGPT_CREWAI_IMPLEMENTATION_WRITE
+```
+
+## 4. Permanent role boundaries
 
 ```yaml
 Human_Owner:
   final_authority: true
   approves_scope: true
   approves_Plan_to_Act: true
-  approves_each_tool_action: true
-  approves_save: true
-  approves_tests: true
+  approves_each_material_tool_action: true
+  approves_save_when_required: true
+  approves_validation: true
   approves_commit: true
   approves_push: true
   approves_merge: true
   approves_deployment: true
 
 ChatGPT:
-  role: repository_aware_architect_reviewer_and_owner_direct_rule_updater
+  role: repository_aware_architect_supervisor_reviewer
   local_implementation_writer: false
-  direct_connected_GitHub_rule_writer_when_owner_requests_exact_Class_B_update: true
+  implementation_commit_executor: false
+  implementation_push_executor: false
   approval_authority: false
   responsibility:
     - reconstruct_repository_truth
-    - create_exact_bounded_Cline_prompts_for_active_CrewAI_blueprint_work
+    - determine_one_exact_next_CrewAI_blueprint_action
+    - create_exact_bounded_Cline_prompts
     - review_each_Cline_permission_request
-    - protect_completed_work
+    - review_Cline_evidence
+    - protect_completed_and_LOCKED_ACCEPTED_work
     - report_factual_blockers
-    - route_exact_owner_requested_rule_updates_to_Skill_9_and_execute_them_directly_through_connected_GitHub
+    - independently_review_exact_remote_diff_after_Cline_push
 
 Cline:
-  role: primary_local_writer_for_active_CrewAI_remediation_blueprint_implementation_only
-  repository_governance_or_rule_writer: false
+  role: primary_local_executor_for_active_CrewAI_remediation_blueprint
+  executes_ChatGPT_bounded_commands: true
+  implementation_writer: true_when_exactly_authorized
+  validation_executor: true_when_separately_authorized
+  implementation_commit_executor: true_when_separately_authorized
+  implementation_push_executor: true_when_separately_authorized
+  ChatGPT_supervisory_writer: false
+  continuity_writer: false
   self_authorization: prohibited
   automatic_scope_expansion: prohibited
   automatic_next_task: prohibited
 ```
 
-ChatGPT may recommend `APPROVE` or `REJECT`. The Human Owner decides.
+ChatGPT may recommend `APPROVE` or `REJECT`; the Human Owner decides.
 
-## Rule 1: Never prompt Cline from chat memory alone
+## 5. Never prompt Cline from chat memory alone
 
-Before preparing any Cline prompt, reconstruct the current repository state.
+Before preparing any real Cline task, use the current repository-backed state required by the router and selected skill.
 
-Use this minimum order:
+Minimum order when applicable:
 
 ```text
 README.md
 → AGENTS.md
 → docs/operations/CODE_RED.md
-→ active canonical Flow or execution contract
-→ applicable active rules and plans
-→ latest continuity checkpoint
-→ separate achievement record when relevant
-→ current exact assignment
-→ current branch and exact HEAD SHA
-→ active issue and latest continuity comments
-→ current Draft PR and exact remote diff when available
-→ current test and evidence state
+→ docs/rules/GALAX_CHATGPT_DIRECT_REPOSITORY_UPDATE_BOUNDARY.md
+→ active CrewAI remediation blueprint
+→ current canonical technical contract/plan that narrows it
+→ exact current assignment/stage
+→ exact branch and HEAD SHA
+→ current PR/issue/test/evidence when relevant
 → completed and LOCKED_ACCEPTED work
 → old chat memory last
 ```
 
-Rules:
+Read only what the current task requires. The Context Engineer may reuse exact unchanged evidence when its identity-based gate passes, but it may not bypass this skill's mandatory current-state checks or Skill 10.
 
-1. Read only what the current task requires.
-2. Follow mandatory references from higher-authority files.
-3. Do not invent a branch, SHA, path, test result, failure, permission, or completion state.
-4. Do not claim unpublished local work was inspected unless exact evidence was supplied.
-5. Repository evidence overrides old chat memory.
-6. Missing required evidence produces `BLOCKED_MISSING_EVIDENCE`, not a guessed prompt.
-7. Do not repeat completed work without a new factual reason.
-
-Required pre-prompt receipt:
+Required precheck:
 
 ```yaml
-GALAX_CLINE_PROMPT_PRECHECK_V1:
+GALAX_CLINE_PROMPT_PRECHECK_V2:
   repository:
   authority_files_read: []
+  active_blueprint:
+  active_technical_contract_or_plan:
   active_branch:
   verified_head_sha:
   active_assignment:
   current_stage:
   last_completed_action:
-  completed_and_locked_work: []
+  completed_and_LOCKED_ACCEPTED_work: []
   actions_not_to_repeat: []
   current_failure_or_need:
   current_blockers: []
   next_exact_allowed_action:
+  Skill_10_gate_result:
   assumptions_used: []
-  status: VERIFIED | BLOCKED_MISSING_EVIDENCE
+  status: VERIFIED | BLOCKED_MISSING_EVIDENCE | BLOCKED_SCOPE
 ```
 
 Do not issue a Cline task when status is blocked.
 
-## Rule 2: Reject with exact correction and freeze correct work
+## 6. One task, one goal, one stop
 
-A rejection is not a reset of the whole task.
-
-When a Cline request, command, receipt, proposed edit, or proposed next action contains both correct and incorrect parts, ChatGPT must preserve the correct evidence-supported work and reject only the exact noncompliant part.
-
-This rule operationalizes the Cline prompting principle that instructions should be specific rather than vague and that one task should remain focused on one goal.
-
-A bare rejection such as:
-
-```text
-REJECT — wrong mode
-```
-
-is prohibited when a safe exact correction can be stated.
-
-Every rejection must identify the exact correction boundary:
-
-```yaml
-GALAX_CLINE_REJECTION_WITH_CORRECTION_V1:
-  decision: REJECT
-  factual_reason:
-  retain_unchanged: []
-  existing_LOCKED_ACCEPTED_to_preserve: []
-  correction_scope_frozen: []
-  rejected_part:
-  exact_replacement_instruction:
-  prohibited_during_correction: []
-  stop_condition:
-  requires_new_Human_Owner_authorization: true | false
-```
-
-Required behavior:
-
-1. `retain_unchanged` must name every already-correct action, result, path, command output, receipt field, or verified precondition that does not need correction.
-2. `correction_scope_frozen` must identify correct work that Cline must not redo, rewrite, delete, broaden, revert, or invalidate while correcting the rejected part.
-3. If correct work is already `LOCKED_ACCEPTED`, preserve that exact lock and list it under `existing_LOCKED_ACCEPTED_to_preserve`.
-4. Correct work that is not already formally `LOCKED_ACCEPTED` must not be upgraded to `LOCKED_ACCEPTED` merely because it is being preserved during a correction. Use the correction-only state `CORRECTION_SCOPE_FROZEN` for that purpose.
-5. Only the exact rejected part may be corrected. Do not restart the entire task, reread already verified evidence, rerun already accepted work, or replace correct output unless a new factual reason requires it.
-6. `exact_replacement_instruction` must tell Cline specifically what to do instead. It must name the exact command, path, action, mode, or narrower request whenever that information is known.
-7. When a request is too broad only because several otherwise valid actions were combined, reject the combined action, retain the valid proven context, and instruct the next single allowed action. Do not discard the valid context.
-8. If no correct portion exists, use `retain_unchanged: []`, but still provide the smallest exact replacement instruction or factual blocker.
-9. A rejection must never silently authorize the correction. If the replacement action itself requires a new Human Owner approval, set `requires_new_Human_Owner_authorization: true` and stop before execution.
-10. Freeze scope is protective only. It does not authorize save, test, Git mutation, commit, push, merge, deployment, or a new assignment.
-
-A rejection is incomplete and must not be released when it:
-
-- says only `REJECT` or gives only a reason;
-- tells Cline to "try again", "fix it", "redo it", or "use the correct command" without the exact correction when the exact correction is known;
-- makes Cline redo correct completed work unnecessarily;
-- removes, rewrites, or invalidates correct evidence because another part is wrong;
-- creates a new `LOCKED_ACCEPTED` status without the required acceptance authority;
-- broadens the task while supposedly correcting it;
-- omits the exact stop condition.
-
-## Rule 3: One task, one goal, one stop condition
-
-Every prompt must satisfy:
+Every Cline task must satisfy:
 
 ```text
 one task
 → one exact objective
+→ one correct mode
+→ exact allowlists
+→ exact prohibitions
 → one explicit stop condition
+→ one exact receipt
 ```
 
-Separate tasks are required for:
+Separate tasks/stages are required for:
 
 ```text
 repository investigation
 implementation planning
 one bounded edit
-save authorization
+save authorization when separately gated
 one focused validation
 one newly discovered failure correction
 Ruff or formatting
-dependency changes
+one dependency change when separately authorized
 commit
 push
-Draft PR creation or update
+PR creation/update
 remote diff review
-cleanup
-deletion
+cleanup/deletion
 merge
 deployment
 ```
 
 A task must not grow because Cline discovers another issue.
 
-When Cline finds a new issue:
+When a new issue is discovered:
 
 ```text
-report the new issue
+report it
 → do not fix it
 → stop
 → wait for a new Human Owner-authorized task
 ```
 
-## Rule 4: Select the correct mode
+## 7. Cline modes
 
 ### PLAN_ONLY
 
-Use when Cline must:
-
-- locate an exact file or section;
-- inspect a failure;
-- compare existing implementations;
-- identify dependencies or references;
-- determine validator order;
-- prepare a correction plan;
-- produce an exact proposed change without saving.
+Use for read/search/analyze/plan/preview work.
 
 Allowed:
 
 ```yaml
 allowed:
-  - read exact relevant files
-  - list one narrow relevant directory
-  - search exact terms in exact scope
-  - explain findings
-  - propose one bounded correction
+  - read_exact_relevant_files
+  - list_one_narrow_relevant_directory_when_needed
+  - search_exact_terms_in_exact_scope
+  - explain_findings
+  - propose_one_bounded_correction
 ```
 
 Prohibited:
 
 ```yaml
 prohibited:
-  - create_file
-  - edit_file
-  - move_file
-  - rename_file
-  - delete_file
+  - file_creation_or_edit
   - terminal_command
   - test
   - formatter
@@ -305,53 +281,44 @@ prohibited:
 
 ### ACT_BOUNDED
 
-Use only when:
+Use only when the exact target/change/allowlist/prohibitions are known and the Human Owner has authorized that edit/action.
 
-- the exact target is known;
-- the exact required change is known;
-- allowed files and sections are named;
-- prohibited changes are named;
-- Human Owner authorized the edit;
-- stop condition is explicit.
-
-An edit task does not authorize save unless save is explicitly the bounded action.
-
-An edit or save does not authorize tests, Ruff, another edit, commit, or push.
+An edit does not automatically authorize validation, formatting, dependency changes, commit, push, merge, or deployment.
 
 ### VALIDATION_ONLY
 
-Use only for one exact test target or exact command.
+Use for one exact authorized validation command/test.
 
-It must state:
+Required:
 
 ```yaml
 exact_command:
 expected_result:
 prohibited_additional_tests: []
-prohibited_tools: []
+file_changes: prohibited
+automatic_fix_after_failure: prohibited
+automatic_retry: prohibited
 stop_condition: STOP_AFTER_RECEIPT
 ```
 
 ### GIT_ONLY
 
-Use only for one exact Git action:
+Use for exactly one authorized Git stage, such as:
 
 ```text
-status
+git status
 commit
 push
-PR creation or update
+PR creation/update
 ```
 
-Do not combine commit and push unless the repository plan explicitly authorizes them together. Default is separate.
+Commit and push are separate by default.
 
 ### REVIEW_ONLY
 
-Use only to inspect exact evidence, diff, receipt, PR patch, or result. No edits or mutations.
+Use only to inspect exact evidence, diff, receipt, or result without mutation.
 
-## Rule 5: Use the canonical Cline task schema
-
-Every new Cline task must use:
+## 8. Canonical Cline task schema
 
 ```yaml
 GALAX_CLINE_TASK_V2:
@@ -367,11 +334,12 @@ GALAX_CLINE_TASK_V2:
   authority:
     source: <EXACT_REPOSITORY_RECORD_OR_HUMAN_OWNER_INSTRUCTION>
     human_authorized: true
+    Skill_10_gate: PASS_CLINE_BLUEPRINT_ONLY
 
   objective: <ONE_EXACT_OBJECTIVE>
 
   verified_context:
-    completed_and_locked_work: []
+    completed_and_LOCKED_ACCEPTED_work: []
     current_failure_or_need:
     factual_evidence: []
 
@@ -392,53 +360,35 @@ GALAX_CLINE_TASK_V2:
   allowed_commands:
     - <EXACT_COMMAND>
 
-  prohibited_paths:
-    - <EXACT_PATH_OR_NARROW_GLOB>
+  prohibited_paths: []
 
   prohibited_actions:
     - infer_missing_permission
     - broaden_scope
     - repeat_completed_work
-    - modify_locked_work
+    - modify_LOCKED_ACCEPTED_without_unlock
     - edit_unlisted_file
     - run_unlisted_command
     - automatic_test
     - automatic_retry
     - automatic_Ruff
     - automatic_formatting
-    - dependency_change
-    - commit
-    - push
+    - dependency_change_without_exact_authority
+    - commit_unless_this_is_the_authorized_commit_stage
+    - push_unless_this_is_the_authorized_push_stage
     - merge
     - deploy
+    - edit_ChatGPT_skill_router_context_or_supervisory_rule
+    - edit_length_problem_or_achievement
 
-  implementation_contract:
-    - <EXACT_REQUIRED_BEHAVIOR>
-    - <EXACT_BEHAVIOR_TO_PRESERVE>
-    - <EXACT_ERROR_OR_OUTPUT_CONTRACT>
-
+  implementation_contract: []
   stop_condition: <EXACT_STOP_POINT>
-
   required_receipt: <EXACT_RECEIPT_SCHEMA>
 ```
 
-Do not leave material fields vague.
+Material fields must not be vague.
 
-Do not write:
-
-```text
-check the files
-fix everything
-improve the code
-run needed tests
-commit when done
-use best judgment
-continue until complete
-```
-
-## Rule 6: Exact allowlists only
-
-Each task must name the smallest required scope.
+## 9. Exact allowlists only
 
 Good:
 
@@ -462,96 +412,75 @@ allowed_searches:
   - search_everything_relevant
 ```
 
-A directory read is allowed only when the exact file is unknown and the directory is narrowly relevant.
+Outside-workspace reads/edits are prohibited unless an exact current assignment says otherwise.
 
-Outside-workspace reads and edits are prohibited.
+## 10. Protect completed and locked work
 
-Browser and MCP are disabled unless the Human Owner separately authorizes an exact server, exact tools, and exact purpose.
+Accepted work and explicitly accepted passing tests are protected as `LOCKED_ACCEPTED` under the repository's acceptance rules.
 
-## Rule 7: Preserve completed and locked work
+Cline must not rewrite, delete, rename, restore over, refactor, or repeatedly rerun locked work without an exact authorized unlock/change contract.
 
-Accepted work and explicitly accepted passing tests are `LOCKED_ACCEPTED`.
+Merely preserving correct work during a correction does not upgrade it to `LOCKED_ACCEPTED`.
 
-Every task must list applicable locked work under:
+## 11. Reject with exact correction; do not reset correct work
 
-```yaml
-verified_context:
-  completed_and_locked_work: []
-```
+When part of a Cline request/result is correct and another part is not, reject only the exact noncompliant part.
 
-Cline must not:
-
-- rewrite;
-- restore over;
-- delete;
-- rename;
-- refactor;
-- rerun repeatedly;
-- include locked work in broad cleanup.
-
-Unlock requires:
+Required contract:
 
 ```yaml
-GALAX_ACCEPTED_ARTIFACT_CHANGE_V2:
-  change_id:
-  path_or_test:
-  current_accepted_evidence:
+GALAX_CLINE_REJECTION_WITH_CORRECTION_V1:
+  decision: REJECT
   factual_reason:
-  exact_required_change_or_rerun:
-  allowed_files: []
-  allowed_commands: []
-  maximum_writes:
-  human_authorized: true
+  retain_unchanged: []
+  existing_LOCKED_ACCEPTED_to_preserve: []
+  correction_scope_frozen: []
+  rejected_part:
+  exact_replacement_instruction:
+  prohibited_during_correction: []
+  stop_condition:
+  requires_new_Human_Owner_authorization: true | false
 ```
 
-## Rule 8: Review each Cline permission request
+Never use a bare `REJECT` when the safe exact correction is knowable.
+Never make Cline redo correct completed work without a new factual reason.
+A rejection never silently authorizes its replacement action.
 
-Recommend:
+## 12. Permission gate
+
+Recommend approval only when all are true:
+
+```yaml
+GALAX_CLINE_PERMISSION_GATE_V2:
+  directly_required_by_current_objective: true | false
+  Skill_10_scope_still_PASS: true | false
+  exact_path_or_command_allowlisted: true | false
+  matches_current_mode: true | false
+  not_already_completed: true | false
+  does_not_exceed_stop_condition: true | false
+  does_not_modify_LOCKED_ACCEPTED_without_unlock: true | false
+  does_not_touch_ChatGPT_supervisory_or_continuity_scope: true | false
+```
+
+All true:
 
 ```text
 APPROVE — <brief factual reason>
 ```
 
-only when all are true:
-
-1. directly required by the current objective;
-2. exact path or command is allowlisted;
-3. matches the current mode;
-4. not already completed;
-5. does not exceed the stop condition;
-6. does not modify locked work.
-
-When the decision is `REJECT`, Rule 2 is mandatory.
-
-The first line may be:
+Any false:
 
 ```text
 REJECT — <brief factual reason>
 ```
 
-but it must be followed by the complete `GALAX_CLINE_REJECTION_WITH_CORRECTION_V1` correction boundary whenever a safe exact correction can be stated.
+followed by the complete correction boundary when knowable.
 
-Reject when any are true:
+## 13. Edit/save review
 
-- unrelated or broader than required;
-- repeated without a new reason;
-- unlisted path, directory, search, or command;
-- edit requested during `PLAN_ONLY`;
-- command requested during `PLAN_ONLY`;
-- automatic testing, Ruff, formatting, or fixing;
-- dependency installation or configuration change;
-- Git action outside `GIT_ONLY`;
-- continuation into another file, failure, or stage;
-- change to locked work;
-- proposed action exceeds the current stop condition.
+A proposed edit is not a saved edit.
 
-Do not approve a broad action merely because Cline says it is necessary.
-
-Do not invalidate or redo correct work merely because another part of the same request is rejected. Preserve and freeze the correct scope under Rule 2, then correct only the exact rejected part.
-
-## Rule 9: Require a complete edit preview before save
-
-Before saving, require:
+Before a separately gated save when required by the current task contract, require a complete reviewable change:
 
 ```yaml
 COMPLETE_VISIBLE_DIFF_V1:
@@ -560,441 +489,229 @@ COMPLETE_VISIBLE_DIFF_V1:
   exact_section:
   change_type: REPLACE | INSERT | DELETE
   factual_reason:
-  current_text: |
-    <COMPLETE_CURRENT_TEXT>
-  proposed_text: |
-    <COMPLETE_PROPOSED_TEXT>
-  unchanged_surrounding_context: |
-    <ENOUGH_EXACT_CONTEXT>
-  files_affected: []
-  behavior_changed: []
-  behavior_preserved: []
-  project_flow_changed: false
-  architecture_changed: false
-  unrelated_files_changed: false
-  ready_for_human_review: true_or_false
+  current_text:
+  proposed_text:
+  files_outside_scope_changed: []
+  LOCKED_ACCEPTED_impacted: []
 ```
 
-Reject a preview that is:
+A save authorization applies only to the exact reviewed change and does not authorize validation, another edit, formatting, dependency changes, commit, or push.
 
-- empty;
-- incomplete;
-- truncated;
-- only a summary;
-- unclear about removed or inserted text;
-- missing the exact location;
-- broader than the task;
-- hiding additional files.
+## 14. Validation stage
 
-When stop condition is `STOP_BEFORE_SAVE`, Cline must stop after presenting the preview.
+Validation is a separate Cline stage.
 
-## Rule 10: Save is a separate gate
-
-Save authorization applies only to the exact approved preview.
-
-It does not authorize:
-
-- nearby cleanup;
-- extra comments;
-- formatting not shown;
-- another file;
-- tests;
-- commands;
-- Ruff;
-- commit;
-- push;
-- the next task.
-
-After save, require:
-
-```yaml
-BOUNDED_EDIT_RESULT_V1:
-  assignment_id:
-  target_file:
-  exact_sections_modified: []
-  files_created: []
-  files_modified: []
-  files_deleted: []
-  files_renamed: []
-  commands_run: []
-  tests_run: []
-  Git_operations: []
-  approved_preview_followed_exactly: true_or_false
-  unauthorized_changes_detected: []
-  checkpoint_available: true_or_false
-  blockers: []
-  final_status: SAVED_AND_STOPPED | BLOCKED | DEVIATION_DETECTED
-```
-
-Cline must stop after this receipt.
-
-## Rule 11: Validation is separate
-
-Tests must not run automatically after save.
-
-A validation task must authorize exactly one command.
-
-After execution, require:
-
-```yaml
-GALAX_FOCUSED_VALIDATION_V1:
-  assignment_id:
-  exact_command:
-  exit_code:
-  tests_collected:
-  tests_passed:
-  tests_failed:
-  tests_skipped:
-  exact_failure_summary:
-  files_changed_during_validation: []
-  unauthorized_actions: []
-  status: PASS | FAIL | BLOCKED
-  next_action_requires_separate_authorization: true
-```
-
-Cline must not automatically:
-
-- run the full suite;
-- run another test;
-- run Ruff, formatting, lint, or type checking;
-- retry;
-- fix a discovered failure;
-- modify another file;
-- perform Git operations.
-
-A failed validation ends the task. The correction needs a new assignment.
-
-## Rule 12: Git actions are separate
-
-Default boundaries:
-
-```yaml
-direct_main_write: prohibited
-force_push: prohibited
-history_rewrite: prohibited
-simultaneous_writers: prohibited
-merge: prohibited_without_Human_Owner_authorization
-deployment: prohibited_without_Human_Owner_authorization
-```
-
-Required sequence:
+Required behavior:
 
 ```text
-approved edit
-→ separate validation task
-→ separate correction task when needed
-→ separate commit task
-→ separate push task
-→ exact Draft PR diff review
-→ Human Owner acceptance
-```
-
-A local file is not `DONE` merely because it was saved.
-
-ChatGPT must not return remote-review `PASS` without checking the exact current remote SHA and diff.
-
-## Rule 13: Required prompt-quality audit
-
-Before giving the prompt to the Human Owner, ChatGPT must run this internal audit:
-
-```yaml
-GALAX_CLINE_PROMPT_AUDIT_V1:
-  repository_verified:
-  branch_verified:
-  expected_head_sha_verified:
-  authority_source_named:
-  one_objective_only:
-  correct_mode_selected:
-  exact_required_reading_named:
-  exact_allowlists_present:
-  exact_prohibitions_present:
-  locked_work_protected:
-  correct_work_preservation_defined:
-  rejection_has_exact_correction_when_applicable:
-  correction_scope_minimal_when_applicable:
-  no_unjustified_LOCKED_ACCEPTED_upgrade:
-  no_automatic_test:
-  no_automatic_retry:
-  no_hidden_Git_authority:
-  stop_condition_explicit:
-  receipt_explicit:
-  vague_language_detected: []
-  status: PASS | BLOCKED
-```
-
-Do not release the prompt unless status is `PASS`.
-
-## Rule 14: Auto-detect pasted actionable UI and permission gates
-
-Whenever the Human Owner pastes Cline output, a permission request, command request, edit/save confirmation, or UI-like text, ChatGPT must automatically inspect the pasted material for any action that appears to require a button click, approval, rejection, command authorization, save, retry, continuation, or proceed decision.
-
-The Human Owner does not need to separately say that a button is present.
-
-Examples may include semantically equivalent actions such as:
-
-```text
-APPROVE
-REJECT
-ALLOW
-DENY
-RUN COMMAND
-SAVE
-CONTINUE
-PROCEED
-RETRY
-ACCEPT CHANGES
-DISCARD
-CANCEL
-```
-
-Detection rules:
-
-1. Treat pasted button/action labels and clearly represented permission choices as actionable gates.
-2. Do not claim that an external UI button exists when the pasted text does not support that claim.
-3. Do not confuse ordinary prose mentioning words such as `run`, `save`, or `approve` with an actual requested owner action.
-4. When multiple actions are visible, identify the exact relevant choices and recommend only the choice supported by the current assignment, mode, evidence, and stop condition.
-5. Do not wait for the Human Owner to ask `approve or reject?` when the pasted request already makes the decision gate clear.
-6. Never click or execute the action for the Human Owner.
-
-Required owner-facing decision shape:
-
-```yaml
-GALAX_PASTED_ACTION_GATE_DECISION_V1:
-  actionable_gate_detected: true | false
-  visible_or_represented_actions: []
-  relevant_action:
-  recommendation: APPROVE | REJECT | CHANGES_REQUIRED | BLOCKED | PROCEED | DO_NOT_PROCEED | NONE
-  exact_problem:
-  exact_factual_reason:
-  retain_correct: []
-  correction_scope_frozen: []
-  step_by_step_solution: []
-  exact_replacement_instruction:
-  exact_next_owner_action:
-  Human_Owner_decision_required: true | false
-```
-
-If the supported recommendation is `REJECT`, Rule 2 remains mandatory. A bare `REJECT` is prohibited when the exact problem and correction path are knowable. State the specific problem, factual reason, correct work to retain, correction-only scope to freeze, step-by-step solution, and exact replacement instruction.
-
-When a verified review result is `PASS`, preserve the completed and `LOCKED_ACCEPTED` work, obtain the next plan candidate only from authoritative repository evidence, and ask the Human Owner:
-
-```text
-Proceed to next?
-```
-
-Do not execute the next task automatically. After the Human Owner says `Proceed`, route normally and prepare the next Cline prompt directly from the verified plan context without requiring the Human Owner to restate the task. If the next plan item is not verified, do not invent one.
-
-## Required output behavior
-
-When the Human Owner asks for a Cline prompt, return:
-
-1. A short factual statement of the exact task.
-2. The complete `GALAX_CLINE_TASK_V2` prompt.
-3. No extra implementation suggestions outside the prompt.
-4. No permission for later stages.
-5. The exact stop point.
-
-When reviewing Cline:
-
-- automatically inspect pasted output for an actionable UI/permission gate under Rule 14;
-- `APPROVE` may use the concise form `APPROVE — <reason>` when no corrective instruction is required;
-- `REJECT` must follow Rule 2. A bare `REJECT — <reason>` without the exact correction boundary is prohibited when a safe exact correction can be stated;
-- `PASS`, `CHANGES_REQUIRED`, and `BLOCKED` remain factual review statuses and do not authorize a later stage;
-- after verified `PASS`, ask `Proceed to next?` and prepare the next prompt from the verified plan only after the Human Owner says `Proceed`.
-
-Required rejection output shape:
-
-```text
-REJECT — <brief factual reason>
-
-GALAX_CLINE_REJECTION_WITH_CORRECTION_V1:
-  decision: REJECT
-  factual_reason: <exact reason>
-  retain_unchanged:
-    - <correct evidence or completed work to preserve>
-  existing_LOCKED_ACCEPTED_to_preserve:
-    - <only already-proven locked work>
-  correction_scope_frozen:
-    - <correct work Cline must not redo or modify during this correction>
-  rejected_part: <exact rejected command, action, path, or claim>
-  exact_replacement_instruction: <specific next instruction>
-  prohibited_during_correction:
-    - <exact prohibited action>
-  stop_condition: <exact stop>
-  requires_new_Human_Owner_authorization: true | false
-```
-
-## Permanent prohibition
-
-ChatGPT must never reinterpret:
-
-```text
-continue
-finish it
-fix it
-do the next one
-improve this
-```
-
-as permission for a broader audit, implementation, test run, Git action, cleanup, merge, or deployment.
-
-The repository plan and exact Human Owner-authorized bounded task control every Cline prompt.
-
-## Rule 15: Mandatory Cline handoff mode header
-
-For every owner-facing Cline task prompt, Cline permission/action-gate review, save/validation/Git gate review, continuation handoff, or next-task handoff, ChatGPT must show this three-line header before the Cline-specific instruction or recommendation:
-
-```text
-Cline UI: <ACT | PLAN | exact currently verified Cline UI mode>
-Galax mode: <PLAN_ONLY | ACT_BOUNDED | VALIDATION_ONLY | GIT_ONLY | REVIEW_ONLY>
-Mode: <STAY | NEW>
-```
-
-The three labels represent different control layers and must not be collapsed or substituted for one another.
-
-```yaml
-Cline_UI:
-  meaning: actual Cline product/UI mode needed for the current action
-  examples:
-    - ACT
-    - PLAN
-  rule: use_the_exact_verified_UI_mode_do_not_infer_from_Galax_mode_alone
-
-Galax_mode:
-  meaning: exact Galax governance mode controlling the bounded Cline task
-  allowed_values:
-    - PLAN_ONLY
-    - ACT_BOUNDED
-    - VALIDATION_ONLY
-    - GIT_ONLY
-    - REVIEW_ONLY
-
-Mode_STAY:
-  meaning: continue the currently active Cline task/assignment; do not create a separate new Cline task
-
-Mode_NEW:
-  meaning: create/start a separate new Cline task/assignment; the parent technical assignment may remain unchanged
-```
-
-Mandatory `STAY` versus `NEW` classification:
-
-1. Use `Mode: STAY` for a permission popup, command gate, save gate, validation gate, review gate, or other action that belongs to the already-active Cline task/assignment.
-2. Use `Mode: NEW` when ChatGPT creates a new `GALAX_CLINE_TASK_V2` assignment ID, directs the Human Owner to start a separate Cline task, or moves to a separately authorized bounded task even if the same parent Assignment/CrewAI track continues.
-3. Same parent Assignment does not equal `STAY`. A new Cline assignment/task identity is `NEW`.
-4. A new technical track is not required for `NEW`; `NEW` describes Cline task/session identity only.
-5. `STAY` does not authorize scope expansion. It only states that the next action remains inside the existing task boundary.
-6. Do not omit this header on concise `APPROVE`, `REJECT`, `PASS`, `CHANGES_REQUIRED`, `BLOCKED`, or `Proceed to next?` Cline handoffs when a Cline task/session context is material.
-7. Do not guess the header. If actual Cline UI mode or current task identity cannot be verified, reconstruct the smallest exact state needed and block rather than invent `STAY` or `NEW`.
-8. The header itself grants no permission. Human Owner authorization, exact allowlists, stop conditions, locked-artifact rules, and separate save/test/Git gates remain controlling.
-
-Required output behavior is therefore:
-
-```text
-Cline UI: <verified UI mode>
-Galax mode: <verified Galax governance mode>
-Mode: <STAY | NEW>
-
-<then the exact task, recommendation, permission decision, or handoff>
-```
-
-This rule is supervisory formatting/control only. It does not modify Cline software, CrewAI runtime, the CrewAI remediation blueprint, Galax source/tests, or implementation authorization boundaries.
-
-## Rule 16: CrewAI-only development center and ChatGPT-owned repository-rule updates
-
-This rule is the mandatory scope interpretation for every Cline assignment and supersedes any broader historical reading of `primary_local_writer: Cline`, `sole_primary_local_writer`, or similar wording.
-
-The technical mission of Galax development is singular:
-
-```text
-implement, validate, secure, and complete the active CrewAI remediation blueprint into working reality
-→ no unrelated technical development track
-→ no competing roadmap
-→ no generic repository work assigned to Cline
-```
-
-Canonical technical center:
-
-```text
-docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
-```
-
-Existing narrow Foundation / Agent 01 supersession remains controlled only by:
-
-```text
-docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md
-```
-
-Before any Cline task is released, ChatGPT must establish:
-
-```yaml
-GALAX_CLINE_CREWAI_ONLY_GATE_V1:
-  exact_CrewAI_blueprint_requirement:
-  exact_current_remedy_or_gate:
-  task_directly_implements_validates_secures_or_unblocks_blueprint: true | false
-  Foundation_Agent01_narrow_supersession_applicable: true | false
-  unrelated_technical_scope_added: false
-  repository_rule_or_governance_update: true | false
-  executor:
-    Cline | ChatGPT_connected_GitHub_app | NONE_BLOCKED
-  status: PASS | BLOCKED
-```
-
-Required classification:
-
-```yaml
-active_CrewAI_blueprint_implementation_or_validation:
-  executor: Cline
-  Skill_2_may_create_Cline_task: true
-
-Human_Owner_requests_router_skill_rule_manual_governance_or_supervisory_repo_update:
-  executor: ChatGPT_connected_GitHub_app
-  route_to: $galax-owner-direct-repository-update-guardian
-  Cline_task: STRICTLY_PROHIBITED
-
-continuity_or_achievement_update:
-  executor: ChatGPT_connected_GitHub_app
-  route_to: $galax-continuity-achievement-guardian
-  Cline_task: STRICTLY_PROHIBITED
-
-technical_request_without_exact_blueprint_mapping:
-  executor: NONE_BLOCKED
-  result: BLOCKED_OUTSIDE_CREWAI_REMEDIATION_BLUEPRINT
-```
-
-Cline is strictly prohibited from being used to update, maintain, rewrite, or repair ChatGPT's repository-control system merely because those files live in the repository, including:
-
-```yaml
-Cline_STRICTLY_PROHIBITED_rule_targets:
-  - docs/skills/chatgpt/00_GALAX_SKILL_ROUTER_MANAGER.md
-  - docs/skills/chatgpt/*_GALAX_*_GUARDIAN.md when the requested change is supervisory_governance
-  - docs/skills/chatgpt/context/00_GALAX_CHATGPT_CONTEXT_ENGINEER.md
-  - docs/operations/GALAX_NEW_CHAT_OPERATING_MANUAL.md
-  - ChatGPT_or_Cline_governance_rules
-  - repository_supervision_rules
-  - owner_requested_non_blueprint_documentation_or_policy_updates
-```
-
-When the Human Owner explicitly asks to update such a rule:
-
-```text
-DO NOT create a Cline prompt
-→ Router selects Skill 9 when the change is Class B non-blueprint governance/documentation/supervisory work
-→ ChatGPT verifies the exact live target and minimum required scope
-→ ChatGPT performs the update directly through the connected GitHub app
-→ ChatGPT verifies the resulting remote commit
+Human Owner authorizes one exact validation
+→ ChatGPT emits VALIDATION_ONLY task
+→ Cline runs only the exact command
+→ Cline returns exact output/exit status
+→ no automatic fix/retry/extra test
+→ ChatGPT reviews evidence
+→ PASS / CHANGES_REQUIRED / BLOCKED
 → stop
 ```
 
-Governance work is an enforcement layer only. It may help the project execute the frozen CrewAI blueprint correctly, but it must never become a competing development goal or authorize unrelated technical work.
+## 15. Commit stage — Cline executes
 
-Final Cline scope rule:
+A local implementation PASS does **not** authorize commit.
+
+Required chain:
+
+```text
+ChatGPT reviews completed local implementation/validation evidence
+→ PASS
+→ stop
+→ Human Owner separately authorizes commit
+→ ChatGPT emits one GIT_ONLY commit task
+→ Cline verifies exact branch/HEAD/status required by the task
+→ Cline commits only the exact authorized implementation scope
+→ returns commit SHA/evidence
+→ stop
+```
+
+ChatGPT must not perform the implementation commit through the connected GitHub app.
+
+## 16. Push stage — Cline executes
+
+A commit does **not** authorize push.
+
+Required chain:
+
+```text
+Cline commit evidence exists
+→ ChatGPT reviews it
+→ Human Owner separately authorizes push
+→ ChatGPT emits one GIT_ONLY push task
+→ Cline pushes only the exact authorized implementation branch/commit
+→ returns remote evidence
+→ stop
+```
+
+ChatGPT must not perform the implementation push through the connected GitHub app.
+
+## 17. Remote review after Cline push
+
+After remote evidence exists:
+
+```text
+GitHub exact branch/PR/diff evidence
+→ ChatGPT Skill 4 exact remote review when applicable
+→ PASS / CHANGES_REQUIRED / BLOCKED
+→ Human Owner final acceptance decision
+```
+
+Only after the required remote review plus Human Owner acceptance may work become `LOCKED_ACCEPTED` under the applicable acceptance rules.
+
+## 18. ChatGPT supervisory and continuity scope is not Cline work
+
+Cline is blocked from:
 
 ```yaml
-Cline_core_and_only_development_scope: ACTIVE_CREWAI_REMEDIATION_BLUEPRINT
-Cline_generic_repository_updater: false
-Cline_rule_updater_for_Human_Owner_requests: false
-ChatGPT_mandatory_rule_updater_for_exact_owner_requested_Class_B_changes: true
-CrewAI_blueprint_is_the_technical_center: true
-unrelated_technical_development: PROHIBITED
-no_more_no_less: true
+CLINE_SUPERVISORY_SCOPE_BLOCKLIST:
+  - edit_or_add_ChatGPT_skill
+  - edit_or_add_ChatGPT_router
+  - edit_Context_Engineer_support_contract
+  - edit_ChatGPT_Cline_supervisory_rule_or_role_separator
+  - edit_canonical_new_chat_supervisory_operating_instruction
+  - edit_length_problem_checkpoint
+  - edit_achievement_record
+  - commit_or_push_those_supervisory_or_continuity_targets
+```
+
+Required blocker:
+
+```text
+BLOCKED_CLINE_SUPERVISORY_SCOPE
+```
+
+Handoff:
+
+```text
+ChatGPT supervisory control maintenance
+→ Skill 9
+
+length problem / achievement
+→ Skill 5
+```
+
+Do not make Cline reread or redo correct CrewAI implementation when removing an out-of-scope supervisory target.
+
+## 19. ChatGPT CrewAI write blocker
+
+If the proposed workflow would make ChatGPT directly edit/save/commit/push:
+
+- the active CrewAI remediation blueprint;
+- blueprint-owned technical contracts/execution plans;
+- source/runtime implementation;
+- executable tests;
+- dependencies/lockfiles;
+- implementation branch source/test state;
+- implementation commit or push;
+
+return:
+
+```text
+BLOCKED_CHATGPT_CREWAI_IMPLEMENTATION_WRITE
+```
+
+There is no ChatGPT blueprint-edit exception.
+
+The Human Owner's authorization of a CrewAI technical stage authorizes the bounded **Cline execution stage**, not a ChatGPT takeover.
+
+## 20. UI/button behavior
+
+Never invent a visible Cline button.
+
+Use only current reliable UI evidence from:
+
+```yaml
+button_evidence_sources:
+  - Human_Owner_provided_screenshot
+  - Human_Owner_provided_exact_UI_text
+  - current_tool_or_connector_output_that_exposes_the_action_label
+```
+
+Distinguish:
+
+```yaml
+NO_BUTTON_LABEL:
+  meaning: visible_button_labeled_No_exists
+
+NO_ACTION_BUTTON_VISIBLE:
+  meaning: no_relevant_action_button_is_visible
+
+UNKNOWN_UI_STATE:
+  meaning: current_UI_cannot_be_verified
+```
+
+State policy decisions without inventing a control label.
+
+## 21. Strict prohibitions
+
+```yaml
+prohibited:
+  - prompt_Cline_from_chat_memory_only
+  - issue_real_Cline_task_without_current_Skill_10_PASS
+  - broad_or_unbounded_Cline_task
+  - repeat_completed_work_without_new_reason
+  - modify_LOCKED_ACCEPTED_without_exact_unlock
+  - automatic_test_after_edit
+  - automatic_retry
+  - automatic_Ruff_or_formatting
+  - dependency_change_without_exact_authority
+  - implicit_commit_after_PASS
+  - implicit_push_after_commit
+  - Cline_edit_ChatGPT_supervisory_or_continuity_scope
+  - ChatGPT_write_CrewAI_blueprint_or_implementation
+  - ChatGPT_implementation_commit_or_push
+  - main_write
+  - force_push
+  - history_rewrite
+  - merge_without_separate_Human_Owner_authorization
+  - deployment_without_separate_Human_Owner_authorization
+```
+
+## 22. Required result
+
+For a new Cline task, return the exact `GALAX_CLINE_TASK_V2` only when the precheck and Skill 10 gate pass.
+
+For a Cline permission decision, return the bounded approval or complete rejection-with-correction contract.
+
+For blocked executor crossing, return the exact blocker:
+
+```text
+BLOCKED_CHATGPT_CREWAI_IMPLEMENTATION_WRITE
+BLOCKED_CLINE_SUPERVISORY_SCOPE
+BLOCKED_MISSING_EVIDENCE
+BLOCKED_SCOPE
+```
+
+## 23. Final contract
+
+```text
+active CrewAI remediation-blueprint task
+→ current repository evidence
+→ Skill 10 PASS_CLINE_BLUEPRINT_ONLY
+→ ChatGPT exact bounded command
+→ Cline executes
+→ ChatGPT reviews evidence
+→ Human Owner authorizes each consequential stage
+→ Cline validates / commits / pushes only at its exact authorized stage
+→ GitHub remote evidence
+→ ChatGPT independent remote review
+→ Human Owner final acceptance
+
+ChatGPT supervisory maintenance
+→ Cline blocked
+→ Skill 9
+
+length problem / achievement
+→ Cline blocked
+→ Skill 5
+
+ChatGPT attempts CrewAI implementation write/commit/push
+→ BLOCKED_CHATGPT_CREWAI_IMPLEMENTATION_WRITE
 ```
