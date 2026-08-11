@@ -5,187 +5,283 @@ native_plugin_skill: false
 custom_GPT_knowledge_file: true
 ```
 
-# Skill 9: Galax Owner Direct Repository Update Guardian
+# Skill 9: Galax ChatGPT Supervisory Repository Update Guardian
 
 ```yaml
-skill_name: Galax Owner Direct Repository Update Guardian
-skill_type: ChatGPT_owner_authorized_non_blueprint_repository_update_skill
+skill_name: Galax ChatGPT Supervisory Repository Update Guardian
+skill_type: ChatGPT_owner_authorized_supervisory_repository_update_skill
 active_project: Galax_AI_only
 repository: ariessocia04-rgb/galax-Ai-project
 runtime_agent: false
 CrewAI_agent: false
 Galax_Agent_01_to_15: false
 local_implementation_writer: false
-direct_connected_GitHub_writer_for_Class_B_updates: true
+CrewAI_implementation_git_executor: false
+direct_connected_GitHub_writer_for_exact_supervisory_controls: true
 approval_authority: false
 final_authority: Human_Owner
 ```
 
-## 1. Purpose
+## 1. One job only
 
-This skill owns exact Human-Owner-authorized Galax repository updates that are outside the active CrewAI remediation blueprint implementation scope and are classified as Class B under:
+Skill 9 exists so ChatGPT can maintain **its own Galax supervisory control layer** without sending that maintenance work to Cline.
 
-```text
-docs/rules/GALAX_CHATGPT_DIRECT_REPOSITORY_UPDATE_BOUNDARY.md
-```
-
-Its core rule is:
+Its exact job is:
 
 ```text
-Human Owner requests an exact non-blueprint repository governance/documentation/supervisory update
-→ ChatGPT verifies the live repository and exact scope
-→ ChatGPT writes the bounded update directly through the connected GitHub app
-→ ChatGPT verifies the resulting commit remotely
+Human Owner requests an exact ChatGPT supervisory-control repository update
+→ ChatGPT verifies the live router, role separator, exact target, branch and HEAD
+→ ChatGPT writes only the exact allowlisted supervisory target through the connected GitHub app
+→ ChatGPT verifies the resulting remote commit
 → stop
 ```
 
-Do not create a Cline task merely because the requested update changes repository files.
+Skill 9 is **not** a generic non-blueprint repository writer.
 
-## 2. Activation triggers
+It does not authorize ChatGPT to edit, save, validate, commit, push, or publish CrewAI remediation-blueprint implementation or blueprint-owned technical work.
 
-Use this skill as the primary skill when the Human Owner requests an exact repository update such as:
-
-```text
-update this rule in my repo
-update my repo with this governance change
-change the ChatGPT rule
-fix the repository instructions
-update the router or supervisory skills
-save this documentation/governance update
-```
-
-and the requested change is outside the active CrewAI blueprint implementation scope.
-
-Do not use this skill for:
-
-- active CrewAI blueprint source/test implementation assigned to Cline;
-- merge or deployment;
-- secrets, credentials, security settings, or workflows;
-- non-blueprint runtime/source/test/dependency changes that lack separate exact authority;
-- continuity/achievement writes that are already owned by Skill 5.
-
-## 3. Mandatory boundary read
-
-Before any write, fetch and follow:
+Canonical boundary:
 
 ```text
 docs/rules/GALAX_CHATGPT_DIRECT_REPOSITORY_UPDATE_BOUNDARY.md
 ```
 
-Also read only the minimum exact authority and target files needed for the current update.
+## 2. Activation triggers
 
-If the boundary file cannot be fetched from the canonical router ref, return:
+Use Skill 9 when the Human Owner requests an exact supervisory update such as:
 
 ```text
-BLOCKED_DIRECT_UPDATE_BOUNDARY_UNAVAILABLE
+edit this ChatGPT skill
+update this ChatGPT skill
+add a ChatGPT skill
+update the ChatGPT router
+add or update the skill router
+update the Context Engineer rule
+update the ChatGPT/Cline role separator
+update this ChatGPT supervisory rule
+update the new-chat supervisory operating instruction
 ```
 
-## 4. Executor classification gate
+Continuity and achievement are **not** Skill 9 work; they remain Skill 5 work:
 
-Before writing, establish:
+```text
+update length problem
+update achievement
+mandatory terminal-PASS achievement persistence
+→ Skill 5
+```
+
+## 3. Exact direct-write allowlist
+
+Skill 9 may directly write only targets whose purpose is clearly part of the ChatGPT supervisory layer.
 
 ```yaml
-GALAX_DIRECT_UPDATE_CLASSIFICATION_V1:
-  requested_change:
-  active_CrewAI_blueprint_scope:
-  requested_change_is_blueprint_implementation: true | false
-  requested_change_is_Class_B_non_blueprint_repo_update: true | false
-  requested_change_is_Class_C_consequential_technical_change: true | false
-  exact_Human_Owner_authorization_present: true | false
-  executor: ChatGPT_connected_GitHub_app | Cline | NONE_BLOCKED
+GALAX_SKILL_9_DIRECT_WRITE_ALLOWLIST_V2:
+  allowed_purposes:
+    - ChatGPT_skill_create_edit_or_update
+    - ChatGPT_router_create_edit_or_update
+    - ChatGPT_Context_Engineer_support_contract_update
+    - ChatGPT_Cline_supervisory_rule_or_role_separator_update
+    - canonical_new_chat_supervisory_operating_instruction_update
+
+  typical_allowed_paths:
+    - docs/skills/chatgpt/**
+    - docs/rules/GALAX_CHATGPT_DIRECT_REPOSITORY_UPDATE_BOUNDARY.md
+    - exact_other_ChatGPT_Cline_supervisory_rule_explicitly_named_by_Human_Owner
+    - docs/operations/GALAX_NEW_CHAT_OPERATING_MANUAL.md
 ```
 
-Required results:
+Path alone never grants authority. The exact purpose must also be supervisory.
+
+A generic document, plan, research file, technical contract, blueprint, source file, test, dependency file, workflow, or implementation record is not Skill 9 work merely because it is outside `src/`.
+
+## 4. Absolute ChatGPT implementation blocker
+
+Skill 9 must fail closed when the target is CrewAI implementation or blueprint-owned technical authority.
+
+Hard-blocked examples:
 
 ```yaml
-blueprint_implementation:
-  executor: Cline
-  this_skill_writes: false
-
-Class_B:
-  executor: ChatGPT_connected_GitHub_app
-  Cline_task: prohibited
-
-Class_C_without_separate_exact_authority:
-  executor: NONE_BLOCKED
-  Cline_task: prohibited
-  ChatGPT_direct_write: prohibited
+GALAX_SKILL_9_CHATGPT_BLOCKLIST_V1:
+  - docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
+  - blueprint_owned_technical_contract_or_execution_plan
+  - src/**
+  - tests/**
+  - pyproject.toml
+  - uv.lock
+  - requirements_or_dependency_files
+  - .github/workflows/**
+  - implementation_branch_source_or_test_change
+  - implementation_commit
+  - implementation_push
+  - merge
+  - deployment
+  - production_data
 ```
 
-## 5. Direct-write precheck
+Required result:
 
-A Class B write may proceed only when all are true:
+```text
+BLOCKED_CHATGPT_CREWAI_IMPLEMENTATION_WRITE
+```
+
+Required handoff for active CrewAI remediation-blueprint execution:
+
+```text
+preserve the exact Human Owner request
+→ Router selects Skill 2 for the real Cline task
+→ Skill 10 must return PASS_CLINE_BLUEPRINT_ONLY
+→ ChatGPT prepares one exact bounded command
+→ Cline executes it locally
+→ preserve separate save / validation / commit / push gates
+```
+
+ChatGPT must not take over the Cline stage because the Human Owner authorized the technical action. The authorization applies to the bounded Cline execution stage.
+
+## 5. Cline exclusion from Skill 9 work
+
+Skill 9 supervisory targets belong to ChatGPT, not Cline.
 
 ```yaml
-GALAX_OWNER_DIRECT_REPO_UPDATE_PRECHECK_V1:
-  repository_verified: true
-  router_verified: true
-  boundary_rule_verified: true
-  exact_Human_Owner_request_preserved: true
-  exact_target_files_known: true
-  target_branch_known: true
-  target_branch_is_not_main: true
-  current_target_branch_head_verified: true
-  requested_scope_is_Class_B: true
-  CrewAI_runtime_or_source_change: false
-  executable_test_change: false
-  dependency_change: false
-  workflow_or_secret_change: false
-  merge_or_deploy: false
-  LOCKED_ACCEPTED_conflict: false
-  unrelated_scope_expansion: false
-  Cline_not_required: true
-  safe_to_write: true
+Cline_prohibited_for_Skill_9_targets:
+  - edit_or_add_ChatGPT_skill
+  - edit_or_add_ChatGPT_router
+  - edit_Context_Engineer_contract
+  - edit_ChatGPT_Cline_supervisory_rule
+  - edit_new_chat_supervisory_operating_instruction
+  - commit_or_push_those_supervisory_changes_as_a_Cline_task
 ```
 
-Any required false field blocks the write.
+If a Cline task attempts this work:
 
-## 6. Minimum-change rule
+```text
+BLOCKED_CLINE_SUPERVISORY_SCOPE
+```
 
-For an authorized Class B update:
+Do not make Cline reread or redo correct CrewAI implementation work when removing an out-of-scope supervisory target.
 
-1. Change only the smallest file set required to make the Human Owner's rule internally consistent.
-2. Preserve all unrelated text and repository history.
-3. Do not rewrite source/tests/runtime merely because they reference the same topic.
-4. Do not modify `LOCKED_ACCEPTED` without a separate exact unlock.
-5. Do not write to `main`.
-6. Do not merge or deploy.
-7. Do not create a Cline task for the update.
-8. Do not run tests, Ruff, formatting, or dependency commands unless a separate exact authority requires them.
-9. Verify every resulting GitHub commit remotely.
+## 6. Mandatory precheck
 
-## 7. Direct-command authority
-
-When the Human Owner's current instruction clearly names the repository update and the target can be resolved from live repository evidence, that instruction is execution authority for the exact Class B change.
-
-ChatGPT must not respond with a Cline prompt instead of performing the authorized update.
-
-If the target is ambiguous, reconstruct only the minimum repository context needed. Do not delegate target discovery to Cline by default.
-
-## 8. Cline non-delegation rule
+Before a Skill 9 write, establish:
 
 ```yaml
-Cline_non_delegation:
-  update_ChatGPT_router: prohibited_for_Class_B
-  update_ChatGPT_skills: prohibited_for_Class_B
-  update_ChatGPT_operating_manual: prohibited_for_Class_B
-  update_repository_governance: prohibited_for_Class_B
-  update_continuity_or_achievement: prohibited_here_and_owned_by_Skill_5
-  generic_owner_direct_documentation_update: prohibited_for_Cline
+GALAX_CHATGPT_SUPERVISORY_UPDATE_PRECHECK_V2:
+  repository_verified: true | false
+  router_verified: true | false
+  role_separator_verified: true | false
+  exact_Human_Owner_request_preserved: true | false
+  exact_target_files_known: true | false
+  target_branch_known: true | false
+  target_branch_is_not_main: true | false
+  current_target_branch_head_verified: true | false
+
+  target_is_ChatGPT_supervisory_control: true | false
+  target_is_continuity_or_achievement: true | false
+  target_is_CrewAI_blueprint_or_implementation: true | false
+  target_is_generic_documentation_or_plan: true | false
+  target_is_source_or_test: true | false
+  target_is_dependency_or_workflow: true | false
+  target_requires_Cline_execution: true | false
+
+  LOCKED_ACCEPTED_conflict: true | false
+  unrelated_scope_expansion: true | false
+
+  executor:
+    ChatGPT_Skill_9 |
+    ChatGPT_Skill_5 |
+    Cline_via_Skill_2_and_Skill_10 |
+    NONE_BLOCKED
+
+  safe_to_write: true | false
 ```
 
-Cline remains the primary local writer for the active CrewAI blueprint implementation work only.
+Skill 9 may write only when:
 
-## 9. Required output
+```text
+target_is_ChatGPT_supervisory_control == true
+AND target_is_continuity_or_achievement == false
+AND target_is_CrewAI_blueprint_or_implementation == false
+AND target_is_generic_documentation_or_plan == false
+AND target_is_source_or_test == false
+AND target_is_dependency_or_workflow == false
+AND target_requires_Cline_execution == false
+AND LOCKED_ACCEPTED_conflict == false
+AND unrelated_scope_expansion == false
+AND target_branch_is_not_main == true
+```
+
+## 7. Minimum-change rule
+
+For an authorized Skill 9 update:
+
+1. Change only the smallest supervisory file set required by the Human Owner's exact request.
+2. Preserve unrelated governance, technical contracts, source, tests, and history.
+3. Never edit the CrewAI remediation blueprint for convenience or consistency.
+4. Never edit executable source/tests/dependencies/workflows.
+5. Never write to `main`.
+6. Never merge or deploy.
+7. Never create a Cline task merely to maintain ChatGPT supervisory controls.
+8. Verify every resulting GitHub commit remotely.
+9. Stop after the exact supervisory update and receipt.
+
+## 8. Direct-command interpretation
+
+When the Human Owner says an equivalent of:
+
+```text
+edit skill
+update skill
+add skill
+update skill router
+update router
+update this ChatGPT rule
+fix this ChatGPT/Cline supervisory rule
+```
+
+and the exact supervisory target is clear from the current conversation plus live repository evidence, that instruction is execution authority for the exact Skill 9 update.
+
+Do not convert it into a Cline task.
+
+If the target is ambiguous or is not clearly supervisory, return the smallest factual blocker instead of guessing.
+
+## 9. Relationship to Skill 5
+
+Skill 5 remains the only ChatGPT direct writer for:
+
+```yaml
+Skill_5_owned_direct_updates:
+  - length_problem_checkpoint
+  - achievement_record
+  - qualifying_terminal_PASS_achievement_persistence
+```
+
+Skill 9 must route those exact requests to Skill 5 and must not duplicate Skill 5's file, branch, PR, timestamp, or dedupe rules.
+
+## 10. Relationship to Skill 2 and Skill 10
+
+For real CrewAI implementation:
+
+```text
+ChatGPT supervisory decision
+→ Skill 2 primary
+→ Skill 10 mandatory scope gate
+→ PASS_CLINE_BLUEPRINT_ONLY required
+→ ChatGPT emits exact bounded Cline task
+→ Cline executes
+```
+
+Skill 9 must never be inserted into that implementation execution chain.
+
+## 11. Required output
 
 After execution, return:
 
 ```yaml
-GALAX_OWNER_DIRECT_REPO_UPDATE_V1:
+GALAX_CHATGPT_SUPERVISORY_REPO_UPDATE_V2:
   repository: ariessocia04-rgb/galax-Ai-project
   executor: ChatGPT_connected_GitHub_app
   Human_Owner_request:
-  classification: Class_B_non_blueprint_repository_update
+  classification: ChatGPT_supervisory_control_update
   authority_files_read: []
   target_branch:
   starting_head_sha:
@@ -194,54 +290,58 @@ GALAX_OWNER_DIRECT_REPO_UPDATE_V1:
   files_deleted: []
   commit_shas: []
   final_branch_head_sha:
+
   Cline_task_created: false
+  CrewAI_blueprint_changed: false
   CrewAI_runtime_changed: false
   source_changed: false
   tests_changed: false
   dependencies_changed: false
   workflows_or_secrets_changed: false
+  implementation_commit_or_push_performed_by_ChatGPT: false
   LOCKED_ACCEPTED_changed: false
   merge_performed: false
   deployment_performed: false
+
   blockers: []
   status: PASS | BLOCKED | FAIL
 ```
 
-## 10. Blockers
-
-Use the smallest accurate blocker:
+## 12. Blockers
 
 ```text
 BLOCKED_DIRECT_UPDATE_BOUNDARY_UNAVAILABLE
 BLOCKED_DIRECT_UPDATE_TARGET_AMBIGUOUS
 BLOCKED_DIRECT_UPDATE_BRANCH_UNVERIFIED
 BLOCKED_DIRECT_UPDATE_MAIN_PROHIBITED
-BLOCKED_DIRECT_UPDATE_NOT_CLASS_B
+BLOCKED_NOT_CHATGPT_SUPERVISORY_SCOPE
+BLOCKED_CHATGPT_CREWAI_IMPLEMENTATION_WRITE
+BLOCKED_CLINE_SUPERVISORY_SCOPE
 BLOCKED_DIRECT_UPDATE_LOCK_CONFLICT
 BLOCKED_DIRECT_UPDATE_SCOPE_EXPANSION
 BLOCKED_DIRECT_UPDATE_GITHUB_WRITE_FAILED
 BLOCKED_DIRECT_UPDATE_POST_WRITE_VERIFICATION_FAILED
 ```
 
-Do not convert a blocker into a Cline assignment unless the request is independently proven to be an active CrewAI blueprint implementation task.
+## 13. Terminal PASS behavior
 
-## 11. Terminal PASS behavior
+A genuinely new completed Skill 9 supervisory update may return terminal `PASS` only after the exact remote commit and branch head are verified.
 
-A genuinely new completed Class B direct repository update may return terminal `PASS` only after the final remote commit and branch head are verified.
+A qualifying terminal PASS remains subject to the router's separate Skill 5 achievement-persistence cycle. That later Skill 5 cycle may update only the authorized achievement/continuity records and does not authorize any CrewAI technical continuation.
 
-A qualifying new terminal PASS is then subject to the router's normal separate Skill 5 achievement-persistence rule. That documentation cycle does not authorize another technical or repository update.
-
-## 12. Final contract
+## 14. Final contract
 
 ```text
-exact Human Owner non-blueprint repo-update request
-→ Router selects Skill 9
-→ read direct-update boundary
-→ verify exact Class B scope and live branch/head
-→ no Cline handoff
-→ ChatGPT writes only the minimum exact files through connected GitHub
-→ verify remote commit and branch head
-→ return factual receipt
-→ if qualifying new terminal PASS, persist it separately through Skill 5
-→ stop
+exact Human Owner request
+→ is it ChatGPT supervisory control maintenance?
+   YES → Skill 9 → ChatGPT direct bounded GitHub update → remote verification → stop
+
+→ is it length problem / achievement?
+   YES → Skill 5 → ChatGPT bounded continuity update → stop
+
+→ is it active CrewAI remediation-blueprint execution?
+   YES → BLOCK Skill 9 → Skill 2 + mandatory Skill 10 → ChatGPT commands → Cline executes
+
+→ anything else
+   → BLOCK until exact authority/executor is proven
 ```
