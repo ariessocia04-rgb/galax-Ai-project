@@ -19,40 +19,68 @@ fetch Router
 → fetch only required dependencies
 → fetch Context Engineer
 → fetch Prompt Engineer only when Cline-facing packaging is required
-→ reconstruct current repository/task/executor state
+→ reconstruct current repository/task/executor/lock state
 → produce bootstrap receipt
 → PASS only when safe_to_continue=true
-→ start separate normal routing cycle for the original request
+→ start separate normal routing cycle for original request
 ```
 
-## 3. Mandatory recovered ChatGPT jobs
+## 3. Highest-priority permanent CrewAI remediation rule to recover
 
-A safe bootstrap must recover these exact standing ChatGPT repository jobs:
+A safe bootstrap must recover this canonical permanent lock:
+
+```text
+docs/rules/GALAX_CREWAI_REMEDIATION_BLUEPRINT_FOCUS_LOCK_2026-08-09.md
+```
+
+and understand:
+
+```yaml
+permanent_CrewAI_remediation_set:
+  - docs/research/crewai/CREWAI_1_15_4_FULL_AGENT_REMEDIATION_BLUEPRINT_2026-07-20.md
+  - docs/rules/GALAX_CREWAI_REMEDIATION_BLUEPRINT_FOCUS_LOCK_2026-08-09.md
+  - docs/plan/FOUNDATION_AGENT01_FLOW_EXECUTION_CONTRACT_2026-07-21.md
+
+unlock_path: NONE
+Human_Owner_unlock: prohibited
+ChatGPT_unlock: prohibited
+Cline_unlock: prohibited
+Skill_9_override: prohibited
+Skill_12_override: prohibited
+mutation_result: BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK
+```
+
+Allowed interaction is only read/check/non-mutating validation and commit/push when the protected set remains unchanged.
+
+Bootstrap must not PASS if this permanent rule is unknown or interpreted as an ordinary owner-unlockable `LOCKED_ACCEPTED` artifact.
+
+## 4. Mandatory recovered ChatGPT jobs
+
+A safe bootstrap must also recover these exact standing ChatGPT repository jobs:
 
 ```text
 1. update length problem in repo → Skill 5 → ChatGPT direct execution/publication.
-2. edit/update ChatGPT skills and rules only → Skill 9 → ChatGPT direct execution/publication only under docs/skills/chatgpt/** and docs/rules/**.
+2. edit/update ChatGPT skills and rules only → Skill 9 → ChatGPT direct execution/publication only under docs/skills/chatgpt/** and docs/rules/**, excluding permanent CrewAI remediation artifacts/rules.
 3. update achievement in repo → Skill 5 → ChatGPT direct execution/publication.
 ```
 
 It must also recover:
 
-- Human Owner final authority;
 - zero-coding-owner rule;
 - Cline-default execution for all other repository work when Cline is capable;
 - `BLOCKED_CHATGPT_TAKEOVER_CLINE_CAPABLE` outside standing Skill 5/Skill 9 scopes;
-- Skill 12 as fallback for other direct ChatGPT execution;
+- Skill 12 as fallback for other direct ChatGPT execution, never for permanent remediation mutation;
 - Context Engineer role and fast-path boundaries;
 - Prompt Engineer role for Cline-facing work;
 - NEW/STAY and mode mappings;
 - PLAN_ONLY before ACT_BOUNDED when planning is required;
 - `execute the approved plan here` only in ACT_BOUNDED;
 - commit/push separation for Cline work;
-- LOCKED_ACCEPTED and do-not-repeat state.
+- ordinary LOCKED_ACCEPTED and do-not-repeat state.
 
-## 4. Prompt support
+## 5. Prompt support
 
-Prompt Engineer is not required for direct Skill 5 or direct Skill 9 repository actions because Cline is not the executor for those exact scopes.
+Prompt Engineer is not required for direct Skill 5 or allowed direct Skill 9 actions because Cline is not executor for those scopes.
 
 For Cline tasks:
 
@@ -66,10 +94,12 @@ REVIEW: REVIEW_ONLY
 
 The Human Owner must not be asked to choose NEW/STAY or PLAN/ACT.
 
-## 5. Bootstrap receipt
+No Cline prompt may be emitted for a permanent remediation mutation/unlock request.
+
+## 6. Bootstrap receipt
 
 ```yaml
-GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V4:
+GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V5:
   repository:
   router_loaded: true | false
   Context_Engineer_loaded: true | false
@@ -82,6 +112,9 @@ GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V4:
   LOCKED_ACCEPTED: []
   do_not_repeat: []
   blockers: []
+  permanent_CrewAI_remediation_lock_recovered: true | false
+  permanent_CrewAI_remediation_unlock_path_NONE_recovered: true | false
+  Human_Owner_cannot_unlock_permanent_remediation_set_recovered: true | false
   Skill_5_ChatGPT_length_problem_rule_recovered: true | false
   Skill_9_ChatGPT_skill_rule_update_rule_recovered: true | false
   Skill_5_ChatGPT_achievement_rule_recovered: true | false
@@ -93,6 +126,8 @@ GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V4:
   safe_to_continue: true | false
 ```
 
-## 6. Stop discipline
+## 7. Stop discipline
 
 Bootstrap itself does not execute the original technical task. After PASS, route the preserved Human Owner request through a separate Router cycle.
+
+A request to mutate/unlock the permanent CrewAI remediation set does not proceed to another route; it returns `BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK` and stops.
