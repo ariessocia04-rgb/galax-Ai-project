@@ -15,7 +15,7 @@ It does not grant ChatGPT broad repository-writing authority.
 
 ## 2. Exact standing ChatGPT scope
 
-ChatGPT may directly edit/update rule content only in these path classes:
+ChatGPT may directly create an owner-approved new supervisory rule under `docs/rules/` and may directly edit/update rule content only in these path classes:
 
 ```yaml
 SKILL_9_CHATGPT_DIRECT_SCOPE:
@@ -23,6 +23,7 @@ SKILL_9_CHATGPT_DIRECT_SCOPE:
     - docs/skills/chatgpt/
     - docs/rules/
   allowed_actions:
+    - create_owner_approved_supervisory_rule_under_docs/rules/
     - edit_existing_skill_rule_content
     - update_existing_skill_rule_content
     - correct_conflicting_skill_rule_content
@@ -31,6 +32,8 @@ SKILL_9_CHATGPT_DIRECT_SCOPE:
   publisher: ChatGPT_connected_GitHub_app_when_available
   Cline_required: false
 ```
+
+A new rule may be created only when the Human Owner has approved the rule purpose/scope and the target is inside `docs/rules/`. Creation must remain bounded to the approved supervisory purpose and must not silently create a new primary skill, runtime agent, source implementation, or broader repository authority.
 
 This includes the ChatGPT skill Router because its canonical file is under `docs/skills/chatgpt/`.
 
@@ -94,13 +97,14 @@ The permanent remediation lock is stricter than this ordinary exclusion list and
 ## 5. Required execution chain
 
 ```text
-Human Owner requests an exact skill/rule correction or update
+Human Owner requests an exact skill/rule creation, correction, or update
 → Router selects Skill 9
 → Context Engineer supplies minimum verified repository evidence
 → first check permanent CrewAI remediation lock
 → if target or semantic effect collides with permanent remediation set: BLOCK
 → otherwise verify target is inside docs/skills/chatgpt/** or docs/rules/**
-→ ChatGPT directly edits/updates the exact allowed skill/rule file through the connected GitHub app when available
+→ for a new rule, verify Human Owner approved the exact supervisory purpose/scope and target is docs/rules/**
+→ ChatGPT directly creates/edits/updates the exact allowed skill/rule file through the connected GitHub app when available
 → ChatGPT verifies the resulting remote commit/file
 → Human Owner remains final acceptance authority for that allowed change
 → stop
@@ -144,7 +148,7 @@ Skill 12 cannot override the permanent CrewAI remediation lock.
 ```text
 ChatGPT standing repository jobs:
 1. Skill 5 → update length problem in repo.
-2. Skill 9 → edit/update ChatGPT skills and rules only.
+2. Skill 9 → create owner-approved supervisory rules under docs/rules/** and edit/update ChatGPT skills and rules only.
 3. Skill 5 → update achievement in repo.
 
 Permanent CrewAI remediation blueprint / lock / canonical narrow supersession:
