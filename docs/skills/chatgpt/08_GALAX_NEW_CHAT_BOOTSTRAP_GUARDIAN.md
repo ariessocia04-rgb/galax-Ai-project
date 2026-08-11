@@ -30,24 +30,42 @@ final_authority: Human_Owner
 
 This skill is the mandatory bootstrap guardian for a new or unverified Galax ChatGPT conversation.
 
-Its job is to make a new chat continue the same repository-backed Galax goal instead of behaving like a fresh project or repeating setup that the repository already proves is complete.
+It must make a new chat continue the same repository-backed Galax goal instead of behaving like a fresh project, repeating completed setup, or changing contributor roles.
 
-It must:
+Before `PASS`, it must reconstruct and preserve:
 
-- load the canonical New Chat Operating Manual;
-- reconstruct the current repository-backed continuation state;
-- preserve the same project goal, current track, current assignment, exact stop point, completed work, `LOCKED_ACCEPTED`, rejected/superseded work, and actions that must not be repeated;
-- learn the mandatory Cline prompting, permission, rejection, correction, mode, UI-button, no-button, save, validation, and Git boundaries before the new chat is declared ready;
-- produce one `GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1`;
-- return `PASS` only when the new chat can safely process the original Human Owner request without guessing or restarting completed setup.
+- current repository-backed project goal;
+- active track and exact current assignment/stage;
+- exact stop point and resume action;
+- completed work and `LOCKED_ACCEPTED` state;
+- rejected/superseded work;
+- actions not to repeat;
+- current Cline prompting/permission/rejection/save/validation/Git rules;
+- the Human Owner's exact ChatGPT → Cline implementation separation;
+- ChatGPT supervisory/continuity direct-write exceptions and their hard limits;
+- the two-way executor blockers.
 
-This skill does not implement Galax source or tests and is not part of the CrewAI runtime.
+It produces one `GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V2` and returns `PASS` only when the original Human Owner request can continue safely without guessing or role drift.
 
-## 2. Activation gate
+## 2. New-chat principle
 
-Treat the current Galax conversation as `NEW_OR_UNVERIFIED_CHAT` when a Galax request is present and no valid `GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1` for the current conversation is available.
+```yaml
+new_chat_means_new_project: false
+new_chat_means_restart_setup: false
+new_chat_means_new_goal: false
+new_chat_authorizes_new_technical_stage: false
+required_behavior: resume_same_repository_backed_Galax_goal
+```
 
-Also require a fresh bootstrap when a prior receipt is materially invalidated by:
+Repository evidence overrides stale chat memory.
+
+A new conversation must not reinterpret tool availability as new executor authority.
+
+## 3. Activation / invalidation gate
+
+Treat the conversation as `NEW_OR_UNVERIFIED_CHAT` when no valid current bootstrap receipt exists.
+
+Also require a fresh bootstrap after a material invalidation such as:
 
 ```yaml
 bootstrap_invalidation:
@@ -56,22 +74,14 @@ bootstrap_invalidation:
   - CODE_RED_recovery_that_requires_reconstruction
   - repository_identity_change
   - canonical_router_change_material_to_current_routing
+  - contributor_role_separator_change
   - active_assignment_identity_change_not_already_processed_in_current_chat
   - unresolved_authority_conflict
 ```
 
-Do not infer that a new technical goal exists merely because the ChatGPT conversation is new.
+## 4. Mandatory dependencies and support
 
-```yaml
-new_chat_means_new_project: false
-new_chat_means_restart_setup: false
-new_chat_means_new_goal: false
-required_behavior: resume_same_repository_backed_Galax_goal
-```
-
-## 3. Mandatory bootstrap dependencies
-
-For the Skill 8 bootstrap routing cycle, the router must load exactly these two dependency skills unless an exact higher-authority blocker prevents it:
+Bootstrap must load exactly these two dependency skills:
 
 ```yaml
 required_dependency_skills:
@@ -79,20 +89,20 @@ required_dependency_skills:
   - $galax-strict-cline-prompt-guardian
 ```
 
-The canonical Context Engineer must also be loaded as the normal non-skill support contract and does not consume a dependency slot.
+Also load the Context Engineer as non-skill support.
 
 Purpose separation:
 
 ```text
-Skill 8 = HOW a new chat boots and proves readiness
-Skill 1 = WHAT repository state is true now
-Context Engineer = WHAT minimum verified context is carried forward
-Skill 2 = HOW Cline is prompted, approved/rejected, corrected, and stopped
+Skill 8 = new-chat readiness and exact continuation
+Skill 1 = current repository truth and bounded scope
+Skill 2 = exact ChatGPT → Cline prompting/action control
+Context Engineer = minimum verified context packaging
 ```
 
-Skill 8 must not perform Skill 1 or Skill 2 authority in their place.
+Skill 10 is not added as a third bootstrap dependency because bootstrap itself does not issue a real Cline task. The new chat must nevertheless know that Skill 10 becomes mandatory before the later normal cycle can issue real Cline work.
 
-## 4. Mandatory first read
+## 5. Mandatory first reads
 
 After Skill 8 is selected, fetch and follow completely:
 
@@ -100,22 +110,32 @@ After Skill 8 is selected, fetch and follow completely:
 docs/operations/GALAX_NEW_CHAT_OPERATING_MANUAL.md
 ```
 
-If the manual cannot be fetched from the canonical router ref, return:
+Also verify the current contributor-role separator when role ownership is material:
+
+```text
+docs/rules/GALAX_CHATGPT_DIRECT_REPOSITORY_UPDATE_BOUNDARY.md
+```
+
+If the operating manual is unavailable:
 
 ```text
 BLOCKED_NEW_CHAT_OPERATING_MANUAL_UNAVAILABLE
 ```
 
-Do not substitute the dated `GALAX_NEW_CHAT_CONTINUITY_GUIDE_2026-07-27.md` as the current bootstrap controller. Dated continuity records may be historical evidence only unless a higher-authority current record explicitly says otherwise.
+If the contributor-role separator is required but unavailable:
 
-## 5. Exact continuation principle
+```text
+BLOCKED_NEW_CHAT_ROLE_SEPARATOR_UNAVAILABLE
+```
 
-A new chat must recover operational memory from repository evidence, not from guesses or raw old-chat recollection.
+Do not substitute a dated continuity guide as the current bootstrap controller.
 
-It must determine, at minimum:
+## 6. Exact continuation state
+
+Reconstruct at minimum:
 
 ```yaml
-continuation_state:
+GALAX_NEW_CHAT_CONTINUATION_STATE_V2:
   project_goal:
   current_blueprint_or_governance_goal:
   active_track:
@@ -135,71 +155,172 @@ continuation_state:
   prohibited_next_actions: []
 ```
 
-If repository evidence proves a setup step is already complete, do not recommend or execute that setup again without a new factual reason.
+If a material identity is unknown, do not invent it.
 
-## 6. Mandatory UI, button, no-button, approve, and reject readiness
+## 7. Human Owner's canonical implementation chain
 
-Before bootstrap `PASS`, the new chat must understand and preserve the current Skill 2 and Context Engineer rules for actionable Human Owner decisions.
+Before bootstrap `PASS`, the new chat must understand exactly:
 
-It must distinguish these UI states exactly:
-
-```yaml
-GALAX_NEW_CHAT_UI_STATE_V1:
-  NO_BUTTON_LABEL:
-    meaning: a_visible_button_labeled_No_exists
-
-  NO_ACTION_BUTTON_VISIBLE:
-    meaning: no_relevant_action_button_is_visible
-
-  UNKNOWN_UI_STATE:
-    meaning: no_reliable_current_UI_evidence_is_available
+```text
+Human Owner
+   ↓
+ChatGPT
+→ decides WHAT should be done
+→ gives one exact bounded command / Cline task
+   ↓
+Cline
+→ executes locally
+→ edits/saves only authorized CrewAI implementation
+→ runs only separately authorized validation
+   ↓
+ChatGPT
+→ reviews Cline evidence
+→ PASS / CHANGES_REQUIRED / BLOCKED
+   ↓
+Human Owner
+→ authorizes exact Git stage
+   ↓
+Cline
+→ separately authorized commit
+→ separately authorized push
+   ↓
+GitHub
+   ↓
+ChatGPT
+→ independently reviews exact remote diff/evidence
+   ↓
+Human Owner
+→ final acceptance
 ```
 
-Never invent a visible button.
+Bootstrap must not pass if the new chat believes ChatGPT may take over Cline's CrewAI implementation/edit/validation/commit/push stage.
 
-Button evidence may come only from current reliable evidence such as:
+## 8. Two-way role separator readiness
 
-```yaml
-button_evidence_sources:
-  - Human_Owner_provided_screenshot
-  - Human_Owner_provided_exact_UI_text
-  - current_tool_or_connector_output_that_exposes_the_action_label
-```
-
-Required behavior:
+Required role map:
 
 ```yaml
-GALAX_UI_ACTION_DETECTION_V1:
-  evidence_source:
-  visible_buttons: []
-  actionable_gate_detected: true | false
-  exact_button_recommended:
-  button_recommendation:
-    APPROVE |
-    REJECT |
-    CLICK_NO |
-    CLICK_CANCEL |
-    CLICK_DENY |
-    CLICK_RUN |
-    CLICK_PROCEED |
-    DO_NOT_CLICK |
-    NO_ACTION_BUTTON_VISIBLE |
-    UNKNOWN
-  factual_reason:
-  Human_Owner_decision_required: true | false
+GALAX_NEW_CHAT_EXECUTOR_ROLE_MAP_V2:
+  Human_Owner:
+    final_authority: true
+
+  ChatGPT:
+    CrewAI_role: architect_supervisor_reviewer
+    CrewAI_implementation_writer: false
+    CrewAI_implementation_commit_executor: false
+    CrewAI_implementation_push_executor: false
+    direct_supervisory_writer: narrow_Skill_9_allowlist_only
+    direct_continuity_writer: narrow_Skill_5_allowlist_only
+
+  Cline:
+    CrewAI_role: primary_local_executor_for_active_remediation_blueprint
+    implementation_writer: true_when_exactly_authorized
+    validation_executor: true_when_separately_authorized
+    implementation_commit_executor: true_when_separately_authorized
+    implementation_push_executor: true_when_separately_authorized
+    ChatGPT_supervisory_writer: false
+    continuity_writer: false
 ```
 
-If a visible `No`, `Reject`, `Deny`, `Cancel`, or equivalent button is the correct action, name the exact visible label and explain the factual reason and exact correction that follows.
+Hard blockers:
 
-If no relevant action button is visible, do not tell the Human Owner to click a nonexistent button. State `NO_ACTION_BUTTON_VISIBLE` and provide the exact next bounded instruction instead.
+```text
+ChatGPT tries to edit/save/commit/push active CrewAI blueprint/source/tests/implementation
+→ BLOCKED_CHATGPT_CREWAI_IMPLEMENTATION_WRITE
 
-If UI state is unknown, do not guess a label. State that the button cannot be verified and provide the policy decision plus exact replacement instruction.
+Cline tries to edit/save/commit/push ChatGPT skill/router/context/supervisory rule/length/achievement
+→ BLOCKED_CLINE_SUPERVISORY_SCOPE
+```
 
-## 7. Mandatory rejection quality
+There is no ChatGPT blueprint-edit exception.
 
-A new chat must never reduce a knowable correction to a bare rejection.
+## 9. Narrow ChatGPT direct-write exceptions
 
-When rejecting a Cline request, use Skill 2's canonical rejection contract and preserve correct work:
+A new chat must know that ChatGPT direct GitHub writing is not a generic repository-writer role.
+
+Skill 9 may be used only for exact Human-Owner-requested supervisory-control maintenance:
+
+```yaml
+Skill_9_exact_scope:
+  - edit_or_update_ChatGPT_skill
+  - add_or_update_ChatGPT_skill
+  - add_or_update_ChatGPT_router
+  - update_Context_Engineer_support_contract
+  - update_ChatGPT_Cline_supervisory_rule_or_role_separator
+  - update_canonical_new_chat_supervisory_operating_instruction
+```
+
+Skill 5 may directly handle only its exact continuity/achievement duties:
+
+```yaml
+Skill_5_exact_scope:
+  - update_length_problem
+  - update_achievement
+  - qualifying_terminal_PASS_achievement_persistence
+```
+
+Generic documentation, plans, research, blueprint files, source, tests, dependencies, workflows, implementation Git, merge, and deployment are not automatically ChatGPT direct-write work.
+
+## 10. Cline prompting and stage separation readiness
+
+Bootstrap must understand the current live Skill 2 method:
+
+```text
+one task
+→ one objective
+→ one mode
+→ exact allowlists
+→ exact prohibitions
+→ one stop condition
+→ one receipt
+```
+
+Modes:
+
+```yaml
+PLAN_ONLY: read_search_analyze_plan_preview_without_mutation
+ACT_BOUNDED: one_exact_authorized_edit_or_action
+VALIDATION_ONLY: one_exact_authorized_validation
+GIT_ONLY: one_exact_authorized_Git_stage
+REVIEW_ONLY: exact_evidence_review_without_mutation
+```
+
+Consequential stages remain separate:
+
+```text
+PLAN ≠ ACT
+ACT ≠ SAVE
+SAVE ≠ VALIDATION
+VALIDATION ≠ FIX
+FIX ≠ COMMIT
+COMMIT ≠ PUSH
+PUSH ≠ REMOTE_REVIEW
+REMOTE_REVIEW ≠ HUMAN_ACCEPTANCE
+HUMAN_ACCEPTANCE ≠ MERGE
+MERGE ≠ DEPLOY
+```
+
+A ChatGPT PASS does not automatically authorize commit or push.
+
+## 11. Mandatory Skill 10 awareness
+
+Before the post-bootstrap normal cycle issues any real Cline task:
+
+```text
+Router selects Skill 2
+→ load Skill 10 as mandatory dependency
+→ prove exact active blueprint trace
+→ require PASS_CLINE_BLUEPRINT_ONLY
+→ only then issue GALAX_CLINE_TASK_V2
+```
+
+Bootstrap itself does not call Skill 10 as a third dependency, but must preserve this rule exactly.
+
+## 12. Permission and rejection readiness
+
+A new chat must preserve the live Skill 2 permission gate and reject-with-correction behavior.
+
+Every rejection must preserve correct work and, when knowable, provide exact replacement instructions:
 
 ```yaml
 GALAX_CLINE_REJECTION_WITH_CORRECTION_V1:
@@ -215,55 +336,57 @@ GALAX_CLINE_REJECTION_WITH_CORRECTION_V1:
   requires_new_Human_Owner_authorization: true | false
 ```
 
-Mandatory principles:
+A rejection is not a reset and never silently authorizes its replacement action.
 
-- reject only the exact noncompliant part;
-- retain correct evidence-supported work;
-- freeze correct scope so it is not redone or invalidated;
-- never upgrade preserved work to `LOCKED_ACCEPTED` without acceptance evidence;
-- provide the exact replacement action when knowable;
-- do not silently authorize the correction;
-- stop at the current bounded decision gate.
+## 13. UI/button readiness
 
-## 8. Mandatory prompting and permission readiness
+Never invent a visible action button.
 
-Before bootstrap `PASS`, the new chat must know and preserve:
+Distinguish exactly:
 
 ```yaml
-prompting_readiness:
-  one_task_one_goal_one_stop: true
-  PLAN_ONLY_behavior: understood
-  ACT_BOUNDED_behavior: understood
-  VALIDATION_ONLY_behavior: understood
-  GIT_ONLY_behavior: understood
-  REVIEW_ONLY_behavior: understood
-  exact_allowlists_required: true
-  repeat_completed_work: prohibited
-  automatic_scope_expansion: prohibited
-  automatic_test_after_edit: prohibited
-  automatic_retry: prohibited
-  automatic_Ruff_or_formatting: prohibited
-  dependency_change_without_separate_authorization: prohibited
-  commit_without_separate_authorization: prohibited
-  push_without_separate_authorization: prohibited
-  merge_without_separate_authorization: prohibited
-  deployment_without_separate_authorization: prohibited
-  Human_Owner_final_authority: true
-  ChatGPT_recommends_but_does_not_self_approve: true
+NO_BUTTON_LABEL:
+  meaning: visible_button_with_exact_label_No_exists
+
+NO_ACTION_BUTTON_VISIBLE:
+  meaning: no_relevant_action_button_is_visible
+
+UNKNOWN_UI_STATE:
+  meaning: current_UI_cannot_be_verified
 ```
 
-The new chat must use the live Skill 2 contract as authority for the exact Cline task schema and exact permission/rejection behavior. Skill 8 must not fork or silently replace Skill 2 policy.
+Button evidence may come only from current reliable Human Owner screenshot/text or a current tool/connector output exposing the action label.
 
-## 9. CrewAI and technical-plan boundary
+## 14. Anti-repeat and lock preservation
 
-Skill 8 is repository governance only.
+Before recommending any setup/action:
+
+```yaml
+GALAX_SETUP_REUSE_GATE_V2:
+  verified_completed_setup: []
+  verified_completed_environment_steps: []
+  verified_completed_assignments: []
+  completed_and_LOCKED_ACCEPTED: []
+  rejected_or_superseded_work: []
+  setup_steps_not_to_repeat: []
+  commands_tests_or_actions_not_to_repeat: []
+  current_missing_prerequisites: []
+  current_required_setup_only: []
+```
+
+Do not repeat a completed action when no material identity changed.
+Do not modify `LOCKED_ACCEPTED` without the applicable unlock/change authority.
+
+## 15. Technical architecture protection
+
+Bootstrap changes no CrewAI runtime architecture:
 
 ```yaml
 CrewAI_runtime_changed: false
 GalaxFoundationFlow_changed: false
 Agent_01_changed: false
 Agents_02_to_15_changed: false
-CrewAI_process_changed: false
+Process_changed: false
 CrewAI_memory_changed: false
 CrewAI_reasoning_changed: false
 CrewAI_planning_changed: false
@@ -272,15 +395,17 @@ tests_changed: false
 dependencies_changed: false
 ```
 
-When the original Human Owner request is technical, the bootstrap must preserve the active CrewAI remediation blueprint focus lock and any existing narrow Foundation supersession. Skill 8 itself does not create a new technical plan.
+For technical continuation, recover the current active blueprint/technical contract/assignment exactly. Skill 8 does not invent a new technical roadmap.
 
-## 10. Bootstrap readiness gate
+## 16. Bootstrap readiness gate
 
-Before returning `PASS`, establish:
+Before `PASS`, establish:
 
 ```yaml
-GALAX_NEW_CHAT_BEHAVIOR_READINESS_GATE_V1:
+GALAX_NEW_CHAT_BEHAVIOR_READINESS_GATE_V2:
+  router_verified: true | false
   operating_manual_loaded: true | false
+  role_separator_verified: true | false
   Skill_1_loaded: true | false
   Skill_2_loaded: true | false
   Context_Engineer_loaded: true | false
@@ -288,36 +413,47 @@ GALAX_NEW_CHAT_BEHAVIOR_READINESS_GATE_V1:
   same_goal_preserved: true | false
   exact_stop_point_known: true | false
   completed_setup_identified: true | false
-  do_not_repeat_identified: true | false
+  actions_not_to_repeat_identified: true | false
   LOCKED_ACCEPTED_preserved: true | false
+  rejected_or_superseded_preserved: true | false
+
+  original_ChatGPT_Cline_chain_understood: true | false
+  ChatGPT_CrewAI_write_block_understood: true | false
+  Cline_supervisory_write_block_understood: true | false
+  Skill_9_narrow_scope_understood: true | false
+  Skill_5_narrow_scope_understood: true | false
+  Skill_10_predelegation_gate_understood: true | false
+  commit_and_push_separate_owner_gates_understood: true | false
+
   prompting_rules_understood: true | false
   approval_rules_understood: true | false
   rejection_with_correction_understood: true | false
   button_detection_understood: true | false
-  No_button_understood: true | false
-  no_visible_button_understood: true | false
-  unknown_UI_state_understood: true | false
-  button_guessing_prohibited: true | false
+  automatic_next_technical_stage_prohibited: true | false
   technical_plan_not_changed: true | false
   ready: true | false
 ```
 
-If any mandatory field is false or required evidence is conflicting, do not return `PASS`.
+If any mandatory field is false or current evidence conflicts, do not return `PASS`.
 
-Use the smallest accurate blocker, including:
+## 17. Blockers
+
+Use the smallest accurate blocker:
 
 ```text
 BLOCKED_NEW_CHAT_OPERATING_MANUAL_UNAVAILABLE
+BLOCKED_NEW_CHAT_ROLE_SEPARATOR_UNAVAILABLE
 BLOCKED_NEW_CHAT_OPERATING_RULES_INCOMPLETE
 BLOCKED_NEW_CHAT_REPOSITORY_STATE_UNVERIFIED
 BLOCKED_NEW_CHAT_CONTEXT_CONFLICT
 BLOCKED_NEW_CHAT_LOCK_CONFLICT
+BLOCKED_NEW_CHAT_EXECUTOR_ROLE_CONFLICT
 ```
 
-## 11. Canonical bootstrap receipt
+## 18. Bootstrap receipt
 
 ```yaml
-GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1:
+GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V2:
   bootstrap_status: PASS | BLOCKED
   session_state: NEW_OR_UNVERIFIED_CHAT
 
@@ -327,6 +463,7 @@ GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1:
   authority:
     router_verified:
     operating_manual_verified:
+    role_separator_verified:
     Skill_1_verified:
     Skill_2_verified:
     Context_Engineer_verified:
@@ -345,11 +482,6 @@ GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1:
     current_incomplete_action:
     exact_resume_action:
 
-  setup_state:
-    completed_setup: []
-    missing_required_setup: []
-    setup_steps_not_to_repeat: []
-
   protection:
     completed_work: []
     LOCKED_ACCEPTED: []
@@ -357,22 +489,21 @@ GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1:
     actions_not_to_repeat: []
     prohibited_next_actions: []
 
-  UI_and_permission_readiness:
-    button_detection_ready:
-    reject_with_correction_ready:
-    no_visible_button_behavior_ready:
-    unknown_UI_behavior_ready:
+  executor_separation:
+    ChatGPT_CrewAI_role: architect_supervisor_reviewer
+    Cline_CrewAI_role: primary_local_executor
+    ChatGPT_CrewAI_direct_write_blocked: true | false
+    Cline_supervisory_direct_write_blocked: true | false
+    Skill_9_narrow_exception_understood: true | false
+    Skill_5_narrow_exception_understood: true | false
+    Skill_10_required_before_real_Cline_task: true | false
 
   Human_Owner:
+    final_authority_preserved: true | false
     current_authorization:
     additional_authorization_required:
 
   original_request:
-
-  continuation:
-    same_goal_preserved: true | false
-    restart_setup: false
-    new_goal_invented: false
 
   next_routing:
     original_request_preserved: true | false
@@ -383,11 +514,9 @@ GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1:
   safe_to_continue: true | false
 ```
 
-## 12. Handoff after bootstrap
+## 19. Handoff after bootstrap
 
-A Skill 8 `PASS` does not authorize an invented next technical stage.
-
-After `PASS`, the router may start a separate routing cycle only to process the same original Human Owner request that triggered bootstrap.
+A Skill 8 `PASS` authorizes only a separate routing cycle for the **same original Human Owner request**.
 
 ```yaml
 automatic_new_technical_stage: prohibited
@@ -396,43 +525,25 @@ preserve_original_Human_Owner_request: required
 post_bootstrap_allowed_action: route_same_original_request_only
 ```
 
-If the original request itself requires a consequential action not already authorized, the normal Human Owner gate remains required.
+If the original request requires a consequential action not yet authorized, the normal Human Owner gate remains required.
 
-## 13. Prohibited behavior
-
-```yaml
-prohibited:
-  - treat_new_chat_as_new_project
-  - restart_completed_setup_without_new_evidence
-  - repeat_completed_or_rejected_work_without_new_reason
-  - guess_branch_SHA_assignment_or_stop_point
-  - guess_visible_UI_button
-  - tell_owner_to_click_nonexistent_button
-  - use_bare_REJECT_when_exact_correction_is_knowable
-  - invalidate_correct_work_during_rejection
-  - self_approve_for_Human_Owner
-  - create_new_CrewAI_agent
-  - become_Agent_16
-  - modify_CrewAI_runtime
-  - modify_Galax_source_or_tests
-  - modify_dependencies
-  - auto_continue_to_new_technical_stage
-  - merge
-  - deploy
-```
-
-## 14. Final contract
+## 20. Final contract
 
 ```text
-new or unverified Galax chat
+new/unverified Galax chat
 → Router selects Skill 8
-→ Skill 8 reads GALAX_NEW_CHAT_OPERATING_MANUAL.md
-→ load Skill 1 + Skill 2 as the two bootstrap dependencies
-→ load Context Engineer as non-skill support
-→ reconstruct repository-backed continuation state
-→ verify same goal, exact stop point, completed setup, locks, do-not-repeat, prompting, rejection, UI-button and no-button behavior
-→ produce GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V1
+→ Skill 8 loads New Chat Operating Manual
+→ load Skill 1 + Skill 2 dependencies
+→ load Context Engineer support
+→ verify contributor role separator
+→ reconstruct exact repository-backed continuation state
+→ verify original ChatGPT → Cline implementation chain
+→ verify ChatGPT CrewAI hard block
+→ verify Cline supervisory hard block
+→ verify narrow Skill 9 / Skill 5 exceptions
+→ verify Skill 10 is mandatory before any later real Cline task
+→ produce GALAX_NEW_CHAT_BOOTSTRAP_RECEIPT_V2
 → PASS only when safe_to_continue=true
-→ route only the same original Human Owner request in a separate routing cycle
-→ stop at that selected skill's normal boundary
+→ route only the same original Human Owner request
+→ stop at the selected skill boundary
 ```
