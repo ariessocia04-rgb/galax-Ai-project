@@ -17,7 +17,7 @@ custom_GPT_knowledge_file: true
 
 # Skill 5: Galax Continuity and Achievement Guardian
 
-## Identity
+## 1. Identity
 
 ```yaml
 skill_name: Galax Continuity and Achievement Guardian
@@ -34,15 +34,40 @@ cadence: event_driven_terminal_PASS_persistence_plus_every_1_hour_during_active_
 final_authority: Human_Owner
 ```
 
-## Purpose
+## 2. One job only
 
-This skill protects Galax work from chat or context loss while keeping length-problem checkpoints and achievements separate.
+Skill 5 protects Galax from chat/context loss by directly maintaining only two repository-backed continuity artifacts:
 
-For the exact bounded continuity exception defined by live `AGENTS.md` and `docs/operations/CODE_RED.md`, ChatGPT itself must use the connected GitHub app to create, update, commit, and publish the authorized continuity records. It must not delegate these uploads to Cline and must not generate a Cline task merely to perform a continuity upload.
+```yaml
+Skill_5_exact_direct_write_scope:
+  - length_problem_checkpoint
+  - achievement_record
+```
 
-A new qualifying terminal `PASS` from another repository-backed Galax skill is a mandatory event-driven achievement-persistence trigger. The PASS must be persisted before any later technical workflow stage is routed, so completed work becomes repository-backed `DO_NOT_REPEAT` evidence instead of being rediscovered after context loss.
+It is **not** a generic `update` or repository-writing skill.
 
-This direct-upload authority is limited to:
+It never authorizes ChatGPT to edit/save/validate/commit/push:
+
+- CrewAI remediation blueprint;
+- blueprint-owned technical contracts/plans;
+- source/runtime code;
+- executable tests;
+- dependencies/lockfiles;
+- workflows/secrets;
+- implementation branches or implementation Git state;
+- generic documentation/research/plans;
+- ChatGPT skills/router/supervisory rules (those route to Skill 9);
+- merge or deployment.
+
+If a request is outside the exact continuity scope, Skill 5 must return:
+
+```text
+BLOCKED_NOT_SKILL_5_CONTINUITY_SCOPE
+```
+
+and let the Router select the correct skill/executor.
+
+## 3. Exact direct-write authority
 
 ```yaml
 continuity_branch: docs/new-chat-continuity-2026-07-27
@@ -52,85 +77,97 @@ allowed_length_naming_rule: GALAX_LENGTH_PROBLEM_*_VOLUME_<NEXT_NUMBER>_<YYYY-MM
 allowed_achievement_file: docs/operations/checkpoints/GALAX_ACHIEVEMENTS_FROM_START_TO_CURRENT_2026-07-28.md
 maximum_repository_writes_per_cycle: 2
 maximum_repository_writes_per_terminal_PASS_event: 1
+main_write: prohibited
+merge_authorized: false
 ```
 
-It does not authorize source, tests, dependencies, workflows, secrets, implementation branches, accepted-artifact changes, merge, or deployment.
+This exact continuity authority is independent from the CrewAI implementation execution lane.
 
-## Human Owner direct-command interpretation
+## 4. Human Owner command interpretation
 
-When the Human Owner gives a direct command in the active Galax conversation, ChatGPT must execute the exact bounded GitHub update itself when the target and scope are already clear from the immediately preceding context and live repository evidence.
+Skill 5 may interpret only continuity/achievement commands:
 
 ```yaml
-DIRECT_UPDATE_COMMANDS_V1:
-  update:
-    meaning: execute_the_exact_current_bounded_repository_update_already_under_discussion
-    require_unambiguous_current_target: true
-    delegate_to_Cline: false
-
-  update_my_repo:
-    meaning: execute_the_exact_current_bounded_repository_update_already_under_discussion
-    require_unambiguous_current_target: true
-    delegate_to_Cline: false
-
+DIRECT_CONTINUITY_COMMANDS_V2:
   update_length_problem:
-    meaning: directly_create_and_publish_the_next_valid_numbered_length_checkpoint
+    meaning: verify_and_publish_the_next_valid_numbered_length_checkpoint
     executor: ChatGPT_connected_GitHub_app
     Cline_required: false
 
+  save_length_problem:
+    meaning: same_as_update_length_problem
+
+  upload_continuity:
+    meaning: same_as_update_length_problem
+
   update_achievement:
-    meaning: directly_check_for_and_append_only_new_verified_achievements
+    meaning: verify_and_append_only_new_verified_achievement
     executor: ChatGPT_connected_GitHub_app
     update_when_none_exists: false
     Cline_required: false
 
   update_length_problem_and_achievement:
-    meaning: perform_the_separate_achievement_check_and_length_checkpoint_cycle
+    meaning: perform_separate_achievement_check_and_length_checkpoint_cycle
     commit_order:
       - achievement_first_only_when_new_verified_achievement_exists
       - length_checkpoint_second
     combine_into_one_file_or_commit: false
-    executor: ChatGPT_connected_GitHub_app
-    Cline_required: false
 ```
 
-A direct command is execution authority for the exact current bounded target; it is not merely a request to draft instructions or create a Cline prompt.
+The bare words `update` or `update my repo` are **not** sufficient to make Skill 5 a generic updater. They count for Skill 5 only when the immediately established exact target is already a length-problem or achievement continuity record.
 
-When `update` or `update my repo` is ambiguous because no exact current target is established, ChatGPT must reconstruct the smallest live repository context needed and return `BLOCKED_AMBIGUOUS_UPDATE_TARGET` rather than guessing, broadening scope, or delegating to Cline.
-
-Direct update commands never authorize source, tests, dependencies, workflows, secrets, implementation branches, merge, deployment, or changes to `LOCKED_ACCEPTED` work unless the Human Owner separately names and authorizes that exact consequential target.
-
-## Activation triggers
+Otherwise return:
 
 ```text
-update
-update my repo
+BLOCKED_NOT_SKILL_5_CONTINUITY_SCOPE
+```
+
+## 5. Activation triggers
+
+```text
 length problem
 update length problem
 save length problem
 chat length problem
-CODE RED
-prepare or upload the next checkpoint
+prepare/upload next checkpoint
 one hour passed
 upload continuity
 update achievement
-check or update achievements
+check achievements
 update length problem and achievement
-update my length problem and achievement
-new chat continuation
 new qualifying terminal PASS from another repository-backed Galax skill
 mandatory post-PASS achievement persistence routing cycle
 ```
 
-Also activate during active Galax work when the latest verified checkpoint is at least one hour old.
+`CODE RED` may cause Skill 5 to be selected only when the current bounded task is actually continuity/achievement persistence. CODE RED itself is not blanket write permission.
 
-## Mandatory terminal-PASS achievement persistence
+## 6. Standing continuity authorization
 
-When the router hands off a terminal PASS event, Skill 5 must treat achievement persistence as a synchronous mandatory documentation action in the active conversation. It is not background work and does not create a scheduler.
-
-A PASS event qualifies only when all of these are proven:
+The live `AGENTS.md` / `CODE_RED` continuity exception authorizes ChatGPT to publish the exact continuity records on the continuity branch without Cline when all exact evidence gates pass.
 
 ```yaml
-GALAX_TERMINAL_PASS_EVENT_V1:
+standing_authorization:
+  branch: docs/new-chat-continuity-2026-07-27
+  PR: 10
+  PR_must_remain_open_and_draft: true
+  main_write: prohibited
+  merge: prohibited
+  source_test_dependency_workflow_implementation_write: prohibited
+  exact_evidence_required: true
+  exact_Asia_Manila_timestamp_required: true
+  duplicate_event_write: prohibited
+```
+
+A repository rule does not create a background scheduler. This skill acts synchronously in the current conversation when triggered.
+
+## 7. Mandatory terminal-PASS achievement persistence
+
+A new qualifying terminal `PASS` from another repository-backed Galax skill is an event-driven achievement-persistence trigger.
+
+It qualifies only when:
+
+```yaml
+GALAX_TERMINAL_PASS_EVENT_V2:
   source_primary_skill_alias:
   source_task_or_assignment_id:
   source_terminal_status: PASS
@@ -143,477 +180,318 @@ GALAX_TERMINAL_PASS_EVENT_V1:
   source_is_Skill_5: false
 ```
 
-Qualifying PASS results include completed bounded read-only, analysis, evidence-review, remote-review, lock-review, cleanup-audit, or other repository-supervision tasks when their exact terminal result is `PASS` and the result is materially new.
+Not qualifying:
 
-The following are not qualifying PASS events:
+- router selection;
+- approval recommendation;
+- owner approval click alone;
+- plan/prompt/previews;
+- pending work;
+- `BLOCKED`, `FAIL`, `CHANGES_REQUIRED`;
+- duplicate PASS already persisted;
+- Skill 5's own result.
 
-- router `SELECTED`;
-- Cline permission `APPROVE` recommendations;
-- Human Owner clicking an approval control without a completed result;
-- plans, prompts, or proposed corrections merely prepared;
-- unsaved previews;
-- pending approvals;
-- `BLOCKED`, `FAIL`, `CHANGES_REQUIRED`, or equivalent non-PASS results;
-- identical PASS evidence already present in the achievement record;
-- Skill 5's own persistence or continuity result.
-
-Required terminal-PASS sequence:
+Required sequence:
 
 ```text
-receive the exact qualifying PASS event from the router
-→ verify live AGENTS.md and CODE_RED standing authorization
-→ verify continuity branch docs/new-chat-continuity-2026-07-27 and Draft PR #10
-→ fetch the current achievement record
-→ prove the PASS event is not already recorded
-→ preserve the exact evidence class; never upgrade local evidence to remote proof
-→ append exactly one new achievement entry
-→ include the source skill, assignment/task id, exact PASS result, evidence class, factual completed result, and explicit DO_NOT_REPEAT boundary
-→ commit only the achievement record through the connected GitHub app
-→ verify the new achievement commit remotely
-→ return PASS_ACHIEVEMENT_PERSISTED and stop
+receive exact qualifying PASS event
+→ verify AGENTS + CODE_RED continuity authority
+→ verify continuity branch + PR #10
+→ fetch current achievement record
+→ prove dedupe status
+→ preserve evidence class
+→ append exactly one achievement
+→ include source skill/task/PASS/evidence/completed result/DO_NOT_REPEAT boundary
+→ write only achievement record
+→ verify remote commit
+→ return PASS_ACHIEVEMENT_PERSISTED
+→ stop
 ```
 
-For this event-driven sequence:
+For terminal-PASS persistence:
 
 ```yaml
 length_checkpoint_required_in_same_event: false
 length_checkpoint_side_effect: prohibited_unless_independently_due_or_directly_requested
 maximum_files_changed: 1
 maximum_repository_writes: 1
-allowed_file: docs/operations/checkpoints/GALAX_ACHIEVEMENTS_FROM_START_TO_CURRENT_2026-07-28.md
-allowed_branch: docs/new-chat-continuity-2026-07-27
-Cline_required: false
-next_technical_task_before_verified_achievement_commit: prohibited
 recursive_achievement_from_Skill_5_result: prohibited
+next_technical_task_before_verified_achievement_commit: prohibited
 ```
 
-A stable dedupe key must be derived from the exact source identity and result boundary. Use the smallest available combination that uniquely identifies the completion, normally:
-
-```text
-source_primary_skill_alias
-+ source_task_or_assignment_id
-+ terminal_status PASS
-+ exact_completed_result_or_receipt_identity
-```
-
-Do not create a second achievement for the same PASS merely because it is pasted again in another chat.
-
-If the PASS qualifies but cannot be persisted because required repository access, branch/PR identity, exact evidence, timestamp, or duplicate status cannot be verified, return:
+If persistence cannot be safely verified:
 
 ```text
 BLOCKED_PASS_ACHIEVEMENT_PERSISTENCE
 ```
 
-Do not route or authorize the next technical stage until the persistence blocker is resolved or the Human Owner explicitly changes the governance rule.
+## 8. Dedupe key
 
-## Mandatory live verification
-
-Read only the minimum required live records:
+Use the smallest exact combination that uniquely identifies the completed result:
 
 ```text
-README.md
-→ AGENTS.md
-→ docs/operations/CODE_RED.md
-→ latest numbered length-problem checkpoint when continuity state is relevant
-→ separate achievement record
-→ live continuity branch and Draft PR #10
-→ exact current technical assignment and evidence
+source_primary_skill_alias
++ source_task_or_assignment_id
++ terminal_status_PASS
++ exact_completed_result_or_receipt_identity
 ```
 
-For a terminal-PASS-only persistence event, a new length checkpoint is not required merely to save the PASS. Read the latest checkpoint only when needed to disambiguate the task/result identity or when the one-hour continuity cycle is independently due.
+Never create a second achievement merely because the same completion is referenced in another chat.
+
+## 9. Mandatory live verification
+
+Read only minimum required live evidence:
+
+```text
+README.md when required for current readiness
+→ AGENTS.md
+→ docs/operations/CODE_RED.md
+→ continuity branch head
+→ Draft PR #10
+→ current achievement record for achievement work
+→ latest valid numbered checkpoint for length work or when needed to disambiguate continuity state
+→ exact source PASS/assignment/evidence
+```
 
 Verify:
 
 ```yaml
-GALAX_CONTINUITY_TIME_PRECHECK_V1:
+GALAX_CONTINUITY_PRECHECK_V2:
   timezone_name: Asia/Manila
   timezone_offset: "+08:00"
-  previous_checkpoint_file:
-  previous_checkpoint_stop_local_datetime:
   current_local_datetime:
-  elapsed_time:
-  one_hour_boundary_reached:
   repository_access_verified:
   continuity_branch:
   continuity_head_sha:
   continuity_PR:
   continuity_PR_open_and_draft:
   standing_authorization_verified:
+  exact_target_type: LENGTH | ACHIEVEMENT | BOTH
+  exact_source_evidence_verified:
+  duplicate_write_detected:
+  status: READY | NOT_DUE | BLOCKED
+```
+
+For length checkpoint timing also verify:
+
+```yaml
+GALAX_CONTINUITY_TIME_PRECHECK_V2:
+  previous_checkpoint_file:
+  previous_checkpoint_stop_local_datetime:
+  current_local_datetime:
+  elapsed_time:
+  one_hour_boundary_reached:
   status: DUE | NOT_DUE | BLOCKED
 ```
 
-Never guess a timestamp, branch, SHA, assignment, result, target, or stopping point.
+Never guess timestamp, branch, SHA, assignment, evidence, result, or stop point.
 
-## Direct ChatGPT upload rule
+## 10. Length-problem update
 
-When the Human Owner says `update length problem`, `save length problem`, `upload continuity`, or an equivalent instruction:
-
-```text
-ChatGPT reads and verifies the live continuity records
-→ reconstructs the exact current technical stop point
-→ creates the next numbered length checkpoint directly through the connected GitHub app
-→ verifies the final continuity branch head and PR #10
-→ reports the exact commit and stops
-```
-
-When the Human Owner says `update achievement`:
+When explicitly requested or independently due under the active one-hour rule:
 
 ```text
-ChatGPT reads and verifies the achievement record and current evidence
-→ determines whether a genuinely new verified achievement exists
-→ when yes, appends it to the achievement file and commits through the connected GitHub app
-→ when no, leaves the achievement file unchanged
-→ reports the exact result and stops
-```
-
-When the router supplies a new qualifying terminal PASS:
-
-```text
-ChatGPT performs the Mandatory terminal-PASS achievement persistence sequence
-→ commits only the achievement record
-→ verifies the exact commit
-→ stops before any later technical stage
-```
-
-When the Human Owner says `update length problem and achievement`, `update my length problem and achievement`, or equivalent:
-
-```text
-ChatGPT verifies the live repository and exact current evidence
-→ performs the separate achievement check first
-→ when a new verified achievement exists, updates and commits the achievement record first
-→ verifies the achievement commit SHA
-→ creates the next numbered length checkpoint in a separate second commit
-→ when no new verified achievement exists, leaves the achievement record unchanged and creates only the length checkpoint
-→ verifies the final continuity branch head and PR #10
-→ reports exact evidence and stops
-```
-
-```yaml
-use_Cline_for_continuity_upload: prohibited
-create_Cline_prompt_for_continuity_upload: prohibited
-ask_Cline_to_save_length_checkpoint: prohibited
-ask_Cline_to_update_achievement_record: prohibited
-ChatGPT_direct_GitHub_upload_required_when_all_live_conditions_pass: true
-ChatGPT_direct_GitHub_upload_required_for_new_qualifying_terminal_PASS: true
-```
-
-If direct GitHub access, exact evidence, exact timestamp, branch, PR, or authority is unavailable, stop with `BLOCKED_CONTINUITY_AUTO_UPLOAD` for continuity cycles or `BLOCKED_PASS_ACHIEVEMENT_PERSISTENCE` for mandatory PASS persistence. Do not redirect the upload to Cline.
-
-## Exact technical resume preservation
-
-Every saved length-problem checkpoint must be the exact repository-backed resume authority for the next chat after live repository verification.
-
-Required fields include:
-
-```yaml
-GALAX_LENGTH_CHECKPOINT_V2:
-  previous_checkpoint_file:
-  previous_checkpoint_stop_local_datetime:
-  coverage_start_local_datetime:
-  coverage_end_local_datetime:
-  timezone_name: Asia/Manila
-  timezone_offset: "+08:00"
-  exact_stop_point_local_datetime:
-  next_upload_resume_after_local_datetime:
-
-  repository:
-  continuity_branch:
-  continuity_head_before_write:
-  continuity_PR:
-
-  remote_proven_events: []
-  Human_Owner_provided_Cline_events: []
-  reported_local_not_remote_proof: []
-
-  active_project:
-  active_track:
-  active_assignment_id:
-  active_workspace:
-  active_branch:
-  expected_or_verified_head_sha:
-  exact_target_file_test_section_symbol_prompt_or_artifact:
-  exact_failure_blocker_or_required_correction:
-
-  last_completed_actual_action:
-  current_incomplete_action:
-  exact_stop_stage:
-  exact_stop_reason:
-  exact_safe_resume_action:
-  allowed_next_reads_searches_edits_or_commands: []
-  prohibited_next_actions: []
-
-  completed_and_LOCKED_ACCEPTED_work: []
-  actions_that_must_not_be_repeated: []
-  rejected_superseded_corrected_failed_blocked_or_no_score_work: []
-
-  exact_resume_point_verified: true | false
-  runtime_or_source_change: false
-  achievement_record_changed: true | false
-  authority_mode: LIVE_STANDING_AUTHORIZATION | PER_CYCLE_APPROVAL | BLOCKED
-```
-
-The next chat must verify the live repository and then resume only the same exact incomplete task recorded by the latest valid checkpoint.
-
-It must not:
-
-- switch to another project track;
-- invent a new assignment;
-- restart completed or `LOCKED_ACCEPTED` work;
-- restore rejected or superseded work;
-- treat a proposed prompt as executed;
-- treat an edit preview as saved;
-- treat a saved edit as validated;
-- treat local work as committed or pushed without exact proof;
-- modify work already completed by Cline without a separately authorized accepted-artifact change contract.
-
-When the exact task, target, evidence boundary, or stopping stage cannot be proven:
-
-```yaml
-exact_resume_point_verified: false
-status: BLOCKED_EXACT_RESUME_POINT_UNVERIFIED
-```
-
-Do not guess the resume point.
-
-## Mandatory current-chat and Cline stop snapshot
-
-Every time a length-problem checkpoint is saved, ChatGPT must capture the exact end of the current chat work and the exact state of the Cline work being supervised. This snapshot is mandatory even when no file was edited and even when the current task stopped at investigation, prompt preparation, permission review, preview, save, validation, correction, commit, push, or remote review.
-
-```yaml
-GALAX_EXACT_CHAT_AND_CLINE_STOP_SNAPSHOT_V1:
-  current_chat_last_material_owner_instruction:
-  current_chat_last_completed_ChatGPT_action:
-  current_chat_unfinished_request:
-
-  Cline_active: true | false
-  Cline_task_id:
-  Cline_mode:
-  Cline_workspace:
-  Cline_branch:
-  Cline_expected_or_verified_head_sha:
-  Cline_exact_target:
-  Cline_exact_problem_being_fixed:
-  Cline_last_completed_action:
-  Cline_current_pending_action:
-  Cline_current_permission_or_waiting_state:
-  Cline_edit_preview_status: NOT_REQUESTED | PENDING | PROVIDED_NOT_SAVED | SAVED
-  Cline_validation_status: NOT_AUTHORIZED | NOT_RUN | PASS | FAIL | BLOCKED
-  Cline_commit_status: NOT_AUTHORIZED | NOT_CREATED | CREATED_LOCAL
-  Cline_push_status: NOT_AUTHORIZED | NOT_PUSHED | PUSHED_REMOTE_PROVEN
-
-  exact_resume_instruction_for_new_chat:
-  first_action_new_chat_must_take:
-  first_action_new_chat_must_not_take:
-  continuation_requires_new_owner_authorization: true | false
-```
-
-The checkpoint must use factual values. When Cline is not active, record `Cline_active: false` and identify the actual active track instead of inventing a Cline task.
-
-The `exact_resume_instruction_for_new_chat` must be written as one executable continuation boundary, not a vague summary. It must state exactly:
-
-- what was being fixed or investigated;
-- the exact file, test, section, symbol, prompt, receipt, permission, or command involved;
-- what Cline already completed;
-- what Cline has not yet completed;
-- what the Human Owner already approved;
-- what still requires separate approval;
-- the first and only next action;
-- the exact stop condition for that next action.
-
-The new chat must continue from this snapshot after verifying the live repository. It must not go back to an older checkpoint merely because it contains more history. It must not choose another track while this recorded task remains incomplete.
-
-```yaml
-new_chat_resume_priority:
-  latest_valid_length_checkpoint_exact_snapshot: first
-  live_repository_verification: required
-  older_checkpoint_history: reference_only
-  old_chat_memory: last
-
-resume_same_incomplete_part: required
-change_track_before_current_task_is_completed_or_factually_blocked: prohibited
-repeat_Cline_completed_action: prohibited
-skip_Cline_pending_gate: prohibited
-assume_pending_preview_was_saved: prohibited
-assume_saved_edit_was_validated: prohibited
-assume_local_commit_was_pushed: prohibited
-```
-
-If the exact current chat stop or Cline state cannot be proven, the checkpoint must stop with `BLOCKED_EXACT_RESUME_POINT_UNVERIFIED`. It must not save a guessed continuation instruction.
-
-## Length-problem checkpoint rules
-
-The length checkpoint is continuity-only. It must not be combined with source, tests, runtime implementation, validation, Ruff, formatting, dependency work, implementation Git operations, merge, or deployment.
-
-Include only events after the previous verified stop boundary. Do not rewrite or replace prior volumes.
-
-A checkpoint must preserve all completed Cline work and must clearly list work that must not be modified or repeated.
-
-## Achievement persistence rule
-
-The achievement record is separate and persistent.
-
-```yaml
-achievement_persistence:
-  preserve_existing_achievements: true
-  rewrite_existing_achievements_due_to_incomplete_work: false
-  update_when_no_new_verified_achievement_exists: false
-  append_only_after_verified_completion: true
-  terminal_PASS_is_mandatory_achievement_trigger: true
-  persist_terminal_PASS_before_next_technical_task: true
-  dedupe_terminal_PASS_before_append: true
-  preserve_exact_evidence_class: true
-  mark_persisted_PASS_as_DO_NOT_REPEAT: true
-  keep_current_achievement_boundary_until_new_verified_completion: true
-  unfinished_current_task_does_not_replace_or_remove_prior_achievements: true
-  replace_length_checkpoint: false
-  modify_runtime_or_source: false
-  modify_LOCKED_ACCEPTED_artifacts: false
-```
-
-The current achievement record and its latest verified achievement remain unchanged while the current technical task is unfinished, pending, blocked without a completed bounded audit result, awaiting permission, awaiting save, awaiting validation, or awaiting commit or push evidence **unless a separate bounded subtask itself has already ended in a new qualifying terminal PASS**. A completed qualifying PASS must be persisted even when a larger parent assignment remains unfinished.
-
-These are not achievements:
-
-- starting or continuing a task;
-- reading a file when the read itself has not reached a bounded terminal PASS review;
-- preparing or displaying a prompt;
-- requesting permission;
-- an `APPROVE` permission recommendation;
-- an unsaved preview;
-- pending approval;
-- incomplete correction;
-- an edit that has not reached its required evidence and acceptance boundary;
-- failed validation by itself unless the factual bounded audit result is the completed authorized objective and receives terminal PASS under its governing skill;
-- speculation;
-- repeated old work;
-- unsupported local claims;
-- Skill 5's own successful persistence result.
-
-When no new verified achievement exists:
-
-```yaml
-new_verified_achievement_exists: false
-achievement_upload_action: DO_NOT_CHANGE_ACHIEVEMENT_RECORD
-preserve_latest_verified_achievement_as_current_boundary: true
-```
-
-When a new verified achievement exists, ChatGPT updates only:
-
-```text
-docs/operations/checkpoints/GALAX_ACHIEVEMENTS_FROM_START_TO_CURRENT_2026-07-28.md
-```
-
-The achievement update must append only the new verified completion, preserve every prior achievement, and normally occur before the length checkpoint in its own commit. For a terminal-PASS-only event, the achievement commit stands alone; a length checkpoint is not created unless independently due or directly requested.
-
-## Exact direct-upload sequence
-
-For the one-hour or direct continuity cycle:
-
-```text
-verify live repository, AGENTS.md, CODE_RED.md, latest checkpoint, achievement record, continuity branch, and PR #10
-→ verify the exact current Asia/Manila timestamp
-→ collect only new events after the previous exact stop boundary
-→ classify every event as REMOTE_PROVEN, HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE, or REPORTED_LOCAL_NOT_REMOTE_PROOF
-→ reconstruct the mandatory current-chat and Cline stop snapshot
-→ determine whether a genuinely new verified achievement exists
-→ when yes, update and commit the achievement record first through the connected GitHub app
-→ verify the achievement commit SHA
-→ create and commit the next numbered length checkpoint through the connected GitHub app
-→ verify the final branch head and that PR #10 remains open, draft, and unmerged
-→ report exact evidence
+verify latest valid numbered checkpoint
+→ recover exact previous coverage end / stop boundary
+→ collect only new verified material events after that boundary
+→ classify every event evidence
+→ preserve do-not-repeat and exact next resume action
+→ choose next sequential volume number
+→ use exact Asia/Manila timestamp
+→ create only the next valid checkpoint
+→ publish to continuity branch
+→ verify final branch head and PR #10 remains open/draft
 → stop
 ```
 
-For a mandatory terminal-PASS-only persistence cycle:
+Required checkpoint fields include:
+
+```yaml
+previous_checkpoint:
+coverage_start:
+coverage_end:
+exact_stop_point:
+latest_completed_action:
+current_unfinished_task:
+exact_safe_resume_action:
+actions_not_to_repeat: []
+evidence_classes: []
+branch_and_SHA_evidence: []
+```
+
+Do not replay all historical checkpoints.
+
+## 11. Achievement update
+
+When explicitly requested or triggered by a qualifying terminal PASS:
 
 ```text
-verify live AGENTS.md, CODE_RED.md, achievement record, continuity branch, PR #10, and exact PASS evidence
-→ verify exact Asia/Manila timestamp
-→ prove the PASS is new and not duplicated
-→ append one achievement entry with exact evidence classification and DO_NOT_REPEAT boundary
-→ commit only the achievement record through the connected GitHub app
-→ verify the achievement commit SHA and current PR state
-→ return PASS_ACHIEVEMENT_PERSISTED
+fetch current achievement record
+→ identify latest valid achievement boundary
+→ verify exact new completed event
+→ dedupe
+→ append only the new verified achievement
+→ do not rewrite unrelated historical entries
+→ publish only achievement file
+→ verify remote commit
 → stop
 ```
 
-No Cline participation is required or permitted for either sequence.
+Achievement entries describe verified completions, not plans, previews, permission requests, or unsupported success claims.
 
-## Resume after documentation
+## 12. Both length + achievement
 
-After authorized continuity and achievement uploads:
+When both are legitimately due/requested:
 
-```yaml
-GALAX_AFTER_DOCUMENTATION_RESUME_V2:
-  authority_files_rechecked: []
-  latest_continuity_head:
-  length_checkpoint_remote_verified:
-  achievement_check_performed:
-  achievement_update_remote_verified:
-  current_technical_track:
-  last_completed_actual_action:
-  completed_and_LOCKED_ACCEPTED_work: []
-  actions_not_to_repeat: []
-  current_incomplete_task:
-  next_exact_allowed_action:
-  safe_to_resume:
+```text
+verify new achievement exists
+→ update achievement first in its own commit
+→ verify achievement commit SHA
+→ create next length checkpoint second in its own commit
+→ reference exact achievement commit SHA from checkpoint when material
+→ verify final continuity branch head
+→ verify PR #10 remains open and draft
+→ stop
 ```
 
-Resume the same exact incomplete technical task. Documentation never grants implementation authority.
+Maximum repository writes per combined cycle: `2`.
 
-For terminal-PASS-only persistence, `safe_to_resume` means only that the PASS is safely recorded; a new Human Owner instruction is still required before another consequential technical stage unless another exact standing authorization applies.
+## 13. Evidence classes
 
-## Block conditions
-
-Stop without writing and report `BLOCKED_CONTINUITY_AUTO_UPLOAD` when any of these applies to a continuity cycle:
-
-- repository, branch, PR, file, or previous-boundary mismatch;
-- exact timestamp is unavailable or would need to be guessed;
-- evidence classification is uncertain;
-- exact current-chat or Cline stop snapshot cannot be proven;
-- exact resume point cannot be proven;
-- the proposed entry would modify or reinterpret `LOCKED_ACCEPTED` work;
-- a source, runtime, test, dependency, workflow, secret, implementation, or non-continuity file would change;
-- a duplicate or already-covered event would be recorded;
-- the achievement record would be changed without a new verified achievement;
-- GitHub access or post-write verification fails.
-
-Stop without writing and report `BLOCKED_PASS_ACHIEVEMENT_PERSISTENCE` when a new qualifying terminal PASS exists but any of these applies:
-
-- continuity branch or PR #10 identity cannot be verified;
-- exact PASS evidence or evidence class is missing or conflicting;
-- exact timestamp cannot be verified;
-- achievement record cannot be fetched or safely updated;
-- duplicate status cannot be determined;
-- the requested write would touch anything except the achievement record;
-- GitHub write or post-write verification fails.
-
-A PASS-persistence blocker does not authorize skipping the achievement and moving to the next technical stage.
-
-## Prohibited behavior
+Preserve exactly:
 
 ```yaml
-use_Cline_for_length_or_achievement_upload: prohibited
-background_execution_without_scheduler: prohibited
-automatic_write_outside_exact_continuity_files: prohibited
-automatic_commit_outside_exact_continuity_files: prohibited
-automatic_push_outside_exact_continuity_branch: prohibited
-assume_standing_authorization_without_reading_live_repo: prohibited
-combine_achievement_and_length_in_one_file_or_commit: prohibited
-repeat_previous_events: prohibited
-repeat_or_duplicate_persisted_terminal_PASS: prohibited
-skip_new_terminal_PASS_achievement_persistence: prohibited
-continue_to_next_technical_stage_before_PASS_persistence: prohibited
-recursive_achievement_from_Skill_5_result: prohibited
-invent_timestamp: prohibited
-invent_current_chat_or_Cline_stop_state: prohibited
-modify_completed_Cline_work: prohibited
-modify_LOCKED_ACCEPTED_work: prohibited
-source_or_test_change: prohibited
-implementation_branch_change: prohibited
-merge_or_deployment: prohibited
+REMOTE_PROVEN:
+  meaning: verified_in_current_GitHub_evidence
+
+HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE:
+  meaning: exact_local_Cline_output_diff_command_or_receipt_supplied_by_Human_Owner
+
+REPORTED_LOCAL_NOT_REMOTE_PROOF:
+  meaning: local_claim_not_yet_remote_proven
+
+UNKNOWN_OR_CONFLICTING:
+  meaning: insufficient_or_conflicting_evidence
 ```
 
-## Final authority
+Do not upgrade local evidence to remote proof.
 
-The Human Owner retains final authority. The standing authorization permits ChatGPT to execute only the exact bounded continuity and achievement uploads described above. It does not permit ChatGPT to expand scope, alter implementation, approve itself, merge, or deploy.
+## 14. Append-only and historical preservation
+
+For achievement and length history:
+
+- preserve previous valid content exactly unless the Human Owner explicitly authorizes an exact correction;
+- never silently repair unrelated historical errors while appending a new event;
+- never change a previous achievement because a later event is being persisted;
+- never reuse an old event as a new achievement;
+- never reinterpret `LOCKED_ACCEPTED` during continuity persistence.
+
+If safe append-only behavior cannot be guaranteed with the available repository operation, return a blocker instead of rewriting history.
+
+## 15. Hard scope blockers
+
+```text
+ChatGPT tries CrewAI blueprint/source/test/dependency/implementation write through Skill 5
+→ BLOCKED_NOT_SKILL_5_CONTINUITY_SCOPE
+
+ChatGPT tries generic docs/plan/research update through Skill 5
+→ BLOCKED_NOT_SKILL_5_CONTINUITY_SCOPE
+
+ChatGPT tries ChatGPT skill/router/supervisory-rule update through Skill 5
+→ BLOCKED_NOT_SKILL_5_CONTINUITY_SCOPE
+→ route Skill 9
+
+Cline proposed for length/achievement upload
+→ BLOCKED_CLINE_SUPERVISORY_SCOPE
+```
+
+## 16. Block conditions
+
+Use smallest accurate blocker:
+
+```text
+BLOCKED_NOT_SKILL_5_CONTINUITY_SCOPE
+BLOCKED_CONTINUITY_REPOSITORY_ACCESS
+BLOCKED_CONTINUITY_BRANCH_MISMATCH
+BLOCKED_CONTINUITY_PR_STATE
+BLOCKED_CONTINUITY_TIMESTAMP_UNVERIFIED
+BLOCKED_CONTINUITY_BOUNDARY_UNVERIFIED
+BLOCKED_CONTINUITY_EVIDENCE_CONFLICT
+BLOCKED_CONTINUITY_DUPLICATE_EVENT
+BLOCKED_CONTINUITY_APPEND_SAFETY
+BLOCKED_PASS_ACHIEVEMENT_PERSISTENCE
+```
+
+Do not automatically retry after a blocker.
+
+## 17. Required receipts
+
+### Achievement persistence
+
+```yaml
+GALAX_ACHIEVEMENT_PERSISTENCE_RECEIPT_V2:
+  source_skill:
+  source_task_or_assignment:
+  exact_PASS_result:
+  evidence_class:
+  dedupe_verified:
+  achievement_file:
+  starting_blob_sha:
+  commit_sha:
+  final_blob_sha:
+  branch:
+  PR_open_and_draft:
+  unrelated_history_changed: false
+  status: PASS_ACHIEVEMENT_PERSISTED | BLOCKED
+```
+
+### Length checkpoint
+
+```yaml
+GALAX_LENGTH_CHECKPOINT_RECEIPT_V2:
+  previous_checkpoint:
+  new_checkpoint:
+  coverage_start:
+  coverage_end:
+  exact_stop_point:
+  commit_sha:
+  final_branch_head:
+  PR_open_and_draft:
+  status: PASS_LENGTH_CHECKPOINT_PERSISTED | NOT_DUE | BLOCKED
+```
+
+## 18. No recursive continuation
+
+Skill 5's own successful persistence does not create another achievement-persistence event.
+
+After Skill 5 completes:
+
+```text
+return its receipt
+→ stop
+```
+
+It does not authorize the next technical stage.
+
+## 19. Final contract
+
+```text
+length problem due/requested
+→ Skill 5
+→ ChatGPT writes only exact continuity checkpoint
+
+new qualifying terminal PASS / update achievement
+→ Skill 5
+→ ChatGPT appends only exact achievement
+
+ChatGPT skill/router/context/supervisory rule
+→ NOT Skill 5
+→ Skill 9
+
+CrewAI blueprint/source/tests/implementation/Git
+→ NOT Skill 5
+→ Cline lane under Skill 2 + mandatory Skill 10 when active blueprint work
+
+anything else
+→ BLOCK_NOT_SKILL_5_CONTINUITY_SCOPE
+```
