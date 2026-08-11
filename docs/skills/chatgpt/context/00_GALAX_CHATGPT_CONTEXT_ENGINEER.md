@@ -9,7 +9,7 @@
 
 ## 1. Purpose
 
-The Context Engineer builds the minimum complete verified context needed by the already-selected skill and Prompt Engineer while preventing stale-history mistakes, duplicate work, unnecessary reads, authority loss, and permanent-lock violations.
+The Context Engineer builds the minimum complete verified context needed by the already-selected skill and Prompt Engineer while preventing stale-history mistakes, duplicate work, unnecessary reads, authority loss, permanent-lock violations, and unsupported material factual claims.
 
 It does not route, approve, execute, edit files, validate, commit, push, merge, deploy, replace Skill 5, replace Skill 6, replace Skill 9, or replace Prompt Engineer.
 
@@ -68,6 +68,7 @@ ChatGPT_standing_repository_jobs:
     - update_achievement_in_repo
     - qualifying_achievement_persistence
   Skill_9:
+    - create_owner_approved_supervisory_rule_under_docs/rules/
     - edit_or_update_ChatGPT_skills_and_rules_only
     allowed_path_prefixes:
       - docs/skills/chatgpt/
@@ -159,7 +160,7 @@ Never upgrade evidence class without proof.
 
 The Context Engineer may reuse exact unchanged evidence only when repository, branch/ref, relevant HEAD/identity, assignment, authority, target, and permanent-lock state remain demonstrably unchanged.
 
-It may never use the fast path to skip a mandatory selected-skill read or hide a permanent-lock collision.
+It may never use the fast path to skip a mandatory selected-skill read, hide a permanent-lock collision, or present an unsupported material claim as verified.
 
 ## 8. Prompt Engineer handoff
 
@@ -178,7 +179,43 @@ Permanent CrewAI remediation set
 → commit/push only when protected set remains unchanged.
 
 Skill 5 → ChatGPT updates length problem and achievement in repo.
-Skill 9 → ChatGPT edits/updates allowed ChatGPT skills and rules only, excluding permanent remediation set.
+Skill 9 → ChatGPT creates owner-approved supervisory rules and edits/updates allowed ChatGPT skills/rules only, excluding permanent remediation set.
 Everything else and Cline capable → Cline executes.
 Other direct ChatGPT execution → Skill 12 fallback only, never to override permanent remediation lock.
 ```
+
+## 10. Factual claim gate support
+
+Canonical supervisory rule:
+
+```text
+docs/rules/GALAX_CHATGPT_FACTUAL_CLAIM_GATE.md
+```
+
+The Context Engineer enforces this rule only for material factual claims and must preserve the fast path.
+
+```yaml
+GALAX_FACTUAL_CLAIM_CONTEXT_CHECK_V1:
+  claim_or_claim_group:
+  material_to_current_task: true | false
+  evidence_already_available: true | false
+  evidence_still_fresh_and_applicable: true | false
+  evidence_class:
+  current_verification_required: true | false
+  exact_missing_fact_when_verification_required:
+  verification_scope_bounded: true | false
+  conflicting_evidence_present: true | false
+  safe_to_present_as_verified_fact: true | false
+  fallback_when_not_verified: UNKNOWN | UNVERIFIED | UNKNOWN_OR_CONFLICTING | applicable_existing_blocker
+```
+
+Rules:
+
+1. If fresh verified evidence already proves the material claim, reuse it; do not re-fetch solely to repeat the same proof.
+2. If freshness/state can materially change and the claim is not currently proven, verify only the exact missing/current fact.
+3. Do not trigger a full repository scan, full skill load, automatic web search, or duplicate evidence read merely because this gate exists.
+4. Keep tool states separate: available, called, succeeded, result inspected, mutation executed, remote state verified.
+5. Do not convert user statements, old chat answers, Cline claims, checkpoints, PR descriptions, or retrieved context into higher evidence classes without proof.
+6. If evidence is missing/conflicting, return an accurate unknown/unverified state rather than guessing.
+7. Stronger current repository/primary evidence overrides stale or lower-authority context.
+8. The permanent CrewAI remediation lock remains higher authority than this gate.
