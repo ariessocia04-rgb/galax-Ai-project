@@ -12,62 +12,53 @@
 
 The Context Engineer builds the minimum complete verified context needed by the already-selected skill and Prompt Engineer while preventing stale-history mistakes, duplicate work, unnecessary reads, and authority loss.
 
-```text
-Human Owner request
-+ Router-selected skill
-+ required dependencies
-+ exact repository evidence
-→ select minimum required context
-→ preserve authority and executor identity
-→ preserve branch/SHA/assignment/locks/do-not-repeat/stop boundary
-→ exclude unrelated/stale/duplicate context when safe
-→ produce one bounded context packet
-→ hand it to selected skill and Prompt Engineer when Prompt Engineer is required
-```
+It does not route, approve, execute, edit files, validate, commit, push, merge, deploy, replace Skill 5, replace Skill 9, or replace Prompt Engineer.
 
-## 2. Absolute boundary
+## 2. Exact executor context
 
-The Context Engineer does not route, approve, reject, execute, edit files, validate, commit, push, merge, deploy, create authority, replace Skill 2, replace Skill 5, or replace Prompt Engineer.
-
-It consumes zero primary/dependency skill slots.
-
-## 3. Executor context
-
-When executor ownership is material, preserve this exact distinction:
+When executor ownership is material, preserve these exact standing ChatGPT jobs:
 
 ```yaml
-Human_Owner:
-  final_authority: true
-  coding_knowledge_required: false
+ChatGPT_standing_repository_jobs:
+  Skill_5:
+    - update_length_problem_in_repo
+    - update_achievement_in_repo
+    - qualifying_achievement_persistence
+  Skill_9:
+    - edit_or_update_ChatGPT_skills_and_rules_only
+    allowed_path_prefixes:
+      - docs/skills/chatgpt/
+      - docs/rules/
+```
 
+For those exact scopes, ChatGPT is the direct executor/publisher and Cline is not required.
+
+For all other repository work:
+
+```yaml
 ChatGPT:
   default_role: architect_specification_supervisor_reviewer
   normal_repository_executor_when_Cline_capable: false
-  Skill_5_direct_continuity_executor: true
-  Skill_5_direct_continuity_publisher: true_when_connected_GitHub_capability_available
   fallback_executor_for_other_work: true_only_after_valid_Skill_12_PASS_and_owner_authorization
 
 Cline:
-  default_repository_executor_when_capable: true_except_exact_Skill_5_continuity_scope
+  default_repository_executor_when_capable_outside_Skill_5_and_Skill_9_standing_scopes: true
   edit_save: only_when_authorized
   validation: only_when_separately_authorized
   commit: only_when_separately_authorized
   push: only_when_separately_authorized
-  Skill_5_length_or_achievement_executor: false_by_default
 ```
 
-For non-Skill-5 work, if Cline is capable, preserve blocker:
+Outside the standing Skill 5/Skill 9 scopes, if Cline is capable, preserve:
 
 ```text
 BLOCKED_CHATGPT_TAKEOVER_CLINE_CAPABLE
 ```
 
-For exact Skill 5 `update_length_problem`, `update_achievement`, or qualifying achievement persistence, preserve that ChatGPT is the direct executor/publisher and Cline is not required.
-
-## 4. Minimum context packet
+## 3. Minimum context packet
 
 ```yaml
-GALAX_CHATGPT_CONTEXT_PACKET_V5:
+GALAX_CHATGPT_CONTEXT_PACKET_V6:
   repository:
   ref_or_branch:
   verified_HEAD_SHA:
@@ -88,6 +79,7 @@ GALAX_CHATGPT_CONTEXT_PACKET_V5:
   prohibited_scope: []
   evidence_classes: []
   Skill_5_direct_persistence_status_when_material:
+  Skill_9_direct_skill_rule_status_when_material:
   Skill_10_status_when_material:
   Skill_12_status_when_material:
   exact_stop_condition:
@@ -106,48 +98,40 @@ GALAX_CHATGPT_CONTEXT_PACKET_V5:
     exact_stop_condition:
 ```
 
-Do not guess material fields. Mark unknown evidence explicitly.
+Do not guess material fields.
 
-## 5. Evidence classes
+## 4. Evidence classes
 
 ```yaml
-REMOTE_PROVEN:
-  meaning: verified current GitHub evidence
-HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE:
-  meaning: exact local Cline output/diff/receipt supplied by owner
-REPORTED_LOCAL_NOT_REMOTE_PROOF:
-  meaning: local claim not yet remotely verified
-CURRENT_TOOL_CAPABILITY_PROVEN:
-  meaning: active tool/schema/success proves current capability
-OFFICIAL_OR_PRIMARY_WEB_PROVEN:
-  meaning: current external fact verified from primary/official source
-UNKNOWN_OR_CONFLICTING:
-  meaning: insufficient or conflicting evidence
+REMOTE_PROVEN: verified_current_GitHub_evidence
+HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE: exact_local_Cline_output_diff_or_receipt_supplied_by_owner
+REPORTED_LOCAL_NOT_REMOTE_PROOF: local_claim_not_yet_remotely_verified
+CURRENT_TOOL_CAPABILITY_PROVEN: active_tool_schema_or_success_proves_current_capability
+OFFICIAL_OR_PRIMARY_WEB_PROVEN: current_external_fact_verified_from_primary_or_official_source
+UNKNOWN_OR_CONFLICTING: insufficient_or_conflicting_evidence
 ```
 
-Never upgrade local evidence to remote proof, proposal to saved edit, save to validation, commit to push, or prompt to execution.
+Never upgrade evidence class without proof.
 
-## 6. Fast-path reuse
+## 5. Fast-path reuse
 
 The Context Engineer may reuse exact unchanged evidence only when repository, branch/ref, relevant HEAD/identity, assignment, authority, and target remain demonstrably unchanged.
 
 It may never use the fast path to skip a mandatory selected-skill read or hide a material state change.
 
-## 7. Prompt Engineer handoff
+## 6. Prompt Engineer handoff
 
-When a Cline-facing or owner-action package is required:
+Prompt Engineer is required only for Cline-facing work.
+
+For direct Skill 5 or direct Skill 9 repository actions, no Cline prompt is required.
+
+## 7. Final rule
+
+Context Engineer must preserve exactly:
 
 ```text
-Context Engineer verified packet
-→ selected skill determines exact authority/scope/mode
-→ Prompt Engineer chooses exact NEW/STAY presentation and mode label from verified facts
-→ final owner-facing + Cline-facing package
+Skill 5 → ChatGPT updates length problem and achievement in repo.
+Skill 9 → ChatGPT edits/updates ChatGPT skills and rules only.
+Everything else and Cline capable → Cline executes.
+Other direct ChatGPT execution → Skill 12 fallback only.
 ```
-
-For direct Skill 5 continuity persistence, Prompt Engineer is not required because no Cline prompt is needed.
-
-If NEW/STAY cannot be safely established for a Cline task, Prompt Engineer must return `BLOCKED_CLINE_SESSION_STATE_UNVERIFIED`; Context Engineer must not invent it.
-
-## 8. Final rule
-
-Context Engineer optimizes context without weakening Router, selected skill, the standing Skill 5 ChatGPT continuity exception, Skill 10, Skill 12, Human Owner authority, stage separation, LOCKED_ACCEPTED, or the general Cline-default execution model.
