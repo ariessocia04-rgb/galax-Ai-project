@@ -8,8 +8,8 @@ GALAX_ACHIEVEMENT_SHARD_INDEX_V1:
   legacy_baseline_file: docs/operations/checkpoints/GALAX_ACHIEVEMENTS_FROM_START_TO_CURRENT_2026-07-28.md
   legacy_baseline_highest_achievement_number: 78
   sharding_started_after_achievement_number: 78
-  highest_sharded_achievement_number: 89
-  updated_local_datetime: 2026-08-12T14:42+08:00
+  highest_sharded_achievement_number: 90
+  updated_local_datetime: 2026-08-12T16:23+08:00
   timezone_name: Asia/Manila
   entries:
     - achievement_number: 79
@@ -78,6 +78,12 @@ GALAX_ACHIEVEMENT_SHARD_INDEX_V1:
       source_task_or_assignment_id: GALAX_FAILURE_2_TEST_AND_IMPLEMENTATION_ACT_V1
       evidence_class: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
       shard_create_commit_sha: 0fa76a42409bb7ad300d79fc6c1d3cae3b90a224
+    - achievement_number: 90
+      shard_path: docs/operations/checkpoints/achievements/GALAX_ACHIEVEMENT_0090_2026-08-12.md
+      source_primary_skill_alias: $galax-evidence-validation-acceptance-guardian
+      source_task_or_assignment_id: GALAX_FAILURE_2_TEST_AND_IMPLEMENTATION_ACT_V1
+      evidence_class: HUMAN_OWNER_PROVIDED_CLINE_EVIDENCE
+      shard_create_commit_sha: 4f1d99e48cd3733dfa7f98eae9592cd0b407380f
 ```
 
 ## Contract
