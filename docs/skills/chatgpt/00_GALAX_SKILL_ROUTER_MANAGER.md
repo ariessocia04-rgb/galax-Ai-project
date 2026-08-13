@@ -159,6 +159,9 @@ GALAX_REPOSITORY_SKILL_REGISTRY:
   $galax-chatgpt-technical-fallback-executor-guardian:
     skill_id: GALAX-SKILL-12
     path: docs/skills/chatgpt/12_GALAX_CHATGPT_TECHNICAL_FALLBACK_EXECUTOR_GUARDIAN.md
+  $galax-qwen-capability-fallback-guardian:
+    skill_id: GALAX-SKILL-13
+    path: docs/skills/chatgpt/13_GALAX_QWEN_CAPABILITY_FALLBACK_GUARDIAN.md
 ```
 
 Do not invent another skill or load all skills by default.
@@ -212,6 +215,8 @@ CHATGPT_SKILL_OR_RULE_UPDATE:
   primary: $galax-owner-direct-repository-update-guardian
 OWNER_RULE_SKILL_REQUIREMENTS_OR_FEASIBILITY:
   primary: $galax-owner-rule-skill-requirements-feasibility-guardian
+QWEN_CAPABILITY_FALLBACK_AFTER_VERIFIED_CLINE_TOOL_FAILURE:
+  primary: $galax-qwen-capability-fallback-guardian
 CHATGPT_TECHNICAL_FALLBACK_AFTER_VERIFIED_CLINE_FAILURE:
   primary: $galax-chatgpt-technical-fallback-executor-guardian
 UNKNOWN_OR_MULTI_TASK:
