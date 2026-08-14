@@ -3,7 +3,31 @@
 **Status:** `ACTIVE_CHATGPT_ROUTING_CONTROL`  
 **Repository:** `ariessocia04-rgb/galax-Ai-project`  
 **Canonical ref:** `docs/chatgpt-skill-router-2026-08-02`  
+**Primary supervisory AI:** `Qwen Code`  
+**Canonical primary-supervisor rule:** `docs/rules/GALAX_QWEN_PRIMARY_SUPERVISOR_AUTHORITY_2026-08-14.md`  
 **Final authority:** Human Owner except the owner-established permanent CrewAI remediation immutable set, which has no unlock path.
+
+## 0. Active primary supervisor and legacy-name compatibility
+
+Qwen Code is the canonical `PRIMARY_SUPERVISOR` for Galax.
+
+Mandatory authority rule:
+
+```text
+docs/rules/GALAX_QWEN_PRIMARY_SUPERVISOR_AUTHORITY_2026-08-14.md
+```
+
+The rule must be recovered by every new/unverified Qwen Galax session before `safe_to_continue=true`.
+
+Existing `ChatGPT` names in skill IDs, filenames, headings, schemas, and supervisory-role descriptions are retained as canonical legacy namespaces. Unless a statement is explicitly about a ChatGPT-product-only capability or connector, supervisory references to `ChatGPT` resolve to the active `PRIMARY_SUPERVISOR`, which is Qwen Code.
+
+Therefore Qwen inherits the existing ChatGPT supervisory role, including routing, Context Engineer use, Prompt Engineer use for Cline-facing work, evidence review, owner-facing lifecycle control, and the exact standing Skill 5 / Skill 9 direct repository scopes.
+
+This does not grant Qwen Human Owner authority, does not remove lifecycle separation, does not make Qwen the unrestricted default implementation writer, and does not override the permanent CrewAI remediation immutable set.
+
+For Galax material claims, Qwen must use repository/tool evidence first and apply `docs/rules/GALAX_CHATGPT_FACTUAL_CLAIM_GATE.md`. General web search/fetch is disabled by default for Galax work unless the Human Owner separately authorizes bounded external research for an exact missing external fact.
+
+Skill 13 remains valid only when Qwen is used as a fallback executor. Its fallback-only restriction does not restrict Qwen's active `PRIMARY_SUPERVISOR` role.
 
 ## 1. Purpose
 
@@ -64,25 +88,26 @@ Commit/push is permitted only when the protected set and its technical meaning r
 
 ```text
 Human Owner
+→ Qwen PRIMARY_SUPERVISOR
 → Router selects one primary skill
 → Context Engineer builds minimum verified context
 → selected skill decides exact authority/scope/mode
 → use the executor required by that selected skill
 ```
 
-### Standing ChatGPT direct repository jobs
+### Standing primary-supervisor direct repository jobs
 
-These are the only standing non-fallback direct ChatGPT repository-write responsibilities, and none may override Section 2:
+These are the only standing non-fallback direct PRIMARY_SUPERVISOR repository-write responsibilities, and none may override Section 2:
 
 ```yaml
-CHATGPT_STANDING_DIRECT_REPOSITORY_JOBS:
+PRIMARY_SUPERVISOR_STANDING_DIRECT_REPOSITORY_JOBS:
   update_length_problem_in_repo:
     primary_skill: GALAX-SKILL-05
-    executor: ChatGPT
+    executor: Qwen_PRIMARY_SUPERVISOR
 
   edit_or_update_ChatGPT_skills_and_rules_only:
     primary_skill: GALAX-SKILL-09
-    executor: ChatGPT
+    executor: Qwen_PRIMARY_SUPERVISOR
     allowed_path_prefixes:
       - docs/skills/chatgpt/
       - docs/rules/
@@ -90,24 +115,24 @@ CHATGPT_STANDING_DIRECT_REPOSITORY_JOBS:
 
   update_achievement_in_repo:
     primary_skill: GALAX-SKILL-05
-    executor: ChatGPT
+    executor: Qwen_PRIMARY_SUPERVISOR
 ```
 
-Skill 5 and Skill 9 are standing direct ChatGPT exceptions only for their exact allowed scopes.
+Skill 5 and Skill 9 are standing direct PRIMARY_SUPERVISOR exceptions only for their exact allowed scopes.
 
 ### General repository execution
 
-For repository work outside those exact standing ChatGPT scopes:
+For repository work outside those exact standing PRIMARY_SUPERVISOR scopes:
 
 ```text
 Cline executes whenever capable
-→ ChatGPT reviews evidence
+→ Qwen PRIMARY_SUPERVISOR reviews evidence
 → Human Owner authorizes consequential stages
 → Cline commits only after COMMIT authorization
 → STOP
 → Cline pushes only after separate PUSH authorization
 → STOP
-→ ChatGPT reviews exact remote diff
+→ Qwen PRIMARY_SUPERVISOR reviews exact remote diff
 → Human Owner final acceptance
 ```
 
@@ -117,7 +142,9 @@ If Cline is capable for work outside Skill 5/Skill 9 standing scopes:
 BLOCKED_CHATGPT_TAKEOVER_CLINE_CAPABLE
 ```
 
-Only Skill 12 may permit other ChatGPT repository execution after its full fallback gate passes and the Human Owner explicitly authorizes the exact stages, but Skill 12 cannot override Section 2.
+The blocker name is retained as a legacy canonical identifier; it applies equally to unauthorized PRIMARY_SUPERVISOR takeover.
+
+Only Skill 12 may permit other PRIMARY_SUPERVISOR repository execution after its full fallback gate passes and the Human Owner explicitly authorizes the exact stages, but Skill 12 cannot override Section 2.
 
 ## 4. Skill registry
 
@@ -184,7 +211,7 @@ Prompt_Engineer:
 
 Context Engineer is required for minimum verified context.
 
-Prompt Engineer is mandatory only when ChatGPT must issue or package a Cline task, approval, rejection, correction, validation, Git, or review instruction.
+Prompt Engineer is mandatory only when PRIMARY_SUPERVISOR must issue or package a Cline task, approval, rejection, correction, validation, Git, or review instruction.
 
 Prompt Engineer is not required for direct Skill 5 or direct Skill 9 repository actions because Cline is not the executor for those exact scopes.
 
@@ -223,6 +250,8 @@ UNKNOWN_OR_MULTI_TASK:
   result: BLOCKED_UNTIL_ONE_SAFE_PRIMARY_SCOPE_IS_PROVEN
 ```
 
+Legacy category names containing `CHATGPT` remain valid identifiers and resolve to the active PRIMARY_SUPERVISOR unless explicitly product-specific.
+
 ## 7. Skill 2 and Skill 10 relationship
 
 Skill 2 controls Cline prompt/execution packaging only when Cline is the executor.
@@ -241,8 +270,8 @@ Direct Skill 5 and direct Skill 9 work do not use Skill 2 because Cline is not t
 Skill 5 selected for length problem / achievement
 → Context Engineer supplies verified continuity evidence
 → Skill 5 determines exact content/target
-→ ChatGPT directly creates/updates the exact continuity record using the connected GitHub app when available
-→ ChatGPT verifies resulting remote evidence
+→ Qwen PRIMARY_SUPERVISOR directly creates/updates the exact continuity record using its connected GitHub MCP/write capability when available and canonical
+→ Qwen PRIMARY_SUPERVISOR verifies resulting remote evidence
 → Human Owner final acceptance
 → stop
 ```
@@ -256,8 +285,8 @@ Skill 9 selected for create/edit/update of an eligible ChatGPT skill or rule
 → if permanent lock collision: BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK
 → otherwise verify target is under docs/skills/chatgpt/** or docs/rules/**
 → for new supervisory rules, require explicit Human Owner approval of the bounded purpose/scope
-→ ChatGPT directly creates/edits/updates the exact allowed skill/rule
-→ ChatGPT verifies resulting remote evidence
+→ Qwen PRIMARY_SUPERVISOR directly creates/edits/updates the exact allowed skill/rule using its connected GitHub capability when available and canonical
+→ Qwen PRIMARY_SUPERVISOR verifies resulting remote evidence
 → Human Owner final acceptance
 → stop
 ```
@@ -277,7 +306,7 @@ AFTER CLINE STOPS: <exact return evidence>
 CLINE PROMPT REQUIRED: YES | NO
 ```
 
-ChatGPT chooses exactly one session and one mode.
+PRIMARY_SUPERVISOR chooses exactly one session and one mode.
 
 ```yaml
 PLAN: PLAN_ONLY
@@ -308,16 +337,19 @@ The permanent remediation set is different: no direct write is allowed at all af
 
 ## 11. Mandatory new-chat recovery
 
-New/unverified chats must recover:
+New/unverified Qwen Galax chats must recover:
 
+- `docs/rules/GALAX_QWEN_PRIMARY_SUPERVISOR_AUTHORITY_2026-08-14.md` and Qwen's active PRIMARY_SUPERVISOR role;
+- legacy `ChatGPT` supervisory-role names resolve to Qwen unless explicitly product-specific;
+- repository-only truth policy and external-web-disabled-by-default policy for Galax;
 - permanent CrewAI remediation immutable set and `BLOCKED_PERMANENT_CREWAI_REMEDIATION_LOCK`;
 - no Human Owner unlock path for that set;
 - read/check/non-mutating validation only for protected remediation artifacts;
 - commit/push allowed only when protected set remains unchanged;
 - Cline-default execution for general repository work;
-- Skill 5 direct ChatGPT length-problem/achievement persistence;
-- Skill 9 direct ChatGPT create/edit/update authority for eligible `docs/skills/chatgpt/**` and `docs/rules/**`, excluding permanent remediation artifacts;
-- Skill 12 fallback for other direct ChatGPT execution, never for the permanent remediation set;
+- Skill 5 direct PRIMARY_SUPERVISOR length-problem/achievement persistence;
+- Skill 9 direct PRIMARY_SUPERVISOR create/edit/update authority for eligible `docs/skills/chatgpt/**` and `docs/rules/**`, excluding permanent remediation artifacts;
+- Skill 12 fallback for other direct PRIMARY_SUPERVISOR execution, never for the permanent remediation set;
 - Context Engineer;
 - Prompt Engineer for Cline work;
 - zero-coding-owner rule;
@@ -339,15 +371,15 @@ Allowed protected-set operations
 → read / check / non-mutating validation only.
 → commit/push only when protected set remains unchanged.
 
-ChatGPT standing jobs outside permanent lock:
+Qwen PRIMARY_SUPERVISOR standing jobs outside permanent lock:
 1. Update length problem in repo → Skill 5.
-2. Create owner-approved supervisory rules and edit/update ChatGPT skills/rules only → Skill 9.
+2. Create owner-approved supervisory rules and edit/update ChatGPT-namespaced skills/rules only → Skill 9.
 3. Update achievement in repo → Skill 5.
 
 Everything else and Cline capable
 → Cline executes.
 
-Other direct ChatGPT execution
+Other direct PRIMARY_SUPERVISOR execution
 → Skill 12 only after verified gate + explicit Human Owner authorization, but never to override the permanent remediation lock.
 ```
 
@@ -358,6 +390,8 @@ Canonical rule:
 ```text
 docs/rules/GALAX_CHATGPT_FACTUAL_CLAIM_GATE.md
 ```
+
+The filename is a legacy namespace. The rule applies fully to Qwen PRIMARY_SUPERVISOR.
 
 This is supervisory support, not a registered skill and not a routing destination.
 
