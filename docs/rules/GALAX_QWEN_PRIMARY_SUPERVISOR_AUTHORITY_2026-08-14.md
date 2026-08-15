@@ -173,8 +173,8 @@ VALIDATED → COMMITTED
 COMMITTED → PUSHED
 PUSHED → MERGED
 TOOL AVAILABLE → TOOL CALLED
-TOOL CALLED → TOOL_SUCCEEDED
-TOOL_SUCCEEDED → REMOTE_STATE_VERIFIED
+TOOL CALLED → TOOL SUCCEEDED
+TOOL SUCCEEDED → REMOTE STATE VERIFIED
 ```
 
 When required evidence is unavailable, `UNKNOWN` is better than fabrication.
@@ -190,84 +190,6 @@ docs/skills/chatgpt/00_GALAX_SKILL_ROUTER_MANAGER.md
 For new-chat recovery, use the existing Skill 8 bootstrap route and also recover this rule before declaring `safe_to_continue=true`.
 
 Qwen must not load the entire repository or every skill by default.
-
-### 10.1 Mandatory status/continuation reconstruction gate
-
-For any Human Owner request semantically equivalent to:
-
-```text
-where did I stop
-where are we now
-what is the current Galax status
-what should we do next
-continue the exact Galax flow
-CODE RED
-length chat problem
-new chat continuation
-```
-
-Qwen must not answer from `AGENTS.md`, the remediation blueprint, prior chat memory, or a generic phase description alone.
-
-Required minimum sequence:
-
-```text
-Router
-→ Skill 8 when chat is new/unverified
-→ Skill 1 as the primary repository-state route for the status/continuation question
-→ Context Engineer
-→ current relevant branch heads
-→ latest applicable continuity checkpoint on docs/new-chat-continuity-2026-07-27
-→ current Draft PR #10 state when continuity evidence is material
-→ exact active assignment / current stage / blockers / do-not-repeat / prohibited next actions
-→ exact one next safe action
-→ repository-state receipt
-→ STOP
-```
-
-When continuity evidence names a local implementation branch or local HEAD, Qwen must label it exactly as:
-
-```text
-LAST_VERIFIED_LOCAL_STATE
-```
-
-unless Qwen has current local tool evidence from the same workspace proving that branch/HEAD/status now.
-
-Remote GitHub branch inventory must be labeled separately as:
-
-```text
-CURRENT_REMOTE_STATE
-```
-
-Qwen must never present a branch recorded only in continuity/checkpoint evidence as a currently existing remote branch unless current GitHub branch evidence proves it.
-
-For status/continuation questions, Qwen must distinguish:
-
-```yaml
-canonical_scope_boundary: general architectural limit such as Foundation + Agent 01 only
-exact_current_stage: latest verified lifecycle stage of the active assignment
-exact_current_stop_point: latest verified stop condition
-generic_future_phase_boundary: later phase boundary from blueprint
-```
-
-A generic architectural boundary is not a substitute for the exact current stop point.
-
-If the latest verified continuity checkpoint reports an unresolved blocker, Qwen must preserve that blocker and must not replace it with a generic instruction such as `continue implementing Agent 01`.
-
-If the latest checkpoint says an existing prompt/package has already been prepared, Qwen must reuse that package or request its returned receipt according to the checkpoint; it must not generate an equivalent new prompt unless repository evidence authorizes replacement.
-
-For current Failure #2 continuity specifically, while the latest authoritative checkpoint remains Volume 79 or an unchanged successor preserving the same state, the canonical reconstructed stop is:
-
-```yaml
-current_stage: CAPTURE_SAFE_FULL_SUITE_RECOVERY_PLAN_PENDING_EVIDENCE
-active_assignment: GALAX_FAILURE_2_CAPTURE_SAFE_FULL_SUITE_RECOVERY_PLAN_V1
-active_blockers:
-  - BLOCKED_VALIDATION_OUTPUT_STILL_UNOBSERVABLE
-  - BLOCKED_COMMIT_SCOPE_NOT_PROVEN
-implementation_commit_authorized: false
-implementation_push_authorized: false
-```
-
-Qwen must recover this from current repository evidence rather than hard-code it as permanent truth; a newer verified checkpoint supersedes this status subsection for lifecycle state while preserving all permanent remediation locks.
 
 ## 11. Zero-coding-owner rule
 
@@ -318,7 +240,6 @@ Qwen Code
 → router-first
 → repository-evidence-first
 → factual-claim gate always applied to material claims
-→ status/continuation questions require Skill 1 + latest continuity reconstruction
 → general external web disabled unless separately authorized
 → no unsupported guessing
 
