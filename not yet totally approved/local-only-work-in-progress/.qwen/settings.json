@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh *)",
+      "Read(C:/Users/socia/.qwen/**)",
+      "Bash(dir *)"
+    ]
+  },
+  "$version": 4
+}
